@@ -1,0 +1,15 @@
+{
+    "name": "rasmus-sharksmedia/ytmvc",
+    "authors": [
+        {
+            "name": "troldefar",
+            "email": "r_emil@live.dk"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "app\\": "./"
+        }
+    },
+    "require": {}
+}

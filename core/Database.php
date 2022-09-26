@@ -37,17 +37,31 @@ class Database {
         $this->createMigrationsTable();
         $appliedMigrations = $this->getAppliedMigrations();
         $files = scandir(Application::$ROOT_DIR.'/migrations');
-        $toBeAppliedMigrations = array_diff($appliedMigrations, $files);
-        var_dump($toBeAppliedMigrations);
+        $toBeAppliedMigrations = array_diff($files, $appliedMigrations);
         $this->iterateMigrations($toBeAppliedMigrations);
     }
 
     public function iterateMigrations(array $toBeAppliedMigrations) {
+
+        $newMigrations = [];
+
         foreach ($toBeAppliedMigrations as $migration) {
             if ($migration === '.' || $migration === '..') continue;
-            require_once Application::$ROOT_DIR . '/migrations/' . $migration . '.php';
+            require_once Application::$ROOT_DIR . '/migrations/' . $migration;
             $className = pathinfo($migration, PATHINFO_FILENAME);
+            $currentMigration = new $className();
+            $currentMigration->up();
+            $newMigrations[] = $migration;
         }
+
+        if (!empty($newMigrations)) $this->saveMigrations($newMigrations);
+        else echo 'Currently all migrations are applied.';
+    }
+
+    protected function saveMigrations(array $migrations) {
+        $migrations = implode(',', array_map(fn($m) => "('$m')", $migrations));
+        $stmt = $this->pdo->prepare("INSERT INTO migrations (migration) VALUES $migrations");
+        $stmt->execute();
     }
 
     public function getAppliedMigrations() {

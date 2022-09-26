@@ -51,11 +51,12 @@ class Database {
             $className = pathinfo($migration, PATHINFO_FILENAME);
             $currentMigration = new $className();
             $currentMigration->up();
+            $this->log('Applying new migration: ' . $className);
             $newMigrations[] = $migration;
         }
 
         if (!empty($newMigrations)) $this->saveMigrations($newMigrations);
-        else echo 'Currently all migrations are applied.';
+        else $this->log('Currently all migrations are applied.');
     }
 
     protected function saveMigrations(array $migrations) {
@@ -72,6 +73,10 @@ class Database {
 
     public function createMigrationsTable() {
         $this->pdo->exec($this->sqlMigrationTable);
+    }
+
+    protected function log(string $message): void {
+        echo date('Y-m-d H:i:s') . ' ' . $message . PHP_EOL;
     }
 
 }

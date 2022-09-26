@@ -8,17 +8,11 @@
  * @return migration
 */
 
-class m0001_initial {
+class m0002_add_password_to_user_table {
 
     public function up() {
         $database = app\core\Application::$app->database;
-        $SQL = "CREATE TABLE IF NOT EXISTS Users (
-            id INT AUTO_INCREMENT PRIMARY KEY,
-            email VARCHAR(255) NOT NULL,
-            firstname VARCHAR(255) NOT NULL,
-            lastname VARCHAR(255) NOT NULL,
-            status TINYINT DEFAULT 0,
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)";
+        $SQL = "ALTER TABLE Users ADD COLUMN password VARCHAR (255) ";
         $database->pdo->exec($SQL);
     }
 

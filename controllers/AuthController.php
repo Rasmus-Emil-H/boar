@@ -21,17 +21,18 @@ class AuthController extends Controller {
             $registerModel->loadData($request->getBody());
 
             if ($registerModel->validate() && $registerModel->register()) return 'success';
-            
-            dump($registerModel->errors);
 
             return $this->render('register', [
                 'model' => $registerModel,
             ]);
+            
         }
+
         $this->setLayout('auth');
         return $this->render('register', [
             'model' => $registerModel,
         ]);
+
     }
 
 }

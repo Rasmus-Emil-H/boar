@@ -11,13 +11,16 @@ namespace app\core;
 class Application {
 
     public static string $ROOT_DIR;
+
     public Router $router;
     public Request $request;
     public Response $response;
     public Controller $controller;
+    public Database $database;
+
     public static Application $app;
 
-    public function __construct(string $rootPath) {
+    public function __construct(string $rootPath, array $pdoConfigurations) {
 
         self::$ROOT_DIR = $rootPath;
         self::$app = $this;
@@ -26,6 +29,8 @@ class Application {
         $this->response = new Response();
 
         $this->router = new Router($this->request, $this->response);
+
+        $this->database = new Database($pdoConfigurations['pdo']);
 
     }
 

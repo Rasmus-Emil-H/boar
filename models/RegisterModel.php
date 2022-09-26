@@ -12,8 +12,8 @@ use app\core\Model;
 
 class RegisterModel extends Model {
 
-    public string $email;
-    public string $password;
+    public string $email = '';
+    public string $password = '';
 
     /*
      * Register method 
@@ -21,7 +21,7 @@ class RegisterModel extends Model {
     */
 
     public function register() {
-        echo 'creating new user';
+        
     }
 
     /** 

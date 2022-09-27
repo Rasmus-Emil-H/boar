@@ -12,11 +12,12 @@ class Application {
 
     public static string $ROOT_DIR;
 
+    public string $layout = 'main';
     public string $authenticationClass;
     public Router $router;
     public Request $request;
     public Response $response;
-    public Controller $controller;
+    public ?Controller $controller = null;
     public Session $session;
     public Database $database;
     public ?DbModel $user;

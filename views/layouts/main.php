@@ -30,6 +30,9 @@
                   <li class="nav-item">
                     <a class="nav-link" href="/logout"><?= Application::$app->user->getDisplayName(); ?></a>
                   </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="/profile"><?= htmlspecialchars('Profile'); ?></a>
+                  </li>
                 <?php endif; ?>
             </ul>
         </div>

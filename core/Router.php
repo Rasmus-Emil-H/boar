@@ -38,8 +38,14 @@ class Router {
         }
         if (is_string($callback)) return $this->renderView($callback);
         if (is_array($callback)) {
-            Application::$app->controller = new $callback[0]();
-            $callback[0] = Application::$app->controller;
+            /** @var \app\core\controller\ $controller */
+            $controller = new $callback[0]();
+            Application::$app->controller = $controller;
+            $controller->action = $callback[1];
+            $callback[0] = $controller;
+            foreach ($controller->getMiddlewares() as $middleware) {
+                $middleware->execute();
+            }
         }
         return call_user_func($callback, $this->request, $this->response);
     }
@@ -51,7 +57,7 @@ class Router {
     }
 
     protected function getLayoutContent() {
-        $layout = Application::$app->controller->layout;
+        $layout = Application::$app->controller ? Application::$app->controller->layout : Application::$app->layout;
         ob_start();
             include_once Application::$ROOT_DIR . "/views/layouts/$layout.php";
         return ob_get_clean();

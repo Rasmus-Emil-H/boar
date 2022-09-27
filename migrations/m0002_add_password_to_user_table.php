@@ -18,7 +18,7 @@ class m0002_add_password_to_user_table {
 
     public function down() {
         $database = app\core\Application::$app->database;
-        $SQL = "DROP TABLE users;";
+        $SQL = "ALTER TABLE Users DROP COLUMN password;";
         $database->pdo->exec($SQL);
     }
 

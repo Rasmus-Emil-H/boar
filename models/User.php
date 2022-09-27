@@ -8,12 +8,16 @@
 
 namespace app\models;
 
-use app\core\Model;
+use app\core\DbModel;
 
-class RegisterModel extends Model {
+class User extends DbModel {
 
     public string $email = '';
     public string $password = '';
+
+    public function tableName(): string {
+        return 'Users';
+    }
 
     /*
      * Register method 
@@ -21,7 +25,7 @@ class RegisterModel extends Model {
     */
 
     public function register() {
-        
+        $this->save();
     }
 
     /** 
@@ -38,6 +42,10 @@ class RegisterModel extends Model {
                 [self::RULE_MAX, 'max' => 255]
             ],
         ];
+    }
+
+    public function getAttributes(): array {
+        return ['firstname', 'lastname', 'email', 'password'];
     }
 
 }

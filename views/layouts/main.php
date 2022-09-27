@@ -22,10 +22,14 @@
                 <?php if(Application::isGuest()): ?>
                   <li class="nav-item">
                     <a class="nav-link" href="/login">Login</a>
-                </li>
-                <li class="nav-item">
+                  </li>
+                  <li class="nav-item">
                     <a class="nav-link" href="/register">Register</a>
-                </li>
+                  </li>
+                <?php else: ?>
+                  <li class="nav-item">
+                    <a class="nav-link" href="/logout"><?= Application::$app->user->getDisplayName(); ?></a>
+                  </li>
                 <?php endif; ?>
             </ul>
         </div>

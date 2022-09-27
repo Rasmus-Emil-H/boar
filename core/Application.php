@@ -74,7 +74,7 @@ class Application {
     }
 
     public static function isGuest(): bool {
-        return self::$user === null ? true : false;
+        return is_null(self::$app->user);
     }
 
 }

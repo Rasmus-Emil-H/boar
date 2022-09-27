@@ -15,6 +15,7 @@ abstract class Model {
     public const RULE_MIN = 'min';
     public const RULE_MAX = 'max';
     public const RULE_MATCH = 'match';
+    public const RULE_UNIQUE = 'unique';
 
     public array $errors = [];
 
@@ -44,6 +45,16 @@ abstract class Model {
                     $this->setError($attribute, self::RULE_MAX, $rule);
                 if ($ruleName === self::RULE_MATCH && !$this->stringCompare($value, $this->{$rule['match']}))
                     $this->setError($attribute, self::RULE_MATCH);
+                if ($ruleName === SELF::RULE_UNIQUE) {
+                    $className = $rule['class'];
+                    $uniqueAttribute = $attribute = $rule['attribute'] ?? $attribute;
+                    $tableName = $className::tableName();
+                    $statement = Application::$app->database->prepare("SELECT * FROM {$tableName} WHERE {$uniqueAttribute} = :attr");
+                    $statement->bindValue(":attr", $value);
+                    $statement->execute();
+                    $record = $statement->fetchObject();
+                    if ($record) $this->setError($attribute, self::RULE_UNIQUE, ['field' => $attribute]);
+                }
             }
         }
 
@@ -65,7 +76,8 @@ abstract class Model {
             self::RULE_REQUIRED => 'This field is required',
             self::RULE_VALID_EMAIL => 'This field must be a valid email',
             self::RULE_MIN => 'This field must contains atleast {min} characters',
-            self::RULE_MAX => 'This field must contains a maximum of {max} characters'
+            self::RULE_MAX => 'This field must contains a maximum of {max} characters',
+            self::RULE_UNIQUE => 'The {field} is already taken'
         ];
     }
 

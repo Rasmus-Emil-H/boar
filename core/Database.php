@@ -65,6 +65,10 @@ class Database {
         $stmt->execute();
     }
 
+    public function prepare(string $sql) {
+        return $this->pdo->prepare($sql);
+    }
+
     public function getAppliedMigrations() {
         $statement = $this->pdo->prepare("SELECT migration FROM migrations");
         $statement->execute();

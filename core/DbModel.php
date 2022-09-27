@@ -19,11 +19,12 @@ abstract class DbModel extends Model {
         $attributes = $this->getAttributes();
         $params = array_map(fn($attr) => ":{$attr}", $attributes);
         $statement = self::prepare("INSERT INTO {$table} (". implode(',', $attributes) .") VALUES (". implode(',', $params) .")");
-        var_dump($statement, $params, $attributes);
+        foreach ($attributes as $attribute) $statement->bindValue(":{$attribute}", $this->{$attribute});
+        return $statement->execute();
     }
 
     public static function prepare(string $sql) {
-        Application::$app->database->pdo->prepare($sql);
+        return Application::$app->database->pdo->prepare($sql);
     }
 
 }

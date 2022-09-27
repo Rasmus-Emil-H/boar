@@ -50,7 +50,14 @@ class Application {
     }
 
     public function run() {
-        echo $this->router->resolve();
+        try {
+            echo $this->router->resolve();
+        } catch (\Exception $e) {
+            $this->response->setStatusCode($e->getCode());
+            echo $this->router->renderView('error', [
+                'exception' => $e
+            ]);
+        }
     }
 
     public function getController(): Controller {

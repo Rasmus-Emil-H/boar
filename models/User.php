@@ -61,4 +61,12 @@ class User extends DbModel {
         return ['firstname', 'lastname', 'email', 'status', 'password'];
     }
 
+    public function labels(): array {
+        return ['email' => 'Email', 'firstname' => 'First Name', 'lastname' => 'Last Name'];
+    }
+
+    public function getPrimaryKey(): string {
+        return 'id';
+    }
+
 }

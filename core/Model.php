@@ -29,6 +29,14 @@ abstract class Model {
 
     abstract public function rules(): array;
 
+    public function labels(): array {
+        return [];
+    }
+
+    public function getLabel($attribute): string {
+        return $this->labels()[$attribute] ?? $attribute;
+    }
+
     public function validate() {
         foreach ($this->rules() as $attribute => $rules) {
             $value = $this->{$attribute};
@@ -36,15 +44,15 @@ abstract class Model {
                 $ruleName = $rule;
                 if (!is_string($ruleName)) $ruleName = $rule[0];
                 if ($ruleName === self::RULE_REQUIRED && !$value) 
-                    $this->setError($attribute, self::RULE_REQUIRED);
+                    $this->setErrorForRule($attribute, self::RULE_REQUIRED);
                 if ($ruleName === self::RULE_VALID_EMAIL && !filter_var($value, FILTER_VALIDATE_EMAIL)) 
-                    $this->setError($attribute, self::RULE_VALID_EMAIL);
+                    $this->setErrorForRule($attribute, self::RULE_VALID_EMAIL);
                 if ($ruleName === self::RULE_MIN && strlen($value) < $rule['min'])
-                    $this->setError($attribute, self::RULE_MIN, $rule);
+                    $this->setErrorForRule($attribute, self::RULE_MIN, $rule);
                 if ($ruleName === self::RULE_MAX && strlen($value) > $rule['max'])
-                    $this->setError($attribute, self::RULE_MAX, $rule);
+                    $this->setErrorForRule($attribute, self::RULE_MAX, $rule);
                 if ($ruleName === self::RULE_MATCH && !$this->stringCompare($value, $this->{$rule['match']}))
-                    $this->setError($attribute, self::RULE_MATCH);
+                    $this->setErrorForRule($attribute, self::RULE_MATCH);
                 if ($ruleName === SELF::RULE_UNIQUE) {
                     $className = $rule['class'];
                     $uniqueAttribute = $attribute = $rule['attribute'] ?? $attribute;
@@ -53,7 +61,7 @@ abstract class Model {
                     $statement->bindValue(":attr", $value);
                     $statement->execute();
                     $record = $statement->fetchObject();
-                    if ($record) $this->setError($attribute, self::RULE_UNIQUE, ['field' => $attribute]);
+                    if ($record) $this->setErrorForRule($attribute, self::RULE_UNIQUE, ['field' => $this->getLabel($attribute)]);
                 }
             }
         }
@@ -65,10 +73,14 @@ abstract class Model {
         return $haystack === $needle;
     }
 
-    public function setError(string $attribute, string $rule, array $params = []): void {
+    private function setErrorForRule(string $attribute, string $rule, array $params = []): void {
         $message = $this->getErrorMessages()[$rule] ?? '';
         foreach ($params as $key => $value) $message = preg_replace("/\{{$key}\}/", $value, $message);
         $this->errors[$attribute][] = $message;
+    }
+
+    public function setError(string $attribute, string $message): void {
+       $this->errors[$attribute][] = $message;
     }
 
     public function getErrorMessages(): array {

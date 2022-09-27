@@ -38,6 +38,18 @@ class Session {
         return $_SESSION[self::FLASH_ARRAY] ?? [];
     }
 
+    public function set(string $key, string $value) {
+        $_SESSION[$key] = $value;
+    }
+
+    public function get(string $key) {
+        return $_SESSION[$key] ?? '';
+    }
+
+    public function removeSessionProperty($key): void {
+        unset($_SESSION[$key]);
+    }
+
     public function __destruct() {
         $flashMessages = $this->getAllFlashMessages();
         foreach ($flashMessages as $key => &$flashMessage) {

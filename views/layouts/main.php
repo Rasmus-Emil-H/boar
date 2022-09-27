@@ -19,12 +19,14 @@
                 <li class="nav-item">
                     <a class="nav-link" href="/about">about</a>
                 </li>
-                <li class="nav-item">
+                <?php if(Application::isGuest()): ?>
+                  <li class="nav-item">
                     <a class="nav-link" href="/login">Login</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/register">Register</a>
                 </li>
+                <?php endif; ?>
             </ul>
         </div>
     </nav>

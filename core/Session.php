@@ -18,10 +18,9 @@ class Session {
     }
 
     public function checkFlashMessages() {
-        $flashMessages = $_SESSION[self::FLASH_ARRAY] ?? [];
-        foreach ($flashMessages as $flashMessage) $flashMessage['remove'] = true;
+        $flashMessages = $this->getAllFlashMessages();
+        foreach ($flashMessages as &$flashMessage) $flashMessage['remove'] = true;
         $_SESSION[self::FLASH_ARRAY] = $flashMessages;
-        var_dump($_SESSION[self::FLASH_ARRAY]);
     }
 
     public function setFlashMessage(string $key, string $message) {
@@ -35,8 +34,16 @@ class Session {
         return $_SESSION[self::FLASH_ARRAY][$key]['value'] ?? '';
     }
 
+    public function getAllFlashMessages() {
+        return $_SESSION[self::FLASH_ARRAY] ?? [];
+    }
+
     public function __destruct() {
-        
+        $flashMessages = $this->getAllFlashMessages();
+        foreach ($flashMessages as $key => &$flashMessage) {
+            if ($flashMessage['remove']) unset($flashMessages[$key]);
+        }
+        $_SESSION[self::FLASH_ARRAY] = $flashMessages;
     }
 
 }

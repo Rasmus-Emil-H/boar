@@ -21,6 +21,7 @@ class Application {
     public Session $session;
     public Database $database;
     public ?DbModel $user;
+    public View $view;
 
     public static Application $app;
 
@@ -36,6 +37,7 @@ class Application {
         $this->router = new Router($this->request, $this->response);
         $this->session = new Session();
         $this->database = new Database($pdoConfigurations['pdo']);
+        $this->view = new View();
 
         $primaryValue = $this->session->get('user');
 
@@ -54,7 +56,7 @@ class Application {
             echo $this->router->resolve();
         } catch (\Exception $e) {
             $this->response->setStatusCode($e->getCode());
-            echo $this->router->renderView('error', [
+            echo $this->view->renderView('error', [
                 'exception' => $e
             ]);
         }

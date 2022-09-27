@@ -26,7 +26,7 @@ class Controller {
     public string $action = '';
 
     public function render(string $view, array $params = array()) {
-        return Application::$app->router->renderView($view, $params);
+        return Application::$app->view->renderView($view, $params);
     }
 
     public function setLayout(string $layout) {

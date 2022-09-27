@@ -7,6 +7,7 @@ error_reporting(E_ALL);
 use app\core\Application;
 use app\controllers\SiteController;
 use app\controllers\AuthController;
+use app\controllers\ContactController;
 
 function dump($arg) {
     echo '<pre>';
@@ -44,5 +45,8 @@ $app->router->post('/register', [AuthController::class, 'register']);
 $app->router->get('/logout', [AuthController::class, 'logout']);
 
 $app->router->get('/profile', [AuthController::class, 'profile']);
+
+$app->router->get('/ticket', [ContactController::class, 'ticket']);
+$app->router->post('/ticket', [ContactController::class, 'ticket']);
 
 $app->run();

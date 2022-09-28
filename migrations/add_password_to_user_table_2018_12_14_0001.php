@@ -8,23 +8,17 @@
  * @return migration
 */
 
-class m0001_initial {
+class add_password_to_user_table_2018_12_14_0001 {
 
     public function up() {
         $database = app\core\Application::$app->database;
-        $SQL = "CREATE TABLE IF NOT EXISTS Users (
-            id INT AUTO_INCREMENT PRIMARY KEY,
-            email VARCHAR(255) NOT NULL,
-            firstname VARCHAR(255) NOT NULL,
-            lastname VARCHAR(255) NOT NULL,
-            status TINYINT DEFAULT 0,
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)";
+        $SQL = "ALTER TABLE Users ADD COLUMN password VARCHAR (255) ";
         $database->pdo->exec($SQL);
     }
 
     public function down() {
         $database = app\core\Application::$app->database;
-        $SQL = "DROP TABLE users;";
+        $SQL = "ALTER TABLE Users DROP COLUMN password;";
         $database->pdo->exec($SQL);
     }
 

@@ -4,6 +4,5 @@
 
 <?php $form = \app\core\form\Form::begin('', 'POST'); ?>
   <?= $form->field($model, 'email')->emailField(); ?>
-  <?php echo new TextareaField($model, 'message'); ?>
-  <button type="submit" class="btn btn-primary">Submit</button>
+  <?= new TextareaField($model, 'message'); ?>
 <?= app\core\form\Form::end(); ?>

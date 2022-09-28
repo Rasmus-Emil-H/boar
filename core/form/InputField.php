@@ -15,6 +15,7 @@ class InputField extends BaseField {
     public const TYPE_TEXT = 'text';
     public const TYPE_EMAIL = 'email';
     public const TYPE_PASSWORD = 'password';
+    public const TYPE_DATE = 'date';
 
     public Model $model;
     public string $attribute;
@@ -34,13 +35,18 @@ class InputField extends BaseField {
         );
     }
 
-    public function passwordField() {
+    public function passwordField(): InputField {
         $this->type = self::TYPE_PASSWORD;
         return $this;
     }
 
-    public function emailField() {
+    public function emailField(): InputField {
         $this->type = self::TYPE_EMAIL;
+        return $this;
+    }
+
+    public function dateField(): InputField {
+        $this->type = self::TYPE_DATE;
         return $this;
     }
 

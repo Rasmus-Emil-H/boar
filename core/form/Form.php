@@ -18,7 +18,7 @@ class Form {
     }
 
     public static function end(): void {
-        echo '</form>';
+        echo '<button type="submit" class="btn btn-primary">Submit</button></form>';
     }
 
     public function field(Model $model, string $attribute) {

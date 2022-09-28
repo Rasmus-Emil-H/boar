@@ -15,12 +15,96 @@ class Database {
     */
     public \Pdo $pdo;
 
+    protected string $query = '';
+    protected string $table;
+    protected string $selector;
+    protected string $where = '';
+    protected array  $args = [];
+
+    public function startQuery(string $table, string $selector = '', array $args = []) {
+        $this->table = $table;
+        $this->selector = $selector;
+        $this->bindValues($args);
+        return $this;
+    }
+
+    public function bindValues(array $arguments) {
+        foreach($arguments as $selector => $value) {
+            $this->where .= ( array_key_first($arguments) === $selector ? "WHERE " : " AND " ) . $selector . " = ?";
+            $this->args[] = $value;
+        }
+    }
+
+    public function fetch(): Database {
+        $this->query .= "SELECT {$this->selector} FROM {$this->table} {$this->where}";
+        return $this;
+    }
+
+    public function create(): void {
+        $this->query .= "INSERT INTO {$this->tableName} ({$this->implodedFields}) VALUES ({$this->implodedArgs})";
+    }
+
+    public function patch(): void {
+        $this->query .= "UPDATE {$this->tableName} SET {$this->implodedFields} {$this->where}";
+    }
+
+    public function remove(): void {
+        $this->query .= "DELETE FROM {$this->tableName} {$this->where}";
+    }
+
+    public function limit(int $limit): DatabaseUtilities {
+        $this->query .= ' LIMIT ' . $limit;
+        return $this;
+    }
+
+    public function execute(): array {
+        $stmt = $this->prepare($this->query);
+        $stmt->execute($this->args);
+        $result = $stmt->fetchAll();
+        $stmt = null;
+        $this->resetQuery();
+        return $result;
+    }
+
+    public function groupBy(string $group): DatabaseUtilities {
+        $this->query .= ' GROUP BY ' . $group;
+        return $this;
+    }
+
+    public function orderBy(string $order): DatabaseUtilities {
+        $this->query .= ' ORDER BY ' . $order;
+        return $this;
+    }
+
+    public function resetQuery() {
+        $this->type = '';
+        $this->selector = '';
+        $this->where = '';
+        $this->implodedFields = '';
+        $this->implodedArgs = '';
+    }
+
+    public function describe() {
+        $this->query = "DESCRIBE {$this->tableName}";
+        $this->execute();
+    }
+
+    public function createTable(string $tableName, array $fields) {
+        $tableFields = implode(', ', $fields);
+        $this->query = "CREATE TABLE {$this->exists} {$tableName} ({$tableFields})";
+    }
+
+    public function alterTable(string $oldColumn, string $newColumn) {
+        $this->query = "ALTER TABLE {$this->tableName} CHANGE {$oldColumn} {$newColumn}";
+    }
+
     /**
      * Migration table sql
      * table for migration so that we dont forking overwrite stuff
      * mkay?
      * @var sqlMigrationTable
     */
+
     protected string $sqlMigrationTable = 'CREATE TABLE IF NOT EXISTS Migrations (
         MigrationID int NOT NULL AUTO_INCREMENT,
         migration VARCHAR(255),

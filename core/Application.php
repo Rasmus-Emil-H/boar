@@ -51,12 +51,12 @@ class Application {
         self::$ROOT_DIR = $rootPath;
         self::$app = $this;
         
-        $this->request = new Request();
-        $this->response = new Response();
-        $this->router = new Router($this->request, $this->response);
-        $this->session = new Session();
-        $this->database = new Database($pdoConfigurations['pdo']);
-        $this->view = new View();
+        $this->request   = new Request();
+        $this->response  = new Response();
+        $this->router    = new Router($this->request, $this->response);
+        $this->session   = new Session();
+        $this->database  = new Database($pdoConfigurations['pdo']);
+        $this->view      = new View();
 
         $this->checkUserBasedOnSession();
 
@@ -74,6 +74,12 @@ class Application {
         $this->user = $authenticationClass->findOne([$primaryKey => $primaryValue], $authenticationClass->tableName());
     }
 
+    /**
+     * Run the application 
+     * Custom exceptions should be written inside \core\exceptions
+     * @return void
+    */
+
     public function run(): void {
         try {
             echo $this->router->resolve();
@@ -84,6 +90,11 @@ class Application {
             ]);
         }
     }
+
+    /**
+     * Getter/ Setter for controllers
+     * @return Controller 
+    */
 
     public function getController(): Controller {
         return $this->controller;
@@ -119,6 +130,8 @@ class Application {
 
         $this->router->get('/', [SiteController::class, 'home']);
         $this->router->get('/about', [SiteController::class, 'about']);
+        $this->router->get('/posts', [SiteController::class, 'posts']);
+
         $this->router->post('/about', [SiteController::class, 'handleContact']);
 
         $this->router->get('/login', [AuthController::class, 'login']);
@@ -133,8 +146,6 @@ class Application {
 
         $this->router->get('/ticket', [ContactController::class, 'ticket']);
         $this->router->post('/ticket', [ContactController::class, 'ticket']);
-
-        $this->router->get('/posts', [PostController::class, 'posts']);
     }
 
     /**

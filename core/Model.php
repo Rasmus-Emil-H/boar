@@ -10,14 +10,19 @@ namespace app\core;
 
 abstract class Model {
 
-    public const RULE_REQUIRED = 'required';
-    public const RULE_VALID_EMAIL = 'email';
-    public const RULE_MIN = 'min';
-    public const RULE_MAX = 'max';
-    public const RULE_MATCH = 'match';
-    public const RULE_UNIQUE = 'unique';
+    /**
+     * Model constants
+     * @var const
+    */
 
-    public array $errors = [];
+    protected const RULE_REQUIRED = 'required';
+    protected const RULE_VALID_EMAIL = 'email';
+    protected const RULE_MIN = 'min';
+    protected const RULE_MAX = 'max';
+    protected const RULE_MATCH = 'match';
+    protected const RULE_UNIQUE = 'unique';
+
+    protected array $errors = [];
 
     /** 
      * Load properties
@@ -70,7 +75,7 @@ abstract class Model {
                     $this->setErrorForRule($attribute, self::RULE_MAX, $rule);
                 if ($ruleName === self::RULE_MATCH && !$this->stringCompare($value, $this->{$rule['match']}))
                     $this->setErrorForRule($attribute, self::RULE_MATCH);
-                if ($ruleName === SELF::RULE_UNIQUE) {
+                if ($ruleName === self::RULE_UNIQUE) {
                     $className = $rule['class'];
                     $uniqueAttribute = $attribute = $rule['attribute'] ?? $attribute;
                     $tableName = $className::tableName();

@@ -17,6 +17,10 @@ class SiteController extends Controller {
         return $this->render('about');
     }
 
+    public function posts() {
+        return $this->render('posts');
+    }
+
     public function handleContact(Request $request) {
         $body = $request->getBody();
         Application::$app->dump($body);

@@ -36,11 +36,8 @@ class AuthController extends Controller {
         $user = new User();
         
         if ($request->isPost()) {
-
             $user->loadData($request->getBody());
-
             if ($user->validate() && $user->save()) {
-                var_dump(123);
                 Application::$app->session->setFlashMessage('success', 'User created');
                 Application::$app->response->redirect('/');
                 return;

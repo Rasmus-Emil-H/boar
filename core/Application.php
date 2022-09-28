@@ -58,16 +58,18 @@ class Application {
         $this->database = new Database($pdoConfigurations['pdo']);
         $this->view = new View();
 
-        $primaryValue = $this->session->get('user');
+        $this->checkUserBasedOnSession();
 
+    }
+
+    public function checkUserBasedOnSession() {
+        $primaryValue = $this->session->get('user');
+        if (!$primaryValue) $this->user = null;
         if ($primaryValue) {            
             $authenticationClass = new $this->authenticationClass();
             $primaryKey = $authenticationClass->getPrimaryKey();
             $this->user = $authenticationClass->findOne([$primaryKey => $primaryValue], $authenticationClass->tableName());
-        } else {
-            $this->user = null;
         }
-
     }
 
     public function run() {

@@ -13,7 +13,7 @@ class adaptive_2018_12_12_0000 {
     public function up() {
         $database = app\core\Application::$app->database;
         $SQL = "CREATE TABLE IF NOT EXISTS Users (
-            id INT AUTO_INCREMENT PRIMARY KEY,
+            UserID INT AUTO_INCREMENT PRIMARY KEY,
             email VARCHAR(255) NOT NULL,
             firstname VARCHAR(255) NOT NULL,
             lastname VARCHAR(255) NOT NULL,
@@ -24,7 +24,7 @@ class adaptive_2018_12_12_0000 {
 
     public function down() {
         $database = app\core\Application::$app->database;
-        $SQL = "DROP TABLE users;";
+        $SQL = "DROP TABLE Users;";
         $database->pdo->exec($SQL);
     }
 

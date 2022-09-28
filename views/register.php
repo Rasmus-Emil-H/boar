@@ -8,5 +8,4 @@
   <?= $form->field($model, 'firstname'); ?>
   <?= $form->field($model, 'lastname'); ?>
   <?= $form->field($model, 'password')->passwordField(); ?>
-  <button type="submit" class="btn btn-primary">Submit</button>
 <?= app\core\form\Form::end(); ?>

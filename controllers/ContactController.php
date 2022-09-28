@@ -15,17 +15,19 @@ class ContactController extends Controller {
 
         $contact = new ContactForm();
 
-        if ($request->isPost()) {
-            $contact->loadData($request->getBody());
-            if ($contact->validate() && $contact->send()) {
-                Application::$app->session->setFlashMessage('success', 'Message sent');
-                $response->redirect('/');
-            }
-        }
+        if ($request->isPost()) $this->handleSubmit($contact, $request, $response);
         
         return $this->render('ticket', [
             'model' => $contact
         ]);
+    }
+
+    public function handleSubmit(ContactForm $contact, Request $request, Response $response) {
+        $contact->loadData($request->getBody());
+        if ($contact->validate() && $contact->send()) {
+            Application::$app->session->setFlashMessage('success', 'Message sent');
+            $response->redirect('/');
+        }
     }
 
 }

@@ -4,28 +4,42 @@
  * Bootstrap RegisterModel 
  * AUTHOR: RE_WEB
  * @package app\models\RegisterModel
-*/
+*******************************/
 
 namespace app\models;
 
-use app\core\DbModel;
 use app\core\UserModel;
 use app\core\Application;
 
 class User extends UserModel {
 
-    const STATUS_INACTIVE = 0;
-    const STATUS_ACTIVE   = 1;
-    const STATUS_DELETED  = 2;
+    /*
+     * User props
+     * @var User properties
+    */
 
     public string $email = '';
     public string $password = '';
-    public int $status = self::STATUS_INACTIVE;
+    public int $status = Application::STATUS_INACTIVE;
     public string $firstname = '';
     public string $lastname = '';
 
+    /*
+     * Tablename
+     * @return string
+    */
+    
     public function tableName(): string {
         return 'Users';
+    }
+
+    /*
+     * Primary key
+     * @return string
+    */
+
+    public function getPrimaryKey(): string {
+        return 'UserID';
     }
 
     /*
@@ -65,10 +79,6 @@ class User extends UserModel {
 
     public function labels(): array {
         return ['email' => 'Email', 'firstname' => 'First Name', 'lastname' => 'Last Name'];
-    }
-
-    public function getPrimaryKey(): string {
-        return 'UserID';
     }
 
     public function getDisplayName(): string {

@@ -4,7 +4,7 @@
  * Bootstrap application 
  * AUTHOR: RE_WEB
  * @package app\core\application
-*/
+*******************************/
 
 namespace app\core;
 
@@ -31,6 +31,15 @@ class Application {
     public Database $database;
     public ?DbModel $user;
     public View $view;
+
+    /**
+     * Application states  
+     * @var states
+    */
+
+    const STATUS_INACTIVE = 0;
+    const STATUS_ACTIVE   = 1;
+    const STATUS_DELETED  = 2;
 
     public static Application $app;
 
@@ -96,7 +105,13 @@ class Application {
         return is_null(self::$app->user);
     }
 
+    /**
+     * Application routes 
+     * @return void
+    */
+
     public function registerRoutes(): void {
+
         $this->router->get('/', [SiteController::class, 'home']);
         $this->router->get('/about', [SiteController::class, 'about']);
         $this->router->post('/about', [SiteController::class, 'handleContact']);
@@ -114,6 +129,11 @@ class Application {
         $this->router->get('/ticket', [ContactController::class, 'ticket']);
         $this->router->post('/ticket', [ContactController::class, 'ticket']);
     }
+
+    /**
+     * DUMP AND DIE
+     * @return buffer
+    */
 
     public function dump($argv) {
         echo '<pre>';

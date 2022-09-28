@@ -4,7 +4,7 @@
  * Bootstrap Model 
  * AUTHOR: RE_WEB
  * @package app\core\Model
-*/
+*******************************/
 
 namespace app\core;
 
@@ -19,12 +19,15 @@ abstract class Model {
 
     public array $errors = [];
 
+    /** 
+     * Load properties
+     * @return array 
+    */
+
     public function loadData(array $data) {
-        foreach ($data as $key => $value) {
-            if (property_exists($this, $key)) {
+        foreach ($data as $key => $value)
+            if (property_exists($this, $key)) 
                 $this->{$key} = $value;
-            }
-        }
     }
 
     abstract public function rules(): array;
@@ -33,9 +36,23 @@ abstract class Model {
         return [];
     }
 
+    /**
+     * Getter for label, return attribute if none is present
+     * @return label 
+    */
+
     public function getLabel($attribute): string {
         return $this->labels()[$attribute] ?? $attribute;
     }
+
+    /** 
+     * Validation method
+     * Loops current model and check if certain rules are set
+     * If set check if the condition is present
+     * Set error rule if true
+     * Render
+     * @return array 
+    */
 
     public function validate() {
         foreach ($this->rules() as $attribute => $rules) {

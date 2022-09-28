@@ -1,16 +1,16 @@
 <?php
 
 /*******************************
- * Bootstrap ContactForm 
+ * Bootstrap PostForm 
  * AUTHOR: RE_WEB
- * @package app\models\ContactForm
+ * @package app\models\PostForm
 *******************************/
 
 namespace app\models;
 
 use app\core\Model;
 
-class ContactForm extends Model {
+class PostForm extends Model {
 
     public string $email = '';
     public string $message = '';

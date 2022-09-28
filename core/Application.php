@@ -62,17 +62,19 @@ class Application {
 
     }
 
-    public function checkUserBasedOnSession() {
+    public function checkUserBasedOnSession(): void {
         $primaryValue = $this->session->get('user');
         if (!$primaryValue) $this->user = null;
-        if ($primaryValue) {            
-            $authenticationClass = new $this->authenticationClass();
-            $primaryKey = $authenticationClass->getPrimaryKey();
-            $this->user = $authenticationClass->findOne([$primaryKey => $primaryValue], $authenticationClass->tableName());
-        }
+        if ($primaryValue) $this->setApplicationUser($primaryValue);
     }
 
-    public function run() {
+    public function setApplicationUser(string $primaryValue): void {
+        $authenticationClass = new $this->authenticationClass();
+        $primaryKey = $authenticationClass->getPrimaryKey();
+        $this->user = $authenticationClass->findOne([$primaryKey => $primaryValue], $authenticationClass->tableName());
+    }
+
+    public function run(): void {
         try {
             echo $this->router->resolve();
         } catch (\Exception $e) {
@@ -140,7 +142,7 @@ class Application {
      * @return buffer
     */
 
-    public function dump($argv) {
+    public function dump($argv): void {
         echo '<pre>';
             var_dump($argv);
         echo '</pre>';

@@ -11,6 +11,7 @@ namespace app\core;
 use app\controllers\SiteController;
 use app\controllers\AuthController;
 use app\controllers\ContactController;
+use app\controllers\PostController;
 
 class Application {
 
@@ -128,6 +129,8 @@ class Application {
 
         $this->router->get('/ticket', [ContactController::class, 'ticket']);
         $this->router->post('/ticket', [ContactController::class, 'ticket']);
+
+        $this->router->get('/posts', [PostController::class, 'posts']);
     }
 
     /**

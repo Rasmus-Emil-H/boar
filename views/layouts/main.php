@@ -36,6 +36,9 @@
                   <li class="nav-item">
                     <a class="nav-link" href="/ticket">Submit ticket</a>
                   </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="/posts">Posts</a>
+                  </li>
                 <?php endif; ?>
             </ul>
         </div>

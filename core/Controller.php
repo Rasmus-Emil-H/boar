@@ -41,4 +41,8 @@ class Controller {
         return $this->middlewares;
     }
 
+    public function handleSubmit() {
+        
+    }
+
 }

@@ -22,12 +22,12 @@ class ContactController extends Controller {
         ]);
     }
 
-    public function handleSubmit(ContactForm $contact, Request $request, Response $response) {
+    /*public function handleSubmit(ContactForm $contact, Request $request, Response $response) {
         $contact->loadData($request->getBody());
         if ($contact->validate() && $contact->send()) {
             Application::$app->session->setFlashMessage('success', 'Message sent');
             $response->redirect('/');
         }
-    }
+    }*/
 
 }

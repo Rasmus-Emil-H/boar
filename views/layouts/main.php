@@ -28,9 +28,6 @@
                   </li>
                 <?php else: ?>
                   <li class="nav-item">
-                    <a class="nav-link" href="/logout"><?= Application::$app->user->getDisplayName(); ?></a>
-                  </li>
-                  <li class="nav-item">
                     <a class="nav-link" href="/profile"><?= htmlspecialchars('Profile'); ?></a>
                   </li>
                   <li class="nav-item">
@@ -38,6 +35,9 @@
                   </li>
                   <li class="nav-item">
                     <a class="nav-link" href="/posts">Posts</a>
+                  </li>
+                  <li class="nav-item float-right">
+                    <a class="nav-link" href="/logout"><?= Application::$app->user->getDisplayName(); ?> (Logout)</a>
                   </li>
                 <?php endif; ?>
             </ul>

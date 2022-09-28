@@ -30,6 +30,12 @@ class Router {
         $this->routes['post'][$path] = $callback;
     }
 
+    /** 
+     * Resolver for the routing module
+     * Middlewares are controller implemented
+     * @return callback
+    */
+
     public function resolve() {
         $path = $this->request->getPath();
         $method = $this->request->method();
@@ -37,7 +43,6 @@ class Router {
         if($callback === false) throw new NotFoundException();
         if (is_string($callback)) return Application::$app->view->renderView($callback);
         if (is_array($callback)) {
-            /** @var \app\core\controller\ $controller */
             $controller = new $callback[0]();
             Application::$app->controller = $controller;
             $controller->action = $callback[1];

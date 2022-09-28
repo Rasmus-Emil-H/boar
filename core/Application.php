@@ -8,7 +8,16 @@
 
 namespace app\core;
 
+use app\controllers\SiteController;
+use app\controllers\AuthController;
+use app\controllers\ContactController;
+
 class Application {
+
+    /**
+     * Application requirements
+     * @var resources
+    */
 
     public static string $ROOT_DIR;
 
@@ -85,6 +94,25 @@ class Application {
 
     public static function isGuest(): bool {
         return is_null(self::$app->user);
+    }
+
+    public function registerRoutes(): void {
+        $this->router->get('/', [SiteController::class, 'home']);
+        $this->router->get('/about', [SiteController::class, 'about']);
+        $this->router->post('/about', [SiteController::class, 'handleContact']);
+
+        $this->router->get('/login', [AuthController::class, 'login']);
+        $this->router->post('/login', [AuthController::class, 'login']);
+
+        $this->router->get('/register', [AuthController::class, 'register']);
+        $this->router->post('/register', [AuthController::class, 'register']);
+
+        $this->router->get('/logout', [AuthController::class, 'logout']);
+
+        $this->router->get('/profile', [AuthController::class, 'profile']);
+
+        $this->router->get('/ticket', [ContactController::class, 'ticket']);
+        $this->router->post('/ticket', [ContactController::class, 'ticket']);
     }
 
 }

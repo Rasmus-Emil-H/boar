@@ -115,4 +115,11 @@ class Application {
         $this->router->post('/ticket', [ContactController::class, 'ticket']);
     }
 
+    public function dump($argv) {
+        echo '<pre>';
+            var_dump($argv);
+        echo '</pre>';
+        exit();
+    }
+    
 }

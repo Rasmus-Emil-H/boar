@@ -17,13 +17,11 @@ class Database {
 
     protected string $query = '';
     protected string $table;
-    protected string $selector;
     protected string $where = '';
     protected array  $args = [];
 
-    public function startQuery(string $table, string $selector = '', array $args = []) {
+    public function init(string $table, array $args = []): Database {
         $this->table = $table;
-        $this->selector = $selector;
         $this->bindValues($args);
         return $this;
     }
@@ -35,7 +33,7 @@ class Database {
         }
     }
 
-    public function fetch(): Database {
+    public function select(): Database {
         $this->query .= "SELECT {$this->selector} FROM {$this->table} {$this->where}";
         return $this;
     }

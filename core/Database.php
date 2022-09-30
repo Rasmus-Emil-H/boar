@@ -20,15 +20,19 @@ class Database {
     protected string $where = '';
     protected array  $args = [];
 
+    public const WHERE = ' WHERE ';
+    public const AND   = ' AND ';
+    public const BIND  = " = ?";
+
     public function init(string $table, array $args = []): Database {
         $this->table = $table;
         $this->bindValues($args);
         return $this;
     }
 
-    public function bindValues(array $arguments) {
+    public function bindValues(array $arguments): void {
         foreach($arguments as $selector => $value) {
-            $this->where .= ( array_key_first($arguments) === $selector ? "WHERE " : " AND " ) . $selector . " = ?";
+            $this->where .= ( array_key_first($arguments) === $selector ? self::WHERE : self::AND ) . $selector . self::BIND;
             $this->args[] = $value;
         }
     }
@@ -38,19 +42,22 @@ class Database {
         return $this;
     }
 
-    public function create(): void {
+    public function create(): Database {
         $this->query .= "INSERT INTO {$this->tableName} ({$this->implodedFields}) VALUES ({$this->implodedArgs})";
+        return $this;
     }
 
-    public function patch(): void {
+    public function patch(): Database {
         $this->query .= "UPDATE {$this->tableName} SET {$this->implodedFields} {$this->where}";
+        return $this;
     }
 
-    public function remove(): void {
+    public function remove(): Database {
         $this->query .= "DELETE FROM {$this->tableName} {$this->where}";
+        return $this;
     }
 
-    public function limit(int $limit): DatabaseUtilities {
+    public function limit(int $limit): Database {
         $this->query .= ' LIMIT ' . $limit;
         return $this;
     }

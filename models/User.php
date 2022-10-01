@@ -3,7 +3,7 @@
 /*******************************
  * Bootstrap RegisterModel 
  * AUTHOR: RE_WEB
- * @package app\models\RegisterModel
+ * @package app\models\User
 *******************************/
 
 namespace app\models;

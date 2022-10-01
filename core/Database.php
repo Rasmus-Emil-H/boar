@@ -16,13 +16,26 @@ class Database {
     public \Pdo $pdo;
 
     protected string $query = '';
-    protected string $table;
     protected string $where = '';
-    protected array  $args = [];
+    protected array  $args  = [];
+    protected string $table;
 
     public const WHERE = ' WHERE ';
     public const AND   = ' AND ';
     public const BIND  = " = ?";
+
+    public function select(string $table, array $values): Database {
+        $this->table  = $table;
+        $this->bindValues($values);
+        var_dump($this->where, $this->args);exit();
+        //$this->query .= "SELECT {$this->} FROM {$this->table}";
+        return $this;
+    }
+
+    public function where(array $conditions): Database {
+        $this->bindValues($conditions);
+        return $this;
+    }
 
     public function init(string $table, array $args = []): Database {
         $this->table = $table;
@@ -37,10 +50,10 @@ class Database {
         }
     }
 
-    public function select(): Database {
+    /*public function select(): Database {
         $this->query .= "SELECT {$this->selector} FROM {$this->table} {$this->where}";
         return $this;
-    }
+    }*/
 
     public function create(): Database {
         $this->query .= "INSERT INTO {$this->tableName} ({$this->implodedFields}) VALUES ({$this->implodedArgs})";
@@ -52,7 +65,7 @@ class Database {
         return $this;
     }
 
-    public function remove(): Database {
+    public function delete(): Database {
         $this->query .= "DELETE FROM {$this->tableName} {$this->where}";
         return $this;
     }

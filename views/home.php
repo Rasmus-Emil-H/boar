@@ -2,8 +2,8 @@
     use app\core\Application;
 
     $query = Application::$app->database
-        ->init("Users", ["status" => "0"])
-        ->select()
+        ->select("Users", ["*"])
+        ->where(["status" => 0])
         ->execute();
 
     var_dump($query);

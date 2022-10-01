@@ -33,6 +33,7 @@ abstract class Model {
         foreach ($data as $key => $value)
             if (property_exists($this, $key)) 
                 $this->{$key} = $value;
+            else throw new \InvalidArgumentException("Invalid key found {$key}");
     }
 
     abstract public function rules(): array;

@@ -38,21 +38,15 @@ class Database {
 
     public function where(array $conditions): Database {
         $this->bindValues($conditions);
-        var_dump($this->where, $this->args);exit();
         return $this;
     }
 
     public function bindValues(array $arguments): void {
         foreach($arguments as $selector => $value) {
-            $this->where .= ( array_key_first($arguments) === $selector ? self::WHERE : self::AND ) . $selector . self::BIND;
+            $this->query .= ( array_key_first($arguments) === $selector ? self::WHERE : self::AND ) . $selector . self::BIND;
             $this->args[] = $value;
         }
     }
-
-    /*public function select(): Database {
-        $this->query .= "SELECT {$this->selector} FROM {$this->table} {$this->where}";
-        return $this;
-    }*/
 
     public function create(): Database {
         $this->query .= "INSERT INTO {$this->tableName} ({$this->implodedFields}) VALUES ({$this->implodedArgs})";

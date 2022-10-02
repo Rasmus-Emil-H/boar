@@ -15,31 +15,29 @@ class Database {
     */
     public \Pdo $pdo;
 
-    protected string $query = '';
-    protected string $where = '';
-    protected array  $args  = [];
+    protected string $query  = '';
+    protected string $where  = '';
+    protected string $fields = '';
+    protected array  $args   = [];
     protected string $table;
 
     public const WHERE = ' WHERE ';
     public const AND   = ' AND ';
     public const BIND  = " = ?";
 
-    public function select(string $table, array $values): Database {
+    public function select(string $table, array $fields): Database {
         $this->table  = $table;
-        $this->bindValues($values);
-        var_dump($this->where, $this->args);exit();
-        //$this->query .= "SELECT {$this->} FROM {$this->table}";
+        $this->bindFields($fields);
+        $this->query .= "SELECT {$this->fields} FROM {$this->table}";
         return $this;
+    }
+
+    public function bindFields(array $fields): void {
+        $this->fields = implode(', ', $fields);
     }
 
     public function where(array $conditions): Database {
         $this->bindValues($conditions);
-        return $this;
-    }
-
-    public function init(string $table, array $args = []): Database {
-        $this->table = $table;
-        $this->bindValues($args);
         return $this;
     }
 

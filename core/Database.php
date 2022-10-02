@@ -38,6 +38,7 @@ class Database {
 
     public function where(array $conditions): Database {
         $this->bindValues($conditions);
+        var_dump($this->where, $this->args);exit();
         return $this;
     }
 

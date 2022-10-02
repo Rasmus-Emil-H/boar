@@ -3,6 +3,7 @@
 
     $query = Application::$app->database
         ->select("Users", ["email"])
+        ->where(["status" => "0"])
         ->limit(1)
         ->execute();
 

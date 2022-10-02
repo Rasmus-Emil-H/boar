@@ -28,7 +28,7 @@ class File extends FileModel {
     }
 
     public function moveFile(): bool {
-        if ( $this->checkFileType() ) throw new \Exception('Invalid file extension');
+        if ( !$this->checkFileType() ) throw new \Exception('Invalid file extension');
         return move_uploaded_file(sys_get_temp_dir(), Application::UPLOAD_FOLDER);
     }
 

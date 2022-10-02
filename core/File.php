@@ -13,6 +13,9 @@ use app\core\Application;
 
 class File extends FileModel {
 
+    public const INVALID_EXTENSION = 'Invalid file extension';
+    public const INVALID_FILE_NAME = 'Invalid file name';
+
     /** 
      * @var string
     */
@@ -28,12 +31,10 @@ class File extends FileModel {
     }
 
     public function moveFile(): bool {
-
-        if ( !$this->checkFileType() ) throw new \Exception('Invalid file extension');
-        if ( !$this->checkFileName() ) throw new \Exception('Invalid file name');
-
+        if ( !$this->checkFileType() ) throw new \Exception(self::INVALID_EXTENSION);
+        if ( !$this->checkFileName() ) throw new \Exception(self::INVALID_FILE_NAME);
         return move_uploaded_file(sys_get_temp_dir(), Application::UPLOAD_FOLDER);
-        
+
     }
 
     protected function checkFileType(): bool {

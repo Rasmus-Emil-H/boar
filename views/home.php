@@ -2,8 +2,8 @@
     use app\core\Application;
 
     $query = Application::$app->database
-        ->select("Users", ["email"])
-        ->where(["status" => "0"])
+        ->select("Users u", ["u.email"])
+        ->where(["u.status" => "0"])
         ->limit(1)
         ->execute();
 

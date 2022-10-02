@@ -41,6 +41,10 @@ class Database {
         return $this;
     }
 
+    public function join(string $type, string $table, array $fields): Database {
+        return $this;
+    }
+
     public function bindValues(array $arguments): void {
         foreach($arguments as $selector => $value) {
             $this->query .= ( array_key_first($arguments) === $selector ? self::WHERE : self::AND ) . $selector . self::BIND;

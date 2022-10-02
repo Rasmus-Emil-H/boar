@@ -84,11 +84,20 @@ class Application {
         try {
             echo $this->router->resolve();
         } catch (\Exception $e) {
+            $this->exceptionCodeHandler($e->getCode());
             $this->response->setStatusCode($e->getCode());
             echo $this->view->renderView('error', [
                 'exception' => $e
             ]);
         }
+    }
+
+    /**
+     * Exception code handler
+    */
+
+    protected function exceptionCodeHandler($code) {
+        if( !is_int($code) ) throw new \Exception('Invalid status code. Must be int, however ' . gettype($code) . ' is provided.');
     }
 
     /**

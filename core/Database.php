@@ -21,9 +21,10 @@ class Database {
     protected array  $args   = [];
     protected string $table;
 
-    public const WHERE = ' WHERE ';
-    public const AND   = ' AND ';
-    public const BIND  = " = ?";
+    public const WHERE      = ' WHERE ';
+    public const AND        = ' AND ';
+    public const BIND       = " = ?";
+    public const INNERJOIN  = ' INNER JOIN ';
 
     public function select(string $table, array $fields): Database {
         $this->table  = $table;
@@ -41,7 +42,8 @@ class Database {
         return $this;
     }
 
-    public function join(string $type, string $table, array $fields): Database {
+    public function join(string $table, string $using): Database {
+        $this->query .= self::INNERJOIN . " {$table} USING({$using}) ";
         return $this;
     }
 

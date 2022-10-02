@@ -24,16 +24,24 @@ class File extends FileModel {
     }
 
     public function getUploadedFile(string $fileName) {
-        return $_FILES[$this->fileName] ?? throw new \Exception('File not found');
+        return basename($_FILES[$this->fileName]["name"]) ?? throw new \Exception('File not found');
     }
 
     public function moveFile(): bool {
+
         if ( !$this->checkFileType() ) throw new \Exception('Invalid file extension');
+        if ( !$this->checkFileName() ) throw new \Exception('Invalid file name');
+
         return move_uploaded_file(sys_get_temp_dir(), Application::UPLOAD_FOLDER);
+        
     }
 
     protected function checkFileType(): bool {
         return in_array(filetype($this->getUploadedFile()), $this->allowedFileExtensions);
+    }
+
+    public function checkFileName (): bool{
+        return preg_match("`^[-0-9A-Z_\.]+$`i", $this->fileName);
     }
 
     public function unlinkFile(): bool {

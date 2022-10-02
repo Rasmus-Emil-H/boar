@@ -69,12 +69,16 @@ class Database {
     }
 
     public function execute(): array {
-        $stmt = $this->prepare($this->query);
-        $stmt->execute($this->args);
-        $result = $stmt->fetchAll();
-        $stmt = null;
-        $this->resetQuery();
-        return $result;
+        try {
+            $stmt = $this->prepare($this->query);
+            $stmt->execute($this->args);
+            $result = $stmt->fetchAll();
+            $stmt = null;
+            $this->resetQuery();
+            return $result;
+        } catch (\Exception $e) {
+            exit("SQL ERROR: " . $e->getMessage());
+        }
     }
 
     public function groupBy(string $group): DatabaseUtilities {

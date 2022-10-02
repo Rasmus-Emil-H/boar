@@ -10,42 +10,55 @@ namespace app\core;
 
 class SQLQueryBuilder extends Database {
 
-    public function __construct() {
+    public const WHERE      = ' WHERE ';
+    public const AND        = ' AND ';
+    public const BIND       = " = ?";
+    public const INNERJOIN  = ' INNER JOIN ';
 
-    }
-
-    public function init(string $table, string $selector = '', array $args = []): Database {
-        $this->table = $table;
-        $this->selector = $selector;
-        $this->bindValues($args);
+    public function select(string $table, array $fields): Database {
+        $this->table  = $table;
+        $this->bindFields($fields);
+        $this->query .= "SELECT {$this->fields} FROM {$this->table}";
         return $this;
     }
 
-    public function bindValues(array $arguments) {
+    public function bindFields(array $fields): void {
+        $this->fields = implode(', ', $fields);
+    }
+
+    public function where(array $conditions): Database {
+        $this->bindValues($conditions);
+        return $this;
+    }
+
+    public function join(string $table, string $using): Database {
+        $this->query .= self::INNERJOIN . " {$table} USING({$using}) ";
+        return $this;
+    }
+
+    public function bindValues(array $arguments): void {
         foreach($arguments as $selector => $value) {
-            $this->where .= ( array_key_first($arguments) === $selector ? "WHERE " : " AND " ) . $selector . " = ?";
+            $this->query .= ( array_key_first($arguments) === $selector ? self::WHERE : self::AND ) . $selector . self::BIND;
             $this->args[] = $value;
         }
     }
 
-    public function select(): Database {
-        $this->query .= "SELECT {$this->selector} FROM {$this->table} {$this->where}";
+    public function create(): Database {
+        $this->query .= "INSERT INTO {$this->tableName} ({$this->implodedFields}) VALUES ({$this->implodedArgs})";
         return $this;
     }
 
-    public function create(): void {
-        $this->query .= "INSERT INTO {$this->tableName} ({$this->implodedFields}) VALUES ({$this->implodedArgs})";
-    }
-
-    public function patch(): void {
+    public function patch(): Database {
         $this->query .= "UPDATE {$this->tableName} SET {$this->implodedFields} {$this->where}";
+        return $this;
     }
 
-    public function remove(): void {
+    public function delete(): Database {
         $this->query .= "DELETE FROM {$this->tableName} {$this->where}";
+        return $this;
     }
 
-    public function limit(int $limit): DatabaseUtilities {
+    public function limit(int $limit): Database {
         $this->query .= ' LIMIT ' . $limit;
         return $this;
     }

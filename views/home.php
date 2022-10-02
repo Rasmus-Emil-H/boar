@@ -8,7 +8,7 @@
         ->limit(1)
         ->execute();
 
-    var_dump($query);
+    var_dump($_SERVER['REQUEST_URI']);
 
 ?>
 <h2>home</h2>

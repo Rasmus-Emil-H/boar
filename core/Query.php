@@ -5,7 +5,6 @@
  * AUTHOR: RE_WEB
  * @package app\core\Query
  * Minor thoughts for some query validation at some point
- * 
 */
 
 namespace app\core;
@@ -17,7 +16,8 @@ class Query extends QueryModel {
     protected QueryModel $queryModel;
 
     public function __construct() {
-        parent::__construct($_GET);
+        $this->queryModel = new QueryModel($_SERVER['REQUEST_URI']);
+        $this->validate();
     }
 
 }

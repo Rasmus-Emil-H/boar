@@ -44,6 +44,13 @@ class Application {
 
     public static Application $app;
 
+    /**
+     * Default file places  
+     * @var string $uploadFolder
+    */
+
+    public const UPLOAD_FOLDER = __DIR__.'/uploads';
+
     public function __construct(string $rootPath, array $pdoConfigurations) {
         
         $this->authenticationClass = $pdoConfigurations['authenticationClass'];

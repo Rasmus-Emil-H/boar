@@ -17,7 +17,7 @@ class File extends FileModel {
     public const INVALID_FILE_NAME = 'Invalid file name';
 
     /** 
-     * @var string
+     * @var string $currentString
     */
 
     public string $fileName;
@@ -41,8 +41,8 @@ class File extends FileModel {
         return in_array(filetype($this->getUploadedFile()), $this->allowedFileExtensions);
     }
 
-    public function checkFileName (): bool{
-        return preg_match("`^[-0-9A-Z_\.]+$`i", $this->fileName);
+    public function checkFileName (): bool {
+        return preg_match('/a-zA-Z0-9/', $this->fileName);
     }
 
     public function unlinkFile(): bool {
@@ -50,11 +50,7 @@ class File extends FileModel {
     }
 
     public function getFile() {
-        try {
-            
-        } catch (\Exception $e) {
-
-        }
+        if ( !file_exists(Application::UPLOAD_FOLDER . $this->fileName)) throw new \Exception('File not found');
     }
 
 }

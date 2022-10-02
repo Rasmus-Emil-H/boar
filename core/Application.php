@@ -49,7 +49,7 @@ class Application {
      * @var string $uploadFolder
     */
 
-    public const UPLOAD_FOLDER = __DIR__.'/uploads';
+    public const UPLOAD_FOLDER = __DIR__.'/uploads/';
 
     public function __construct(string $rootPath, array $pdoConfigurations) {
         

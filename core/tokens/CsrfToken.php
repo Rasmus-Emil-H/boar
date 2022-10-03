@@ -15,10 +15,12 @@ class CsrfToken {
 
     protected Session $session;
     protected Request $request;
+    protected Response $response;
 
     public function __construct() {
-        $this->session = new Session();
-        $this->request = new Request();
+        $this->session = Application::$app->session;
+        $this->request = Application::$app->request;
+        $this->response = Application::$app->response;
     }
 
     public function setToken() {
@@ -26,14 +28,11 @@ class CsrfToken {
     }
 
     public function getToken() {
+        
         $token = filter_input($this->request->getBody(), 'token', FILTER_SANITIZE_STRING);
 
-        if ( !$token || $token !== $this->session->get('CSRF_TOKEN') ) {
-            header($_SERVER['SERVER_PROTOCOL'] . ' 405 Method Not Allowed');
-            exit;
-        } else {
-            
-        }
+        if ( !$token || $token !== $this->session->get('CSRF_TOKEN') ) 
+            $this->response->setStatusCode(405);
     }
 
 }

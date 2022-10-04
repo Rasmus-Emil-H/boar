@@ -2,8 +2,6 @@
 
 # Application instance @ Application::$app
 
-#
-
 # Build queries through 
 
 Application::$app->database

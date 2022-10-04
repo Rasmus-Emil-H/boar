@@ -1,28 +1,28 @@
 # Boar mvc
 
-# Application instance @ Application::$app
+### Application instance @ Application::$app
 
-# Build queries through 
+### Build queries through 
 
-Application::$app->database
-    ->select("Users u", ["u.email", "u.firstname", "p.body"])
-    ->join('Posts p', 'UserID')
-    ->where(["u.status" => "0"])
-    ->limit()
-    ->execute();
+#### Application::$app->database
+### ->select("Users u", ["u.email", "u.firstname", "p.body"])
+### ->join('Posts p', 'UserID')
+### ->where(["u.status" => "0"])
+### ->limit()
+### ->execute();
 
-# Handle files through 
+### Handle files through 
 
-Application::$app->file
+#### Application::$app->file
 
-# Request response cycle through 
+### Request response cycle through 
 
-Response / Request handlers
+#### Response / Request handlers
 
-# Custom middlewares at core\middlewares
+### Custom middlewares at core\middlewares
 
-Auth middleware for protected routes
+#### Auth middleware for protected routes
 
-# Set CSRF tokens through core\tokens\csrf
+### Set CSRF tokens through core\tokens\csrf
 
-Remember to use tokens for your forms kids!
+#### Remember to use tokens for your forms kids!

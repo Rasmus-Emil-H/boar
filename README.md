@@ -24,3 +24,7 @@
 # Set CSRF tokens through core\tokens\csrf
 
 #### Remember to use tokens for your forms kids!
+
+# Handle Database changes through migrations
+
+#### @migrations folder

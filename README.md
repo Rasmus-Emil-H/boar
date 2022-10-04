@@ -1,15 +1,13 @@
 # Boar mvc
 
-### Application instance @ Application::$app
-
 ### Build queries through 
 
 #### Application::$app->database
-### ->select("Users u", ["u.email", "u.firstname", "p.body"])
-### ->join('Posts p', 'UserID')
-### ->where(["u.status" => "0"])
-### ->limit()
-### ->execute();
+#### ->select("Users u", ["u.email", "u.firstname", "p.body"])
+#### ->join('Posts p', 'UserID')
+#### ->where(["u.status" => "0"])
+#### ->limit()
+#### ->execute();
 
 ### Handle files through 
 

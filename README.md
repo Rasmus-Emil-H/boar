@@ -1,6 +1,6 @@
 # Boar mvc
 
-### Build queries through 
+# Build queries through 
 
 Application::$app->database
     ->select("Users u", ["u.email", "u.firstname", "p.body"])
@@ -9,7 +9,7 @@ Application::$app->database
     ->limit()
     ->execute();
 
-### Handle files through 
+# Handle files through 
 
 Application::$app->file
 
@@ -19,4 +19,8 @@ Response / Request handlers
 
 # Custom middlewares at core\middlewares
 
+Auth middleware for protected routes
+
 # Set CSRF tokens through core\tokens\csrf
+
+Remember to use tokens for your forms kids!

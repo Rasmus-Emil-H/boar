@@ -15,7 +15,7 @@ Application::$app->database
 
 Application::$app->file
 
-### Request response cycle through 
+# Request response cycle through 
 
 Response / Request handlers
 

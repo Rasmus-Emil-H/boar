@@ -5,10 +5,10 @@
         ->select("Users u", ["u.email", "u.firstname", "p.body"])
         ->join('Posts p', 'UserID')
         ->where(["u.status" => "0"])
-        ->limit(1)
+        ->limit()
         ->execute();
 
-    var_dump($_SERVER['REQUEST_URI']);
+    var_dump($query);
 
 ?>
 <h2>home</h2>

@@ -21,10 +21,12 @@ class Database {
     protected array  $args   = [];
     protected string $table;
 
-    public const WHERE      = ' WHERE ';
-    public const AND        = ' AND ';
-    public const BIND       = " = ?";
-    public const INNERJOIN  = ' INNER JOIN ';
+    public const WHERE         = ' WHERE ';
+    public const AND           = ' AND ';
+    public const BIND          = " = ?";
+    public const INNERJOIN     = ' INNER JOIN ';
+    
+    public const DEFAULT_LIMIT = 10;
 
     public function select(string $table, array $fields): Database {
         $this->table  = $table;
@@ -69,7 +71,7 @@ class Database {
         return $this;
     }
 
-    public function limit(int $limit): Database {
+    public function limit(int $limit = self::DEFAULT_LIMIT): Database {
         $this->query .= ' LIMIT ' . $limit;
         return $this;
     }

@@ -29,14 +29,6 @@ class Router {
         $this->queryPattern = Application::$app->regex->validateRoute();
     }
 
-    public function get($path, $callback) {
-        $this->routes['get'][$path] = $callback;
-    }
-
-    public function post($path, $callback) {
-        $this->routes['post'][$path] = $callback;
-    }
-
     protected function checkController() {
         $handler = ucfirst($this->queryPattern[1]).self::CONTROLLER;
         $controller = '\\app\controllers\\'.$handler;

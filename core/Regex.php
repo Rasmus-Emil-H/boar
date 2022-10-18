@@ -17,8 +17,12 @@ class Regex {
         $this->string = $string;
     }
 
-    protected function validateRoute(): string {
-        return '';
+    public function strip(string $string, array $characters = []): string {
+        return preg_replace('/'.implode($characters).'/', '', $this->string);
+    }
+
+    public function validateRoute(): string {
+        return $this->strip($this->string, ['\/']);
     }
 
 }

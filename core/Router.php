@@ -9,21 +9,25 @@
 namespace app\core;
 
 use app\core\Regex;
-
 use app\core\exceptions\NotFoundException;
+use app\controllers;
 
 class Router {
 
     protected array $routes = [];
-    protected Regex $pattern;
+    protected Regex $regex;
+    protected string $queryPattern;
 
     public Request $request;
     public Response $response;
 
+    protected const CONTROLLER = 'Controller';
+
     public function __construct(Request $request, Response $response) {
         $this->request = $request;
         $this->response = $response;
-        $this->pattern = new Regex($this->request->getPath());
+        $this->regex = new Regex($this->request->getPath());
+        $this->queryPattern = $this->regex->validateRoute();
     }
 
     public function get($path, $callback) {
@@ -42,11 +46,15 @@ class Router {
 
     public function resolve() {
 
-        var_dump($this->pattern);
-
         $path = $this->request->getPath();
         $method = $this->request->method();
         $callback = $this->routes[$method][$path] ?? false;
+
+        $handler = ucfirst($this->queryPattern).self::CONTROLLER;
+
+        $controller = '\\app\controllers\\'.$handler;
+
+        if (!class_exists($controller)) $callback = false;
 
         if($callback === false) 
             throw new NotFoundException();

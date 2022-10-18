@@ -14,6 +14,7 @@ use app\controllers;
 
 class Router {
 
+    protected string $method;
     protected array $routes = [];
     protected array $queryPattern;
 
@@ -37,11 +38,23 @@ class Router {
     }
 
     protected function checkController() {
-
+        $handler = ucfirst($this->queryPattern[1]).self::CONTROLLER;
+        $controller = '\\app\controllers\\'.$handler;
+        if (!class_exists($controller)) throw new NotFoundException();
+        $currentController = new $controller();
+        Application::$app->setController($currentController);
     }
 
     protected function checkMethod() {
+        $method = $this->queryPattern[2] ?? Application::$app->controller->defaultRoute;
+        if (!method_exists(Application::$app->controller, $method)) 
+            throw new NotFoundException();
+        $this->method = $method;
+    }
 
+    protected function runMiddlewares() {
+        foreach (Application::$app->controller->getMiddlewares() as $middleware) 
+            $middleware->execute();
     }
 
     /** 
@@ -52,30 +65,11 @@ class Router {
 
     public function resolve() {
 
-        $callback = true;
+        $this->checkController();
+        $this->checkMethod();
+        $this->runMiddlewares();
 
-        unset($this->queryPattern[0]);
-
-        $handler = ucfirst($this->queryPattern[1]).self::CONTROLLER;
-
-        $controller = '\\app\controllers\\'.$handler;
-
-        if (!class_exists($controller)) $callback = false;
-        
-        if($callback === false) throw new NotFoundException();
-
-        $currentController = new $controller();
-        $method = $this->queryPattern[2] ?? $currentController->defaultRoute;
-        if (!method_exists($controller, $method)) $callback = false;
-
-        if($callback === false) throw new NotFoundException();
-
-        Application::$app->setController($currentController);
-
-        foreach ($currentController->getMiddlewares() as $middleware) 
-            $middleware->execute();
-
-        $currentController->$method($this->request, $this->response);
+        Application::$app->controller->{$this->method}($this->request, $this->response);
 
     }
 

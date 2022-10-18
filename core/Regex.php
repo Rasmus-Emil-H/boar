@@ -21,8 +21,8 @@ class Regex {
         return preg_replace('/'.implode($characters).'/', '', $this->string);
     }
 
-    public static function match(string $string): bool {
-        return preg_match('/a-zA-Z0-9/', $string);
+    public static function match(string $pattern, string $string): bool {
+        return preg_match($pattern, $string);
     }
 
     public function validateRoute(): array {

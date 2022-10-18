@@ -1,6 +1,7 @@
 # Boar mvc
 
-# Start application by running php migrations.php
+# Start application 
+###### php migrations.php
 
 # Build queries through 
 

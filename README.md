@@ -1,4 +1,4 @@
-# Boar mvc
+# 🐗 B0AR MVC 🐗
 
 ## Init application by running the setup migration 
 ###### php migrations.php

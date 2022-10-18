@@ -16,7 +16,7 @@ class Router {
 
     protected array $routes = [];
     protected Regex $regex;
-    protected string $queryPattern;
+    protected array $queryPattern;
 
     public Request $request;
     public Response $response;
@@ -46,32 +46,30 @@ class Router {
 
     public function resolve() {
 
-        $path = $this->request->getPath();
-        $method = $this->request->method();
-        $callback = $this->routes[$method][$path] ?? false;
+        // $path = $this->request->getPath();
+        // $method = $this->request->method();
+        // $callback = $this->routes[$method][$path] ?? false;
 
-        $handler = ucfirst($this->queryPattern).self::CONTROLLER;
+        $callback = true;
+
+        unset($this->queryPattern[0]);
+
+        $handler = ucfirst($this->queryPattern[1]).self::CONTROLLER;
 
         $controller = '\\app\controllers\\'.$handler;
 
-        var_dump($method);
-
         if (!class_exists($controller)) $callback = false;
+        //if (!method_exists($controller, $this->queryPattern[2])) $callback = false;
 
         if($callback === false) 
             throw new NotFoundException();
-        if (is_string($callback)) 
-            return Application::$app->view->renderView($callback);
-        if (is_array($callback)) {
-            $controller = new $callback[0]();
-            Application::$app->controller = $controller;
-            $controller->action = $callback[1];
-            $callback[0] = $controller;
-            foreach ($controller->getMiddlewares() as $middleware) 
-                $middleware->execute();
-        }
 
-        return call_user_func($callback, $this->request, $this->response);
+        $init = new $controller();
+
+        // foreach ($init->getMiddlewares() as $middleware) 
+        //     $middleware->execute();
+
+        $init->$$queryPattern[2]($this->request, $this->response);
     }
 
 }

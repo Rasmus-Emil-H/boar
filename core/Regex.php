@@ -17,12 +17,12 @@ class Regex {
         $this->string = $string;
     }
 
-    public function strip(string $string, array $characters = []): string {
+    public function replace(string $string, array $characters = []): string {
         return preg_replace('/'.implode($characters).'/', '', $this->string);
     }
 
-    public function validateRoute(): string {
-        return $this->strip($this->string, ['\/']);
+    public function validateRoute(): array {
+        return explode('/', $this->string);
     }
 
 }

@@ -1,6 +1,6 @@
 # Boar mvc
 
-# Start application 
+## Start application 
 ###### php migrations.php
 
 # Build queries through 
@@ -12,22 +12,22 @@
 ###### ->limit()
 ###### ->execute();
 
-# Handle files through 
+## Handle files through 
 
 #### Application::$app->file
 
-# Request response cycle through 
+## Request response cycle through 
 
 ###### Response / Request handlers
 
-# Custom middlewares at core\middlewares
+## Custom middlewares at core\middlewares
 
 ###### Auth middleware for protected routes
 
-# Set CSRF tokens through core\tokens\csrf
+## Set CSRF tokens through core\tokens\csrf
 
 ###### Remember to use tokens for your forms kids!
 
-# Handle Database changes through migrations
+## Handle Database changes through migrations
 
 ###### @migrations folder

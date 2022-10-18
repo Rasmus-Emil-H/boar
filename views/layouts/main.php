@@ -18,10 +18,10 @@
                     <a class="nav-link" href="/about">about</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" href="/login">Login</a>
+                    <a class="nav-link" href="/auth">Login</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" href="/register">Register</a>
+                    <a class="nav-link" href="/auth/register">Register</a>
                   </li>
                 <?php else: ?>
                   <li class="nav-item active">

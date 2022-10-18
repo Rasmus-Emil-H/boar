@@ -12,6 +12,8 @@ use app\core\middlewares\AuthMiddleware;
 
 class AuthController extends Controller {
 
+    public string $defaultRoute = 'login';
+
     public function __construct() {
         $this->registerMiddleware(new AuthMiddleware(['profile']));
     }

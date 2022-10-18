@@ -59,17 +59,20 @@ class Router {
         $controller = '\\app\controllers\\'.$handler;
 
         if (!class_exists($controller)) $callback = false;
-        //if (!method_exists($controller, $this->queryPattern[2])) $callback = false;
-
-        if($callback === false) 
-            throw new NotFoundException();
+        
+        if($callback === false) throw new NotFoundException();
 
         $init = new $controller();
+        $method = $this->queryPattern[2] ?? $init->defaultRoute;
+        if (!method_exists($controller, $method)) $callback = false;
 
-        // foreach ($init->getMiddlewares() as $middleware) 
-        //     $middleware->execute();
+        if($callback === false) throw new NotFoundException();
 
-        $init->$$queryPattern[2]($this->request, $this->response);
+        foreach ($init->getMiddlewares() as $middleware) 
+            $middleware->execute();
+
+        $init->$method($this->request, $this->response);
+
     }
 
 }

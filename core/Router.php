@@ -54,6 +54,8 @@ class Router {
 
         $controller = '\\app\controllers\\'.$handler;
 
+        var_dump($method);
+
         if (!class_exists($controller)) $callback = false;
 
         if($callback === false) 

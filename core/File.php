@@ -26,8 +26,8 @@ class File extends FileModel {
         $this->fileName = $fileName;
     }
 
-    public function getUploadedFile(string $fileName) {
-        return basename($_FILES[$this->fileName]["name"]) ?? throw new \Exception('File not found');
+    public function getUploadedFile() {
+        return basename($_FILES[$this->fileName]['name']) ?? throw new \Exception('File not found');
     }
 
     public function moveFile(): bool {
@@ -41,8 +41,8 @@ class File extends FileModel {
         return in_array(filetype($this->getUploadedFile()), $this->allowedFileExtensions);
     }
 
-    public function checkFileName (): bool {
-        return preg_match('/a-zA-Z0-9/', $this->fileName);
+    public function checkFileName(): bool {
+        return Application::$app->regex->match('/a-zA-Z0-9/', $this->fileName);
     }
 
     public function unlinkFile(): bool {

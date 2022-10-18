@@ -21,6 +21,10 @@ class Regex {
         return preg_replace('/'.implode($characters).'/', '', $this->string);
     }
 
+    public static function match(string $string): bool {
+        return preg_match('/a-zA-Z0-9/', $string);
+    }
+
     public function validateRoute(): array {
         return explode('/', $this->string);
     }

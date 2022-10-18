@@ -8,7 +8,7 @@
 
 namespace app\core;
 
-use \app\core\middlewares\AuthMiddleware;
+use \app\core\middlewares\Middleware;
 
 class Controller {
 
@@ -25,7 +25,7 @@ class Controller {
     */
     public string $action = '';
 
-    public function render(string $view, array $params = array()) {
+    public function render(string $view, array $params = []) {
         echo Application::$app->view->renderView($view, $params);
     }
 
@@ -33,7 +33,7 @@ class Controller {
         $this->layout = $layout;
     }
 
-    public function registerMiddleware(AuthMiddleware $middleware) {
+    public function registerMiddleware(Middleware $middleware) {
         $this->middlewares[] = $middleware;
     }
 

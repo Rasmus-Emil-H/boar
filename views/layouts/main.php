@@ -34,10 +34,10 @@
                     <a class="nav-link" href="/ticket">Submit ticket</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" href="/posts">Posts</a>
+                    <a class="nav-link" href="/post">Posts</a>
                   </li>
                   <li class="nav-item float-right">
-                    <a class="nav-link" href="/logout"><?= Application::$app->user->getDisplayName(); ?> (Logout)</a>
+                    <a class="nav-link" href="/auth/logout"><?= Application::$app->user->getDisplayName(); ?> (Logout)</a>
                   </li>
                 <?php endif; ?>
             </ul>

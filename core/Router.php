@@ -15,7 +15,6 @@ use app\controllers;
 class Router {
 
     protected array $routes = [];
-    protected Regex $regex;
     protected array $queryPattern;
 
     public Request $request;
@@ -26,8 +25,7 @@ class Router {
     public function __construct(Request $request, Response $response) {
         $this->request = $request;
         $this->response = $response;
-        $this->regex = new Regex($this->request->getPath());
-        $this->queryPattern = $this->regex->validateRoute();
+        $this->queryPattern = Application::$app->regex->validateRoute();
     }
 
     public function get($path, $callback) {
@@ -38,6 +36,14 @@ class Router {
         $this->routes['post'][$path] = $callback;
     }
 
+    protected function checkController() {
+
+    }
+
+    protected function checkMethod() {
+
+    }
+
     /** 
      * Resolver for the routing module
      * Middlewares are controller implemented
@@ -45,7 +51,7 @@ class Router {
     */
 
     public function resolve() {
-        
+
         $callback = true;
 
         unset($this->queryPattern[0]);

@@ -23,7 +23,6 @@ class SiteController extends Controller {
 
     public function handleContact(Request $request) {
         $body = $request->getBody();
-        Application::$app->dump($body);
     }
 
 }

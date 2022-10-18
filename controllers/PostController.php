@@ -11,6 +11,8 @@ use \app\models\PostForm;
 
 class PostController extends Controller {
 
+    public string $defaultRoute = 'posts';
+
     public function posts(Request $request, Response $response) {
         return $this->render('posts', [
             

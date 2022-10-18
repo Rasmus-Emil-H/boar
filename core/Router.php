@@ -62,16 +62,18 @@ class Router {
         
         if($callback === false) throw new NotFoundException();
 
-        $init = new $controller();
-        $method = $this->queryPattern[2] ?? $init->defaultRoute;
+        $currentController = new $controller();
+        $method = $this->queryPattern[2] ?? $currentController->defaultRoute;
         if (!method_exists($controller, $method)) $callback = false;
 
         if($callback === false) throw new NotFoundException();
 
-        foreach ($init->getMiddlewares() as $middleware) 
+        Application::$app->setController($currentController);
+
+        foreach ($currentController->getMiddlewares() as $middleware) 
             $middleware->execute();
 
-        $init->$method($this->request, $this->response);
+        $currentController->$method($this->request, $this->response);
 
     }
 

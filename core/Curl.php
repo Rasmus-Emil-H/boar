@@ -40,12 +40,9 @@ class curl {
 	}
 
 	public function send() {
-		
 		try{
-
 			if( $this->handler == null ) $this->handler = curl_init( );
-			
-			switch( strtolower( $this->method ) ) {
+			switch( $this->method ) {
 				case 'post':
 					curl_setopt_array ( $this->handler , [
 						CURLOPT_URL => $this->url,
@@ -54,47 +51,24 @@ class curl {
 						CURLOPT_POST => count($this->data),
 						CURLOPT_POSTFIELDS => http_build_query($this->data),
 					] );
-				break;
-				case 'put':
-					curl_setopt_array ( $this->handler , [
-						CURLOPT_URL => $this->url,
-						CURLOPT_RETURNTRANSFER => true,
-						CURLOPT_CUSTOMREQUEST => 'PUT',
-						CURLOPT_POSTFIELDS => http_build_query($this->data),
-					] );
-				break;
-				case 'delete':
-					curl_setopt_array ( $this->handler , [
-						CURLOPT_URL => $this->url,
-						CURLOPT_RETURNTRANSFER => true,
-						CURLOPT_CUSTOMREQUEST => 'DELETE',
-						CURLOPT_POSTFIELDS => http_build_query($this->data),
-					] );
-				break;                    
-				
+				break;           
 				default:
 					curl_setopt_array ( $this->handler , [
 						CURLOPT_URL => $this->url,
 						CURLOPT_RETURNTRANSFER => true,
 					] );
 				break;
-
 			}
-
 			$this->content = curl_exec ( $this->handler );
 			$this->info = curl_getinfo( $this->handler );
-			
-		} catch( Exception $e ) {
+		} catch( \Exception $e ) {
 			die( $e->getMessage() );
 		}
-	
-	}		
+	}
 
 	public function close() {
-	
 	   curl_close ( $this->handler );
 	   $this->handler = null;
-	   
 	}
 	
 }

@@ -20,13 +20,9 @@ class LoginForm extends Model {
         
         $user = User::findOne(['email' => $this->email], 'Users');
 
-        if (!$user) {
-            $this->setError('email', 'User not found');
-            return false;
-        }
-
-        if (!$this->verifyPasswords($this->password, $user->password)) {
-            $this->setError('password', 'Password incorrect');
+        if (!$user || !$this->verifyPasswords($this->password, $user->password)) {
+            $this->setError('email', 'Email error');
+            $this->setError('password', 'Password error');
             return false;
         }
         

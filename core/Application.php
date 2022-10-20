@@ -23,12 +23,12 @@ class Application {
     public Router $router;
     public Request $request;
     public Response $response;
-    public ?Controller $controller = null;
     public Session $session;
     public Database $database;
-    public ?DbModel $user;
     public View $view;
     public Authentication $authentication;
+    public ?Controller $controller = null;
+    public ?DbModel $user;
 
     /**
      * Application states  

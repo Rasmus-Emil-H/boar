@@ -10,13 +10,13 @@ namespace app\core;
 
 class curl {
 
-	protected $handler = null;
-	protected $url = '';
-	protected $info = [];
-	protected $data = [];
-	protected $headers = [];
-	protected $method = 'get';
-	public $content = '';
+	protected $handler  = null;
+	protected $url 		= '';
+	protected $info 	= [];
+	protected $data 	= [];
+	protected $headers  = [];
+	protected $method   = 'get';
+	public    $content  = '';
 	
 	public function setUrl(string $url = '') {
 		$this->url = $url;

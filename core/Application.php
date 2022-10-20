@@ -32,6 +32,7 @@ class Application {
     public Database $database;
     public ?DbModel $user;
     public View $view;
+    public Authentication $authentication;
 
     /**
      * Application states  
@@ -58,27 +59,16 @@ class Application {
         self::$ROOT_DIR = $rootPath;
         self::$app = $this;
         
-        $this->request   = new Request();
-        $this->response  = new Response();
-        $this->router    = new Router($this->request, $this->response);
-        $this->session   = new Session();
-        $this->database  = new Database($pdoConfigurations['pdo']);
-        $this->view      = new View();
+        $this->request          = new Request();
+        $this->response         = new Response();
+        $this->router           = new Router($this->request, $this->response);
+        $this->session          = new Session();
+        $this->database         = new Database($pdoConfigurations['pdo']);
+        $this->view             = new View();
+        $this->authentication   = new Authentication();
 
-        $this->checkUserBasedOnSession();
+        $this->authentication->checkUserBasedOnSession();
 
-    }
-
-    public function checkUserBasedOnSession(): void {
-        $primaryValue = $this->session->get('user');
-        if (!$primaryValue) $this->user = null;
-        if ($primaryValue) $this->setApplicationUser($primaryValue);
-    }
-
-    public function setApplicationUser(string $primaryValue): void {
-        $authenticationClass = new $this->authenticationClass();
-        $primaryKey = $authenticationClass->getPrimaryKey();
-        $this->user = $authenticationClass->findOne([$primaryKey => $primaryValue], $authenticationClass->tableName());
     }
 
     /**
@@ -119,23 +109,6 @@ class Application {
 
     public function setController(Controller $controller): void {
         $this->controller = $controller;
-    }
-
-    public function login(DbModel $user): bool {
-        $this->user = $user;
-        $primaryKey = $user->getPrimaryKey();
-        $primaryValue = $user->{$primaryKey};
-        $this->session->set('user', $primaryValue);
-        return true;
-    }
-
-    public function logout(): void {
-        $this->user = null;
-        $this->session->removeSessionProperty('user');
-    }
-
-    public static function isGuest(): bool {
-        return is_null(self::$app->user);
     }
     
 }

@@ -30,7 +30,7 @@ class LoginForm extends Model {
             return false;
         }
         
-        return Application::$app->login($user);
+        return Application::$app->authentication->login($user);
 
     }
 

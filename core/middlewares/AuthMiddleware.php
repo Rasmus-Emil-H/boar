@@ -20,7 +20,7 @@ class AuthMiddleware extends Middleware {
     }
 
     public function execute() {
-        if (Application::isGuest()) 
+        if (Application::$app->authentication->isGuest()) 
             if (empty($this->actions) || in_array(Application::$app->controller->action, $this->actions)) 
                 throw new ForbiddenException();
     }

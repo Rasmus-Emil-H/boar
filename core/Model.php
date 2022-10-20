@@ -3,6 +3,10 @@
 /*******************************
  * Bootstrap Model 
  * AUTHOR: RE_WEB
+ * Global model
+ * Should be able to define different things
+ * Within your specific models - extend to this
+ * Thus giving you the ability to set rules and extend this class' validation methods
  * @package app\core\Model
 *******************************/
 
@@ -15,12 +19,12 @@ abstract class Model {
      * @var const
     */
 
-    protected const RULE_REQUIRED = 'required';
+    protected const RULE_REQUIRED    = 'required';
     protected const RULE_VALID_EMAIL = 'email';
-    protected const RULE_MIN = 'min';
-    protected const RULE_MAX = 'max';
-    protected const RULE_MATCH = 'match';
-    protected const RULE_UNIQUE = 'unique';
+    protected const RULE_MIN         = 'min';
+    protected const RULE_MAX         = 'max';
+    protected const RULE_MATCH       = 'match';
+    protected const RULE_UNIQUE      = 'unique';
 
     protected array $errors = [];
 

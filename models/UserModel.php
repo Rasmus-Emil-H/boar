@@ -6,7 +6,9 @@
  * @package app\core\UserModel
 */
 
-namespace app\core;
+namespace app\models;
+
+use app\core\DbModel;
 
 abstract class UserModel extends DbModel {
 

@@ -49,12 +49,9 @@ class Application {
     public const UPLOAD_FOLDER = __DIR__.'/uploads/';
 
     public function __construct(string $rootPath, array $pdoConfigurations) {
-        
         $this->authenticationClass = $pdoConfigurations['authenticationClass'];
-
         self::$ROOT_DIR = $rootPath;
         self::$app = $this;
-        
         $this->request          = new Request();
         $this->response         = new Response();
         $this->router           = new Router($this->request, $this->response);
@@ -62,9 +59,7 @@ class Application {
         $this->database         = new Database($pdoConfigurations['pdo']);
         $this->view             = new View();
         $this->authentication   = new Authentication();
-
         $this->authentication->checkUserBasedOnSession();
-
     }
 
     /**

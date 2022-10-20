@@ -61,12 +61,10 @@ class Router {
     */
 
     public function resolve(): void {
-
         $this->setQueryPattern();
         $this->checkController();
         $this->checkMethod();
         $this->runMiddlewares();
-
         Application::$app->controller->{$this->method}($this->request, $this->response);
 
     }

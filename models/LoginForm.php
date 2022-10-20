@@ -17,17 +17,13 @@ class LoginForm extends Model {
     public string $password = '';
 
     public function login() {
-        
         $user = User::findOne(['email' => $this->email], 'Users');
-
         if (!$user || !$this->verifyPasswords($this->password, $user->password)) {
             $this->setError('email', 'Email error');
             $this->setError('password', 'Password error');
             return false;
         }
-        
         return Application::$app->authentication->login($user);
-
     }
 
     public function verifyPasswords(string $haystack, string $needle): bool {

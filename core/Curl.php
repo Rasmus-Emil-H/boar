@@ -67,7 +67,7 @@ class Curl {
 		}
 	}
 
-	public function close() {
+	public function close(): void {
 	   curl_close ( $this->handler );
 	   $this->handler = null;
 	}

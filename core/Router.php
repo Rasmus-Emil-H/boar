@@ -30,7 +30,7 @@ class Router {
     }
 
     protected function checkController() {
-        $handler = ucfirst($this->queryPattern[1]).self::CONTROLLER;
+        $handler = ucfirst($this->queryPattern[0] ?? '').self::CONTROLLER;
         $controller = '\\app\controllers\\'.$handler;
         if (!class_exists($controller)) throw new NotFoundException();
         $currentController = new $controller();
@@ -38,7 +38,7 @@ class Router {
     }
 
     protected function checkMethod() {
-        $method = $this->queryPattern[2] ?? Application::$app->controller->defaultRoute;
+        $method = $this->queryPattern[1] ?? Application::$app->controller->defaultRoute;
         if (!method_exists(Application::$app->controller, $method)) 
             throw new NotFoundException();
         $this->method = $method;

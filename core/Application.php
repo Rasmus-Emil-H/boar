@@ -3,15 +3,11 @@
 /*******************************
  * Bootstrap application 
  * AUTHOR: RE_WEB
+ * Entrypoint for application
  * @package app\core\application
 *******************************/
 
 namespace app\core;
-
-use app\controllers\SiteController;
-use app\controllers\AuthController;
-use app\controllers\ContactController;
-use app\controllers\PostController;
 
 class Application {
 
@@ -21,9 +17,9 @@ class Application {
     */
 
     public static string $ROOT_DIR;
-
     public string $layout = 'main';
     public string $authenticationClass;
+
     public Router $router;
     public Request $request;
     public Response $response;

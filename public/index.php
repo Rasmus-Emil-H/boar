@@ -8,12 +8,13 @@ use app\core\Application;
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
-$dotenv = Dotenv\Dotenv::createImmutable(dirname(__DIR__));
-$dotenv->load();
-
 $config = [
     'authenticationClass' => \app\models\User::class,
-    'pdo' => ['dsn' => $_ENV['DB_DSN'], 'user' => $_ENV['DB_USER'], 'password' => $_ENV['DB_PASSWORD']]
+    'pdo' => [
+        'dsn' => 'mysql:host=localhost;port=3306;dbname=boar', 
+        'user' => 'root', 
+        'password' => ''
+    ]
 ];
 
 $app = new Application(dirname(__DIR__), $config);

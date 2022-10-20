@@ -17,11 +17,11 @@ class User extends UserModel {
      * @var User properties
     */
 
-    public string $email = '';
-    public string $password = '';
-    public int $status = Application::STATUS_INACTIVE;
+    public string $email     = '';
+    public string $password  = '';
+    public int    $status    = Application::STATUS_INACTIVE;
     public string $firstname = '';
-    public string $lastname = '';
+    public string $lastname  = '';
 
     /*
      * Tablename

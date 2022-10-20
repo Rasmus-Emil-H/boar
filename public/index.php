@@ -6,7 +6,7 @@ error_reporting(E_ALL);
 
 use app\core\Application;
 
-require_once __DIR__ . '/../vendor/autoload.php';
+require_once dirname(__DIR__) . '/vendor/autoload.php';
 
 $config = [
     'authenticationClass' => \app\models\User::class,

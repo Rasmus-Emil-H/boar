@@ -32,7 +32,6 @@ class Application {
     public Database $database;
     public ?DbModel $user;
     public View $view;
-    public Regex $regex;
 
     /**
      * Application states  
@@ -61,7 +60,6 @@ class Application {
         
         $this->request   = new Request();
         $this->response  = new Response();
-        $this->regex     = new Regex($this->request->getPath());
         $this->router    = new Router($this->request, $this->response);
         $this->session   = new Session();
         $this->database  = new Database($pdoConfigurations['pdo']);

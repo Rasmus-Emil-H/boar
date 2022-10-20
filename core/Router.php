@@ -20,31 +20,36 @@ class Router {
 
     public Request $request;
     public Response $response;
+    public Regex $regex;
 
     protected const CONTROLLER = 'Controller';
 
     public function __construct(Request $request, Response $response) {
         $this->request = $request;
         $this->response = $response;
-        $this->queryPattern = Application::$app->regex->validateRoute();
+        $this->regex = new Regex($this->request->getPath());
     }
 
-    protected function checkController() {
+    public function setQueryPattern(): void {
+        $this->queryPattern = $this->regex->validateRoute();
+    }
+
+    protected function checkController(): void {
         $handler = ucfirst($this->queryPattern[0] ?? '').self::CONTROLLER;
         $controller = '\\app\controllers\\'.$handler;
-        if (!class_exists($controller)) throw new NotFoundException();
-        $currentController = new $controller();
-        Application::$app->setController($currentController);
+        if (!class_exists($controller)) 
+            throw new NotFoundException();
+        Application::$app->setController(new $controller());
     }
 
-    protected function checkMethod() {
+    protected function checkMethod(): void {
         $method = $this->queryPattern[1] ?? Application::$app->controller->defaultRoute;
         if (!method_exists(Application::$app->controller, $method)) 
             throw new NotFoundException();
         $this->method = $method;
     }
 
-    protected function runMiddlewares() {
+    protected function runMiddlewares(): void {
         foreach (Application::$app->controller->getMiddlewares() as $middleware) 
             $middleware->execute();
     }
@@ -55,8 +60,9 @@ class Router {
      * @return callback
     */
 
-    public function resolve() {
+    public function resolve(): void {
 
+        $this->setQueryPattern();
         $this->checkController();
         $this->checkMethod();
         $this->runMiddlewares();

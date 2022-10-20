@@ -26,7 +26,7 @@ class Regex {
     }
 
     public function validateRoute(): array {
-        return explode('/', $this->string);
+        return explode('/', substr($this->string, 1));
     }
 
 }

@@ -16,7 +16,7 @@ class curl {
 	protected $data 	= [];
 	protected $headers  = [];
 	protected $method   = 'get';
-	public    $content  = '';
+	protected $content  = '';
 	
 	public function setUrl(string $url = '') {
 		$this->url = $url;

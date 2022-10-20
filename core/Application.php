@@ -103,7 +103,7 @@ class Application {
      * Exception code handler
     */
 
-    protected function exceptionCodeHandler($code) {
+    protected function exceptionCodeHandler(mixed $code) {
         if( !is_int($code) ) 
             throw new \Exception('Invalid status code. Must be int, however ' . gettype($code) . ' is provided.');
     }

@@ -89,12 +89,12 @@ class Database {
         }
     }
 
-    public function groupBy(string $group): DatabaseUtilities {
+    public function groupBy(string $group): Database {
         $this->query .= ' GROUP BY ' . $group;
         return $this;
     }
 
-    public function orderBy(string $order): DatabaseUtilities {
+    public function orderBy(string $order): Database {
         $this->query .= ' ORDER BY ' . $order;
         return $this;
     }

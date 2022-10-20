@@ -8,7 +8,7 @@
 
 namespace app\core;
 
-class curl {
+class Curl {
 
 	protected $handler  = null;
 	protected $url 		= '';
@@ -18,28 +18,28 @@ class curl {
 	protected $method   = 'get';
 	protected $content  = '';
 	
-	public function setUrl(string $url = '') {
+	public function setUrl(string $url = ''): Curl {
 		$this->url = $url;
 		return $this;
 	}
 	
-	public function setData(array $data = []) {
+	public function setData(array $data = []): Curl {
 		$this->data = $data;
 		return $this;
 	}
 	
-	public function setMethod(string $method = 'get') {
+	public function setMethod(string $method = 'get'): Curl {
 		$this->method = $method;
 		return $this;
 	}
 	
-	public function setHeaders(array $headers) {
+	public function setHeaders(array $headers): Curl {
 		foreach ( $headers as $header) 
 			$this->headers[] = $header;
 		return $this;
 	}
 
-	public function send() {
+	public function send(): Curl {
 		try{
 			if( $this->handler == null ) $this->handler = curl_init( );
 			switch( $this->method ) {
@@ -61,6 +61,7 @@ class curl {
 			}
 			$this->content = curl_exec ( $this->handler );
 			$this->info = curl_getinfo( $this->handler );
+			return $this;
 		} catch( \Exception $e ) {
 			die( $e->getMessage() );
 		}

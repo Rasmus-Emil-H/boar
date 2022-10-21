@@ -10,6 +10,15 @@ namespace app\core;
 class Database {
 
     /**
+     * Database constructor
+    */
+
+    public function __construct(array $pdoConfigurations) {
+        $this->pdo = new \Pdo($pdoConfigurations['dsn'], $pdoConfigurations['user'], $pdoConfigurations['password']);
+        $this->pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+    }
+
+    /**
      * Pdo instance 
      * @var Pdo;
     */
@@ -134,11 +143,6 @@ class Database {
         created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         PRIMARY KEY (MigrationID)
     );';
-
-    public function __construct(array $pdoConfigurations) {
-        $this->pdo = new \Pdo($pdoConfigurations['dsn'], $pdoConfigurations['user'], $pdoConfigurations['password']);
-        $this->pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
-    }
 
     public function applyMigrations() {
         $this->createMigrationsTable();

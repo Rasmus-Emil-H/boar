@@ -40,3 +40,4 @@
 ###### ->setData(['foo' => 'bar'])
 ###### ->setHeaders(['bla:bla'])
 ###### ->send();
+###### Get info by $curl->content

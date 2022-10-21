@@ -34,9 +34,9 @@
 
 ## curl
 
-$curl = new curl();
-$curl->setUrl('https://superfunresource.oi')
-    ->setMethod('post')
-    ->setData(['foo' => 'bar'])
-    ->setHeaders(['bla:bla'])
-    ->send();
+###### $curl = new curl();
+###### $curl->setUrl('https://superfunresource.oi')
+###### ->setMethod('post')
+###### ->setData(['foo' => 'bar'])
+###### ->setHeaders(['bla:bla'])
+###### ->send();

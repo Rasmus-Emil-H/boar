@@ -36,6 +36,11 @@ class InputField extends BaseField {
         );
     }
 
+    public function hiddenField(): InputField {
+        $this->type = self::TYPE_HIDDEN;
+        return $this;
+    }
+
     public function passwordField(): InputField {
         $this->type = self::TYPE_PASSWORD;
         return $this;

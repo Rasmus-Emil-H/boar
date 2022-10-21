@@ -34,7 +34,7 @@
 
 ## curl
 
-###### $curl = new curl();
+###### $curl = new \app\core\curl();
 ###### $curl->setUrl('https://superfunresource.oi')
 ###### ->setMethod('post')
 ###### ->setData(['foo' => 'bar'])

@@ -33,6 +33,7 @@ abstract class DbModel extends Model {
         $statement = self::prepare("SELECT * FROM {$tableName} WHERE {$sql}");
         foreach ($where as $key => $value) $statement->bindValue(":{$key}", $value);
         $statement->execute();
+        var_dump(static::class);exit();
         return $statement->fetchObject(static::class);
     }
 

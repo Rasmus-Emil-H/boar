@@ -66,7 +66,6 @@ class Router {
         $this->checkMethod();
         $this->runMiddlewares();
         Application::$app->controller->{$this->method}($this->request, $this->response);
-
     }
 
 }

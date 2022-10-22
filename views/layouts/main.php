@@ -51,7 +51,7 @@
       <?php endif; ?>
       {{content}}
     </div>
-    <script src="resources/js/jquery-3.5.1.min.slim.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-    <script src="resources/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
+    <script src="resources/js/jquery-3.5.1.min.slim.js"></script>
+    <script src="resources/js/bootstrap.bundle.min.js"></script>
   </body>
 </html>

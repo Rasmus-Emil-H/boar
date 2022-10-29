@@ -39,6 +39,11 @@ class Curl {
 		return $this;
 	}
 
+	public function encodeData(): Curl {
+		json_encode($this->data);
+		return $this;
+	}
+
 	public function send(): Curl {
 		try{
 			if( $this->handler == null ) $this->handler = curl_init( );

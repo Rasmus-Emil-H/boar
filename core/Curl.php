@@ -39,8 +39,14 @@ class Curl {
 		return $this;
 	}
 
-	public function encodeData(): Curl {
-		json_encode($this->data);
+	public function setEncoding(string $scheme): Curl {
+		switch ( $scheme) {
+			case 'json':
+				json_encode($this->data);
+				break;
+			default:
+				break;
+		}
 		return $this;
 	}
 

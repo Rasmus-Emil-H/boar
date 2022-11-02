@@ -52,7 +52,7 @@ class Curl {
 
 	public function send(): Curl {
 		try{
-			if( $this->handler == null ) $this->handler = curl_init( );
+			if( $this->handler === null ) $this->handler = curl_init();
 			switch( $this->method ) {
 				case 'post':
 					curl_setopt_array ( $this->handler , [

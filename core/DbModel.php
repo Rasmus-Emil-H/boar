@@ -14,6 +14,11 @@ abstract class DbModel extends Model {
     abstract public function getAttributes(): array;
     abstract public function getPrimaryKey(): string;
 
+    public function setAttributes(array $attributes) {
+        foreach ( $this->getAttributes() as $key => $value ) 
+            $this->{$value} = $attributes[$key];
+    }
+
     public function save() {
         $table = $this->tableName();
         $attributes = $this->getAttributes();

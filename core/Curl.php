@@ -34,13 +34,13 @@ class Curl {
 	}
 	
 	public function setHeaders(array $headers): Curl {
-		foreach ( $headers as $header) 
+		foreach ( $headers as $header ) 
 			$this->headers[] = $header;
 		return $this;
 	}
 
 	public function setEncoding(string $scheme): Curl {
-		switch ( $scheme) {
+		switch ( $scheme ) {
 			case 'json':
 				json_encode($this->data);
 				break;
@@ -52,8 +52,8 @@ class Curl {
 
 	public function send(): Curl {
 		try{
-			if( $this->handler === null ) $this->handler = curl_init();
-			switch( $this->method ) {
+			if ( $this->handler === null ) $this->handler = curl_init();
+			switch ( $this->method ) {
 				case 'post':
 					curl_setopt_array ( $this->handler , [
 						CURLOPT_URL => $this->url,

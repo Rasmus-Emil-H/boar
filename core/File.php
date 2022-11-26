@@ -53,4 +53,8 @@ class File extends FileModel {
         if ( !file_exists(Application::UPLOAD_FOLDER . $this->fileName)) throw new \Exception('File not found');
     }
 
+    public function fileSize(string $type, string $quality) {
+        
+    }
+
 }

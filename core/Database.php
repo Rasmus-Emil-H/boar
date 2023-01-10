@@ -8,34 +8,30 @@
 namespace app\core;
 
 class Database {
-
-    /**
-     * Database constructor
-    */
-
-    public function __construct(array $pdoConfigurations) {
-        $this->pdo = new \Pdo($pdoConfigurations['dsn'], $pdoConfigurations['user'], $pdoConfigurations['password']);
-        $this->pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
-    }
+    
+    protected string $query  = '';
+    protected string $where  = '';
+    protected string $fields = '';
+    protected array  $args   = [];
+    protected string $table;
+    
+    public const WHERE       = ' WHERE ';
+    public const AND         = ' AND ';
+    public const BIND        = ' = ?';
+    public const INNERJOIN   = ' INNER JOIN ';
+    
+    public const DEFAULT_LIMIT = 100;
 
     /**
      * Pdo instance 
      * @var Pdo;
     */
     public \Pdo $pdo;
-
-    protected string $query  = '';
-    protected string $where  = '';
-    protected string $fields = '';
-    protected array  $args   = [];
-    protected string $table;
-
-    public const WHERE         = ' WHERE ';
-    public const AND           = ' AND ';
-    public const BIND          = " = ?";
-    public const INNERJOIN     = ' INNER JOIN ';
     
-    public const DEFAULT_LIMIT = 10;
+    public function __construct(array $pdoConfigurations) {
+        $this->pdo = new \Pdo($pdoConfigurations['dsn'], $pdoConfigurations['user'], $pdoConfigurations['password']);
+        $this->pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+    }
 
     public function select(string $table, array $fields): Database {
         $this->table  = $table;
@@ -43,9 +39,20 @@ class Database {
         $this->query .= "SELECT {$this->fields} FROM {$this->table}";
         return $this;
     }
+    
+    /**
+     * @return binders for fields and arguments 
+    */
 
     public function bindFields(array $fields): void {
         $this->fields = implode(', ', $fields);
+    }
+    
+    public function bindValues(array $arguments): void {
+        foreach($arguments as $selector => $value) {
+            $this->query .= ( array_key_first($arguments) === $selector ? self::WHERE : self::AND ) . $selector . self::BIND;
+            $this->args[] = $value;
+        }
     }
 
     public function where(array $conditions): Database {
@@ -53,16 +60,15 @@ class Database {
         return $this;
     }
 
-    public function join(string $table, string $using): Database {
+    public function innerJoin(string $table, string $using): Database {
         $this->query .= self::INNERJOIN . " {$table} USING({$using}) ";
         return $this;
     }
-
-    public function bindValues(array $arguments): void {
-        foreach($arguments as $selector => $value) {
-            $this->query .= ( array_key_first($arguments) === $selector ? self::WHERE : self::AND ) . $selector . self::BIND;
-            $this->args[] = $value;
-        }
+    
+    public function leftJoin(string $table, string $on, array $and = []): Database {
+        $implodedAnd = (count($and) > 0 ? ' AND ' : '') . implode(' AND ', $and);
+        $this->query .= " LEFT JOIN {$table} {$on} {$implodedAnd} ";
+        return $this;
     }
 
     public function create(): Database {
@@ -75,8 +81,8 @@ class Database {
         return $this;
     }
 
-    public function delete(): Database {
-        $this->query .= "DELETE FROM {$this->tableName} {$this->where}";
+    public function delete(string $table): Database {
+        $this->query .= "DELETE FROM {$table} {$this->where}";
         return $this;
     }
 
@@ -114,6 +120,9 @@ class Database {
         $this->where = '';
         $this->implodedFields = '';
         $this->implodedArgs = '';
+        $this->query = '';
+        $this->fields = '';
+        $this->args = [];
     }
 
     public function describe() {

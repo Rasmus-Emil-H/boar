@@ -13,29 +13,42 @@ abstract class DbModel extends Model {
     abstract public function tableName(): string;
     abstract public function getAttributes(): array;
     abstract public function getPrimaryKey(): string;
-
+        
     public function setAttributes(array $attributes) {
-        foreach ( $this->getAttributes() as $key => $value ) 
+        foreach ( $this->getAttributes() as $key => $value )
             $this->{$value} = $attributes[$key];
+    }
+
+    public function getCurrentProperties(): array {
+        $props = [];
+        foreach ( $this->getAttributes() as $key => $value ) $props[$value] = $this->{$value};
+        return $props;
     }
 
     public function save() {
         $table = $this->tableName();
         $attributes = $this->getAttributes();
         $params = array_map(fn($attr) => ":{$attr}", $attributes);
-        $statement = self::prepare("INSERT INTO {$table} (". implode(',', $attributes) .") VALUES (". implode(',', $params) .")");
+        $exists = $this->findOne([$this->getPrimaryKey() => $this->{$this->getPrimaryKey()}], $table);
+        if(!$exists) $statement = $this->prepare("INSERT INTO {$table} (". implode(',', $attributes) .") VALUES (". implode(',', $params) .")");
+        else {
+            $primaryKey = $this->getPrimaryKey();
+            $updateValues = '';
+            foreach ( $this->getCurrentProperties() as $key => $value ) $updateValues .= "{$key} = :{$key}" . (array_key_last($this->getCurrentProperties()) === $key ? '' : ', ');
+            $statement = $this->prepare("UPDATE {$table} SET ". $updateValues ." WHERE {$primaryKey} = {$exists->{$primaryKey}}");
+        }
         foreach ($attributes as $attribute) $statement->bindValue(":{$attribute}", $this->{$attribute});
         return $statement->execute();
     }
 
-    public static function prepare(string $sql) {
+    public function prepare(string $sql) {
         return Application::$app->database->pdo->prepare($sql);
     }
 
-    public static function findOne(array $where, string $tableName) {
+    public function findOne(array $where, string $tableName) {
         $attributes = array_keys($where);
         $sql = implode(" AND ", array_map(fn($attr) => "{$attr} = :{$attr}", $attributes));
-        $statement = self::prepare("SELECT * FROM {$tableName} WHERE {$sql}");
+        $statement = $this->prepare("SELECT * FROM {$tableName} WHERE {$sql}");
         foreach ($where as $key => $value) $statement->bindValue(":{$key}", $value);
         $statement->execute();
         return $statement->fetchObject(static::class);

@@ -26,21 +26,20 @@ abstract class DbModel extends Model {
     }
 
     public function prepareCreate(string $table, array $attributes, array $params) {
-        return $this->prepare("INSERT INTO {$table} (". implode(',', $attributes) .") VALUES (". implode(',', $params) .")");
+        return $this->prepare("INSERT INTO {$this->tableName()} (". implode(',', $attributes) .") VALUES (". implode(',', $params) .")");
     }
 
     public function prepareUpdate() {
         $primaryKey = $this->getPrimaryKey();
         $updateValues = '';
         foreach ( $this->getCurrentProperties() as $key => $value ) $updateValues .= "{$key} = :{$key}" . (array_key_last($this->getCurrentProperties()) === $key ? '' : ', ');
-        return $this->prepare("UPDATE {$table} SET ". $updateValues ." WHERE {$primaryKey} = {$exists->{$primaryKey}}");
+        return $this->prepare("UPDATE {$this->tableName()} SET ". $updateValues ." WHERE {$primaryKey} = {$exists->{$primaryKey}}");
     }
 
     public function save() {
-        $table = $this->tableName();
         $attributes = $this->getAttributes();
         $params = array_map(fn($attr) => ":{$attr}", $attributes);
-        $exists = $this->findOne([$this->getPrimaryKey() => $this->{$this->getPrimaryKey()}], $table);
+        $exists = $this->findOne([$this->getPrimaryKey() => $this->{$this->getPrimaryKey()}], $this->tableName());
         $statement = !$exists ? $this->prepareCreate() : $this->prepareUpdate();
         foreach ($attributes as $attribute) $statement->bindValue(":{$attribute}", $this->{$attribute});
         return $statement->execute();

@@ -35,14 +35,14 @@ abstract class DbModel extends Model {
         $primaryKey = $this->getPrimaryKey();
         $updateValues = '';
         foreach ( $this->getCurrentProperties() as $key => $value ) $updateValues .= "{$key} = :{$key}" . (array_key_last($this->getCurrentProperties()) === $key ? '' : ', ');
-        return $this->prepare("UPDATE {$this->tableName()} SET ". $updateValues ." WHERE {$primaryKey} = {$exists->{$primaryKey}}");
+        return $this->prepare("UPDATE {$this->tableName()} SET ". $updateValues ." WHERE {$primaryKey} = {$this->{$this->getPrimaryKey()}}");
     }
 
     public function save() {
         $exists = $this->findOne([$this->getPrimaryKey() => $this->{$this->getPrimaryKey()}], $this->tableName());
         $statement = !$exists ? $this->prepareCreate() : $this->prepareUpdate();
-        foreach ($attributes as $attribute) $statement->bindValue(":{$attribute}", $this->{$attribute});
-        return $statement->execute();
+        foreach ($this->getAttributes() as $attribute) $statement->bindValue(":{$attribute}", $this->{$attribute});
+        $statement->execute();
     }
 
     public function prepare(string $sql) {

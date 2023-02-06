@@ -25,7 +25,9 @@ abstract class DbModel extends Model {
         return $props;
     }
 
-    public function prepareCreate(string $table, array $attributes, array $params) {
+    public function prepareCreate() {
+        $attributes = $this->getAttributes();
+        $params = array_map(fn($attr) => ":{$attr}", $attributes);
         return $this->prepare("INSERT INTO {$this->tableName()} (". implode(',', $attributes) .") VALUES (". implode(',', $params) .")");
     }
 
@@ -37,8 +39,6 @@ abstract class DbModel extends Model {
     }
 
     public function save() {
-        $attributes = $this->getAttributes();
-        $params = array_map(fn($attr) => ":{$attr}", $attributes);
         $exists = $this->findOne([$this->getPrimaryKey() => $this->{$this->getPrimaryKey()}], $this->tableName());
         $statement = !$exists ? $this->prepareCreate() : $this->prepareUpdate();
         foreach ($attributes as $attribute) $statement->bindValue(":{$attribute}", $this->{$attribute});

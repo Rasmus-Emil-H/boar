@@ -13,7 +13,7 @@ use \app\core\middlewares\Middleware;
 class Controller {
 
     public string $layout = 'main';
-
+    
     /**
      * Array of middleware classes
      * @var app\core\middlewares\Middleware[]
@@ -40,5 +40,13 @@ class Controller {
     public function getMiddlewares(): array {
         return $this->middlewares;
     }
+
+    public function remove(): void {
+		$id = Application::$app->request->getPHPInput();
+		$reqModel = explode('-', $id->id);
+		$model    = $reqModel[0].'Model';
+		$static   = $this->{$model}->findOne([$this->{$model}->getPrimaryKey() => $reqModel[1]], $this->{$model}->tableName());
+		$static->remove();
+	}
 
 }

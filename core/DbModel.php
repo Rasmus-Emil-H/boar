@@ -12,6 +12,7 @@ abstract class DbModel extends Model {
 
     abstract public function tableName(): string;
     abstract public function getAttributes(): array;
+    abstract public function getForeignKeys(): array;
     abstract public function getPrimaryKey(): string;
         
     public function setAttributes(array $attributes) {

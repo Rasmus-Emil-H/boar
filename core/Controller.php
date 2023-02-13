@@ -46,8 +46,11 @@ class Controller {
     public function remove() {
 		$id = Application::$app->request->getPHPInput();
 		$reqModel = explode('-', $id->id);
-		$model    = $reqModel[0].'Model';
-		$static   = $this->{$model}->findOne([$this->{$model}->getPrimaryKey() => $reqModel[1]], $this->{$model}->tableName());
+		$model = $reqModel[0].'Model';
+        $prefix = self::MODEL_PREFIX.ucfirst($model);
+        Application::$app->classCheck($prefix);
+        $obj = new $prefix();
+		$static   = $obj->findOne([$obj->getPrimaryKey() => $reqModel[1]], $obj->tableName());
 		$static->remove();
         Application::$app->response->setResponse(204, 'application/json', ['msg' => 'deleted']);
 	}

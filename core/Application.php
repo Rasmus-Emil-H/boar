@@ -136,6 +136,12 @@ class Application {
         return true;
     }
 
+    public function dd($whatever): void {
+        echo '<pre>';
+        print_r($whatever);
+        echo '</pre>';
+    }
+
     public function logout(): void {
         $this->user = null;
         $this->session->removeSessionProperty('user');

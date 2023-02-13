@@ -138,8 +138,9 @@ class Application {
 
     public function dd($whatever): void {
         echo '<pre>';
-        print_r($whatever);
+        var_dump($whatever);
         echo '</pre>';
+        exit;
     }
 
     public function logout(): void {

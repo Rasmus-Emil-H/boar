@@ -52,16 +52,12 @@ class Controller {
         Application::$app->response->setResponse(204, 'application/json', ['msg' => 'deleted']);
 	}
 
-    public function modelCheck(string $class) {
-        if(!class_exists($class)) Application::$app->response->setResponse(400, 'application/json', ['msg' => 'bad request']);
-    }
-
     public function save() {
 		foreach(Application::$app->request->getPHPInput() as $key => $value) {
 			$exp = explode('-', $key);
 			$model = $exp[0].'Model';
             $prefix = self::MODEL_PREFIX.ucfirst($model);
-            $this->modelCheck($prefix);
+            Application::$app->classCheck($prefix);
             $obj = new $prefix();
 			$static = $obj->findOne([$obj->getPrimaryKey() => $exp[1]], $obj->tableName());
             if(!$static) $static = new $prefix();

@@ -35,6 +35,7 @@ class Application {
     public ?DbModel $user;
     public View $view;
     public Regex $regex;
+    public Env $env;
 
     /**
      * Application states  
@@ -68,6 +69,7 @@ class Application {
         $this->session   = new Session();
         $this->database  = new Database($pdoConfigurations['pdo']);
         $this->view      = new View();
+        $this->env       = new Env();
 
         $this->checkUserBasedOnSession();
 

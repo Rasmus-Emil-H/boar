@@ -28,7 +28,8 @@ abstract class DbModel extends Model {
     public function init(string $addition = '') {
 		$fields = $this->getAttributes();
         foreach ( $fields as $key => $value ) $initValues[] = $value;
-		return Application::$app->database->init($this->tableName(), $fields, $initValues);
+        Application::$app->database->init($this->tableName(), $fields, $initValues);
+        return Application::$app->database->getLastID();
 	}
 
     public function prepareCreate() {

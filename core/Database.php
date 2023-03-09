@@ -52,7 +52,7 @@ class Database {
         return '?';
     }
 
-    public function init(string $table, array $fields, array $values): Database {
+    public function init(string $table, array $fields, array $values) {
         $holders = '';
         foreach ( $values as $valKey => $value ) $holders .= '?' . ( array_key_last($values) === $valKey ? '' : ', ' );
         $this->tableName = $table;
@@ -61,7 +61,6 @@ class Database {
         $this->placeholders = $holders;
         $this->create();
         $this->execute();
-        return $this;
     }
     
     /**
@@ -126,6 +125,10 @@ class Database {
         } catch (\PDOException $e) {
             exit("[ SQL ERROR ] " . $e);
         }
+    }
+
+    public function getLastID() {
+        return $this->pdo->lastInsertId();
     }
 
     public function groupBy(string $group): Database {

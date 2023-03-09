@@ -14,11 +14,11 @@ class View {
 
     public function renderView(string $view, array $params = []) {
         $viewContent   = $this->renderOnlyView($view, $params);
-        $layoutContent = $this->getLayoutContent();
+        $layoutContent = $this->getLayoutContent($params['title'] ?? 'Not set');
         return preg_replace('/{{content}}/', $viewContent, $layoutContent);
     }
 
-    protected function getLayoutContent() {
+    protected function getLayoutContent(string $title) {
         $layout = Application::$app->controller ? Application::$app->controller->layout : Application::$app->layout;
         ob_start();
             include_once Application::$ROOT_DIR . "/views/layouts/$layout.php";

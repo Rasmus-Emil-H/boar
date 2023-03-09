@@ -13,11 +13,14 @@ class Database {
     protected string $where  = '';
     protected string $fields = '';
     protected array  $args   = [];
+    protected string $placeholders = '';
     protected string $table;
+
+    protected array $fieldPlaceholders = [];
     
     public const WHERE       = ' WHERE ';
     public const AND         = ' AND ';
-    public const BIND        = ' = ?';
+    public const BIND        = ' = ? ';
     public const INNERJOIN   = ' INNER JOIN ';
     
     public const DEFAULT_LIMIT = 100;
@@ -37,6 +40,27 @@ class Database {
         $this->table  = $table;
         $this->bindFields($fields);
         $this->query .= "SELECT {$this->fields} FROM {$this->table}";
+        return $this;
+    }
+
+    /**
+     * Init method for needing objects
+     * @return Database
+    */
+
+    public function replaceWithPlaceholders(string $value): string {
+        return '?';
+    }
+
+    public function init(string $table, array $fields, array $values): Database {
+        $holders = '';
+        foreach ( $values as $valKey => $value ) $holders .= '?' . ( array_key_last($values) === $valKey ? '' : ', ' );
+        $this->tableName = $table;
+        $this->fields = implode(', ', $fields);
+        $this->args = $values;
+        $this->placeholders = $holders;
+        $this->create();
+        $this->execute();
         return $this;
     }
     
@@ -72,12 +96,12 @@ class Database {
     }
 
     public function create(): Database {
-        $this->query .= "INSERT INTO {$this->tableName} ({$this->implodedFields}) VALUES ({$this->implodedArgs})";
+        $this->query .= "INSERT INTO {$this->tableName} ({$this->fields}) VALUES ({$this->placeholders})";
         return $this;
     }
 
     public function patch(): Database {
-        $this->query .= "UPDATE {$this->tableName} SET {$this->implodedFields} {$this->where}";
+        $this->query .= "UPDATE {$this->tableName} SET {$this->implodedFields} WHERE {$this->where}";
         return $this;
     }
 
@@ -99,8 +123,8 @@ class Database {
             $stmt = null;
             $this->resetQuery();
             return $result;
-        } catch (\Exception $e) {
-            exit("SQL ERROR: " . $e->getMessage());
+        } catch (\PDOException $e) {
+            exit("[ SQL ERROR ] " . $e);
         }
     }
 

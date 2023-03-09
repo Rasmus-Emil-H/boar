@@ -86,6 +86,13 @@ class Application {
         $this->user = $authenticationClass->findOne([$primaryKey => $primaryValue], $authenticationClass->tableName());
     }
 
+    public function getLanguages() {
+        $languages = new \app\models\LanguageModel();
+        foreach ( $languages->getLanguages() as $languageValue ) 
+            $languageSplit[$languageValue['languageID']][] = $languageValue;
+        return $languageSplit;
+    }
+
     /**
      * Run the application 
      * Custom exceptions should be written inside \core\exceptions

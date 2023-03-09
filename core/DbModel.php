@@ -25,6 +25,12 @@ abstract class DbModel extends Model {
         return $props;
     }
 
+    public function init(string $addition = '') {
+		$fields = $this->getAttributes();
+        foreach ( $fields as $key => $value ) $initValues[] = $value;
+		return Application::$app->database->init($this->tableName(), $fields, $initValues);
+	}
+
     public function prepareCreate() {
         $attributes = $this->getAttributes();
         $params = array_map(fn($attr) => ":{$attr}", $attributes);

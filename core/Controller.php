@@ -43,6 +43,14 @@ class Controller {
         return $this->middlewares;
     }
 
+    public function init() {
+        $prefix = self::MODEL_PREFIX.ucfirst(Application::$app->request->getPHPInput()).'Model';
+        Application::$app->classCheck($prefix);
+        $obj = new $prefix();
+        var_dump($obj->init());
+        Application::$app->response->setResponse(200, 'application/json', ['msg' => 'saved']);
+    }
+
     public function save() {
         foreach ( Application::$app->request->getPHPInput() as $key => $value ) {
             foreach ( $value as $objectKey => $objectValues ) {

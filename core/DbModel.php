@@ -16,8 +16,7 @@ abstract class DbModel extends Model {
     abstract public function getPrimaryKey(): string;
         
     public function setAttributes(array $attributes) {
-        foreach ( $this->getAttributes() as $key => $value )
-            $this->{$value} = $attributes[$key];
+        foreach ( $attributes as $key => $value ) $this->{$key} = $value;
     }
 
     public function getCurrentProperties(): array {
@@ -35,24 +34,31 @@ abstract class DbModel extends Model {
     public function prepareUpdate() {
         $primaryKey = $this->getPrimaryKey();
         $updateValues = '';
-        foreach ( $this->getCurrentProperties() as $key => $value ) $updateValues .= "{$key} = :{$key}" . (array_key_last($this->getCurrentProperties()) === $key ? '' : ', ');
+        $placeholders = $this->getCurrentProperties();
+        foreach ( $placeholders as $key => $value ) $updateValues .= "{$key} = :{$key}" . (array_key_last($this->getCurrentProperties()) === $key ? '' : ', ');
         return $this->prepare("UPDATE {$this->tableName()} SET ". $updateValues ." WHERE {$primaryKey} = {$this->{$this->getPrimaryKey()}}");
     }
 
     public function save() {
         $exists = $this->findOne([$this->getPrimaryKey() => $this->{$this->getPrimaryKey()}], $this->tableName());
         $statement = !$exists ? $this->prepareCreate() : $this->prepareUpdate();
-        foreach ($this->getAttributes() as $attribute) $statement->bindValue(":{$attribute}", $this->{$attribute});
+        foreach ($this->getAttributes() as $attribute) {
+            if ( $attribute === 'placeholder' ) continue;
+            $statement->bindValue(":{$attribute}", $this->{$attribute});
+        }
         $statement->execute();
     }
+
+    public function debug($statement): void {
+        var_dump($statement->debugDumpParams());
+    } 
 
     public function prepare(string $sql) {
         return Application::$app->database->pdo->prepare($sql);
     }
 
     public function findOne(array $where, string $tableName) {
-        $attributes = array_keys($where);
-        $sql = implode(" AND ", array_map(fn($attr) => "{$attr} = :{$attr}", $attributes));
+        $sql = implode(" AND ", array_map(fn($attr) => "{$attr} = :{$attr}", array_keys($where)));
         $statement = $this->prepare("SELECT * FROM {$tableName} WHERE {$sql}");
         foreach ($where as $key => $value) $statement->bindValue(":{$key}", $value);
         $statement->execute();

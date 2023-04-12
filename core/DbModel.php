@@ -59,8 +59,8 @@ abstract class DbModel extends Model {
     }
 
     public function checkRelationalValues() {
-        if(!method_exists($this, 'getRelationTables')) return;
-        $relationalObjects = $this->getRelationTables();
+        if(!method_exists($this, 'getRelationObjects')) return;
+        $relationalObjects = $this->getRelationObjects();
         foreach ( $relationalObjects as $object ) {
             $obj = self::MODEL_PREFIX.$object.'Model';
             $static = new $obj();

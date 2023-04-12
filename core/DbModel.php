@@ -14,6 +14,8 @@ abstract class DbModel extends Model {
     abstract public function getAttributes(): array;
     abstract public function getForeignKeys(): array;
     abstract public function getPrimaryKey(): string;
+
+    public const MODEL_PREFIX = '\\app\\models\\';
         
     public function setAttributes(array $attributes) {
         foreach ( $attributes as $key => $value ) $this->{$key} = $value;
@@ -56,6 +58,19 @@ abstract class DbModel extends Model {
         $statement->execute();
     }
 
+    public function checkRelationalValues() {
+        if(!method_exists($this, 'getRelationTables')) return;
+        $relationalObjects = $this->getRelationTables();
+        foreach ( $relationalObjects as $object ) {
+            $obj = self::MODEL_PREFIX.$object.'Model';
+            $static = new $obj();
+            Application::$app->database
+                ->delete($static->tableName())
+                ->where([$static->getForeignKeys()[0] => $this->{$this->getPrimaryKey()}])
+                ->execute();
+        }
+    }
+
     public function debug($statement): void {
         var_dump($statement->debugDumpParams());
     } 
@@ -73,6 +88,7 @@ abstract class DbModel extends Model {
     }
 
     public function remove() {
+        $this->checkRelationalValues();
         Application::$app->database
             ->delete($this->tableName())
             ->where([$this->getPrimaryKey() => $this->{$this->getPrimaryKey()}])

@@ -11,9 +11,9 @@ require_once dirname(__DIR__) . '/vendor/autoload.php';
 $config = [
     'authenticationClass' => \app\models\User::class,
     'pdo' => [
-        'dsn' => 'mysql:host=localhost:8889;port=3306;dbname=boar', 
+        'dsn' => 'mysql:host=localhost;port=3306;dbname=boar', 
         'user' => 'root', 
-        'password' => 'root'
+        'password' => ''
     ]
 ];
 

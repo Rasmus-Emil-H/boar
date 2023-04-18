@@ -13,10 +13,6 @@ $config = [
     ]
 ];
 
-$app = new Application(
-    rootPath: dirname(__DIR__), pdoConfigurations: $config
-);
-
-$app->run();
+$app = new Application(rootPath: __DIR__, pdoConfigurations: $config);
 
 $app->database->applyMigrations();

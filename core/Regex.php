@@ -13,7 +13,7 @@ class Regex {
 
     protected string $string;
 
-    public function __construct(string $string) {
+    public function __construct(string $string = '') {
         $this->string = $string;
     }
 

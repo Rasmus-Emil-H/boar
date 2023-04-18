@@ -64,7 +64,7 @@ class Application {
         
         $this->request   = new Request();
         $this->response  = new Response();
-        $this->regex     = new Regex($this->request->getPath());
+        $this->regex     = new Regex();
         $this->router    = new Router($this->request, $this->response);
         $this->session   = new Session();
         $this->database  = new Database($pdoConfigurations['pdo']);
@@ -90,7 +90,7 @@ class Application {
         $languages = new \app\models\LanguageModel();
         foreach ( $languages->getLanguages() as $languageValue ) 
             $languageSplit[$languageValue['languageID']][] = $languageValue;
-        return $languageSplit;
+        return $languageSplit??[];
     }
 
     /**

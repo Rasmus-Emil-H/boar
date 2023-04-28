@@ -71,8 +71,8 @@ abstract class DbModel extends Model {
         }
     }
 
-    public function debug(): void {
-        var_dump(Application::$app->database->pdo->debugDumpParams());
+    public function debug($statement): void {
+        var_dump($statement->debugDumpParams());
     } 
 
     public function prepare(string $sql) {
@@ -92,6 +92,12 @@ abstract class DbModel extends Model {
         Application::$app->database
             ->delete($this->tableName())
             ->where([$this->getPrimaryKey() => $this->{$this->getPrimaryKey()}])
+            ->execute();
+    }
+
+    public function get() {
+        return Application::$app->database
+            ->select($this->tableName(), ['*'])
             ->execute();
     }
 

@@ -18,7 +18,7 @@ class LanguageModel extends DbModel {
 
 	public function getLanguages(): array {
 		return Application::$app->database
-			->select('t_languages l', ['l.*'])
+			->select('languages l', ['l.*'])
 			->execute();
 	}
 
@@ -32,7 +32,7 @@ class LanguageModel extends DbModel {
 	*/
 	
 	public function tableName(): string {
-		return 't_languages';
+		return 'languages';
 	}
 	
 	/*

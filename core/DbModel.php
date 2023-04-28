@@ -71,8 +71,8 @@ abstract class DbModel extends Model {
         }
     }
 
-    public function debug($statement): void {
-        var_dump($statement->debugDumpParams());
+    public function debug(): void {
+        var_dump(Application::$app->database->pdo->debugDumpParams());
     } 
 
     public function prepare(string $sql) {

@@ -76,7 +76,7 @@ class Controller {
     public function remove() {
 		$id = Application::$app->request->getPHPInput();
 		$reqModel = explode('-', $id->id);
-		$model = $reqModel[0].'Model';
+		$model = $exp[array_key_first($exp)].'Model';
         $prefix = self::MODEL_PREFIX.ucfirst($model);
         Application::$app->classCheck($prefix);
         $obj = new $prefix();

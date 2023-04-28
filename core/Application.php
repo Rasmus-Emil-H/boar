@@ -20,22 +20,17 @@ class Application {
     public string $layout = 'main';
     public string $authenticationClass;
     
-    public string $trackingAPI = 'https://tracking.autologik.dk/fetch';
-    public string $trackingAPIKey = 'MC45NzE3NjM1OTgwMDg4MzUy';
-    
-    public string $bookAPI = 'https://dev.book.autologik.dk/api';
-    public string $bookAPIKey = 'MC45NzE3NjM1OTgwMDg4MzUy';
-    
     public Router $router;
     public Request $request;
     public Response $response;
     public ?Controller $controller = null;
     public Session $session;
-    public Database $database;
+    public \app\core\database\Connection $connection;
     public ?DbModel $user;
     public View $view;
-    public Regex $regex;
     public Env $env;
+    public Regex $regex;
+    public I18n $i18n;
 
     /**
      * Application states  
@@ -62,17 +57,23 @@ class Application {
         self::$ROOT_DIR = $rootPath;
         self::$app = $this;
         
-        $this->request   = new Request();
-        $this->response  = new Response();
-        $this->regex     = new Regex();
-        $this->router    = new Router($this->request, $this->response);
-        $this->session   = new Session();
-        $this->database  = new Database($pdoConfigurations['pdo']);
-        $this->view      = new View();
-        $this->env       = new Env();
+        $this->request     = new Request();
+        $this->response    = new Response();
+        $this->regex       = new Regex($this->request->getPath());
+        $this->router      = new Router($this->request, $this->response);
+        $this->session     = new Session();
+        $this->connection  = new \app\core\database\Connection($pdoConfigurations['pdo']);
+        $this->view        = new View();
+        $this->env         = new Env();
+        $this->i18n        = new I18n();
 
+        $this->checkLanguage();
         $this->checkUserBasedOnSession();
 
+    }
+
+    public function checkLanguage() {
+        if ( $this->session->get('language') === '' ) $this->session->set('language', 'Danish');
     }
 
     public function checkUserBasedOnSession(): void {
@@ -90,7 +91,7 @@ class Application {
         $languages = new \app\models\LanguageModel();
         foreach ( $languages->getLanguages() as $languageValue ) 
             $languageSplit[$languageValue['languageID']][] = $languageValue;
-        return $languageSplit??[];
+        return $languageSplit;
     }
 
     /**
@@ -147,7 +148,7 @@ class Application {
 
     public function dd($whatever): void {
         echo '<pre>';
-        var_dump($whatever);
+            var_dump($whatever);
         echo '</pre>';
         exit;
     }
@@ -155,6 +156,10 @@ class Application {
     public function logout(): void {
         $this->user = null;
         $this->session->removeSessionProperty('user');
+    }
+
+    public function translate(string $value): string {
+        return $this->i18n->translate($value);
     }
 
     public static function isGuest(): bool {

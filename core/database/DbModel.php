@@ -87,6 +87,10 @@ abstract class DbModel extends Model {
         return $statement->fetchObject(static::class);
     }
 
+    /**
+     * Remove entity
+     * @return $this
+    */
     public function remove() {
         $this->checkRelationalValues();
         Application::$app->database
@@ -95,6 +99,10 @@ abstract class DbModel extends Model {
             ->execute();
     }
 
+    /**
+     * Gets obj based on current model
+     * @return $this
+    */
     public function get() {
         return Application::$app->database
             ->select($this->tableName(), ['*'])

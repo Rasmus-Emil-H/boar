@@ -5,9 +5,9 @@
  * @return database runner
 */
 
-namespace app\core;
+namespace app\core\database;
 
-class Database {
+class Connection {
     
     protected string $query  = '';
     protected string $where  = '';
@@ -34,9 +34,10 @@ class Database {
     public function __construct(array $pdoConfigurations) {
         $this->pdo = new \Pdo($pdoConfigurations['dsn'], $pdoConfigurations['user'], $pdoConfigurations['password']);
         $this->pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+        // $this->pdo->setAttribute(\PDO::ATTR_STATEMENT_CLASS, ["Database\query", [$this]]);
     }
 
-    public function select(string $table, array $fields): Database {
+    public function select(string $table, array $fields): self {
         $this->table  = $table;
         $this->bindFields($fields);
         $this->query .= "SELECT {$this->fields} FROM {$this->table}";
@@ -78,38 +79,38 @@ class Database {
         }
     }
 
-    public function where(array $conditions): Database {
+    public function where(array $conditions): self {
         $this->bindValues($conditions);
         return $this;
     }
 
-    public function innerJoin(string $table, string $using): Database {
+    public function innerJoin(string $table, string $using): self {
         $this->query .= self::INNERJOIN . " {$table} USING({$using}) ";
         return $this;
     }
     
-    public function leftJoin(string $table, string $on, array $and = []): Database {
+    public function leftJoin(string $table, string $on, array $and = []): self {
         $implodedAnd = (count($and) > 0 ? ' AND ' : '') . implode(' AND ', $and);
         $this->query .= " LEFT JOIN {$table} {$on} {$implodedAnd} ";
         return $this;
     }
 
-    public function create(): Database {
+    public function create(): self {
         $this->query .= "INSERT INTO {$this->tableName} ({$this->fields}) VALUES ({$this->placeholders})";
         return $this;
     }
 
-    public function patch(): Database {
+    public function patch(): self {
         $this->query .= "UPDATE {$this->tableName} SET {$this->implodedFields} WHERE {$this->where}";
         return $this;
     }
 
-    public function delete(string $table): Database {
+    public function delete(string $table): self {
         $this->query .= "DELETE FROM {$table} {$this->where}";
         return $this;
     }
 
-    public function limit(int $limit = self::DEFAULT_LIMIT): Database {
+    public function limit(int $limit = self::DEFAULT_LIMIT): self {
         $this->query .= ' LIMIT ' . $limit;
         return $this;
     }
@@ -131,12 +132,12 @@ class Database {
         return $this->pdo->lastInsertId();
     }
 
-    public function groupBy(string $group): Database {
+    public function groupBy(string $group): self {
         $this->query .= ' GROUP BY ' . $group;
         return $this;
     }
 
-    public function orderBy(string $order): Database {
+    public function orderBy(string $order): self {
         $this->query .= ' ORDER BY ' . $order;
         return $this;
     }

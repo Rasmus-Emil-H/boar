@@ -12,13 +12,14 @@ namespace app\core;
 class Regex {
 
     protected string $string;
+    protected array  $excludes = ['', 'dev'];
 
-    public function __construct(string $string = '') {
+    public function __construct(string $string) {
         $this->string = $string;
     }
 
-    public function replace(string $string, array $characters = []): string {
-        return preg_replace('/'.implode($characters).'/', '', $this->string);
+    public function replace(string $string, string $with, array $characters = []): string {
+        return preg_replace('/'.implode($characters).'/', $with, $string);
     }
 
     public static function match(string $pattern, string $string): bool {
@@ -26,7 +27,10 @@ class Regex {
     }
 
     public function validateRoute(): array {
-        return explode('/', substr($this->string, 1));
+        $includes = [];
+        foreach ( explode('/', $this->string) as $param )
+            if ( !in_array($param, $this->excludes) ) $includes[] = $param;
+        return $includes;
     }
 
 }

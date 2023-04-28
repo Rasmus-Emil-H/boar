@@ -12,11 +12,10 @@ use \app\core\Model;
 
 class InputField extends BaseField {
 
-    public const TYPE_TEXT     = 'text';
-    public const TYPE_EMAIL    = 'email';
+    public const TYPE_TEXT = 'text';
+    public const TYPE_EMAIL = 'email';
     public const TYPE_PASSWORD = 'password';
-    public const TYPE_DATE     = 'date';
-    public const TYPE_HIDDEN   = 'hidden';
+    public const TYPE_DATE = 'date';
 
     public Model $model;
     public string $attribute;
@@ -34,11 +33,6 @@ class InputField extends BaseField {
             $this->model->{$this->attribute},
             $this->model->getError($this->attribute) ? 'is-invalid' : '',
         );
-    }
-
-    public function hiddenField(): InputField {
-        $this->type = self::TYPE_HIDDEN;
-        return $this;
     }
 
     public function passwordField(): InputField {

@@ -47,8 +47,7 @@ class Controller {
         $prefix = self::MODEL_PREFIX.ucfirst(Application::$app->request->getPHPInput()).'Model';
         Application::$app->classCheck($prefix);
         $obj = new $prefix();
-        var_dump($obj->init());
-        Application::$app->response->setResponse(200, 'application/json', ['msg' => 'saved']);
+        Application::$app->response->setResponse(200, 'application/json', ['msg' => $obj->init()]);
     }
 
     public function save() {
@@ -56,7 +55,7 @@ class Controller {
             foreach ( $value as $objectKey => $objectValues ) {
                 if ( $objectKey === 'undefined' ) continue;
                 $exp = explode('-', $objectKey);
-                $model = $exp[0].'Model';
+                $model = $exp[array_key_first($exp)].'Model';
                 $prefix = self::MODEL_PREFIX.ucfirst($model);
                 Application::$app->classCheck($prefix);
                 $obj = new $prefix();
@@ -76,11 +75,11 @@ class Controller {
     public function remove() {
 		$id = Application::$app->request->getPHPInput();
 		$reqModel = explode('-', $id->id);
-		$model = $exp[array_key_first($exp)].'Model';
+		$model = $reqModel[0].'Model';
         $prefix = self::MODEL_PREFIX.ucfirst($model);
         Application::$app->classCheck($prefix);
         $obj = new $prefix();
-		$static   = $obj->findOne([$obj->getPrimaryKey() => $reqModel[1]], $obj->tableName());
+		$static = $obj->findOne([$obj->getPrimaryKey() => $reqModel[1]], $obj->tableName());
 		$static->remove();
         Application::$app->response->setResponse(204, 'application/json', ['msg' => 'deleted']);
 	}

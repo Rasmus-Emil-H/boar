@@ -16,6 +16,28 @@ class Request {
         if(!$position) return $path;
         return substr($path, 0, $position);
     }
+    
+    public function getRefere(): string {
+        return $_SERVER['HTTP_REFERER'];
+    }
+    
+    public function getHost(): string {
+        return $_SERVER['HTTP_HOST'];
+    }
+    
+    public function getQueryParams(): array {
+        return $_GET;
+    }
+    
+    public function getReplacedHost(): string {
+        return preg_replace('/'.$this->getHost().'/', '', $this->getRefere());
+    }
+    
+    public function getAdditionalParams(array $indexes): array {
+        $indexes = [];
+        
+        return $indexes;
+    }
 
     public function method(): string {
         return strtolower($_SERVER['REQUEST_METHOD']) ?? 'get';
@@ -30,18 +52,21 @@ class Request {
     }
 
     public function getBody(): array {
-        
         $body = [];
 
-        if ($this->method() === 'get')
-            foreach ($_GET as $key => $value)
+        if ($this->method() === 'get') 
+            foreach ($_GET as $key => $value) 
                 $body[$key] = filter_input(INPUT_GET, $key, FILTER_SANITIZE_SPECIAL_CHARS);
 
         if ($this->method() === 'post') 
-            foreach ($_POST as $key => $value)
+            foreach ($_POST as $key => $value) 
                 $body[$key] = filter_input(INPUT_POST, $key, FILTER_SANITIZE_SPECIAL_CHARS);
 
         return $body;
+    }
+    
+    public function getPHPInput() {
+        return json_decode(file_get_contents('php://input'));
     }
 
 }

@@ -14,8 +14,10 @@ class Cookie {
         $_COOKIE[$key] = password_hash($value, PASSWORD_DEFAULT);
     }
 
-    public function getCookie(string $cookie): string {
-        return $_COOKIE[$cookie] ?? '';
+    public function getCookie(string $key): string {
+        $cookie = $_COOKIE[$key] ?? '';
+        if ( !password_check($cookie, PASSWORD_DEFAULT) ) exit('Invalid cookie');
+        return $_COOKIE[$key];
     }
 
 }

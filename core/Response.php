@@ -17,5 +17,15 @@ class Response {
     public function redirect(string $location) {
         header('Location: ' . $location);
     }
+    
+    public function setContentType(string $type) {
+        header('Content-Type: ' . $type);
+    }
+    
+    public function setResponse(int $code, string $content, array $message) {
+        $this->setStatusCode($code);
+        $this->setContentType($content);
+        exit(json_encode($message));
+    }
 
 }

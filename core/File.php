@@ -22,19 +22,18 @@ class File extends FileModel {
 
     public string $fileName;
 
-    public function __construct(string $fileName) {
-        $this->fileName = $fileName;
-    }
-
     public function getUploadedFile() {
-        return basename($_FILES[$this->fileName]['name']) ?? throw new \Exception('File not found');
+        return $_FILES['file']['name'] ?? 'invalid';
+    }
+    
+    public function getCurrentFiles() {
+        return $_FILES;
     }
 
     public function moveFile(): bool {
         if ( !$this->checkFileType() ) throw new \Exception(self::INVALID_EXTENSION);
         if ( !$this->checkFileName() ) throw new \Exception(self::INVALID_FILE_NAME);
         return move_uploaded_file(sys_get_temp_dir(), Application::UPLOAD_FOLDER);
-
     }
 
     protected function checkFileType(): bool {
@@ -46,13 +45,13 @@ class File extends FileModel {
     }
 
     public function unlinkFile(): bool {
-        return unlink($this->fileName);
+        return unlink(Application::UPLOAD_FOLDER . $this->fileName);
     }
 
     public function getFile() {
         if ( !file_exists(Application::UPLOAD_FOLDER . $this->fileName)) throw new \Exception('File not found');
     }
-
+    
     public function fileSize(string $type, string $quality) {
         
     }

@@ -14,9 +14,9 @@ class I18n extends \app\models\LanguageModel {
     protected string $languageID;
 
     public function __construct() {
+        var_dump($this->get());exit;
         $this->currentLanguage = Application::$app->session->get('language');
         $res = Application::$app->database->select("t_languages l", ["l.languageID"])->where(["l.language" => $this->currentLanguage])->execute();
-        var_dump($res);return;
         $this->languageID = Application::$app->database->select("t_languages l", ["l.languageID"])->where(["l.language" => $this->currentLanguage])->execute()[0]['languageID']??0;
         $this->languageID = $this->languageID;
     }

@@ -20,36 +20,31 @@ class Router {
 
     public Request $request;
     public Response $response;
-    public Regex $regex;
 
     protected const CONTROLLER = 'Controller';
 
     public function __construct(Request $request, Response $response) {
         $this->request = $request;
         $this->response = $response;
-        $this->regex = new Regex($this->request->getPath());
+        $this->queryPattern = Application::$app->regex->validateRoute();
     }
 
-    public function setQueryPattern(): void {
-        $this->queryPattern = $this->regex->validateRoute();
-    }
-
-    protected function checkController(): void {
+    protected function checkController() {
         $handler = ucfirst($this->queryPattern[0] ?? '').self::CONTROLLER;
         $controller = '\\app\controllers\\'.$handler;
-        if (!class_exists($controller)) 
-            throw new NotFoundException();
-        Application::$app->setController(new $controller());
+        if (!class_exists($controller)) throw new NotFoundException();
+        $currentController = new $controller();
+        Application::$app->setController($currentController);
     }
 
-    protected function checkMethod(): void {
+    protected function checkMethod() {
         $method = $this->queryPattern[1] ?? Application::$app->controller->defaultRoute;
         if (!method_exists(Application::$app->controller, $method)) 
             throw new NotFoundException();
         $this->method = $method;
     }
 
-    protected function runMiddlewares(): void {
+    protected function runMiddlewares() {
         foreach (Application::$app->controller->getMiddlewares() as $middleware) 
             $middleware->execute();
     }
@@ -60,12 +55,14 @@ class Router {
      * @return callback
     */
 
-    public function resolve(): void {
-        $this->setQueryPattern();
+    public function resolve() {
+
         $this->checkController();
         $this->checkMethod();
         $this->runMiddlewares();
+
         Application::$app->controller->{$this->method}($this->request, $this->response);
+
     }
 
 }

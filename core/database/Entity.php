@@ -14,13 +14,23 @@ abstract class Entity {
 
      /**
      * Gets obj based on current model
-     * @return $this
+     * @return \Iteratable
     */
 
     public function get() {
         return \app\core\Application::$app->connection
             ->select($this->getTableName(), ['*'])
             ->execute();
+    }
+
+    /**
+     * Model debgging
+     * @return string
+    */
+    public function __toString() {
+        $result = get_class($this)."(".$this->key."):\n";
+        foreach ($this->data as $key => $value) $result .= " [".$key."] ".$value."\n";
+        return $result;
     }
 
 }

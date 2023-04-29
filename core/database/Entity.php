@@ -8,6 +8,8 @@
 
 namespace app\core\database;
 
+use \app\core\Application;
+
 abstract class Entity {
 
     private   $key;
@@ -22,11 +24,11 @@ abstract class Entity {
     */
 
     public function get() {
-        return \app\core\Application::$app->connection->select($this->getTableName(), ['*'])->execute($this);
+        return Application::$app->connection->select($this->getTableName(), ['*'])->execute($this);
     }
 
     public static function all() {
-        return \app\core\Application::$app->connection->select(static::tableName, ['*'])->execute();
+        return Application::$app->connection->select(static::tableName, ['*'])->execute();
     }
 
     /**
@@ -43,7 +45,7 @@ abstract class Entity {
     */
 
     public function search(array $criterias) {
-        return \app\core\Application::$app->connection->select($this->getTableName(), ['*'])->execute($this);
+        return Application::$app->connection->select($this->getTableName(), ['*'])->execute($this);
     }
 
     /**
@@ -52,7 +54,7 @@ abstract class Entity {
     */
 
     public function delete() {
-        return \app\core\Application::$app->connection
+        return Application::$app->connection
             ->select($this->getTableName(), ['*'])
             ->execute();
     }

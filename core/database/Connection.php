@@ -34,6 +34,7 @@ class Connection {
     public function __construct(array $pdoConfigurations) {
         $this->pdo = new \Pdo($pdoConfigurations['dsn'], $pdoConfigurations['user'], $pdoConfigurations['password']);
         $this->pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+        $this->dbh->setAttribute(PDO::ATTR_STATEMENT_CLASS, ["Database\Statement", [$this]]);
         // $this->pdo->setAttribute(\PDO::ATTR_STATEMENT_CLASS, ["Database\query", [$this]]);
     }
 

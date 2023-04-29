@@ -41,7 +41,7 @@ class Connection {
      * Allow methods not implemented by this class to be called on the connection
     */
     public function __call(string $method, array $params = []) {
-        return method_exists($this, $method) ? call_user_func_array([$this, $method], $params) : "PDO::".$method." no such method.";
+        return method_exists($this, $method) ? call_user_func_array([$this, $method], $params) : "PDO::$method does not exists.";
     } 
 
     public function select(string $table, array $fields): self {

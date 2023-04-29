@@ -14,17 +14,21 @@ class Connection {
     protected string $query  = '';
     protected string $where  = '';
     protected string $fields = '';
-    protected array  $args   = [];
     protected string $placeholders = '';
     protected string $table;
 
     protected array $fieldPlaceholders = [];
+    protected array  $args = [];
+    private   array $defaultPdoOptions = [
+    \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC,
+        \PDO::ATTR_EMULATE_PREPARES => false,
+        \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION,
+    ];
     
     public const WHERE       = ' WHERE ';
     public const AND         = ' AND ';
     public const BIND        = ' = ? ';
     public const INNERJOIN   = ' INNER JOIN ';
-    
     public const DEFAULT_LIMIT = 100;
 
     /**
@@ -34,9 +38,9 @@ class Connection {
     public \Pdo $pdo;
     
     public function __construct(array $pdoConfigurations) {
-        $this->pdo = new \Pdo($pdoConfigurations['dsn'], $pdoConfigurations['user'], $pdoConfigurations['password']);
+        $this->pdo = new \PDO($pdoConfigurations['dsn'], $pdoConfigurations['user'], $pdoConfigurations['password'], $this->defaultPdoOptions);
         $this->pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
-        $this->pdo->setAttribute(\PDO::ATTR_STATEMENT_CLASS, ["Database\Statement", [$this]]);
+        //$this->pdo->setAttribute(\PDO::ATTR_STATEMENT_CLASS, ["Database\Statement", [$this]]);
     }
 
     /**
@@ -128,7 +132,6 @@ class Connection {
         try {
             $stmt = $this->prepare($this->query);
             $stmt->execute($this->args);
-            $stmt->setFetchMode(\PDO::FETCH_OBJ);
             $result = $stmt->fetchAll();
             $stmt = null;
             $this->resetQuery();

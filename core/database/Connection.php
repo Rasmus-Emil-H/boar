@@ -37,6 +37,17 @@ class Connection {
         // $this->pdo->setAttribute(\PDO::ATTR_STATEMENT_CLASS, ["Database\query", [$this]]);
     }
 
+    /**
+     * Allow methods not implemented by this class to be called on the connection
+    */
+    public function __call(string $method, array $params = []) {
+        if(method_exists($this, $method)) {
+            return call_user_func_array([$this, $method], $params);
+        } else {
+            throw new Exception("PDO::".$method." no such method.");
+        }
+    } 
+
     public function select(string $table, array $fields): self {
         $this->table  = $table;
         $this->bindFields($fields);
@@ -119,6 +130,7 @@ class Connection {
         try {
             $stmt = $this->prepare($this->query);
             $stmt->execute($this->args);
+            $stmt->setFetchMode(\PDO::FETCH_OBJ);
             $result = $stmt->fetchAll();
             $stmt = null;
             $this->resetQuery();

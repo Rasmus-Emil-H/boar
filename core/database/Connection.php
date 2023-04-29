@@ -8,6 +8,8 @@
 namespace app\core\database;
 
 class Connection {
+
+    private bool $transactionStarted = false;
     
     protected string $query  = '';
     protected string $where  = '';
@@ -34,8 +36,7 @@ class Connection {
     public function __construct(array $pdoConfigurations) {
         $this->pdo = new \Pdo($pdoConfigurations['dsn'], $pdoConfigurations['user'], $pdoConfigurations['password']);
         $this->pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
-        $this->dbh->setAttribute(PDO::ATTR_STATEMENT_CLASS, ["Database\Statement", [$this]]);
-        // $this->pdo->setAttribute(\PDO::ATTR_STATEMENT_CLASS, ["Database\query", [$this]]);
+        $this->pdo->setAttribute(\PDO::ATTR_STATEMENT_CLASS, ["Database\Statement", [$this]]);
     }
 
     /**
@@ -234,6 +235,47 @@ class Connection {
 
     public function createMigrationsTable() {
         $this->pdo->exec($this->sqlMigrationTable);
+    }
+
+    /**
+    * Begin transaction
+    * @return boolean
+    */
+    public function beginTransaction() : bool {
+        return $this->transactionStarted = $this->pdo->beginTransaction();
+    }
+
+    /**
+    * @return boolean
+    */
+    public function transaction() : bool {
+        return $this->beginTransaction();
+    }
+
+    /**
+    * Commits a transaction, returning the database connection to autocommit mode.
+    * @throws PDOException
+    * @return boolean
+    */
+    public function commit() : bool {
+        if($this->transactionStarted === true) {
+            return $this->pdo->commit();
+        } else {
+            throw new \PDOException("Attempted to commit when not in transaction, or transaction failed to start.");
+        }
+    }
+
+    /**
+    * Rolls back the current transaction
+    * @throws PDOException
+    * @return boolean
+    */
+    public function rollback() : bool {
+        if($this->transactionStarted === true) {
+            return $this->pdo->rollBack();
+        } else {
+            throw new \PDOException("Attempted rollback when not in transaction.");
+        }
     }
 
     protected function log(string $message): void {

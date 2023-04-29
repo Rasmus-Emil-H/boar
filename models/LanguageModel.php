@@ -8,17 +8,17 @@
 
 namespace app\models;
 
-use \app\core\DbModel;
+use \app\core\database\Entity;
 use \app\core\Application;
 
-class LanguageModel extends DbModel {
+class LanguageModel extends Entity {
 
-	public string $name;
-	public string $language;
+	const keyID     = 'languageID';
+	const tableName = 't_languages';
 
 	public function getLanguages(): array {
 		return Application::$app->database
-			->select('languages l', ['l.*'])
+			->select('t_languages l', ['l.*'])
 			->execute();
 	}
 
@@ -31,8 +31,8 @@ class LanguageModel extends DbModel {
 	 * @return string
 	*/
 	
-	public function tableName(): string {
-		return 'languages';
+	public function getTableName(): string {
+		return 't_languages';
 	}
 	
 	/*
@@ -40,7 +40,7 @@ class LanguageModel extends DbModel {
 	 * @return string
 	*/
 	
-	public function getPrimaryKey(): string {
+	public function getKeyField(): string {
 		return 'languageID';
 	}
 
@@ -50,6 +50,10 @@ class LanguageModel extends DbModel {
 	
 	public function rules(): array {
 		return [];
+	}
+
+	public function getRelationObjects() {
+		return ['Translation'];
 	}
 
 }

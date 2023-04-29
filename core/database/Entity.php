@@ -44,7 +44,6 @@ abstract class Entity {
                 $data[$key] = is_string($value) && trim($value) === '' ? null : $value;
         }
 
-        // Again empty strings should be null
         if(is_string($data) && trim($data) === '') $data = null;
 
         if ($allowedFields != null) $data = array_intersect_key($data, array_flip($allowedFields));
@@ -54,7 +53,7 @@ abstract class Entity {
         if ($data !== null && gettype($data) !== "array") $data = [$key => $data];
 
         if(isset($data[$key])) {
-            $exists = Connection::getInstance()->fetchRow($this->getTableName(), [$key => $data[$key]]);
+            $exists = Application::$app->connection->fetchRow($this->getTableName(), [$key => $data[$key]]);
 
             if(!empty($exists)) {
                 $this->key = $exists->$key;

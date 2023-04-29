@@ -25,6 +25,10 @@ abstract class Entity {
         return \app\core\Application::$app->connection->select($this->getTableName(), ['*'])->execute($this);
     }
 
+    public static function all() {
+        return \app\core\Application::$app->connection->select(static::tableName, ['*'])->execute();
+    }
+
     /**
     * Gets the current entity data
     * @return array

@@ -88,8 +88,13 @@ class Connection {
     public function bindValues(array $arguments): void {
         foreach($arguments as $selector => $value) {
             $this->query .= ( array_key_first($arguments) === $selector ? self::WHERE : self::AND ) . $selector . self::BIND . $selector;
-            $this->args[$selector] = $value;
+            $this->setArgumentPair($selector, $value);
         }
+    }
+
+    public function setArgumentPair(string $key, string $value): self {
+        $this->args[$key] = $value;
+        return $this;
     }
 
     public function where(array $conditions): self {
@@ -108,8 +113,18 @@ class Connection {
         return $this;
     }
 
-    public function create(array $fields): self {
-        $this->query .= "INSERT INTO {$this->tableName} ({$this->fields}) VALUES ({$this->placeholders})";
+    public function create(string $table, array $fields): self {
+        $this->preparePlaceholdersAndBoundValues($fields);
+        $this->query .= "INSERT INTO {$table} ({$this->fields}) VALUES ({$this->placeholders})";
+        return $this;
+    }
+
+    public function preparePlaceholdersAndBoundValues(array $fields): self {
+        $this->fields = implode(', ', array_keys($fields));
+        foreach ( $fields as $key => $field ) {
+            $this->placeholders .= ":$key";
+            $this->setArgumentPair($key, $field);
+        }
         return $this;
     }
 

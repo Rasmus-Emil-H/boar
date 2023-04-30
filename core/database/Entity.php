@@ -163,12 +163,12 @@ abstract class Entity {
     }
 
     /**
-     * Model debgging
+     * Model debugging
      * @return string
     */
     public function __toString() {
-        $result = get_class($this)."(".$this->key."):\n";
-        foreach ($this->data as $key => $value) $result .= " [".$key."] ".$value."\n";
+        $result = get_class($this)."($this->key:\n";
+        foreach ($this->data as $key => $value) $result .= "[$key]:$value\n";
         return $result;
     }
 

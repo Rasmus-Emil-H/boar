@@ -189,7 +189,8 @@ abstract class Entity {
     */
 
     public static function search(array $criterias) {
-        return Application::$app->connection->select(static::tableName, ['*'])->where($criterias)->execute();
+        $rows = Application::$app->connection->select(static::tableName, ['*'])->whereClause($criterias)->execute();
+        return self::load(array_column($rows, static::keyID));
     }
 
     /**
@@ -198,7 +199,7 @@ abstract class Entity {
     */
 
     public function delete() {
-        return Application::$app->connection->delete($this->getTableName())->where([$this->getKeyField() => $this->id()])->execute();
+        return Application::$app->connection->delete($this->getTableName())->where([$this->getKeyField() => $this->key])->execute();
     }
 
     /**

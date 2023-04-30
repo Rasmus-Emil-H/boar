@@ -145,6 +145,14 @@ class Connection {
         return $this;
     }
 
+    public function whereClause(array $arguments): self {
+        foreach($arguments as $selector => $value) {
+            $this->query .= ( array_key_first($arguments) === $selector ? self::WHERE : self::AND ) . $selector . '=? ';
+            $this->args[] = $value;
+        }
+        return $this;
+    }
+
     /*
      * Global query executioner
      * Responsible for executing the desired query
@@ -302,7 +310,7 @@ class Connection {
     }
 
     public function fetchRow(string $table, ?array $criteria) {
-        $this->select($table, ['*'])->where($criteria);
+        $this->select($table, ['*'])->whereClause($criteria);
         return $this->execute('fetch');
     }
 

@@ -114,23 +114,24 @@ class Connection {
     }
 
     public function create(string $table, array $fields): self {
-        $this->preparePlaceholdersAndBoundValues($fields);
+        $this->preparePlaceholdersAndBoundValues($fields, 'insert');
         $this->query .= "INSERT INTO {$table} ({$this->fields}) VALUES ({$this->placeholders})";
         return $this;
     }
 
-    public function preparePlaceholdersAndBoundValues(array $fields): self {
-        $this->fields = implode(', ', array_keys($fields));
+    public function preparePlaceholdersAndBoundValues(array $fields, string $fieldSetter): self {
         foreach ( $fields as $key => $field ) {
-            $this->placeholders .= "?".(array_key_last($fields) === $key ? '' : ',');
+            $this->fields .= $key.(array_key_last($fields) === $key ? '' : ',');
+            $this->placeholders .= ($fieldSetter === 'insert' ? '' : $key.'=')."?".(array_key_last($fields) === $key ? '' : ',');
             $this->args[] = $field;
             // $this->setArgumentPair($key, $field);
         }
         return $this;
     }
 
-    public function patch(): self {
-        $this->query .= "UPDATE {$this->tableName} SET {$this->implodedFields} WHERE {$this->where}";
+    public function patch(string $table, array $fields, array $where): self {
+        $this->preparePlaceholdersAndBoundValues($fields, 'patch');
+        $this->query .= "UPDATE {$table} SET {$this->placeholders} WHERE {}";
         return $this;
     }
 

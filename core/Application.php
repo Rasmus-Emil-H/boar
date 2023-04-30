@@ -88,9 +88,8 @@ class Application {
     }
 
     public function getLanguages() {
-        $languages = new \app\models\LanguageModel();
-        foreach ( $languages->getLanguages() as $languageValue ) 
-            $languageSplit[$languageValue['languageID']][] = $languageValue;
+        foreach ( \app\models\LanguageModel::all() as $languageValue ) 
+            $languageSplit[$languageValue->get('languageID')][] = $languageValue;
         return $languageSplit;
     }
 

@@ -152,14 +152,12 @@ abstract class Entity {
     }
 
     /**
-     * Delete obj based on PK
+     * Delete obj based on pk
      * @return 
     */
 
     public function delete() {
-        return Application::$app->connection
-            ->select($this->getTableName(), ['*'])
-            ->execute();
+        return Application::$app->connection->delete($this->getTableName())->where([$this->getKeyField() => $this->id()])->execute();
     }
 
     /**

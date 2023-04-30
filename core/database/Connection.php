@@ -128,11 +128,16 @@ class Connection {
         return $this;
     }
 
-    public function execute(): array {
+    /*
+     * Global query executioner
+     * Responsible for executing the desired query
+     * @return object | array
+    */
+    public function execute(string $fetchType = 'fetchAll') {
         try {
             $stmt = $this->prepare($this->query);
             $stmt->execute($this->args);
-            $result = $stmt->fetchAll();
+            $result = $stmt->{$fetchType}();
             $stmt = null;
             $this->resetQuery();
             return $result;
@@ -285,7 +290,7 @@ class Connection {
     */
     public function fetchRow(string $table, ?array $criteria = null) {
         $this->select($table, $criteria)->where($criteria);
-        return $this->execute();
+        return $this->execute('fetch');
     }
 
     /**
@@ -302,13 +307,10 @@ class Connection {
 
         $list = [];
         foreach ($array as $column => $value) {
-            if($value === null && $seperator !== ',') {
-                $operator = "<=>";
-            } else if(is_array($value)) {
-                $operator = "IN";
-            } else {
-                $operator = '=';
-            }
+
+            if($value === null && $seperator !== ',') $operator = "<=>";
+            else if(is_array($value)) $operator = "IN";
+            else $operator = '=';
 
             $list[] = " `$column` $operator :" . $variablePrefix . $column;
         }

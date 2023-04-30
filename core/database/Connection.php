@@ -98,7 +98,7 @@ class Connection {
     }
 
     public function where(array $conditions): self {
-        $this->bindValues($conditions);
+        $this->preparePlaceholdersAndBoundValues($conditions, 'insert');
         return $this;
     }
 
@@ -159,7 +159,9 @@ class Connection {
             $this->resetQuery();
             return $result;
         } catch (\PDOException $e) {
-            throw new \Exception("ERROR WITH THE FOLLOWING QUERY: $this->query");exit;
+            $errorQuery = $this->query;
+            $this->resetQuery();
+            throw new \PDOException("ERROR WITH THE FOLLOWING QUERY: $errorQuery");
             //exit("[ SQL ERROR ] " . $e);
         }
     }

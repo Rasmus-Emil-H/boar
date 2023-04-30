@@ -88,11 +88,12 @@ abstract class Entity {
     public function save() {
         try {
             if ($this->exists() === true) {
-                Application::$app->connection->update($this->getTableName(), $this->data, $this->getKeyFilter());
+                Application::$app->connection->patch($this->getTableName(), $this->data, $this->getKeyFilter())->execute('fetch');
                 return $this->data;
             } else {
                 if(empty($this->data)) throw new \Exception("Data variable is empty");
-                $this->key = Application::$app->connection->create($this->getTableName(), $this->data)->execute();
+                Application::$app->connection->create($this->getTableName(), $this->data)->execute();
+                $this->key = Application::$app->connection->getLastID();
                 return $this->key;
             }
         } catch(Exception $e) {

@@ -16,12 +16,6 @@ class LanguageModel extends Entity {
 	const keyID     = 'languageID';
 	const tableName = 't_languages';
 
-	public function getLanguages(): array {
-		return Application::$app->database
-			->select('t_languages l', ['l.*'])
-			->execute();
-	}
-
 	public function getAttributes(): array {
 		return ['language'];
 	}

@@ -102,7 +102,7 @@ class Application {
     public function run(): void {
         try {
             echo $this->router->resolve();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->exceptionCodeHandler($e->getCode());
             $this->response->setStatusCode($e->getCode());
             echo $this->view->renderView('error', [

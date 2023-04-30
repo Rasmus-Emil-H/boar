@@ -129,9 +129,9 @@ class Connection {
         return $this;
     }
 
-    public function patch(string $table, array $fields, array $where): self {
+    public function patch(string $table, array $fields, string $primaryKey, string $primaryKeyValue): self {
         $this->preparePlaceholdersAndBoundValues($fields, 'patch');
-        $this->query .= "UPDATE {$table} SET {$this->placeholders} WHERE {}";
+        $this->query .= "UPDATE {$table} SET {$this->placeholders} WHERE {$primaryKey} = $primaryKeyValue";
         return $this;
     }
 

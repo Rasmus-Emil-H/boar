@@ -88,7 +88,7 @@ abstract class Entity {
     public function save() {
         try {
             if ($this->exists() === true) {
-                Application::$app->connection->patch($this->getTableName(), $this->data, $this->getKeyFilter())->execute('fetch');
+                Application::$app->connection->patch($this->getTableName(), $this->data, $this->getKeyField(), $this->key)->execute('fetch');
                 return $this->data;
             } else {
                 if(empty($this->data)) throw new \Exception("Data variable is empty");

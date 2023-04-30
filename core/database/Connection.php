@@ -211,7 +211,6 @@ class Connection {
      * mkay?
      * @var sqlMigrationTable
     */
-
     protected string $sqlMigrationTable = 'CREATE TABLE IF NOT EXISTS Migrations (
         MigrationID int NOT NULL AUTO_INCREMENT,
         migration VARCHAR(255),
@@ -302,25 +301,11 @@ class Connection {
         return $this->transactionStarted ? $this->pdo->rollBack() : false;
     }
 
-    /**
-     * Fetch a single row from the given criteria.
-     * @param string $table Name of the table containing the row to be fetched
-     * @param array $criteria Criteria used to filter the rows.
-     * @return mixed Returns the first row in the result set, false upon failure.
-    */
     public function fetchRow(string $table, ?array $criteria) {
         $this->select($table, ['*'])->where($criteria);
         return $this->execute('fetch');
     }
 
-    /**
-     * Internal function to convert column=>value pairs into SQL.
-     * If a parameter value is an array, it will be treated as such, using the IN operator.
-     * @param array $array Array of arguments to parse (You sure yet that it's an array?)
-     * @param string $seperator String seperator to seperate the pairs with
-     * @param string $variablePrefix string to use for prefixing values in the SQL
-     * @return string
-    */
     private function keysToSql(?array $array, string $seperator, string $variablePrefix = ""): string {
 
         if ($array == null) return "1";

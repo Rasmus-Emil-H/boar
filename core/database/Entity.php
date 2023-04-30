@@ -112,6 +112,28 @@ abstract class Entity {
 	}
 
     /**
+     * Soft delete
+     * Don't actually delete the record, but update the delatedAt colmun 
+     * @return $this
+    */
+
+    public function softDelete(): self {
+		$this->deletedAt = new \DateTime(now());
+        $this->save();
+	}
+
+    /**
+     * Restore
+     * Restore object where delatedAt !== null
+     * @return $this
+    */
+
+    public function restore(): self {
+		$this->deletedAt = null;
+        $this->save();
+	}
+
+    /**
      * Gets value based on key
      * @return \Iteratable
     */

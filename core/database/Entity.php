@@ -164,7 +164,7 @@ abstract class Entity {
             return new $class((int) $ids);
         }
 
-        throw new Exception($class."::load(); expects either an array or integer. '".gettype($ids)."' was provided.");
+        throw new \Exception("$class::load(); expects either an array or integer. '".gettype($ids)."' was provided.");
     }
 
     /**
@@ -188,8 +188,8 @@ abstract class Entity {
      * @return \Iteratable
     */
 
-    public function search(array $criterias) {
-        return Application::$app->connection->select($this->getTableName(), ['*'])->execute($this);
+    public static function search(array $criterias) {
+        return Application::$app->connection->select(static::tableName, ['*'])->where($criterias)->execute();
     }
 
     /**

@@ -122,8 +122,9 @@ class Connection {
     public function preparePlaceholdersAndBoundValues(array $fields): self {
         $this->fields = implode(', ', array_keys($fields));
         foreach ( $fields as $key => $field ) {
-            $this->placeholders .= ":$key";
-            $this->setArgumentPair($key, $field);
+            $this->placeholders .= "?".(array_key_last($fields) === $key ? '' : ',');
+            $this->args[] = $field;
+            // $this->setArgumentPair($key, $field);
         }
         return $this;
     }
@@ -157,7 +158,8 @@ class Connection {
             $this->resetQuery();
             return $result;
         } catch (\PDOException $e) {
-            exit("[ SQL ERROR ] " . $e);
+            throw new \Exception("ERROR WITH THE FOLLOWING QUERY: $this->query");exit;
+            //exit("[ SQL ERROR ] " . $e);
         }
     }
 

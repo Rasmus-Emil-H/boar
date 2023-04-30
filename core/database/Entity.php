@@ -58,6 +58,8 @@ abstract class Entity {
             }
         }
 
+        var_dump($this->data);
+        echo '<br>';
         if($data === null) $data = [];
 
         $this->data = array_merge($this->data, $data);
@@ -93,12 +95,12 @@ abstract class Entity {
     }
 
     /**
-     * Gets obj based on current model
+     * Gets value based on key
      * @return \Iteratable
     */
 
-    public function get() {
-        return Application::$app->connection->select($this->getTableName(), ['*'])->execute($this);
+    public function get(string $key) {
+        return $this->data[$key] ?? "Invalid key: $key"; 
     }
 
     public static function all() {

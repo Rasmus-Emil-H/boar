@@ -35,7 +35,6 @@ abstract class Entity {
     */
     public function set($data = null, ?array $allowedFields = null): Entity {
         if(is_object($data) === true) $data = (array) $data;
-
         if(is_array($data) === true) {
             // Find empty strings in dataset and convert to null instead.
             // JSON fields doesn't allow empty strings to be stored.
@@ -45,20 +44,17 @@ abstract class Entity {
         }
 
         if(is_string($data) && trim($data) === '') $data = null;
-
         if ($allowedFields != null) $data = array_intersect_key($data, array_flip($allowedFields));
-        
         $key = $this->getKeyField();
-        
         if ($data !== null && gettype($data) !== "array") $data = [$key => $data];
 
         if(isset($data[$key])) {
             $exists = Application::$app->connection->fetchRow($this->getTableName(), [$key => $data[$key]]);
-
             if(!empty($exists)) {
-                $this->key = $exists->$key;
+                $this->key = $exists->{$this->getKeyField()};
                 $this->data = (array)$exists;
-                unset($data[$key]);
+                unset($this->data[$this->getKeyField()]);
+                unset($data[$this->getKeyField()]);
             }
         }
 

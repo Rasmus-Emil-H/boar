@@ -27,7 +27,7 @@ class Connection {
     
     public const WHERE       = ' WHERE ';
     public const AND         = ' AND ';
-    public const BIND        = ' = ? ';
+    public const BIND        = ' = :';
     public const INNERJOIN   = ' INNER JOIN ';
     public const DEFAULT_LIMIT = 100;
 
@@ -40,7 +40,7 @@ class Connection {
     public function __construct(array $pdoConfigurations) {
         $this->pdo = new \PDO($pdoConfigurations['dsn'], $pdoConfigurations['user'], $pdoConfigurations['password'], $this->defaultPdoOptions);
         $this->pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
-        //$this->pdo->setAttribute(\PDO::ATTR_STATEMENT_CLASS, ["Database\Statement", [$this]]);
+        //$this->pdo->setAttribute(\PDO::ATTR_STATEMENT_CLASS, ["\app\core\database\statement", [$this]]);
     }
 
     /**
@@ -87,8 +87,8 @@ class Connection {
     
     public function bindValues(array $arguments): void {
         foreach($arguments as $selector => $value) {
-            $this->query .= ( array_key_first($arguments) === $selector ? self::WHERE : self::AND ) . $selector . self::BIND;
-            $this->args[] = $value;
+            $this->query .= ( array_key_first($arguments) === $selector ? self::WHERE : self::AND ) . $selector . self::BIND . $selector;
+            $this->args[$selector] = $value;
         }
     }
 
@@ -288,8 +288,8 @@ class Connection {
      * @param array $criteria Criteria used to filter the rows.
      * @return mixed Returns the first row in the result set, false upon failure.
     */
-    public function fetchRow(string $table, ?array $criteria = null) {
-        $this->select($table, $criteria)->where($criteria);
+    public function fetchRow(string $table, ?array $criteria) {
+        $this->select($table, ['*'])->where($criteria);
         return $this->execute('fetch');
     }
 

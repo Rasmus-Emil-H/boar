@@ -69,6 +69,34 @@ abstract class Entity {
     }
 
     /**
+    * Determine if the loaded entity exists in db
+    * @return bool
+    */
+    public function exists() : bool {
+        return $this->key !== null;
+    }
+
+    /**
+    * Saves the entity to a long term storage.
+    * Empty strings are converted to null values
+    * @return mixed if a new entity was just inserted, returns the primary key for that entity, otherwise the current data is returned
+    */
+    public function save() {
+        try {
+            if ($this->exists() === true) {
+                Application::$app->connection->update($this->getTableName(), $this->data, $this->getKeyFilter());
+                return $this->data;
+            } else {
+                if(empty($this->data)) throw new Exception("Data variable is empty");
+                $this->key = Application::$app->connection->create($this->getTableName(), $this->data);
+                return $this->key;
+            }
+        } catch(Exception $e) {
+            throw $e;
+        }
+    }
+
+    /**
      * Gets obj based on current model
      * @return \Iteratable
     */
@@ -78,7 +106,28 @@ abstract class Entity {
     }
 
     public static function all() {
-        return Application::$app->connection->select(static::tableName, ['*'])->execute();
+        $rows = Application::$app->connection->select(static::tableName, ['*'])->execute();
+        return self::load(array_column($rows, static::keyID));
+    }
+
+    /**
+    * Load one or more ID's into entities
+    * @param mixed $ids an array of ID's or an integer to load
+    * @return mixed The loaded entities
+    * @throws Exception
+    */
+    public static function load($ids) {
+        $class = get_called_class();
+
+        if(is_array($ids)) {
+            $objects = [];
+            foreach($ids as $id) $objects[$id] = new $class($id);
+            return $objects;
+        } else if(is_numeric($ids)) {
+            return new $class((int) $ids);
+        }
+
+        throw new Exception($class."::load(); expects either an array or integer. '".gettype($ids)."' was provided.");
     }
 
     /**
@@ -87,6 +136,14 @@ abstract class Entity {
     */
     public function getData(): array {
         return $this->data;
+    }
+
+    /**
+    * Get value based on key
+    * @return array
+    */
+    public function __get(string $key) {
+        return $this->data[$key] ?? new \Exception("Invalid key");
     }
 
     /**

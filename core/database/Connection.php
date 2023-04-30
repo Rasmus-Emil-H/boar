@@ -20,7 +20,7 @@ class Connection {
     protected array $fieldPlaceholders = [];
     protected array  $args = [];
     private   array $defaultPdoOptions = [
-    \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC,
+        \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_OBJ,
         \PDO::ATTR_EMULATE_PREPARES => false,
         \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION,
     ];
@@ -108,7 +108,7 @@ class Connection {
         return $this;
     }
 
-    public function create(): self {
+    public function create(array $fields): self {
         $this->query .= "INSERT INTO {$this->tableName} ({$this->fields}) VALUES ({$this->placeholders})";
         return $this;
     }
@@ -274,11 +274,46 @@ class Connection {
     * @return boolean
     */
     public function rollback() : bool {
-        if($this->transactionStarted === true) {
-            return $this->pdo->rollBack();
-        } else {
-            throw new \PDOException("Attempted rollback when not in transaction.");
+        return $this->transactionStarted ? $this->pdo->rollBack() : false;
+    }
+
+    /**
+     * Fetch a single row from the given criteria.
+     * @param string $table Name of the table containing the row to be fetched
+     * @param array $criteria Criteria used to filter the rows.
+     * @return mixed Returns the first row in the result set, false upon failure.
+    */
+    public function fetchRow(string $table, ?array $criteria = null) {
+        $this->select($table, $criteria)->where($criteria);
+        return $this->execute();
+    }
+
+    /**
+     * Internal function to convert column=>value pairs into SQL.
+     * If a parameter value is an array, it will be treated as such, using the IN operator.
+     * @param array $array Array of arguments to parse (You sure yet that it's an array?)
+     * @param string $seperator String seperator to seperate the pairs with
+     * @param string $variablePrefix string to use for prefixing values in the SQL
+     * @return string
+    */
+    private function keysToSql(?array $array, string $seperator, string $variablePrefix = ""): string {
+
+        if ($array == null) return "1";
+
+        $list = [];
+        foreach ($array as $column => $value) {
+            if($value === null && $seperator !== ',') {
+                $operator = "<=>";
+            } else if(is_array($value)) {
+                $operator = "IN";
+            } else {
+                $operator = '=';
+            }
+
+            $list[] = " `$column` $operator :" . $variablePrefix . $column;
         }
+
+        return implode(' ' . $seperator, $list);
     }
 
     protected function log(string $message): void {

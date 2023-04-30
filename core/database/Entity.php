@@ -57,20 +57,26 @@ abstract class Entity {
                 unset($data[$this->getKeyField()]);
             }
         }
-
-        var_dump($this->data);
-        echo '<br>';
+        
         if($data === null) $data = [];
 
         $this->data = array_merge($this->data, $data);
         return $this;
+    }
+    
+    /**
+    * get pk
+    * @return bool
+    */
+    public function key(): string {
+        return $this->key;
     }
 
     /**
     * Determine if the loaded entity exists in db
     * @return bool
     */
-    public function exists() : bool {
+    public function exists(): bool {
         return $this->key !== null;
     }
 
@@ -85,14 +91,24 @@ abstract class Entity {
                 Application::$app->connection->update($this->getTableName(), $this->data, $this->getKeyFilter());
                 return $this->data;
             } else {
-                if(empty($this->data)) throw new Exception("Data variable is empty");
-                $this->key = Application::$app->connection->create($this->getTableName(), $this->data);
+                if(empty($this->data)) throw new \Exception("Data variable is empty");
+                $this->key = Application::$app->connection->create($this->getTableName(), $this->data)->execute();
                 return $this->key;
             }
         } catch(Exception $e) {
             throw $e;
         }
     }
+
+    /**
+     * Initialize new 
+     * @return $this
+    */
+
+    public function init(string $languageID = '') {
+		$fields = $this->getAttributes();
+		return Application::$app->database->init($this->tableName(), $fields, [null, $languageID, null]);
+	}
 
     /**
      * Gets value based on key

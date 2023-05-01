@@ -3,6 +3,12 @@
 ## Init application by running the setup migration 
 ###### php migrations.php
 
+# Models
+
+##### Object should be placed inside models directory and extend Entity
+##### Properties can be found by $static->myValue
+
+
 # Build queries through 
 
 ###### Application::$app->database
@@ -31,13 +37,3 @@
 ## Handle Database changes through migrations
 
 ###### @migrations folder
-
-## curl
-
-###### $curl = new \app\core\curl();
-###### $curl->setUrl('https://superfunresource.oi')
-###### ->setMethod('post')
-###### ->setData(['foo' => 'bar'])
-###### ->setHeaders(['bla:bla'])
-###### ->send();
-###### Get response by $curl->content

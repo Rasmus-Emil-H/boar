@@ -8,9 +8,9 @@
 ##### Object should be placed inside models directory and extend Entity
 ##### Properties can be found by
 ##### $product = new ProductModel();
-##### $product->myValue
+##### $product->myValue;
 ### Static methods are also present per default and be extended as you wish
-##### $produts = ProductModel::all(); / ProductModel::search(['key' => 'value]);
+##### $products = ProductModel::all(); / $specificProducts = ProductModel::search(['key' => 'value]);
 
 
 # Build queries through 

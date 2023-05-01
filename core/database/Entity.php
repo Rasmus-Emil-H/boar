@@ -28,20 +28,13 @@ abstract class Entity {
     }
 
     /**
-     * Sets ones or more properties to a given value.
      * @param array $values key:value pairs of values to set
      * @param array $allowedFields keys of fields allowed to be altered
      * @return object The current entity instance
     */
     public function set($data = null, ?array $allowedFields = null): Entity {
         if(is_object($data) === true) $data = (array) $data;
-        if(is_array($data) === true) {
-            // Find empty strings in dataset and convert to null instead.
-            // JSON fields doesn't allow empty strings to be stored.
-            // This also helps against empty strings telling exists(); to return true
-            foreach($data as $key => $value)
-                $data[$key] = is_string($value) && trim($value) === '' ? null : $value;
-        }
+        if(is_array($data) === true) foreach($data as $key => $value) $data[$key] = is_string($value) && trim($value) === '' ? null : $value;
 
         if(is_string($data) && trim($data) === '') $data = null;
         if ($allowedFields != null) $data = array_intersect_key($data, array_flip($allowedFields));
@@ -81,9 +74,7 @@ abstract class Entity {
     }
 
     /**
-    * Saves the entity to a long term storage.
-    * Empty strings are converted to null values
-    * @return mixed if a new entity was just inserted, returns the primary key for that entity, otherwise the current data is returned
+    * @return string
     */
     public function save() {
         try {
@@ -120,6 +111,7 @@ abstract class Entity {
     public function softDelete(): self {
 		$this->deletedAt = new \DateTime(now());
         $this->save();
+        return $this;
 	}
 
     /**
@@ -131,6 +123,7 @@ abstract class Entity {
     public function restore(): self {
 		$this->deletedAt = null;
         $this->save();
+        return $this;
 	}
 
     /**

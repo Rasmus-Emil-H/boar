@@ -113,6 +113,11 @@ class Connection {
         return $this;
     }
 
+    public function in(array $inValues): self {
+        $this->query .= " IN ( " . implode(', ', $inValues) . " ) ";
+        return $this;
+    }
+
     public function create(string $table, array $fields): self {
         $this->preparePlaceholdersAndBoundValues($fields, 'insert');
         $this->query .= "INSERT INTO {$table} ({$this->fields}) VALUES ({$this->placeholders})";

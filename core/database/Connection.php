@@ -68,7 +68,7 @@ class Connection {
 
     public function init(string $table, array $data) {
         $this->tableName = $table;
-        $this->fields = implode(', ', $data);
+        $this->bindFields($data); 
         $this->bindValues($data);
         $this->create();
         $this->execute();

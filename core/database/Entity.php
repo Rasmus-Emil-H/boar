@@ -181,7 +181,7 @@ abstract class Entity {
      * @return \Iteratable
     */
 
-    public static function search(array $criterias, array $additionalQueryBuilding = []) {
+    public static function search(array $criterias, array $additionalQueryBuilding = []): array {
         $rows = Application::$app->connection->select(static::tableName, ['*'])->whereClause($criterias);
         isset($additionalQueryBuilding['limit']) ? $rows = $rows->limit($additionalQueryBuilding['limit']) : '';
         isset($additionalQueryBuilding['orderBy']) ? $rows = $rows->orderBy($additionalQueryBuilding['orderBy']) : '';
@@ -206,6 +206,40 @@ abstract class Entity {
         $result = get_class($this)."($this->key:\n";
         foreach ($this->data as $key => $value) $result .= "[$key]:$value\n";
         return $result;
+    }
+
+    /**
+     * RELATIONSHIP SECTION
+     * @return \app\models\$xxxxx
+    */
+
+    /**
+     * Create a new model instance for a related model.
+     * @param  string  $class
+     * @return mixed
+     */
+    protected function newRelatedInstance($class) {
+        var_dump($class);
+    }
+
+    /**
+     * Define a one-to-one relationship.
+     * @param  string  $related
+     * @param  string  $foreignKey
+     * @return \core\database\hasOne
+     */
+    public function hasOne($related, $foreignKey) {
+        $instance = $this->newRelatedInstance($related);
+    }
+
+    /**
+     * Define a one-to-many relationship.
+     * @param  string  $related
+     * @param  string  $foreignKey
+     * @return \core\database\hasMany
+     */
+    public function hasMany($related, $foreignKey) {
+        $instance = $this->newRelatedInstance($related);
     }
 
 }

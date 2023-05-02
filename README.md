@@ -13,6 +13,7 @@
 ###### Is an invalid/no key not set, a object based on your table will be returned
 ###### Can get values by: $product->get('myValue');
 ###### Can set values by: $product->set([$field => $value]);
+###### Once you're done remember to: $product->save();
 ###### Static methods are also present per default and be extended as you wish
 ###### $products = ProductModel::all(); / $specificProducts = ProductModel::search(['key' => 'value]);
 

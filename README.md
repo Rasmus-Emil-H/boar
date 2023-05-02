@@ -7,8 +7,10 @@
 
 ##### Object should be placed inside models directory and extend Entity
 ##### Properties can be found by
-##### $product = new ProductModel();
-##### $product->myValue;
+##### $product = new SomeModel($modelPrimaryKey);
+##### Is a invalid/no key not set, a object based on your table will be returned
+### Can get values by: $product->get('myValue');
+### Can set values by: $product->set($field, 'myValue');
 ### Static methods are also present per default and be extended as you wish
 ##### $products = ProductModel::all(); / $specificProducts = ProductModel::search(['key' => 'value]);
 

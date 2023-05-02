@@ -66,13 +66,10 @@ class Connection {
         return '?';
     }
 
-    public function init(string $table, array $fields, array $values) {
-        $holders = '';
-        foreach ( $values as $valKey => $value ) $holders .= '?' . ( array_key_last($values) === $valKey ? '' : ', ' );
+    public function init(string $table, array $data) {
         $this->tableName = $table;
-        $this->fields = implode(', ', $fields);
-        $this->args = $values;
-        $this->placeholders = $holders;
+        $this->fields = implode(', ', $data);
+        $this->bindValues($data);
         $this->create();
         $this->execute();
     }

@@ -61,7 +61,7 @@ abstract class Entity {
     * get pk
     * @return bool
     */
-    public function key(): string {
+    public function key() {
         return $this->key;
     }
 
@@ -97,9 +97,9 @@ abstract class Entity {
      * @return $this
     */
 
-    public function init(string $languageID = '') {
+    public function init() {
 		$fields = $this->getAttributes();
-		return Application::$app->database->init($this->tableName(), $fields, [null, $languageID, null]);
+		return Application::$app->connection->init($this->tableName(), $this->data);
 	}
 
     /**
@@ -192,7 +192,7 @@ abstract class Entity {
     */
 
     public function delete() {
-        return Application::$app->connection->delete($this->getTableName())->where([$this->getKeyField() => $this->key])->execute();
+        return Application::$app->connection->delete($this->getTableName())->where([$this->getKeyField() => $this->key()])->execute();
     }
 
     /**

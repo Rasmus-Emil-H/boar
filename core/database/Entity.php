@@ -181,8 +181,11 @@ abstract class Entity {
      * @return \Iteratable
     */
 
-    public static function search(array $criterias) {
-        $rows = Application::$app->connection->select(static::tableName, ['*'])->whereClause($criterias)->execute();
+    public static function search(array $criterias, array $additionalQueryBuilding = []) {
+        $rows = Application::$app->connection->select(static::tableName, ['*'])->whereClause($criterias);
+        isset($additionalQueryBuilding['limit']) ? $rows = $rows->limit($additionalQueryBuilding['limit']) : '';
+        isset($additionalQueryBuilding['orderBy']) ? $rows = $rows->orderBy($additionalQueryBuilding['orderBy']) : '';
+        $rows = $rows->execute();
         return self::load(array_column($rows, static::keyID));
     }
 

@@ -34,7 +34,7 @@ class Relations {
      * Define a one-to-one relationship.
      * @param  string  $related
      * @param  string  $foreignKey
-     * @return \core\database\hasOne
+     * @return \core\database\relations\hasOne
      */
     public function hasOne($related, $foreignKey) {
         $instance = $this->newRelatedInstance($related);
@@ -44,7 +44,7 @@ class Relations {
      * Define a one-to-many relationship.
      * @param  string  $related
      * @param  string  $foreignKey
-     * @return \core\database\hasMany
+     * @return \core\database\relations\hasMany
      */
     public function hasMany($related, $foreignKey) {
         $instance = $this->newRelatedInstance($related);

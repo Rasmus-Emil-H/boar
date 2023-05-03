@@ -87,12 +87,6 @@ class Application {
         $this->user = $authenticationClass->findOne([$primaryKey => $primaryValue], $authenticationClass->tableName());
     }
 
-    public function getLanguages() {
-        foreach ( \app\models\LanguageModel::all() as $languageValue ) 
-            $languageSplit[$languageValue->get('languageID')][] = $languageValue;
-        return $languageSplit;
-    }
-
     /**
      * Run the application 
      * Custom exceptions should be written inside \core\exceptions
@@ -117,11 +111,16 @@ class Application {
 
     /**
      * Exception code handler
+     * @param code
     */
 
     protected function exceptionCodeHandler($code) {
         if( !is_int($code) ) 
             throw new \Exception('Invalid status code. Must be int, however ' . gettype($code) . ' is provided.');
+    }
+
+    public function isDevSite() {
+        return $_SERVER['REMOTE_ADDR'] === '152.115.151.122' || $this->env->get('isDev') === 'true' ;
     }
 
     /**
@@ -133,12 +132,13 @@ class Application {
         return $this->controller;
     }
 
+    /**
+     * @param controller The desired controller
+     * @return void
+    */
+
     public function setController(Controller $controller): void {
         $this->controller = $controller;
-    }
-
-    public function isDevSite() {
-        return $_SERVER['REMOTE_ADDR'] === 'x.x.x.x' || $this->env->get('isDev') === 'true' ;
     }
 
     public function login(DbModel $user): bool {
@@ -160,6 +160,11 @@ class Application {
         $this->user = null;
         $this->session->removeSessionProperty('user');
     }
+
+    /**
+     * @param value To be, translated, string
+     * @return void
+    */
 
     public function translate(string $value): string {
         return $this->i18n->translate($value);

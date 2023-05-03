@@ -149,6 +149,7 @@ abstract class Entity extends Relations {
 
     /** 
      * For those annoying bits
+     * Maybe this should be used for executing something cool
      * @return \Exception
     */
 
@@ -158,11 +159,12 @@ abstract class Entity extends Relations {
 
     /** 
      * For those annoying bits
+     * Maybe this should be used for executing something cool
      * @return \Exception
     */
 
     public static function __callStatic($name, $arguments) {
-        Application::$app->globalThrower("Invalid method [{$name}]");
+        Application::$app->globalThrower("Invalid static method [{$name}]");
     }
 
     /**

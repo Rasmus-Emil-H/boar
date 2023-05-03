@@ -24,7 +24,10 @@ abstract class Entity extends Relations {
 
     abstract protected function getKeyField()  : string;
     abstract protected function getTableName() : string;
-    // abstract protected function getRelatedObject() : string;
+
+    public function getRelatedObject(string $key): string {
+		return $this->relatedObjects[$key] ?: 'Invalid relation';
+	}
 
     /**
      * Loads a given entity, instantiates a new if none given.

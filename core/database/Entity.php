@@ -30,6 +30,7 @@ abstract class Entity extends Relations {
      * @param mixed $data Can be either an array of existing data or an entity ID to load.
      * @return void
     */
+    
     public function __construct($data = null, ?array $allowedFields = null) {
         $this->set($data, $allowedFields);
     }
@@ -39,6 +40,7 @@ abstract class Entity extends Relations {
      * @param array $allowedFields keys of fields allowed to be altered
      * @return object The current entity instance
     */
+
     public function set($data = null, ?array $allowedFields = null): Entity {
         if(is_object($data) === true) $data = (array) $data;
         if(is_array($data) === true) foreach($data as $key => $value) $data[$key] = is_string($value) && trim($value) === '' ? null : $value;
@@ -68,6 +70,7 @@ abstract class Entity extends Relations {
     * get pk
     * @return bool
     */
+
     public function key() {
         return $this->key;
     }
@@ -76,6 +79,7 @@ abstract class Entity extends Relations {
     * Determine if the loaded entity exists in db
     * @return bool
     */
+
     public function exists(): bool {
         return $this->key !== null;
     }
@@ -83,6 +87,7 @@ abstract class Entity extends Relations {
     /**
     * @return string
     */
+
     public function save() {
         try {
             if ($this->exists() === true) {
@@ -192,6 +197,7 @@ abstract class Entity extends Relations {
     * Gets the current entity data
     * @return array
     */
+
     public function getData(): array {
         return $this->data;
     }
@@ -200,6 +206,7 @@ abstract class Entity extends Relations {
     * Get value based on key
     * @return array
     */
+
     public function __get(string $key) {
         return $this->data[$key] ?? new \Exception("Invalid key");
     }
@@ -238,6 +245,7 @@ abstract class Entity extends Relations {
      * Model debugging
      * @return string
     */
+
     public function __toString() {
         $result = get_class($this)."($this->key:\n";
         foreach ($this->data as $key => $value) $result .= "[$key]:$value\n";

@@ -16,8 +16,15 @@ abstract class Entity extends Relations {
     private   $key;
     protected $data = [];
 
+    /**
+     * Related object array
+     * @format like: 'objectIdentifier' => Model::class
+    */
+    // protected array $relatedObjects = [];
+
     abstract protected function getKeyField()  : string;
     abstract protected function getTableName() : string;
+    // abstract protected function getRelatedObject() : string;
 
     /**
      * Loads a given entity, instantiates a new if none given.
@@ -129,6 +136,7 @@ abstract class Entity extends Relations {
 
     /**
      * Gets value based on key
+     * @param string key
      * @return \Iteratable
     */
 

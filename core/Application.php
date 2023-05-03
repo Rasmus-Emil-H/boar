@@ -109,6 +109,10 @@ class Application {
         if(!class_exists($class)) $this->response->setResponse(400, 'application/json', ['msg' => 'bad request']);
     }
 
+    public function globalThrower(string $message): \Exception {
+        throw new \Exception($message);
+    }
+
     /**
      * Exception code handler
      * @param code

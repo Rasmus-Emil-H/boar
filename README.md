@@ -24,7 +24,7 @@
 ######     $imageModel = $this->hasMany($this->getRelatedObject('images'));
 ###### }
 ###### Where "images" is a key based on your models as below
-###### protected array $relatedObjects = ['images' => Model::class];
+###### protected array $relatedObjects = ['images' => Image::class];
 
 
 ## Build queries through 

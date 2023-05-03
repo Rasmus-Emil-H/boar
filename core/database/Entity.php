@@ -202,7 +202,7 @@ abstract class Entity extends Relations {
     */
 
     public function getRelatedObject(string $key): string {
-		return $this->relatedObjects[$key] ?: 'Invalid relation';
+		return $this->relatedObjects[$key] ?? Application::$app->globalThrower('Invalid relation');
 	}
 
     /**

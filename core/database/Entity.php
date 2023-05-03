@@ -9,8 +9,9 @@
 namespace app\core\database;
 
 use \app\core\Application;
+use \app\core\database\relations\Relations;
 
-abstract class Entity {
+abstract class Entity extends Relations {
 
     private   $key;
     protected $data = [];
@@ -205,40 +206,6 @@ abstract class Entity {
         $result = get_class($this)."($this->key:\n";
         foreach ($this->data as $key => $value) $result .= "[$key]:$value\n";
         return $result;
-    }
-
-    /**
-     * RELATIONSHIP SECTION
-     * @return \app\models\Entity
-    */
-
-    /**
-     * Create a new model instance for a related model.
-     * @param  string  $class
-     * @return mixed
-     */
-    protected function newRelatedInstance($class) {
-        var_dump($class);
-    }
-
-    /**
-     * Define a one-to-one relationship.
-     * @param  string  $related
-     * @param  string  $foreignKey
-     * @return \core\database\hasOne
-     */
-    public function hasOne($related, $foreignKey) {
-        $instance = $this->newRelatedInstance($related);
-    }
-
-    /**
-     * Define a one-to-many relationship.
-     * @param  string  $related
-     * @param  string  $foreignKey
-     * @return \core\database\hasMany
-     */
-    public function hasMany($related, $foreignKey) {
-        $instance = $this->newRelatedInstance($related);
     }
 
 }

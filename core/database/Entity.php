@@ -181,7 +181,7 @@ abstract class Entity extends Relations {
     * @return array
     */
     public function __get(string $key) {
-        return $this->data[$key] ?? new \Exception("Invalid key");
+        return $this->data[$key] ?? Application::$app->globalThrower('Invalid key');
     }
 
     /**

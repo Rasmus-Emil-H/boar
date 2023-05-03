@@ -183,8 +183,7 @@ abstract class Entity {
 
     public static function search(array $criterias, array $additionalQueryBuilding = []): array {
         $rows = Application::$app->connection->select(static::tableName, ['*'])->whereClause($criterias);
-        isset($additionalQueryBuilding['limit']) ? $rows = $rows->limit($additionalQueryBuilding['limit']) : '';
-        isset($additionalQueryBuilding['orderBy']) ? $rows = $rows->orderBy($additionalQueryBuilding['orderBy']) : '';
+        foreach ( $additionalQueryBuilding as $key => $param ) $rows = $rows = $rows->{$key}($param);
         $rows = $rows->execute();
         return self::load(array_column($rows, static::keyID));
     }
@@ -210,7 +209,7 @@ abstract class Entity {
 
     /**
      * RELATIONSHIP SECTION
-     * @return \app\models\$xxxxx
+     * @return \app\models\Entity
     */
 
     /**

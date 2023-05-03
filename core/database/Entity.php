@@ -99,7 +99,7 @@ abstract class Entity extends Relations {
                 $this->key = Application::$app->connection->getLastID();
                 return $this->key;
             }
-        } catch(Exception $e) {
+        } catch(\Exception $e) {
             Application::$app->globalThrow($e->getMessage());
         }
     }

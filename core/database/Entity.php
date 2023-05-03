@@ -105,8 +105,7 @@ abstract class Entity extends Relations {
     */
 
     public function init() {
-		$fields = $this->getAttributes();
-		return Application::$app->connection->init($this->tableName(), $this->data);
+		return Application::$app->connection->init($this->getTableName(), $this->data);
 	}
 
     /**

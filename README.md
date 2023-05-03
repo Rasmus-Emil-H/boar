@@ -1,12 +1,12 @@
 # 🐗 B0AR MVC 🐗
 ###### Mvc like PHP application
 
-## Init application by running the setup migration 
+### Init application by running the setup migration 
 ###### Create your database
 ###### Update index files with valid credentials and run script below
 ###### php migrations.php
 
-## Models
+### Models
 
 ###### Object should be placed inside models directory and extend Entity
 ###### Properties can be found by
@@ -18,7 +18,7 @@
 ###### Static methods are also present per default and be extended as you wish
 ###### $products = ProductModel::all(); / $specificProducts = ProductModel::search(['key' => 'value]);
 
-## Relations
+### Relations
 ###### Relations between objects should be done by defining a method on your Model as such:
 ###### public function images() {
 ######     $imageModel = $this->hasMany($this->getRelatedObject('images'));
@@ -27,7 +27,7 @@
 ###### protected array $relatedObjects = ['images' => Image::class];
 
 
-## Build queries through 
+### Build queries through 
 
 ###### Application::$app->connection
 ###### ->select("Users u", ["u.email", "u.firstname", "p.body"])
@@ -36,22 +36,22 @@
 ###### ->limit()
 ###### ->execute();
 
-## Handle files through 
+### Handle files through 
 
 ###### Application::$app->file
 
-## Request response cycle through 
+### Request response cycle through 
 
 ###### Response / Request handlers
 
-## Custom middlewares at core\middlewares
+### Custom middlewares at core\middlewares
 
 ###### Auth middleware for protected routes
 
-## Set CSRF tokens through core\tokens\csrf
+### Set CSRF tokens through core\tokens\csrf
 
 ###### Remember to use tokens for your forms kids!
 
-## Handle Database changes through migrations
+### Handle Database changes through migrations
 
 ###### @migrations folder

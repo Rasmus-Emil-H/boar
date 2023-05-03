@@ -25,10 +25,6 @@ abstract class Entity extends Relations {
     abstract protected function getKeyField()  : string;
     abstract protected function getTableName() : string;
 
-    public function getRelatedObject(string $key): string {
-		return $this->relatedObjects[$key] ?: 'Invalid relation';
-	}
-
     /**
      * Loads a given entity, instantiates a new if none given.
      * @param mixed $data Can be either an array of existing data or an entity ID to load.
@@ -199,6 +195,15 @@ abstract class Entity extends Relations {
         $rows = $rows->execute();
         return self::load(array_column($rows, static::keyID));
     }
+
+    /**
+     * @param string key
+     * @return mixed 
+    */
+
+    public function getRelatedObject(string $key): string {
+		return $this->relatedObjects[$key] ?: 'Invalid relation';
+	}
 
     /**
      * Delete obj based on pk

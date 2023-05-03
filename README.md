@@ -18,6 +18,14 @@
 ###### Static methods are also present per default and be extended as you wish
 ###### $products = ProductModel::all(); / $specificProducts = ProductModel::search(['key' => 'value]);
 
+## Relations
+###### Relations between objects should be done by defining a method on your Model as such:
+###### public function images() {
+######     $imageModel = $this->hasMany($this->getRelatedObject('images'));
+###### }
+###### Where "images" is a key based on your models as below
+###### protected array $relatedObjects = ['images' => Model::class];
+
 
 ## Build queries through 
 

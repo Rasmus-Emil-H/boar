@@ -11,6 +11,8 @@ namespace app\core;
 
 class Env {
 
+    private string $someTestKey = 'dontShareMePlease';
+
     public function get(string $key): string {
         return $this->{$key};
     }

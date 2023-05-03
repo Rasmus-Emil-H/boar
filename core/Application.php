@@ -137,6 +137,10 @@ class Application {
         $this->controller = $controller;
     }
 
+    public function isDevSite() {
+        return $_SERVER['REMOTE_ADDR'] === 'x.x.x.x' || $this->env->get('isDev') === 'true' ;
+    }
+
     public function login(DbModel $user): bool {
         $this->user = $user;
         $primaryKey = $user->getPrimaryKey();

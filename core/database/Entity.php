@@ -182,8 +182,8 @@ abstract class Entity extends Relations {
      * @return \Iteratable
     */
 
-    public static function search(array $criterias, array $additionalQueryBuilding = []): array {
-        $rows = Application::$app->connection->select(static::tableName, ['*'])->whereClause($criterias);
+    public static function search(array $criterias, array $values = ['*'], array $additionalQueryBuilding = []): array {
+        $rows = Application::$app->connection->select(static::tableName, $values)->whereClause($criterias);
         foreach ( $additionalQueryBuilding as $key => $value ) $rows = $rows->{$key}($value);
         $rows = $rows->execute();
         return self::load(array_column($rows, static::keyID));

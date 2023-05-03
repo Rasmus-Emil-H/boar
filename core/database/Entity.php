@@ -183,7 +183,7 @@ abstract class Entity {
 
     public static function search(array $criterias, array $additionalQueryBuilding = []): array {
         $rows = Application::$app->connection->select(static::tableName, ['*'])->whereClause($criterias);
-        foreach ( $additionalQueryBuilding as $key => $param ) $rows = $rows = $rows->{$key}($param);
+        foreach ( $additionalQueryBuilding as $key => $param ) $rows = $rows->{$key}($param);
         $rows = $rows->execute();
         return self::load(array_column($rows, static::keyID));
     }

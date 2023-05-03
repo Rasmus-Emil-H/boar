@@ -147,12 +147,31 @@ abstract class Entity extends Relations {
         return self::load(array_column($rows, static::keyID));
     }
 
+    /** 
+     * For those annoying bits
+     * @return \Exception
+    */
+
+    public function __call($name, $arguments) {
+        Application::$app->globalThrower("Invalid method [{$name}]");
+    }
+
+    /** 
+     * For those annoying bits
+     * @return \Exception
+    */
+
+    public static function __callStatic($name, $arguments) {
+        Application::$app->globalThrower("Invalid method [{$name}]");
+    }
+
     /**
     * Load one or more ID's into entities
     * @param mixed $ids an array of ID's or an integer to load
     * @return mixed The loaded entities
     * @throws Exception
     */
+
     public static function load($ids) {
         $class = get_called_class();
 

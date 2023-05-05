@@ -100,7 +100,7 @@ abstract class Entity extends Relations {
                 return $this->key;
             }
         } catch(\Exception $e) {
-            Application::$app->globalThrow($e->getMessage());
+            Application::$app->globalThrower($e->getMessage());
         }
     }
 

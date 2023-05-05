@@ -12,6 +12,9 @@ use app\core\Application;
 
 class Relations {
 
+    private const ENTITY_TYPE = 'entityType';
+    private const ENTITY_ID   = 'entityID';
+
     public function __construct() {
 
     }
@@ -49,7 +52,7 @@ class Relations {
      */
     public function hasMany($related) {
         $instance = $this->newRelatedInstance($related);
-        return $instance::search(['entityID' => $this->key]);
+        return $instance::search([self::ENTITY_TYPE => get_called_class(), self::ENTITY_ID => $this->key()]);
     }
 
 }

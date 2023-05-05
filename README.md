@@ -21,10 +21,8 @@
 ### Relations
 ###### Relations between objects should be done by defining a method on your Model as such:
 ###### public function images() {
-######     $imageModel = $this->hasMany($this->getRelatedObject('images'));
+######     return $this->hasMany(ImageModel::class);
 ###### }
-###### Where "images" is a key based on your models as below
-###### protected array $relatedObjects = ['images' => Image::class];
 
 
 ### Build queries through 

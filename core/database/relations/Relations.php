@@ -13,7 +13,7 @@ use app\core\Application;
 class Relations {
 
     public function __construct() {
-        
+
     }
 
     /**
@@ -25,8 +25,7 @@ class Relations {
      * Create a new model instance for a related model.
      * @param  string  $class
      * @return mixed
-    */
-    
+     */
     protected function newRelatedInstance(string $class) {
         Application::$app->classCheck($class);
         return new $class();
@@ -37,8 +36,7 @@ class Relations {
      * @param  string  $related
      * @param  string  $foreignKey
      * @return \core\database\relations\hasOne
-    */
-
+     */
     public function hasOne($related, $foreignKey) {
         $instance = $this->newRelatedInstance($related);
     }
@@ -48,12 +46,10 @@ class Relations {
      * @param  string  $related
      * @param  string  $foreignKey
      * @return \core\database\relations\hasMany
-    */
-
+     */
     public function hasMany($related) {
         $instance = $this->newRelatedInstance($related);
-        var_dump($instance);
-        $instance::search([]);
+        return $instance::search(['entityID' => $this->key]);
     }
 
 }

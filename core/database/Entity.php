@@ -233,7 +233,7 @@ abstract class Entity extends Relations {
 	}
 
     /**
-     * Delete obj based on pk
+     * Delete obj based on primary
      * @return 
     */
 

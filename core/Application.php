@@ -177,5 +177,14 @@ class Application {
     public static function isGuest(): bool {
         return is_null(self::$app->user);
     }
+
+    /**
+     * Determine is current execution context is CLI
+     * @return bool
+    */
+
+    public function isCLI(): bool {
+        return php_sapi_name() === 'cli';     
+    }
     
 }

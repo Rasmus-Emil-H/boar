@@ -28,7 +28,8 @@ class Relations {
      * Create a new model instance for a related model.
      * @param  string  $class
      * @return mixed
-     */
+    */
+
     protected function newRelatedInstance(string $class) {
         Application::$app->classCheck($class);
         return new $class();
@@ -39,8 +40,9 @@ class Relations {
      * @param  string  $related
      * @param  string  $foreignKey
      * @return \core\database\relations\hasOne
-     */
-    public function hasOne($related, $foreignKey) {
+    */
+
+    public function hasOne(string $related, string $foreignKey) {
         $instance = $this->newRelatedInstance($related);
     }
 
@@ -49,10 +51,20 @@ class Relations {
      * @param  string  $related
      * @param  string  $foreignKey
      * @return \core\database\relations\hasMany
-     */
-    public function hasMany($related) {
+    */
+    
+    public function hasMany(string $related) {
         $instance = $this->newRelatedInstance($related);
-        return $instance::search([self::ENTITY_TYPE => get_called_class(), self::ENTITY_ID => $this->key()]);
+        return $instance::search([self::ENTITY_TYPE => $this->getTableName(), self::ENTITY_ID => $this->key()]);
+    }
+
+    /*
+     * Define a belongs-to relationship.
+     * return \[Entity]
+    */
+    public function belongsTo(string $related) {
+        $instance = $this->newRelatedInstance($related);
+        return $instance::search([self::ENTITY_TYPE => $instace->getTableName(), self::ENTITY_ID => $this->key()]);
     }
 
 }

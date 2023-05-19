@@ -7,6 +7,7 @@
 *******************************/
 
 namespace app\core;
+use \app\core\database\Connection;
 
 class Application {
 
@@ -25,8 +26,8 @@ class Application {
     public Response $response;
     public ?Controller $controller = null;
     public Session $session;
-    public \app\core\database\Connection $connection;
-    public ?DbModel $user;
+    public Cookie $cookie;
+    public Connection $connection;
     public View $view;
     public Env $env;
     public Regex $regex;
@@ -42,6 +43,7 @@ class Application {
     const STATUS_DELETED  = 2;
 
     public static Application $app;
+    public static $defaultRoute = '/auth/login';
 
     /**
      * Default file places  
@@ -62,7 +64,8 @@ class Application {
         $this->regex       = new Regex($this->request->getPath());
         $this->router      = new Router($this->request, $this->response);
         $this->session     = new Session();
-        $this->connection  = new \app\core\database\Connection($pdoConfigurations['pdo']);
+        $this->cookie      = new Cookie();
+        $this->connection  = new Connection($pdoConfigurations['pdo']);
         $this->view        = new View();
         $this->env         = new Env();
         $this->i18n        = new I18n();
@@ -77,14 +80,15 @@ class Application {
     }
 
     public function checkUserBasedOnSession(): void {
-        $primaryValue = $this->session->get('user');
+        $primaryValue = $this->cookie->get('sessionId');
         !$primaryValue ? $this->user = null : $this->setApplicationUser($primaryValue);
+        if ( $this->user === null ) header('Location: /auth/login');
     }
 
     public function setApplicationUser(string $primaryValue): void {
         $authenticationClass = new $this->authenticationClass();
-        $primaryKey = $authenticationClass->getPrimaryKey();
-        $this->user = $authenticationClass->findOne([$primaryKey => $primaryValue], $authenticationClass->tableName());
+        $session = $authenticationClass::search(['session_id' => $primaryValue]);
+        $this->user = $session[array_key_first($session)]??null;
     }
 
     /**
@@ -100,7 +104,8 @@ class Application {
             $this->exceptionCodeHandler($e->getCode());
             $this->response->setStatusCode($e->getCode());
             echo $this->view->renderView('error', [
-                'exception' => $e
+                'exception' => $e,
+                'isDev' => $this->isDevSite() ?: false
             ]);
         }
     }
@@ -124,7 +129,7 @@ class Application {
     }
 
     public function isDevSite() {
-        return $_SERVER['REMOTE_ADDR'] === '152.115.151.122' || $this->env->get('isDev') === 'true' ;
+        return $_SERVER['REMOTE_ADDR'] === '152.115.151.122' || $this->env->get('isDev') === 'true' || $_SERVER['REMOTE_ADDR'] === '87.62.102.71';
     }
 
     /**

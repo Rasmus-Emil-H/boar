@@ -39,7 +39,11 @@ class Router {
     }
 
     public function defaultRoute() {
-        header('Location: ' . Application::$defaultRoute);
+        $this->location(Application::$defaultRoute);
+    }
+
+    public function location(string $location): void {
+        header('Location: ' . $location);
         exit;
     }
 

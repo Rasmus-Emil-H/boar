@@ -3,8 +3,7 @@
 
 ### Init application by running the setup migration 
 ###### Create your database
-###### Update index files with valid credentials and run script below
-###### php migrations.php
+###### Update index files with valid credentials and "php migrations.php"
 
 ### Models
 

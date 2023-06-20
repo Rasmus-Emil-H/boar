@@ -19,12 +19,14 @@ class add_posts_table_2022_10_18_0002 {
             body TEXT NOT NULL,
             UserID INT(11) NOT NULL,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)";
-        Application::$app->connection->exec($SQL);
+        Application::$app->connection->prepare($SQL);
+        Application::$app->connection->execute();
     }
 
     public function down() {
         $SQL = "DROP TABLE Users;";
-        Application::$app->connection->exec($SQL);
+        Application::$app->connection->prepare($SQL);
+        Application::$app->connection->execute();
     }
 
 }

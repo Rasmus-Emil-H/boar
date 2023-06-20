@@ -7,6 +7,8 @@
 
 namespace app\core\database;
 
+use app\core\Application;
+
 class Connection {
 
     private bool $transactionStarted = false;

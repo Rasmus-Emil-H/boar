@@ -17,7 +17,6 @@ class add_users_table_2018_12_14_0001 {
             UserID INT AUTO_INCREMENT PRIMARY KEY,
             Email VARCHAR(255) NOT NULL,
             Name VARCHAR(255) NOT NULL,
-            Password VARCHAR(255) NOT NULL,
             Status INT(1) DEFAULT 0,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)";
         Application::$app->connection->exec($SQL);

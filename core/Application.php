@@ -61,7 +61,7 @@ class Application {
 
         $this->connection  = new Connection($pdoConfigurations['pdo']);
 
-        if ( $isMigrating) return;
+        if ( $isMigrating ) return;
         
         $this->request     = new Request();
         $this->response    = new Response();

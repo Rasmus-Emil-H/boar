@@ -82,7 +82,6 @@ class Application {
     public function checkUserBasedOnSession(): void {
         $primaryValue = $this->cookie->get('sessionId');
         !$primaryValue ? $this->user = null : $this->setApplicationUser($primaryValue);
-        if ( $this->user === null ) header('Location: /auth/login');
     }
 
     public function setApplicationUser(string $primaryValue): void {

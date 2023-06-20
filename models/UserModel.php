@@ -13,8 +13,8 @@ use \app\core\Application;
 
 class UserModel extends Entity {
 
-    const keyID     = 'user_id';
-	const tableName = 'users';
+    const keyID     = 'UserID';
+	const tableName = 'Users';
 	
 	/*
 	 * Tablename
@@ -22,7 +22,7 @@ class UserModel extends Entity {
 	*/
 	
 	public function getTableName(): string {
-		return 'users';
+		return 'Users';
 	}
 	
 	/*
@@ -31,7 +31,7 @@ class UserModel extends Entity {
 	*/
 	
 	public function getKeyField(): string {
-		return 'user_id';
+		return 'UserID';
 	}
 
 	public function getForeignKeys(): array {

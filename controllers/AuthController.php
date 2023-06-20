@@ -9,6 +9,7 @@ use app\models\User;
 use app\models\LoginForm;
 use app\core\Response;
 use app\core\middlewares\AuthMiddleware;
+use app\models\Authenticator;
 
 class AuthController extends Controller {
 
@@ -19,9 +20,10 @@ class AuthController extends Controller {
     }
 
     public function login(Request $request, Response $response) {
-        $loginForm = new LoginForm();
+        $login = new Authenticator($request->getBody(), 'login');
         if ($request->isPost()) {
-            $loginForm->loadData($request->getBody());
+            var_dump($login);exit;
+            $loginForm->loadData();
             
             if ($loginForm->validate() && $loginForm->login()) {
                 $response->redirect('/');

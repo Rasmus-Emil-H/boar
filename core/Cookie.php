@@ -10,13 +10,14 @@ namespace app\core;
 
 class Cookie {
 
-    public function setCookie(string $key, string $value): void {
+    public function set(string $key, string $value): void {
         $_COOKIE[$key] = password_hash($value, PASSWORD_DEFAULT);
     }
 
-    public function getCookie(string $key): string {
+    public function get(string $key): string {
         $cookie = $_COOKIE[$key] ?? '';
-        if ( !password_check($cookie, PASSWORD_DEFAULT) ) exit('Invalid cookie');
+        if ( !$cookie ) return '';
+        if ( !password_verify($cookie, PASSWORD_PASSWORD_DEFAULT) ) throw new \Exception('Invalid cookie');
         return $_COOKIE[$key];
     }
 

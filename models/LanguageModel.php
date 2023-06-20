@@ -14,7 +14,7 @@ use \app\core\Application;
 class LanguageModel extends Entity {
 
 	const keyID     = 'languageID';
-	const tableName = 't_languages';
+	const tableName = 'languages';
 
 	public function getAttributes(): array {
 		return ['language'];
@@ -26,7 +26,7 @@ class LanguageModel extends Entity {
 	*/
 	
 	public function getTableName(): string {
-		return 't_languages';
+		return 'languages';
 	}
 	
 	/*

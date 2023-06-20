@@ -105,7 +105,7 @@ class Application {
             $this->response->setStatusCode($e->getCode());
             echo $this->view->renderView('error', [
                 'exception' => $e,
-                'isDev' => $this->isDevSite() ?: false
+                'isDev' => $this->isDevSite()
             ]);
         }
     }
@@ -128,7 +128,7 @@ class Application {
             throw new \Exception('Invalid status code. Must be int, however ' . gettype($code) . ' is provided.');
     }
 
-    public function isDevSite() {
+    public function isDevSite(): bool {
         return $_SERVER['REMOTE_ADDR'] === '152.115.151.122' || $this->env->get('isDev') === 'true' || $_SERVER['REMOTE_ADDR'] === '87.62.102.71';
     }
 

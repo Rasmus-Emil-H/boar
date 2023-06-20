@@ -15,4 +15,4 @@ $config = [
 
 $app = new Application(rootPath: __DIR__, pdoConfigurations: $config);
 
-$app->database->applyMigrations();
+$app->connection->applyMigrations();

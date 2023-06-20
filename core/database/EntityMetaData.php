@@ -23,27 +23,13 @@ class EntityMetaData extends Entity {
     // protected array $relatedObjects = [];
 
     protected function getKeyField(): string {
-        return '';
+        return 'MetaID';
     }
 
     protected function getTableName(): string {
-        return '';
+        return 'Meta';
     }
 
-    /**
-     * Loads a given entity, instantiates a new if none given.
-     * @param mixed $data Can be either an array of existing data or an entity ID to load.
-     * @return void
-    */
-
-    /**
-     * @param array $metaData
-     * @return string
-    */
-
-    public function set(array $metaData): void {
-        $metaData['entityID'] = $this->key();
-        Application::$app->connection->create('t_meta_data', json_encode($metaData));
-    }
+    
 
 }

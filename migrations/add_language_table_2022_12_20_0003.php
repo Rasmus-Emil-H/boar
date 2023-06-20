@@ -8,21 +8,23 @@
  * @return migration
 */
 
+use \app\core\Application;
+
 class add_language_table_2022_12_20_0003 {
 
     public function up() {
-        $database = app\core\Application::$app->database;
         $SQL = "CREATE TABLE IF NOT EXISTS Languages (
             LanguageID INT AUTO_INCREMENT PRIMARY KEY,
-            name VARCHAR(50) NOT NULL,
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)";
-        $database->pdo->exec($SQL);
+            Name VARCHAR(50) NOT NULL,
+            CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP)";
+        Application::$app->connection->rawSQL($SQL);
+        Application::$app->connection->execute();
     }
 
     public function down() {
-        $database = app\core\Application::$app->database;
         $SQL = "DROP TABLE Languages;";
-        $database->pdo->exec($SQL);
+        Application::$app->connection->rawSQL($SQL);
+        Application::$app->connection->execute();
     }
 
 }

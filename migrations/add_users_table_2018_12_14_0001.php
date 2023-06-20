@@ -19,12 +19,14 @@ class add_users_table_2018_12_14_0001 {
             Name VARCHAR(255) NOT NULL,
             Status INT(1) DEFAULT 0,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)";
-        Application::$app->connection->exec($SQL);
+        Application::$app->connection->rawSQL($SQL);
+        Application::$app->connection->execute();
     }
 
     public function down() {
         $SQL = "DROP TABLE Users;";
-        Application::$app->connection->exec($SQL);
+        Application::$app->connection->rawSQL($SQL);
+        Application::$app->connection->execute();
     }
 
 }

@@ -262,6 +262,11 @@ class Connection {
         $stmt->execute();
     }
 
+    protected function rawSQL(string $sql): self {
+        $this->query = $sql;
+        return $this;
+    }
+
     public function prepare(string $sql) {
         return $this->pdo->prepare($sql);
     }

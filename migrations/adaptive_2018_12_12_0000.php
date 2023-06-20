@@ -20,14 +20,13 @@ class adaptive_2018_12_12_0000 {
             Lastname VARCHAR(255) NOT NULL,
             Status TINYINT DEFAULT 0,
             CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP)";
-        var_dump($SQL);
-        Application::$app->connection->prepare($SQL);
+        Application::$app->connection->rawSQL($SQL);
         Application::$app->connection->execute();
     }
 
     public function down() {
         $SQL = "DROP TABLE Users;";
-        Application::$app->connection->prepare($SQL);
+        Application::$app->connection->rawSQL($SQL);
         Application::$app->connection->execute();
     }
 

@@ -15,11 +15,12 @@ class adaptive_2018_12_12_0000 {
     public function up() {
         $SQL = "CREATE TABLE IF NOT EXISTS Users (
             UserID INT AUTO_INCREMENT PRIMARY KEY,
-            email VARCHAR(255) NOT NULL,
-            firstname VARCHAR(255) NOT NULL,
-            lastname VARCHAR(255) NOT NULL,
-            status TINYINT DEFAULT 0,
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)";
+            Email VARCHAR(255) NOT NULL,
+            Firstname VARCHAR(255) NOT NULL,
+            Lastname VARCHAR(255) NOT NULL,
+            Status TINYINT DEFAULT 0,
+            CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP)";
+        var_dump($SQL);
         Application::$app->connection->prepare($SQL);
         Application::$app->connection->execute();
     }

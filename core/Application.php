@@ -52,12 +52,16 @@ class Application {
 
     public const UPLOAD_FOLDER = __DIR__.'/uploads/';
 
-    public function __construct(string $rootPath, array $pdoConfigurations) {
+    public function __construct(string $rootPath, array $pdoConfigurations, bool $isMigrating) {
         
         $this->authenticationClass = $pdoConfigurations['authenticationClass'];
 
         self::$ROOT_DIR = $rootPath;
         self::$app = $this;
+
+        $this->connection  = new Connection($pdoConfigurations['pdo']);
+
+        if ( $isMigrating) return;
         
         $this->request     = new Request();
         $this->response    = new Response();
@@ -65,7 +69,6 @@ class Application {
         $this->router      = new Router($this->request, $this->response);
         $this->session     = new Session();
         $this->cookie      = new Cookie();
-        $this->connection  = new Connection($pdoConfigurations['pdo']);
         $this->view        = new View();
         $this->env         = new Env();
         $this->i18n        = new I18n();

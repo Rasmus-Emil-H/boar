@@ -19,8 +19,6 @@ $config = [
     ]
 ];
 
-$app = new Application(
-    rootPath: dirname(__DIR__), pdoConfigurations: $config
-);
+$app = new Application(dirname(__DIR__),$config, false);
 
 $app->run();

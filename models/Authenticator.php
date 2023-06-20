@@ -14,14 +14,14 @@ class Authenticator {
 
     protected array $data;
 
-    public function __construct(array $data = [], string $method) {
+    public function __construct(array $data, string $method) {
         $this->data = $data;
         $this->$method();
     }
 
     public function login() {
-        $user = UserModel::search(['email' => $this->data['email']], 'Users');
-        if (!$user || password_verify($this->data['password'], $user->password)) return false;
+        // $user = UserModel::search(['email' => $this->data['email']]);
+        // if (!$user || password_verify($this->data['password'], $user->password)) return false;
         // return Application::$app->authentication->login($user);
     }
 

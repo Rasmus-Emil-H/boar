@@ -10,7 +10,7 @@
 
 use \app\core\Application;
 
-class add_password_to_user_table_2018_12_14_0001 {
+class edit_user_table_add_password_2018_12_14_0001 {
 
     public function up() {
         $SQL = "ALTER TABLE Users ADD COLUMN Password VARCHAR(255) ";

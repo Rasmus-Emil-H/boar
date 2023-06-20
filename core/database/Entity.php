@@ -120,7 +120,7 @@ abstract class Entity extends Relations {
     */
 
     public function softDelete(): self {
-		$this->deletedAt = new \DateTime(now());
+		$this->deletedAt = new \DateTime(date('Y-m-d H:i:s'));
         $this->save();
         return $this;
 	}

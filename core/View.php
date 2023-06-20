@@ -29,14 +29,7 @@ class View {
     protected function renderOnlyView(string $view, array $params = []) {
         foreach ($params as $key => $value) $$key = $value;
         ob_start(); ?>
-            <style> 
-                <?php include_once Application::$ROOT_DIR . "/public/css/bootstrap.css"; ?>
-                <?php include_once Application::$ROOT_DIR . "/public/css/main.css"; ?>
-            </style>
             <?php include_once Application::$ROOT_DIR . "/views/$view.php"; ?>
-            <script> 
-                <?php include_once Application::$ROOT_DIR . "/public/js/trip.js"; ?> 
-            </script>
         <?php return ob_get_clean();
     }
 

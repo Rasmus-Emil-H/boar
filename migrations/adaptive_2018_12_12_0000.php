@@ -8,10 +8,11 @@
  * @return migration
 */
 
+use \app\core\Application;
+
 class adaptive_2018_12_12_0000 {
 
     public function up() {
-        $database = app\core\Application::$app->database;
         $SQL = "CREATE TABLE IF NOT EXISTS Users (
             UserID INT AUTO_INCREMENT PRIMARY KEY,
             email VARCHAR(255) NOT NULL,
@@ -19,13 +20,14 @@ class adaptive_2018_12_12_0000 {
             lastname VARCHAR(255) NOT NULL,
             status TINYINT DEFAULT 0,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)";
-        $database->pdo->exec($SQL);
+        Application::$app->connection->prepare($SQL);
+        Application::$app->connection->execute();
     }
 
     public function down() {
-        $database = app\core\Application::$app->database;
         $SQL = "DROP TABLE Users;";
-        $database->pdo->exec($SQL);
+        Application::$app->connection->prepare($SQL);
+        Application::$app->connection->execute();
     }
 
 }

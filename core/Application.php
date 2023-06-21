@@ -7,7 +7,9 @@
 *******************************/
 
 namespace app\core;
+
 use \app\core\database\Connection;
+use \app\config\Config;
 
 class Application {
 
@@ -32,6 +34,7 @@ class Application {
     public Env $env;
     public Regex $regex;
     public I18n $i18n;
+    public Config $config;
 
     /**
      * Application states  
@@ -42,7 +45,7 @@ class Application {
     const STATUS_ACTIVE   = 1;
     const STATUS_DELETED  = 2;
 
-    public static Application $app;
+    public static self $app;
     public static $defaultRoute = '/auth/login';
 
     /**
@@ -72,6 +75,7 @@ class Application {
         $this->view        = new View();
         $this->env         = new Env();
         $this->i18n        = new I18n();
+        $this->config      = new Config();
 
         $this->checkLanguage();
         $this->checkUserBasedOnSession();
@@ -131,7 +135,7 @@ class Application {
     }
 
     public function isDevSite(): bool {
-        return $_SERVER['REMOTE_ADDR'] === '152.115.151.122' || $this->env->get('isDev') === 'true' || $_SERVER['REMOTE_ADDR'] === '87.62.102.71';
+        return in_array(self::$app->config->get('env')->validIPs, $_SERVER['REMOTE_ADDR']) || $this->env->get('isDev') === 'true';
     }
 
     /**

@@ -16,6 +16,7 @@ class Authenticator {
 
     public function __construct(array $data, string $method) {
         $this->data = $data;
+        if (!method_exists($this, $method)) throw new \Exception('Invalid method');
         $this->$method();
     }
 

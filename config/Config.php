@@ -1,9 +1,9 @@
 <?php
 
 /*******************************
- * Bootstrap Cache 
+ * Bootstrap Config 
  * AUTHOR: RE_WEB
- * @package app\core\Cache
+ * @package app\core\Config
 */
 
 namespace app\config;

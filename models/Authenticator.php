@@ -21,9 +21,10 @@ class Authenticator {
     }
 
     public function login() {
-        // $user = UserModel::search(['email' => $this->data['email']]);
-        // if (!$user || password_verify($this->data['password'], $user->password)) return false;
-        // return Application::$app->authentication->login($user);
+        $user = UserModel::search(['email' => $this->data['email']]);
+        var_dump($user);exit;
+        if (!$user || password_verify($this->data['password'], $user->password)) return false;
+        // return Application::$app->session->set('qwd', $user);
     }
 
     public function api() {

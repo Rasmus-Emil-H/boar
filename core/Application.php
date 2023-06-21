@@ -84,13 +84,12 @@ class Application {
 
     public function checkUserBasedOnSession(): void {
         $primaryValue = $this->cookie->get('sessionId');
-        !$primaryValue ? $this->user = null : $this->setApplicationUser($primaryValue);
+        !$primaryValue ? $this->session->get('user') : $this->setApplicationUser($primaryValue);
     }
 
     public function setApplicationUser(string $primaryValue): void {
         $authenticationClass = new $this->authenticationClass();
         $session = $authenticationClass::search(['session_id' => $primaryValue]);
-        $this->user = $session[array_key_first($session)]??null;
     }
 
     /**
@@ -153,14 +152,6 @@ class Application {
         $this->controller = $controller;
     }
 
-    public function login(DbModel $user): bool {
-        $this->user = $user;
-        $primaryKey = $user->getPrimaryKey();
-        $primaryValue = $user->{$primaryKey};
-        $this->session->set('user', $primaryValue);
-        return true;
-    }
-
     public function dd($whatever): void {
         echo '<pre>';
             var_dump($whatever);
@@ -169,8 +160,7 @@ class Application {
     }
 
     public function logout(): void {
-        $this->user = null;
-        $this->session->removeSessionProperty('user');
+        $this->session->unset('user');
     }
 
     /**
@@ -183,7 +173,7 @@ class Application {
     }
 
     public static function isGuest(): bool {
-        return is_null(self::$app->user);
+        return is_null(self::$app->session->get('user'));
     }
 
     /**

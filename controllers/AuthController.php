@@ -20,10 +20,7 @@ class AuthController extends Controller {
     }
 
     public function login(Request $request, Response $response) {
-        if($request->isPost()) {
-            $login = new Authenticator($request->getBody(), 'login');
-            var_dump($login);
-        }
+        if($request->isPost()) new Authenticator($request->getBody(), 'login');
         $this->setLayout('auth');
         return $this->render('login', [
             

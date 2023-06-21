@@ -39,7 +39,7 @@ class UserModel extends Entity {
 	}
 
 	public static function search(array $criterias, array $values = ['*'], array $additionalQueryBuilding = []): array {
-        $rows = Application::$app->connection->select('sessions', $values)->whereClause($criterias);
+        $rows = Application::$app->connection->select(self::tableName, $values)->whereClause($criterias);
         $rows = $rows->execute();
         return self::load(array_column($rows, static::keyID));
     }

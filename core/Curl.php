@@ -63,7 +63,7 @@ class curl {
 			}
 			$this->content = curl_exec ( $this->handler );
 			$this->info = curl_getinfo( $this->handler );
-		} catch( Exception $e ) {
+		} catch( \Exception $e ) {
 			die( $e->getMessage() );
 		}
 	}		

@@ -135,7 +135,7 @@ class Application {
     }
 
     public function isDevSite(): bool {
-        return in_array(self::$app->config->get('env')->validIPs, $_SERVER['REMOTE_ADDR']) || $this->env->get('isDev') === 'true';
+        return in_array(self::$app->config->get('env')->developmentArrayIPs, $_SERVER['REMOTE_ADDR']) || $this->env->get('isDev') === 'true';
     }
 
     /**

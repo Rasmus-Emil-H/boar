@@ -22,9 +22,9 @@ class Authenticator {
 
     public function login() {
         $user = UserModel::search(['email' => $this->data['email']]);
-        var_dump($user);exit;
+        if (!empty($user)) $user = $user[array_key_first($user)];
         if (!$user || password_verify($this->data['password'], $user->password)) return false;
-        // return Application::$app->session->set('qwd', $user);
+        Application::$app->response->redirect('/');
     }
 
     public function api() {

@@ -15,7 +15,7 @@ $config = [
     'pdo' => [
         'dsn' => 'mysql:host=localhost;port=3306;dbname=boar', 
         'user' => 'root', 
-        'password' => 'root'
+        'password' => ''
     ]
 ];
 

@@ -1,26 +1,28 @@
 * {
 	user-select: none !important;
 	outline: none !important;
+	box-sizing: border-box;
 }
 
 html, body {
 	height: 100%;
+	width: 100%;
 }
 
 :root {
-	--dal-primary-font-color: #901728;
+	--primary-font-color: #2e2b2b;
 }
 
 .btn-primary {
-	background-color: var(--dal-primary-font-color) !important;
+	background-color: var(--primary-font-color) !important;
 }
 
 .primary-color {
-	color: var(--dal-primary-font-color) !important;
+	color: var(--primary-font-color) !important;
 }
 
 tbody > tr:first-child > td {
-	border-top: 3px solid var(--dal-primary-font-color);
+	border-top: 3px solid var(--primary-font-color);
 }
 
 .file-upload-container {
@@ -129,7 +131,7 @@ img {
 }
 
 .logo {
-	background-color: var(--dal-primary-font-color);
+	background-color: var(--primary-font-color);
 	color: white !important;
 }
 

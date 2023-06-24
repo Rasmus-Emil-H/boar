@@ -8,7 +8,5 @@
         ->limit()
         ->execute();
 
-    var_dump($query);
-
 ?>
 <h2>home</h2>

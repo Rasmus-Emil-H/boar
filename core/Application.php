@@ -106,7 +106,6 @@ class Application {
         try {
             echo $this->router->resolve();
         } catch (\Throwable $e) {
-            var_dump($e);
             $this->exceptionCodeHandler($e->getCode());
             $this->response->setStatusCode($e->getCode());
             echo $this->view->renderView('error', [

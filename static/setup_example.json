@@ -1,6 +1,15 @@
 {
     "version": "0.1",
     "env": {
-        "developmentArrayIPs": []
+        "developmentArrayIPs": [""]
+    },
+    "database": {
+        "dsn": "",
+        "user": "",
+        "password": ""
+    },
+    "hash": {
+        "salt": "",
+        "peber": ""
     }
 }

@@ -12,9 +12,9 @@ use \app\core\Application;
 
 class Config {
 
-    public function get(string $key): string {
+    public function get(string $key): mixed {
         $config = file_get_contents(Application::$app::$ROOT_DIR.'/static/setup.json', 'R');
-        return json_decode($config)->$key ?? '';
+        return json_decode($config)->$key ?? 'Key not found';
     }
 
 }

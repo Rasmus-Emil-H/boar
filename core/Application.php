@@ -55,14 +55,24 @@ class Application {
 
     public const UPLOAD_FOLDER = __DIR__.'/uploads/';
 
-    public function __construct(string $rootPath, array $pdoConfigurations, bool $isMigrating) {
-        
-        $this->authenticationClass = $pdoConfigurations['authenticationClass'];
+    public function __construct(bool $isMigrating) {
 
-        self::$ROOT_DIR = $rootPath;
         self::$app = $this;
+        self::$ROOT_DIR = dirname(__DIR__);
 
-        $this->connection  = new Connection($pdoConfigurations['pdo']);
+        $this->config      = new Config();
+
+        $applicationConfig = [
+            'authenticationClass' => \app\models\UserModel::class,
+            'pdo' => [
+                'dsn' => $this->config->get('database')->dsn, 
+                'user' => $this->config->get('database')->user, 
+                'password' => $this->config->get('database')->password
+            ]
+        ];
+
+        $this->authenticationClass = $applicationConfig['authenticationClass'];
+        $this->connection  = new Connection($applicationConfig['pdo']);
 
         if ( $isMigrating ) return;
         
@@ -75,7 +85,6 @@ class Application {
         $this->view        = new View();
         $this->env         = new Env();
         $this->i18n        = new I18n();
-        $this->config      = new Config();
 
         $this->checkLanguage();
         $this->checkUserBasedOnSession();

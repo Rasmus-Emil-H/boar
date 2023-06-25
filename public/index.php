@@ -10,6 +10,6 @@ define('PASSWORD_PASSWORD_DEFAULT', 'qwd');
 
 require_once dirname(__DIR__) . '/vendor/autoload.php';
 
-$app = new Application(isMigrating: false);
+$app = new Application(applicationIsMigrating: false);
 
 $app->run();

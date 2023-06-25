@@ -55,7 +55,7 @@ class Application {
 
     public const UPLOAD_FOLDER = __DIR__.'/uploads/';
 
-    public function __construct(bool $isMigrating) {
+    public function __construct(bool $applicationIsMigrating) {
 
         self::$app = $this;
         self::$ROOT_DIR = dirname(__DIR__);
@@ -74,7 +74,7 @@ class Application {
         $this->authenticationClass = $applicationConfig['authenticationClass'];
         $this->connection  = new Connection($applicationConfig['pdo']);
 
-        if ( $isMigrating ) return;
+        if ( $applicationIsMigrating ) return;
         
         $this->request     = new Request();
         $this->response    = new Response();

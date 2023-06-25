@@ -13,5 +13,6 @@
     </div>
     <script src="/resources/js/jquery-3.5.1.min.slim.js"></script>
     <script src="/resources/js/bootstrap.bundle.min.js"></script>
+    <script type="module" src="/resources/js/main.js"></script>
   </body>
 </html>

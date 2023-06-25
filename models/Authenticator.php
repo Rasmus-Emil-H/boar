@@ -22,9 +22,10 @@ class Authenticator {
 
     public function login() {
         $user = UserModel::search(['email' => $this->data['email']]);
+        $msg = '';
         if (!empty($user)) $user = $user[array_key_first($user)];
         if (empty($user) || password_verify($this->data['password'], $user->password)) return false;
-        Application::$app->response->redirect('/');
+        Application::$app->response->setResponse(200, $msg, ['message' => $msg]);
     }
 
     public function api() {

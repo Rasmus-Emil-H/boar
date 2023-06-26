@@ -15,7 +15,9 @@
         </div>
         <button class="button login__submit">
           <span class="button__text w-100">Login</span>
-        </button>       
+        </button>
+        <input class="url" type="hidden" data-url="/auth/login">
+        <input class="csrf" type="hidden" value="<?= rand(293032, 9040939030940930943); ?>">
       </form>
   </div>
   <div class="screen__background">

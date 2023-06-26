@@ -14,8 +14,7 @@
             <input type="password" class="login__input" name="password" placeholder="Password">
         </div>
         <button class="button login__submit">
-        <span class="button__text">Login</span>
-        <i class="button__icon fas fa-chevron-right"></i>
+          <span class="button__text w-100">Login</span>
         </button>       
       </form>
   </div>

@@ -33,7 +33,7 @@ class Router {
         if (empty($this->queryPattern)) $this->defaultRoute();
         $handler = ucfirst($this->queryPattern[0] ?? '').self::CONTROLLER;
         $controller = '\\app\controllers\\'.$handler;
-        if (!class_exists($controller)) throw new NotFoundException();
+        if (!class_exists($controller)) $controller = '\\app\controllers\\AuthController';
         $currentController = new $controller();
         Application::$app->setController($currentController);
     }

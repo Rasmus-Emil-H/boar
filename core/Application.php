@@ -56,7 +56,6 @@ class Application {
     public const UPLOAD_FOLDER = __DIR__.'/uploads/';
 
     public function __construct(bool $applicationIsMigrating) {
-
         self::$app = $this;
         self::$ROOT_DIR = dirname(__DIR__);
 
@@ -143,7 +142,7 @@ class Application {
     }
 
     public function isDevSite(): bool {
-        return in_array(self::$app->config->get('env')->developmentArrayIPs, $_SERVER['REMOTE_ADDR']) || $this->env->get('isDev') === 'true';
+        return in_array($_SERVER['REMOTE_ADDR'], self::$app->config->get('env')->developmentArrayIPs) || $this->env->get('isDev') === 'true';
     }
 
     /**

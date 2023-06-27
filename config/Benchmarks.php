@@ -24,7 +24,7 @@ class Benchmarks {
         do {
             $cost++;
             $start = microtime(true);
-            password_hash("test", PASSWORD_BCRYPT, ["cost" => $cost]);
+            password_hash("test", PASSWORD_DEFAULT, ["cost" => $cost]);
             $end = microtime(true);
         } while (($end - $start) < $timeTarget);
 

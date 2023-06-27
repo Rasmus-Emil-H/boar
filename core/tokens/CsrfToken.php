@@ -30,15 +30,12 @@ class CsrfToken {
     }
 
     protected function generateRandom(): int {
-        return md5(uniqid(mt_rand(), true)) . random_int(rand(200, 2000), rand(4000, 7000));
+        return bin2hex(md5(uniqid(mt_rand(), true)) . random_int(rand(200, 20000000000), rand(4000, 70000000000)));
     }
 
     public function getToken(): void {
-        
         $token = filter_input($this->session->get('CSRF_TOKEN'), 'token', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-
-        if ( !$token || $token !== $this->session->get('CSRF_TOKEN') ) 
-            $this->response->setStatusCode(405);
+        if ( !$token || $token !== $this->session->get('CSRF_TOKEN') ) $this->response->setStatusCode(405);
     }
 
 }

@@ -1,5 +1,11 @@
 <?php
 
+/*******************************
+ * Some random benchmarks for your server regarding security, performance
+ * AUTHOR: RE_WEB
+ * @package app\config\Benchmarks
+*/
+
 namespace app\config;
 
 class Benchmarks {

@@ -12,8 +12,8 @@ class Benchmarks {
 
     /**
      * This code will benchmark your server to determine how high of a cost you can
-     * afford. You want to set the highest cost that you can without slowing down
-     * you server too much. determineCost aims for ≤ $timeTarget ( etc 0.05 = 50 milliseconds ) stretching time,
+     * afford. You want to set the highest cost that you can without slowing down you server too much. 
+     * @var float $determineCost aims for ≤ $timeTarget ( etc 0.05 = 50 milliseconds ) stretching time,
      * which is a good baseline for systems handling interactive logins.  
      * @var float $timeTarget
      * @return void

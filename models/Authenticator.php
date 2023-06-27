@@ -21,11 +21,12 @@ class Authenticator {
     }
 
     public function login() {
+        $status = false;
         $user = UserModel::search(['email' => $this->data['email']]);
-        $msg = '';
         if (!empty($user)) $user = $user[array_key_first($user)];
-        if (empty($user) || password_verify($this->data['password'], $user->password)) return false;
-        Application::$app->response->setResponse(200, $msg, ['message' => $msg]);
+        if (empty($user) || password_verify($this->data['password'], $user->password)) $status = 'false';
+        else $status = true;
+        Application::$app->response->setResponse(200, 'application/json', ['message' => $status]);
     }
 
     public function api() {

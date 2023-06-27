@@ -1,17 +1,13 @@
-<?php
-  /** @var $model app\models\User */
-?>
-
 <div class="screen fade-in">
   <div class="screen__content">
       <form class="login" method="POST">
         <div class="login__field">
             <i class="login__icon fas fa-user"></i>
-            <input type="text" class="login__input" name="email" placeholder="Email">
+            <input type="text" class="login__input" required name="email" placeholder="Email">
         </div>
         <div class="login__field">
             <i class="login__icon fas fa-lock"></i>
-            <input type="password" class="login__input" name="password" placeholder="Password">
+            <input type="password" class="login__input" required name="password" placeholder="Password">
         </div>
         <button class="button login__submit">
           <span class="button__text w-100">Login</span>

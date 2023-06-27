@@ -36,15 +36,6 @@ class Application {
     public I18n $i18n;
     public Config $config;
 
-    /**
-     * Application states  
-     * @var states
-    */
-
-    const STATUS_INACTIVE = 0;
-    const STATUS_ACTIVE   = 1;
-    const STATUS_DELETED  = 2;
-
     public static self $app;
     public static $defaultRoute = '/auth/login';
 

@@ -35,7 +35,6 @@ class Request {
     
     public function getAdditionalParams(array $indexes): array {
         $indexes = [];
-        
         return $indexes;
     }
 

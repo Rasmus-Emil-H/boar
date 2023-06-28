@@ -18,11 +18,11 @@ class Request {
     }
     
     public function getRefere(): string {
-        return $_SERVER['HTTP_REFERER'];
+        return htmlspecialchars($_SERVER['HTTP_REFERER']);
     }
     
     public function getHost(): string {
-        return $_SERVER['HTTP_HOST'];
+        return htmlspecialchars($_SERVER['HTTP_HOST']);
     }
     
     public function getQueryParams(): array {

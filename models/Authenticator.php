@@ -38,10 +38,11 @@ class Authenticator {
     }
 
     public function api(): void {
-        $curl = new Curl($this->data['endpoint']);
-        $curl->setUrl($endpoint);
-        $curl->setHeaders($this->data['headers']);
-        $curl->setData($this->data['data']);
+        $curl = new Curl();
+        foreach ( $this->data as $key => $values ) {
+            $curlMethod = "set".ucfirst($key);
+            $curl->{$curlMethod()} = $this->data[$key];
+        }
         $curl->send();
         $response =  $curl->content;
         $curl->close();

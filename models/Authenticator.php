@@ -1,7 +1,8 @@
 <?php
 
 /*******************************
- * Authentication mechanism for whatever you need 
+ * Authentication mechanism for whatever you need
+ * Use this object to authenticate with the application, external api, ect
  * AUTHOR: RE_WEB
  * @package app\models\Authenticator
 */
@@ -9,6 +10,7 @@
 namespace app\models;
 
 use \app\core\Application;
+use \app\core\Curl;
 
 class Authenticator {
 
@@ -20,6 +22,11 @@ class Authenticator {
         $this->$method();
     }
 
+    /**
+     * Application authentication mechanism 
+     * @return void
+    */
+
     public function login() {
         $status = false;
         $user = UserModel::search(['email' => $this->data['email']]);
@@ -30,8 +37,10 @@ class Authenticator {
         Application::$app->response->setResponse(200, 'application/json', ['message' => $status]);
     }
 
-    public function api() {
-
+    public function api(string $endpoint): void {
+        $curl = new Curl();
+        $curl->setUrl($endpoint);
+        $response = $curl->send();
     }
 
 }

@@ -24,7 +24,7 @@
 ###### }
 
 
-### Build queries through 
+### Build manual queries through 
 
 ###### Application::$app->connection
 ###### ->select("Users u", ["u.email", "u.firstname", "p.body"])

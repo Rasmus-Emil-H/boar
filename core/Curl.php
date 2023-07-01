@@ -16,7 +16,6 @@ class curl {
 	protected $data = [];
 	protected $headers = [];
 	protected $method = 'get';
-	protected string $API_KEY = 'MC45NzE3NjM1OTgwMDg4MzUy';
 	public $content = '';
 	
 	public function setUrl(string $url = '') {

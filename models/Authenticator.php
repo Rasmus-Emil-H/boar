@@ -37,15 +37,19 @@ class Authenticator {
         Application::$app->response->setResponse(200, 'application/json', ['message' => $status]);
     }
 
-    public function api(): void {
+    /**
+     * API authentication mechanism
+     * @return array $data
+    */
+
+    public function api(): array {
         $curl = new Curl();
         foreach ( $this->data as $key => $values ) {
             $curlMethod = "set".ucfirst($key);
             $curl->{$curlMethod($values)};
         }
         $curl->send();
-        $response =  $curl->content;
-        $curl->close();
+        return (array)$curl->content;
     }
 
 }

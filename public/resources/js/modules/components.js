@@ -1,5 +1,5 @@
 export default {
-    initModal: function(title, body, id, cb = null, hidefooter = null, buttonHider = null) {
+    initModal: function(title, body, id, hidefooter = null, buttonHider = null, buttonText = '', cb = null) {
         let modal = document.createElement('div');
         let modalID = Math.round(Math.random() * 100000);
         let reevalTitle = title;
@@ -15,7 +15,7 @@ export default {
                   </div>
                   <div class="modal-body">${body}</div>
                   <div class="modal-footer ${hidefooter ? 'd-none' : ''}">
-                    <button type="button" class="btn btn-primary ${buttonHider === null ? 'd-none' : ''}" id="${id}">Create file</button>
+                    <button type="button" class="btn btn-primary ${buttonHider === null ? 'd-none' : ''}" id="${id}">${buttonText}</button>
                     <button type="button" class="btn btn-secondary" onclick="DAL.removeGeneratedModal(event, '#generatedModalContainer${modalID}')">Close</button>
                   </div>
                 </div>

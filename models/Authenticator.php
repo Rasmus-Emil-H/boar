@@ -40,7 +40,8 @@ class Authenticator {
     public function api(string $endpoint): void {
         $curl = new Curl();
         $curl->setUrl($endpoint);
-        $response = $curl->send();
+        $curl->send();
+        $response =  $curl->content;
     }
 
 }

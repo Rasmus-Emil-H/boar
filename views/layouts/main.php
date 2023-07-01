@@ -1,25 +1,13 @@
-<?php
-  use app\core\Application;
+<?php 
+  require_once('../views/includes/header.php');
+  Use \app\core\Application;
 ?>
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="stylesheet" href="/resources/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/resources/css/main.css">
-  </head>
-  <body>
-    <div class="container">
-      <?php if (Application::$app->session->getFlashMessage('success')): ?>
-        <div class="alert alert-success">
-          <?= Application::$app->session->getFlashMessage('success'); ?>
-        </div>
-      <?php endif; ?>
-      {{content}}
+<div class="container">
+  <?php if (Application::$app->session->getFlashMessage('success')): ?>
+    <div class="alert alert-success">
+      <?= Application::$app->session->getFlashMessage('success'); ?>
     </div>
-    <script src="/resources/js/jquery-3.7.0.min.js"></script>
-    <script src="/resources/js/bootstrap.bundle.min.js"></script>
-    <script type="module" src="/resources/js/main.js"></script>
-  </body>
-</html>
+  <?php endif; ?>
+  {{content}}
+</div>
+<?php require_once('../views/includes/footer.php'); ?>

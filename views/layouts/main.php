@@ -2,7 +2,7 @@
   require_once('../views/includes/header.php');
   Use \app\core\Application;
 ?>
-<div class="container">
+<div>
   <?php if (Application::$app->session->getFlashMessage('success')): ?>
     <div class="alert alert-success">
       <?= Application::$app->session->getFlashMessage('success'); ?>

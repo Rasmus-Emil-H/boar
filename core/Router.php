@@ -49,14 +49,12 @@ class Router {
 
     protected function checkMethod() {
         $method = $this->queryPattern[1] ?? Application::$app->controller->defaultRoute;
-        if (!method_exists(Application::$app->controller, $method)) 
-            throw new NotFoundException();
+        if (!method_exists(Application::$app->controller, $method)) throw new NotFoundException();
         $this->method = $method;
     }
 
     protected function runMiddlewares() {
-        foreach (Application::$app->controller->getMiddlewares() as $middleware) 
-            $middleware->execute();
+        foreach (Application::$app->controller->getMiddlewares() as $middleware) $middleware->execute();
     }
 
     /** 

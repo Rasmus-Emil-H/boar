@@ -86,13 +86,11 @@ class Application {
     }
 
     public function checkUserBasedOnSession(): void {
-        $primaryValue = $this->cookie->get('sessionId');
-        !$primaryValue ? $this->session->get('user') : $this->setApplicationUser($primaryValue);
+        $this->session->get('user') ? null : $this->setApplicationUser();
     }
 
-    public function setApplicationUser(string $primaryValue): void {
-        $authenticationClass = new $this->authenticationClass();
-        $session = $authenticationClass::search(['session_id' => $primaryValue]);
+    public function setApplicationUser(): void {
+        
     }
 
     /**

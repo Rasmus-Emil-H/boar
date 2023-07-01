@@ -37,11 +37,14 @@ class Authenticator {
         Application::$app->response->setResponse(200, 'application/json', ['message' => $status]);
     }
 
-    public function api(string $endpoint): void {
-        $curl = new Curl();
+    public function api(): void {
+        $curl = new Curl($this->data['endpoint']);
         $curl->setUrl($endpoint);
+        $curl->setHeaders($this->data['headers']);
+        $curl->setData($this->data['data']);
         $curl->send();
         $response =  $curl->content;
+        $curl->close();
     }
 
 }

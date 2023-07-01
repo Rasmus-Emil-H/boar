@@ -9,9 +9,7 @@
             <i class="login__icon fas fa-lock"></i>
             <input type="password" class="login__input" required name="password" placeholder="Password">
         </div>
-        <button class="button login__submit">
-          <span class="button__text w-100">Login</span>
-        </button>
+        <button class="button login__submit" id="submit">Login</button>
         <input class="url" type="hidden" name="url" data-url="/auth/login">
         <input class="csrf" type="hidden" name="csrf" value="<?= rand(293032, 9040939030940930943); ?>">
       </form>

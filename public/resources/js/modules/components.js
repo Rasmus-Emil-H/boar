@@ -26,5 +26,8 @@ export default {
         $(`#generatedModalContainer${modalID}`).modal('show');
         if(!title) $('.modal-header').css({borderBottom: '0px'});
         if(cb) cb();
+    },
+    spinner: function() {
+      return `<div class="spinner-border text-primary" role="status"><span class="sr-only">Loading...</span></div>`;
     }
 }

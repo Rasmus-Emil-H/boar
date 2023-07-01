@@ -23,9 +23,10 @@ class Authenticator {
     public function login() {
         $status = false;
         $user = UserModel::search(['email' => $this->data['email']]);
-        if (!empty($user)) $user = $user[array_key_first($user)];
-        if (empty($user) || !password_verify($this->data['password'], $user->get('Password'))) $status = false;
-        if (password_verify($this->data['password'], $user->get('Password'))) $status = true;
+        if (!empty($user)) {
+            $user = $user[array_key_first($user)];
+            $status = password_verify($this->data['password'], $user->get('Password'));
+        }
         Application::$app->response->setResponse(200, 'application/json', ['message' => $status]);
     }
 

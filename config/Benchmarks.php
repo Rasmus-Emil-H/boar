@@ -19,7 +19,7 @@ class Benchmarks {
      * @return void
     */
 
-    public static function determineCost(float $timeTarget): void {
+    public static function determineServerHashCost(float $timeTarget): void {
         $cost = 8;
         do {
             $cost++;

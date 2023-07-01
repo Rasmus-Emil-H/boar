@@ -154,9 +154,15 @@ class Application {
         $this->controller = $controller;
     }
 
-    public function dd($whatever): void {
+    /**
+     * @param mixed $target
+     * Die and dump your target
+     * @return void
+    */
+
+    public function dd(mixed $target): void {
         echo '<pre>';
-            var_dump($whatever);
+            var_dump($target);
         echo '</pre>';
         exit;
     }

@@ -8,6 +8,8 @@
 
 namespace app\core;
 
+use \app\core\encryption\Encryption;
+
 class Session {
 
     protected const FLASH_ARRAY = 'FLASH_MESSAGES';
@@ -19,8 +21,7 @@ class Session {
 
     public function checkFlashMessages() {
         $flashMessages = $this->getAllFlashMessages();
-        foreach ($flashMessages as &$flashMessage) 
-            $flashMessage['remove'] = true;
+        foreach ($flashMessages as &$flashMessage) $flashMessage['remove'] = true;
         $_SESSION[self::FLASH_ARRAY] = $flashMessages;
     }
 
@@ -40,15 +41,15 @@ class Session {
     }
 
     public function set(string $key, string $value) {
-        $_SESSION[$key] = $value;
+        $_SESSION[Encryption::encrypt($key)] = Encryption::encrypt($value);
     }
 
     public function get(string $key) {
-        return $_SESSION[$key] ?? '';
+        return $_SESSION[Encryption::decrypt($key)] ?? '';
     }
 
     public function unset($key): void {
-        unset($_SESSION[$key]);
+        unset($_SESSION[Encryption::decrypt($key)]);
     }
 
     public function __destruct() {

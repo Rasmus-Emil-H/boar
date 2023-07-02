@@ -8,6 +8,12 @@
         "user": "",
         "password": ""
     },
+    "encryption": {
+        "openSSL": {
+            "key": "",
+            "iv": ""
+        }
+    },
     "hash": {
         "salt": "",
         "peber": ""

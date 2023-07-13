@@ -32,11 +32,11 @@ class Session {
         ];
     }
 
-    public function getFlashMessage(string $key) {
+    public function getFlashMessage(string $key): string {
         return $_SESSION[self::FLASH_ARRAY][$key]['value'] ?? '';
     }
 
-    public function getAllFlashMessages() {
+    public function getAllFlashMessages(): array {
         return $_SESSION[self::FLASH_ARRAY] ?? [];
     }
 
@@ -44,8 +44,8 @@ class Session {
         $_SESSION[$key] = $value;
     }
 
-    public function get(string $key) {
-        return $_SESSION[$key] ?? 'invalid';
+    public function get(string $key): mixed {
+        return $_SESSION[$key] ?? null;
     }
 
     public function unset($key): void {

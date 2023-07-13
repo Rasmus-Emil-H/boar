@@ -20,7 +20,7 @@ class AuthController extends Controller {
     }
 
     public function login() {
-        if(Application::$app->session->get('user')) Application::$app->response->redirect('/home');
+        if(Application::$app->session->get('user') !== 'invalid') Application::$app->response->redirect('/home');
         if(Application::$app->request->isPost()) new Authenticator(Application::$app->request->getBody(), 'login');
         $this->setLayout('auth');
         return $this->render('login', [

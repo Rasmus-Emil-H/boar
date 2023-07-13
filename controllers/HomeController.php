@@ -11,7 +11,7 @@ use app\core\middlewares\AuthMiddleware;
 
 class HomeController extends Controller {
 
-    public string $defaultRoute = 'home';
+    public string $defaultRoute = 'index';
 
     public function __construct() { 
         
@@ -19,7 +19,7 @@ class HomeController extends Controller {
 
     public function index(Request $request, Response $response) {
 
-        return $this->render($this->defaultRoute, [
+        return $this->render('home', [
 
         ]);
     }

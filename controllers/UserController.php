@@ -11,7 +11,9 @@ use app\core\middlewares\AuthMiddleware;
 
 class UserController extends Controller {
 
-    public string $defaultRoute = 'profile';
+    protected const DEFAULT_VIEW = 'profile';
+
+    public string $defaultRoute = 'index';
 
     public function __construct() { 
         
@@ -19,7 +21,7 @@ class UserController extends Controller {
 
     public function index(Request $request, Response $response) {
 
-        return $this->render($this->defaultRoute, [
+        return $this->render(self::DEFAULT_VIEW, [
 
         ]);
     }

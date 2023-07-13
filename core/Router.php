@@ -48,7 +48,7 @@ class Router {
     }
 
     protected function checkMethod() {
-        $method = $this->queryPattern[1] ?? Application::$app->controller->defaultRoute;
+        $method = $this->queryPattern[1] ?? $this->method = 'index';
         if (!method_exists(Application::$app->controller, $method)) throw new NotFoundException();
         $this->method = $method;
     }
@@ -69,7 +69,7 @@ class Router {
         $this->checkMethod();
         $this->runMiddlewares();
 
-        Application::$app->controller->{$this->method}($this->request, $this->response);
+        Application::$app->controller->{$this->method}();
 
     }
 

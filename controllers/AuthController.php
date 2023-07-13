@@ -19,19 +19,19 @@ class AuthController extends Controller {
         $this->registerMiddleware(new AuthMiddleware(['profile', 'home']));
     }
 
-    public function login(Request $request, Response $response) {
-        if(Application::$app->session->get('user')) $response->redirect('/home');
-        if($request->isPost()) new Authenticator($request->getBody(), 'login');
+    public function login() {
+        if(Application::$app->session->get('user')) Application::$app->response->redirect('/home');
+        if(Application::$app->request->isPost()) new Authenticator(Application::$app->request->getBody(), 'login');
         $this->setLayout('auth');
         return $this->render('login', [
             
         ]);
     }
 
-    public function register(Request $request) {
+    public function register() {
         $user = new UserModel();
-        if ($request->isPost()) {
-            $user->set($request->getBody());
+        if (Application::$app->request->isPost()) {
+            $user->set(Application::$app->request->getBody());
             if ($user->validate() && $user->save()) {
                 Application::$app->session->setFlashMessage('success', 'User created');
                 Application::$app->response->redirect('/');
@@ -47,9 +47,9 @@ class AuthController extends Controller {
         ]);
     }
 
-    public function logout(Request $request, Response $response) {
+    public function logout() {
         Application::$app->session->unset('user');
-        $response->redirect('/');
+        Application::$app->response->redirect('/');
     }
 
     public function profile() {

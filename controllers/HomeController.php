@@ -11,13 +11,11 @@ use app\core\middlewares\AuthMiddleware;
 
 class HomeController extends Controller {
 
-    public string $defaultRoute = 'index';
-
     public function __construct() { 
         
     }
 
-    public function index(Request $request, Response $response) {
+    public function index() {
 
         return $this->render('home', [
 

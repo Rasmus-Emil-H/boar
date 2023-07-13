@@ -31,7 +31,7 @@ class AuthController extends Controller {
     public function register(Request $request) {
         $user = new UserModel();
         if ($request->isPost()) {
-            $user->loadData($request->getBody());
+            $user->set($request->getBody());
             if ($user->validate() && $user->save()) {
                 Application::$app->session->setFlashMessage('success', 'User created');
                 Application::$app->response->redirect('/');

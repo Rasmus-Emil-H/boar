@@ -9,9 +9,9 @@ use app\core\Response;
 use app\core\middlewares\AuthMiddleware;
 
 
-class HomeController extends Controller {
+class UserController extends Controller {
 
-    public string $defaultRoute = 'home';
+    public string $defaultRoute = 'profile';
 
     public function __construct() { 
         

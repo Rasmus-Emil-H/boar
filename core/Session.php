@@ -41,15 +41,15 @@ class Session {
     }
 
     public function set(string $key, string $value) {
-        $_SESSION[Encryption::encrypt($key)] = Encryption::encrypt($value);
+        $_SESSION[$key] = $value;
     }
 
     public function get(string $key) {
-        return $_SESSION[Encryption::decrypt($key)] ?? '';
+        return $_SESSION[$key] ?? 'invalid';
     }
 
     public function unset($key): void {
-        unset($_SESSION[Encryption::decrypt($key)]);
+        unset($_SESSION[$key]);
     }
 
     public function __destruct() {

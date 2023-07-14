@@ -126,7 +126,7 @@ class CsrfToken {
     */
 
     public function unsetToken() {
-        if (!empty($this->session[$this->sessionTokenLabel])) unset($this->session[$this->sessionTokenLabel]);
+        if ($this->session->get($this->sessionTokenLabel)) $this->session->unset($this->sessionTokenLabel);
     }
 
 }

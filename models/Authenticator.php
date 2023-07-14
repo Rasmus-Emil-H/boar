@@ -28,6 +28,7 @@ class Authenticator {
     */
 
     public function login() {
+        if(!(new \app\core\tokens\CsrfToken())->validate()) return false;
         $status = false;
         $user = UserModel::search(['email' => $this->data['email']]);
         if(!empty($user)) {

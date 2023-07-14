@@ -11,7 +11,7 @@
         </div>
         <button class="button login__submit" id="submit">Login</button>
         <input class="url" type="hidden" name="url" data-url="/auth/login">
-        <input class="csrf" type="hidden" name="csrf" value="<?= \app\core\Application::$app->session->get('csrf'); ?>">
+        <?= (new app\core\tokens\CsrfToken())->insertHiddenToken(); ?>
       </form>
   </div>
   <div class="screen__background">

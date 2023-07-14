@@ -1,4 +1,4 @@
-<div class="error-container">
+<div class="error-container fill-node">
     <h2><?= $exception->getMessage(); ?></h2>
     <?php if($isDev): ?>
         <p>Line: <?= $exception->getLine(); ?></p>

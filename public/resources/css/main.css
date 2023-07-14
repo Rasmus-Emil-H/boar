@@ -10,7 +10,7 @@
 html, body {
 	height: 100%;
 	width: 100%;
-	background: linear-gradient(90deg, #C7C5F4, #776BCC);
+	background: linear-gradient(90deg, #C7C5F4, #504b7a);
 }
 
 :root {
@@ -343,6 +343,16 @@ img {
 .fade-in {
 	position: relative;
 	animation: fadein 0.3s ease-in forwards;
+}
+
+.fill-node {
+	height: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+	width: 50%;
+	margin: 0 auto;
 }
 
 @keyframes fadein {

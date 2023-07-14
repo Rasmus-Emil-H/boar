@@ -33,7 +33,7 @@ class Authenticator {
         if(!empty($user)) {
             $user = $user[array_key_first($user)];
             $status = password_verify($this->data['password'], $user->get('Password'));
-            if($status) {
+            if($status === true) {
                 Application::$app->session->set('user', $user->key());
                 Application::$app->response->redirect('/home');
             }

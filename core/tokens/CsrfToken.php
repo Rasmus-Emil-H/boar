@@ -26,16 +26,16 @@ class CsrfToken {
     }
 
     public function setToken(): void {
-        $this->session->set('CSRF_TOKEN', $this->generateRandom());
+        $this->session->set('csrf', $this->generateRandom());
+    }
+
+    public function getToken(): string {
+        if (!Application::$app->session->get('csrf')) $this->setToken();
+        return Application::$app->session->get('csrf');
     }
 
     protected function generateRandom(): int {
-        return bin2hex(md5(uniqid(mt_rand(), true)) . random_int(rand(200, 20000000000), rand(4000, 70000000000)));
-    }
-
-    public function getToken(): void {
-        $token = filter_input($this->session->get('CSRF_TOKEN'), 'token', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-        if ( !$token || $token !== $this->session->get('CSRF_TOKEN') ) $this->response->setStatusCode(405);
+        return bin2hex(openssl_random_pseudo_bytes(32));
     }
 
 }

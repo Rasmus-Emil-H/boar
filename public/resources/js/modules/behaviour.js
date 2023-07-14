@@ -1,6 +1,7 @@
 export default {
     init: function() {
         $('form').on('submit', function(e) {
+            if($(e.target).attr('id') === 'login-form') return;
             e.preventDefault();
             let _href = $(this).find('#submit');
             let _text = _href.text();

@@ -22,14 +22,16 @@ class View {
     protected function getLayoutContent(string $title) {
         $layout = Application::$app->controller ? Application::$app->controller->layout : Application::$app->layout;
         ob_start();
-            include_once Application::$ROOT_DIR . "/views/layouts/$layout.php";
+            require_once(Application::$ROOT_DIR . '/views/includes/header.php');
+            include_once Application::$ROOT_DIR . '/views/layouts/'.$layout.'.php';
+            require_once(Application::$ROOT_DIR . '/views/includes/footer.php');
         return ob_get_clean();
     }
 
     protected function renderOnlyView(string $view, array $params = []) {
         foreach ($params as $key => $value) $$key = $value;
         ob_start(); ?>
-            <?php include_once Application::$ROOT_DIR . "/views/$view.php"; ?>
+            <?php include_once Application::$ROOT_DIR . '/views/'.$view.'.php'; ?>
         <?php return ob_get_clean();
     }
 

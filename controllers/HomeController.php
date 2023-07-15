@@ -12,7 +12,7 @@ use app\core\middlewares\AuthMiddleware;
 class HomeController extends Controller {
 
     public function __construct() { 
-        
+        $this->registerMiddleware(new AuthMiddleware(['profile', 'home']));
     }
 
     public function index() {

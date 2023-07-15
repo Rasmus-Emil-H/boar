@@ -40,7 +40,7 @@ class CsrfToken {
     }
 
     protected function generateRandom(): string {
-        return bin2hex(openssl_random_pseudo_bytes(64));
+        return bin2hex(openssl_random_pseudo_bytes(32));
     }
 
     /*

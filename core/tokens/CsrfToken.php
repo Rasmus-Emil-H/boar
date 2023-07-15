@@ -21,7 +21,6 @@ class CsrfToken {
     private $excludeUrl = [];
     private $hashAlgo = 'sha256';
     private $hmac_ip = true;
-    private $hmacData = '6ca3e5861af5e2b29cc736bdwS4dy5JfUbCrc6adUwnxBRpBDhKQ5QEk';
 
     public function __construct($excludeUrl = null) {
         if (!is_null($excludeUrl)) $this->excludeUrl = $excludeUrl;
@@ -65,7 +64,7 @@ class CsrfToken {
     */
 
     private function hMacWithIp(string $token): string {
-        $hashHmac = hash_hmac($this->hashAlgo, $this->hmacData, $token);
+        $hashHmac = hash_hmac($this->hashAlgo, Application::$app->config->get('tokens')->csrf->hMacData, $token);
         return $hashHmac;
     }
 

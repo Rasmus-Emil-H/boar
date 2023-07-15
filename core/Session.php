@@ -45,7 +45,7 @@ class Session {
     }
 
     public function get(string $key): mixed {
-        return $_SESSION[$key] ?? null;
+        return $_SESSION[$key] ?? '';
     }
 
     public function unset($key): void {

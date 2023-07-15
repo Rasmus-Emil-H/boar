@@ -10,7 +10,6 @@
             <input type="password" class="login__input" required name="password" placeholder="Password" />
         </div>
         <button class="button login__submit" id="submit">Login</button>
-        <input class="url" type="hidden" name="url" data-url="/auth/login">
         <?= (new app\core\tokens\CsrfToken())->insertHiddenToken(); ?>
       </form>
   </div>

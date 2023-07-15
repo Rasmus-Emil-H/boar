@@ -36,7 +36,8 @@ class CsrfToken {
 
     public function getToken(): string {
         if (!$this->session->get('csrf')) $this->setToken();
-        return $this->session->get('csrf');
+        $token = $this->hmac_ip !== false ? $this->hMacWithIp($this->session->get($this->sessionTokenLabel)) : $this->session->get($this->sessionTokenLabel);
+        return $token;
     }
 
     protected function generateRandom(): string {
@@ -63,7 +64,7 @@ class CsrfToken {
      * @return string
     */
 
-    private function hMacWithIp($token) {
+    private function hMacWithIp(string $token) {
         $hashHmac = hash_hmac($this->hashAlgo, $this->hmacData, $token);
         return $hashHmac;
     }
@@ -113,7 +114,6 @@ class CsrfToken {
         if ($this->session->get($this->sessionTokenLabel)) return false;
         if (!empty($this->post[$this->formTokenLabel])) $token = $this->post[$this->formTokenLabel];
         else return false;
-
         // Grab the stored token for testing
         $expected = $this->hmac_ip ? $this->hMacWithIp($this->session->get($this->sessionTokenLabel)) : $this->session->get($this->sessionTokenLabel);
 

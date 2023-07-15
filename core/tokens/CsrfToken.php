@@ -64,7 +64,7 @@ class CsrfToken {
      * @return string
     */
 
-    private function hMacWithIp(string $token) {
+    private function hMacWithIp(string $token): string {
         $hashHmac = hash_hmac($this->hashAlgo, $this->hmacData, $token);
         return $hashHmac;
     }
@@ -93,9 +93,10 @@ class CsrfToken {
 
     /*
      * Validate current request
+     * @return bool
     */
 
-    public function isValidRequest() {
+    public function isValidRequest(): bool {
         $isValid = false;
         $currentUrl = $this->getCurrentRequestUrl();
         if (!in_array($currentUrl, $this->excludeUrl))
@@ -109,7 +110,7 @@ class CsrfToken {
      * @return bool
     */
     
-    public function validateRequest() {
+    public function validateRequest(): bool {
         if ($this->session->get($this->sessionTokenLabel)) return false;
         if (!empty($this->post[$this->formTokenLabel])) $token = $this->post[$this->formTokenLabel];
         else return false;

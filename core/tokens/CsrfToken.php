@@ -21,7 +21,7 @@ class CsrfToken {
     private $excludeUrl = [];
     private $hashAlgo = 'sha256';
     private $hmac_ip = true;
-    private $hmacData = 'ABCeNBHVe3kmAqvU2s7yyuJSF2gpxKLC';
+    private $hmacData = '6ca3e5861af5e2b29cc736bdwS4dy5JfUbCrc6adUwnxBRpBDhKQ5QEk';
 
     public function __construct($excludeUrl = null) {
         if (!is_null($excludeUrl)) $this->excludeUrl = $excludeUrl;

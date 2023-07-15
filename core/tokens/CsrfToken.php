@@ -69,7 +69,6 @@ class CsrfToken {
         return $hashHmac;
     }
 
-
     /*
      * @return string
     */

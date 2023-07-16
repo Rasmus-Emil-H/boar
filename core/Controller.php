@@ -9,6 +9,7 @@
 namespace app\core;
 
 use \app\core\middlewares\Middleware;
+use app\core\exceptions\NotFoundException;
 
 class Controller {
 

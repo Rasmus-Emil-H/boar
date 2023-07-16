@@ -11,7 +11,8 @@ namespace app\core;
 
 class View {
 
-    public string $title = '';
+    protected $includes = '/views/includes/';
+    protected $layouts  = '/views/layouts/';
 
     public function renderView(string $view, array $params = []) {
         $viewContent   = $this->renderOnlyView($view, $params);
@@ -22,9 +23,9 @@ class View {
     protected function getLayoutContent(string $title) {
         $layout = Application::$app->controller ? Application::$app->controller->layout : Application::$app->layout;
         ob_start();
-            require_once(Application::$ROOT_DIR . '/views/includes/header.php');
-            include_once Application::$ROOT_DIR . '/views/layouts/'.$layout.'.php';
-            require_once(Application::$ROOT_DIR . '/views/includes/footer.php');
+            require_once(Application::$ROOT_DIR . $this->includes . 'header.php');
+            include_once Application::$ROOT_DIR . $this->layouts . $layout.'.php';
+            require_once(Application::$ROOT_DIR . $this->includes . 'footer.php');
         return ob_get_clean();
     }
 

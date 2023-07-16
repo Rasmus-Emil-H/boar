@@ -101,7 +101,7 @@ class Application {
 
     public function run(): void {
         try {
-            echo $this->router->resolve();
+            $this->router->resolve();
         } catch (\Throwable $e) {
             $this->exceptionCodeHandler($e->getCode());
             $this->response->setStatusCode($e->getCode());
@@ -179,7 +179,7 @@ class Application {
     }
 
     public static function isGuest(): bool {
-        return is_null(self::$app->session->get('user'));
+        return is_null(self::$app->session->get('user')) || self::$app->session->get('user') === '';
     }
 
     /**

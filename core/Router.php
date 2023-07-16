@@ -22,7 +22,8 @@ class Router {
     public Request $request;
     public Response $response;
 
-    protected const CONTROLLER = 'Controller';
+    protected const CONTROLLER   = 'Controller';
+    protected const INDEX_METHOD = 'index';
 
     public function __construct(Request $request, Response $response) {
         $this->request = $request;
@@ -34,7 +35,7 @@ class Router {
         if (empty($this->queryPattern)) $this->defaultRoute();
         $handler = ucfirst($this->queryPattern[0] ?? '').self::CONTROLLER;
         $controller = '\\app\controllers\\'.$handler;
-        if (!class_exists($controller)) $controller = '\\app\controllers\\AuthController';
+        if (!class_exists($controller)) throw new NotFoundException();
         $currentController = new $controller();
         Application::$app->setController($currentController);
     }
@@ -49,7 +50,7 @@ class Router {
     }
 
     protected function checkMethod() {
-        $method = $this->queryPattern[1] ?? $this->method = 'index';
+        $method = $this->queryPattern[1] ?? $this->method = self::INDEX_METHOD;
         if (!method_exists(Application::$app->controller, $method)) throw new NotFoundException();
         $this->method = $method;
     }

@@ -16,7 +16,7 @@ class HomeController extends Controller {
     }
 
     public function index() {
-
+        $this->setChildData(['UserController']);
         return $this->render('home', [
 
         ]);

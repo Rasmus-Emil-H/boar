@@ -9,10 +9,13 @@
 
 namespace app\core;
 
+use app\core\exceptions\NotFoundException;
+
 class View {
 
     protected string $includes = '/views/includes/';
     protected string $layouts  = '/views/layouts/';
+    protected string $partials  = '/views/partials/';
 
     public function renderView(string $view, array $params = []) {
         $viewContent   = $this->renderOnlyView($view, $params);
@@ -34,6 +37,15 @@ class View {
         ob_start(); ?>
             <?php include_once Application::$ROOT_DIR . '/views/'.$view.'.php'; ?>
         <?php return ob_get_clean();
+    }
+
+    /**
+    * @return string
+    */
+    public function getTemplate(string $template) : string {
+        $templateFile = Application::$ROOT_DIR . $this->partials . $template . ".tpl.php";
+        if (!file_exists($templateFile)) throw new NotFoundException();
+        return $templateFile;
     }
 
 }

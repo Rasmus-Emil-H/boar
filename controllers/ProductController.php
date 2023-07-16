@@ -1,7 +1,7 @@
 <?php
 
 /*******************************
- * Home Controller 
+ * Product Controller 
  * AUTHOR: RE_WEB
  * @package app\controllers
 */
@@ -10,20 +10,22 @@ namespace app\controllers;
 
 use app\core\Application;
 use app\core\Controller;
-use app\core\Request;
-use app\core\Response;
 use app\core\middlewares\AuthMiddleware;
 
 
-class HomeController extends Controller {
+class UserController extends Controller {
+
+    protected const DEFAULT_VIEW = 'profile';
+
+    public string $defaultRoute = 'index';
 
     public function __construct() { 
-        $this->registerMiddleware(new AuthMiddleware(['profile', 'home']));
+        
     }
 
     public function index() {
-        // $this->setChildData(['UserController']);
-        return $this->render('home', [
+
+        return $this->render(self::DEFAULT_VIEW, [
 
         ]);
     }

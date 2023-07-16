@@ -62,9 +62,9 @@ class Controller {
         foreach ( $children as $child ) {
             $childAndMethod = preg_match('/:/', $child) ? explode(':', $child) : [$child, 'index'];
             $childController = '\\app\controllers\\'.$childAndMethod[0];
-            if (!class_exists($childController)) throw new NotFoundException();
-            if (!method_exists($childAndMethod[0], $childAndMethod[1])) throw new NotFoundException();
-            $currentChildController = new $childController->{$childAndMethod[1]}();
+            if (!class_exists($childController)) throw new NotFoundException('Invalid controller');
+            if (!method_exists($childController, $childAndMethod[1])) throw new NotFoundException('Invalid method');
+            (new $childController())->{$childAndMethod[1]}();
         }
     }
 

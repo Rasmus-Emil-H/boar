@@ -19,7 +19,7 @@ class UserController extends Controller {
         
     }
 
-    public function index(Request $request, Response $response) {
+    public function index() {
 
         return $this->render(self::DEFAULT_VIEW, [
 

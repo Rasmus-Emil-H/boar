@@ -11,8 +11,8 @@ namespace app\core;
 
 class View {
 
-    protected $includes = '/views/includes/';
-    protected $layouts  = '/views/layouts/';
+    protected string $includes = '/views/includes/';
+    protected string $layouts  = '/views/layouts/';
 
     public function renderView(string $view, array $params = []) {
         $viewContent   = $this->renderOnlyView($view, $params);

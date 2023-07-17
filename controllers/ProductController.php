@@ -30,4 +30,8 @@ class UserController extends Controller {
         ]);
     }
 
+    public function edit() {
+        $this->data['product'] = $this->getTemplatePath('product');
+    }
+
 }

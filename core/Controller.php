@@ -9,7 +9,7 @@
 namespace app\core;
 
 use \app\core\middlewares\Middleware;
-use app\core\exceptions\NotFoundException;
+use \app\core\exceptions\NotFoundException;
 
 class Controller {
 
@@ -78,6 +78,14 @@ class Controller {
 
     public function getChildren() : array {
         return $this->children;
+    }
+
+    /**
+        * @return string
+    */
+    public function getTemplatePath(string $template): string {
+        $view = Application::$ROOT_DIR.'view/partials/'.$template.'.tpl.php';
+        return $view;
     }
 
     public function render(string $view, array $params = []) {

@@ -13,6 +13,8 @@ use app\core\exceptions\NotFoundException;
 
 class Controller {
 
+    public string $DEFAULT_METHOD = 'index';
+
     /**
      * @var string $currentAction
     */
@@ -54,17 +56,16 @@ class Controller {
     protected array $middlewares = [];
 
     /*
-     * Set child data
-     * Format is Controller:method, can do Controller without :method, will default to Controller:index
+     * Set child data with corresponding controller/method
     */
 
-    protected function setChildData(array $children) {
-        foreach ( $children as $child ) {
-            $childAndMethod = preg_match('/:/', $child) ? explode(':', $child) : [$child, 'index'];
-            $childController = '\\app\controllers\\'.$childAndMethod[0];
+    protected function setChildData(array $childControllers) {
+        foreach ( $childControllers as $childController ) {
+            $controllerAndMethod = preg_match('/:/', $childController) ? explode(':', $childController) : [$childController, $this->DEFAULT_METHOD];
+            $childController = '\\app\controllers\\'.$controllerAndMethod[0];
             if (!class_exists($childController)) throw new NotFoundException('Invalid controller');
-            if (!method_exists($childController, $childAndMethod[1])) throw new NotFoundException('Invalid method');
-            (new $childController())->{$childAndMethod[1]}();
+            if (!method_exists($childController, $controllerAndMethod[1])) throw new NotFoundException('Invalid method');
+            (new $childController())->{$controllerAndMethod[1]}();
         }
     }
 

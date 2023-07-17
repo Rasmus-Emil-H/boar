@@ -1,10 +1,10 @@
 <?php
 
-/*******************************
+/**
  * Translation
  * AUTHOR: RE_WEB
  * @package app\core\i18n
-*******************************/
+*/
 
 namespace app\core;
 

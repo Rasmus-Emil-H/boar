@@ -1,6 +1,6 @@
 <?php
 
-/*******************************
+/**
  * Bootstrap Env
  * Temp storage for additional keys
  * AUTHOR: RE_WEB

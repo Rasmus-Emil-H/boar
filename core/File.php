@@ -1,6 +1,6 @@
 <?php
 
-/*******************************
+/**
  * File handler 
  * AUTHOR: RE_WEB
  * @package app\core\File

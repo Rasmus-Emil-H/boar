@@ -1,8 +1,7 @@
 <?php
 
-/*******************************
+/**
  * Bootstrap View
- * Probably should create a more generic way to load assets
  * AUTHOR: RE_WEB
  * @package app\core\View
 */

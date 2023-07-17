@@ -1,6 +1,6 @@
 <?php
 
-/*******************************
+/**
  * Bootstrap relations between entities 
  * AUTHOR: RE_WEB
  * @package app\core\relations

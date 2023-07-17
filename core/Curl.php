@@ -1,6 +1,6 @@
 <?php
 
-/*******************************
+/**
  * Bootstrap Curl 
  * AUTHOR: RE_WEB
  * @package app\core\Curl

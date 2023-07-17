@@ -1,6 +1,6 @@
 <?php
 
-/*******************************
+/**
  * Bootstrap Router 
  * AUTHOR: RE_WEB
  * @package app\core\Router
@@ -62,7 +62,6 @@ class Router {
     /** 
      * Resolver for the routing module
      * Middlewares are controller implemented
-     * @return callback
     */
 
     public function resolve() {

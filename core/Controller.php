@@ -1,6 +1,6 @@
 <?php
 
-/*******************************
+/**
  * Bootstrap Controller 
  * AUTHOR: RE_WEB
  * @package app\core\Controller
@@ -96,7 +96,8 @@ class Controller {
     }
 
     /**
-        * @return string
+     * @param string template name
+     * @return string
     */
 
     public function getTemplatePath(string $template): string {

@@ -13,7 +13,9 @@ use app\core\exceptions\NotFoundException;
 
 class Controller {
 
-    public string $DEFAULT_METHOD = 'index';
+    private const DEFAULT_METHOD = 'index';
+    private const INVALID_METHOD_TEXT = 'Invalid method';
+    private const INVALID_CONTROLLER_TEXT = 'Invalid controller';
 
     /**
      * @var string $currentAction
@@ -61,10 +63,10 @@ class Controller {
 
     protected function setChildData(array $childControllers) {
         foreach ( $childControllers as $childController ) {
-            $controllerAndMethod = preg_match('/:/', $childController) ? explode(':', $childController) : [$childController, $this->DEFAULT_METHOD];
+            $controllerAndMethod = preg_match('/:/', $childController) ? explode(':', $childController) : [$childController, self::DEFAULT_METHOD];
             $childController = '\\app\controllers\\'.$controllerAndMethod[0];
-            if (!class_exists($childController)) throw new NotFoundException('Invalid controller');
-            if (!method_exists($childController, $controllerAndMethod[1])) throw new NotFoundException('Invalid method');
+            if (!class_exists($childController)) throw new NotFoundException(self::INVALID_METHOD_TEXT);
+            if (!method_exists($childController, $controllerAndMethod[1])) throw new NotFoundException(self::INVALID_CONTROLLER_TEXT);
             (new $childController())->{$controllerAndMethod[1]}();
         }
     }

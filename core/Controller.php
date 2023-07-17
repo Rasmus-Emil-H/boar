@@ -47,7 +47,7 @@ class Controller {
     */
 
     public function setData(array $data): void {
-        $this->data = $data;
+        array_merge($this->data, $data);
     }
     
     /**
@@ -57,17 +57,17 @@ class Controller {
 
     protected array $middlewares = [];
 
-    /*
+    /**
      * Set child data with corresponding controller/method
     */
 
     protected function setChildData(array $childControllers) {
         foreach ( $childControllers as $childController ) {
-            $controllerAndMethod = preg_match('/:/', $childController) ? explode(':', $childController) : [$childController, self::DEFAULT_METHOD];
-            $childController = '\\app\controllers\\'.$controllerAndMethod[0];
-            if (!class_exists($childController)) throw new NotFoundException(self::INVALID_METHOD_TEXT);
-            if (!method_exists($childController, $controllerAndMethod[1])) throw new NotFoundException(self::INVALID_CONTROLLER_TEXT);
-            (new $childController())->{$controllerAndMethod[1]}();
+            [$controller, $method] = preg_match('/:/', $childController) ? explode(':', $childController) : [$childController, self::DEFAULT_METHOD];
+            $childController = '\\app\controllers\\'.$controller.'Controller';
+            if (!class_exists($controller)) throw new NotFoundException(self::INVALID_CONTROLLER_TEXT);
+            if (!method_exists($controller, $method)) throw new NotFoundException(self::INVALID_METHOD_TEXT);
+            $this->setData((new $controller())->{$method}());
         }
     }
 
@@ -83,6 +83,7 @@ class Controller {
     /**
         * @return string
     */
+
     public function getTemplatePath(string $template): string {
         $view = Application::$ROOT_DIR.'view/partials/'.$template.'.tpl.php';
         return $view;

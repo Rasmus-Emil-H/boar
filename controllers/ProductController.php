@@ -15,7 +15,7 @@ use app\core\middlewares\AuthMiddleware;
 
 class UserController extends Controller {
 
-    protected const DEFAULT_VIEW = 'profile';
+    protected const DEFAULT_VIEW = 'product';
 
     public string $defaultRoute = 'index';
 
@@ -30,8 +30,9 @@ class UserController extends Controller {
         ]);
     }
 
-    public function edit() {
+    public function edit(): self {
         $this->data['product'] = $this->getTemplatePath('product');
+        return $this;
     }
 
 }

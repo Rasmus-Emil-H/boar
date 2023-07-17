@@ -23,7 +23,7 @@ class Authenticator {
     }
 
     /**
-     * Application authentication mechanism 
+     * Application authentication mechanism
      * @return void
     */
 

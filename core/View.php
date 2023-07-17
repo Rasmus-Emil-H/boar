@@ -12,8 +12,8 @@ use app\core\exceptions\NotFoundException;
 
 class View {
 
-    protected string $includes = '/views/includes/';
-    protected string $layouts  = '/views/layouts/';
+    protected string $includes  = '/views/includes/';
+    protected string $layouts   = '/views/layouts/';
     protected string $partials  = '/views/partials/';
 
     public function renderView(string $view, array $params = []) {
@@ -25,10 +25,14 @@ class View {
     protected function getLayoutContent(string $title) {
         $layout = Application::$app->controller->layout ?: Application::$app->layout;
         ob_start();
-            require_once(Application::$ROOT_DIR . $this->partials . 'header.php');
-            include_once Application::$ROOT_DIR . $this->layouts . $layout.'.php';
-            require_once(Application::$ROOT_DIR . $this->partials . 'footer.php');
+            $this->socketFiles($layout);
         return ob_get_clean();
+    }
+
+    protected function socketFiles(string $layout): void {
+        require_once(Application::$ROOT_DIR . $this->partials . 'header.php');
+        include_once Application::$ROOT_DIR . $this->layouts . $layout . '.php';
+        require_once(Application::$ROOT_DIR . $this->partials . 'footer.php');
     }
 
     protected function renderOnlyView(string $view, array $params = []) {

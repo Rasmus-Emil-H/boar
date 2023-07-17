@@ -16,6 +16,7 @@ class Controller {
     private const DEFAULT_METHOD = 'index';
     private const INVALID_METHOD_TEXT = 'Invalid method';
     private const INVALID_CONTROLLER_TEXT = 'Invalid controller';
+    private const PARTIALS_TEXT = '/views/partials/';
 
     /**
      * @var string $currentAction
@@ -71,7 +72,7 @@ class Controller {
      * Then set data on called controller
     */
 
-    protected function setChildData(array $childControllers, Controller $currentObject) {
+    protected function setChildData(array $childControllers, Controller $currentObject): void {
         foreach ( $childControllers as $childController ) {
             [$controller, $method] = preg_match('/:/', $childController) ? explode(':', $childController) : [$childController, self::DEFAULT_METHOD];
             $cController = '\\app\controllers\\'.$controller.'Controller';
@@ -96,12 +97,12 @@ class Controller {
     */
 
     public function getTemplatePath(string $template): string {
-        $view = Application::$ROOT_DIR.'view/partials/'.$template.'.tpl.php';
+        $view = Application::$ROOT_DIR . self::PARTIALS_TEXT . $template . '.tpl.php';
         return $view;
     }
 
-    public function render(string $view, array $params = []) {
-        echo Application::$app->view->renderView($view, $params);
+    public function render(string $view) {
+        echo Application::$app->view->renderView($view, $this->data);
     }
 
     public function setLayout(string $layout) {

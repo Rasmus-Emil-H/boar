@@ -70,6 +70,9 @@ class Controller {
     /**
      * Get data from child
      * Then set data on called controller
+     * @param array [strings of to be \app\core\Controller]
+     * @param \Controller Parent controller
+     * @return void
     */
 
     protected function setChildData(array $childControllers, Controller $currentObject): void {

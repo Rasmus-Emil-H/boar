@@ -24,11 +24,11 @@ class View {
     }
 
     protected function getLayoutContent(string $title) {
-        $layout = Application::$app->controller ? Application::$app->controller->layout : Application::$app->layout;
+        $layout = Application::$app->controller->layout ?: Application::$app->layout;
         ob_start();
-            require_once(Application::$ROOT_DIR . $this->includes . 'header.php');
+            require_once(Application::$ROOT_DIR . $this->partials . 'header.php');
             include_once Application::$ROOT_DIR . $this->layouts . $layout.'.php';
-            require_once(Application::$ROOT_DIR . $this->includes . 'footer.php');
+            require_once(Application::$ROOT_DIR . $this->partials . 'footer.php');
         return ob_get_clean();
     }
 

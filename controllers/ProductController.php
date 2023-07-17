@@ -13,7 +13,7 @@ use app\core\Controller;
 use app\core\middlewares\AuthMiddleware;
 
 
-class UserController extends Controller {
+class ProductController extends Controller {
 
     protected const DEFAULT_VIEW = 'product';
 

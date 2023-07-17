@@ -47,7 +47,16 @@ class Controller {
     */
 
     public function setData(array $data): void {
-        array_merge($this->data, $data);
+        $this->data = $data;
+    }
+
+    /**
+     * get data in current controller
+     * @return void
+    */
+
+    public function getData(): array {
+        return $this->data;
     }
     
     /**
@@ -58,16 +67,18 @@ class Controller {
     protected array $middlewares = [];
 
     /**
-     * Set child data with corresponding controller/method
+     * Get data from child
+     * Then set data on called controller
     */
 
-    protected function setChildData(array $childControllers) {
+    protected function setChildData(array $childControllers, Controller $currentObject) {
         foreach ( $childControllers as $childController ) {
             [$controller, $method] = preg_match('/:/', $childController) ? explode(':', $childController) : [$childController, self::DEFAULT_METHOD];
-            $childController = '\\app\controllers\\'.$controller.'Controller';
-            if (!class_exists($controller)) throw new NotFoundException(self::INVALID_CONTROLLER_TEXT);
-            if (!method_exists($controller, $method)) throw new NotFoundException(self::INVALID_METHOD_TEXT);
-            $this->setData((new $controller())->{$method}());
+            $cController = '\\app\controllers\\'.$controller.'Controller';
+            if (!class_exists($cController)) throw new NotFoundException(self::INVALID_CONTROLLER_TEXT);
+            if (!method_exists($cController, $method)) throw new NotFoundException(self::INVALID_METHOD_TEXT);
+            $static = (new $cController())->{$method}();
+            $currentObject->setData($static->getData());
         }
     }
 

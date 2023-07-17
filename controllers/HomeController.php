@@ -22,7 +22,8 @@ class HomeController extends Controller {
     }
 
     public function index() {
-        $this->setChildData(['Product:edit']);
+        $this->setChildData(['Product:edit'], $this);
+        var_dump($this);
         return $this->render('home', [
 
         ]);

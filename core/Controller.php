@@ -53,7 +53,7 @@ class Controller {
 
     /**
      * get data in current controller
-     * @return void
+     * @return array
     */
 
     public function getData(): array {

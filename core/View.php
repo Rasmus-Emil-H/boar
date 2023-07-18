@@ -9,6 +9,8 @@
 namespace app\core;
 
 use app\core\exceptions\NotFoundException;
+use \app\controllers\HeaderController;
+use \app\controllers\FooterController;
 
 class View {
 
@@ -30,15 +32,15 @@ class View {
     }
 
     protected function socketFiles(string $layout): void {
-        require_once(Application::$ROOT_DIR . $this->partials . 'header.php');
+        require_once (new HeaderController())->getTemplatePath('header');
         include_once Application::$ROOT_DIR . $this->layouts . $layout . '.php';
-        require_once(Application::$ROOT_DIR . $this->partials . 'footer.php');
+        require_once (new FooterController())->getTemplatePath('footer');
     }
 
     protected function renderOnlyView(string $view, array $params = []) {
         foreach ($params as $key => $value) $$key = $value;
         ob_start(); ?>
-            <?php include_once Application::$ROOT_DIR . '/views/'.$view.'.php'; ?>
+            <?php include_once Application::$ROOT_DIR . '/views/' . $view . '.php'; ?>
         <?php return ob_get_clean();
     }
 

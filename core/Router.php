@@ -41,7 +41,7 @@ class Router {
     }
 
     public function defaultRoute() {
-        $this->location(Application::$defaultRoute);
+        $this->location(Application::$app::$defaultRoute);
     }
 
     public function location(string $location): void {

@@ -11,7 +11,7 @@ namespace app\controllers;
 use app\core\Application;
 use app\core\Controller;
 
-class DOMComponentController extends Controller {
+class DOMNodeController extends Controller {
 
     public function navbar(): self {
         $this->data['navbar'] = $this->getTemplatePath('navbar');

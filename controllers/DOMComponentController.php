@@ -13,8 +13,9 @@ use app\core\Controller;
 
 class DOMComponentController extends Controller {
 
-    public function navbar() {
+    public function navbar(): self {
         $this->data['navbar'] = $this->getTemplatePath('navbar');
+        return $this;
     }
 
 }

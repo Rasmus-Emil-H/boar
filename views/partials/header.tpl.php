@@ -12,8 +12,9 @@
     <link rel="stylesheet" href="/resources/css/main.css">
   </head>
   <body>
-    <?php if (\app\core\Application::$app->session->getFlashMessage('success')): ?>
+    <?php if ($flashMessage): ?>
       <div class="alert alert-success">
-        <?= \app\core\Application::$app->session->getFlashMessage('success'); ?>
+        <?= $flashMessage ?>
       </div>
     <?php endif; ?>
+    

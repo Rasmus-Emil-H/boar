@@ -14,12 +14,12 @@ use app\core\Controller;
 class HeaderController extends Controller {
 
     public function __construct() { 
-        $this->index();
+        
     }
 
     public function index() {
         $this->setChildData(['DOMComponent:navbar'], $this);
-        return $this->getTemplatePath('header');
+        $this->data['flashMessage'] = Application::$app->session->getFlashMessage('success');
     }
 
 }

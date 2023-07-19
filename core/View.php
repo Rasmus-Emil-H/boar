@@ -32,9 +32,7 @@ class View {
     }
 
     protected function socketFiles(string $layout): void {
-        require_once (new HeaderController())->getTemplatePath('header');
-        include_once Application::$ROOT_DIR . $this->layouts . $layout . '.tpl.php';
-        require_once (new FooterController())->getTemplatePath('footer');
+        require_once Application::$ROOT_DIR . $this->layouts . $layout . '.tpl.php';
     }
 
     protected function renderOnlyView(string $view, array $params = []) {

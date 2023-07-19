@@ -81,7 +81,8 @@ class Controller {
             $cController = '\\app\controllers\\'.$controller.'Controller';
             if (!class_exists($cController)) throw new NotFoundException(self::INVALID_CONTROLLER_TEXT);
             if (!method_exists($cController, $method)) throw new NotFoundException(self::INVALID_METHOD_TEXT);
-            $static = (new $cController())->{$method}();
+            $static = new $cController();
+            $static->{$method}();
             $currentObject->setData($static->getData());
         }
     }

@@ -9,8 +9,9 @@
 namespace app\controllers;
 
 use app\core\Application;
+use app\core\Controller;
 
-class FooterController extends \app\core\Controller {
+class FooterController extends Controller {
 
     public function __construct() { 
         

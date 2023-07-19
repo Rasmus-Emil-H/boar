@@ -10,6 +10,7 @@
     <meta name="msapplication-tap-highlight" content="no">
     <link rel="stylesheet" href="/resources/css/bootstrap.min.css">
     <link rel="stylesheet" href="/resources/css/main.css">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
   </head>
   <body>
     <?php if ($flashMessage): ?>

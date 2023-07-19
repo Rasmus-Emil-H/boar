@@ -14,7 +14,7 @@ use app\core\Controller;
 class HeaderController extends Controller {
 
     public function index() {
-        $this->setChildData(['DOMNodeController:navbar'], $this);
+        $this->setChildData(['DOMNode:navbar'], $this);
         $this->data['flashMessage'] = Application::$app->session->getFlashMessage('success');
     }
 

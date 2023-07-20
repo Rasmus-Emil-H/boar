@@ -1,6 +1,6 @@
 <?php
 
-/*******************************
+/**
  * Home Controller 
  * AUTHOR: RE_WEB
  * @package app\controllers

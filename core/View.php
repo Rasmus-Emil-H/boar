@@ -14,9 +14,10 @@ use \app\controllers\FooterController;
 
 class View {
 
-    protected string $includes  = '/views/includes/';
-    protected string $layouts   = '/views/layouts/';
-    protected string $partials  = '/views/partials/';
+    protected string $includes    = '/views/includes/';
+    protected string $layouts     = '/views/layouts/';
+    protected string $partials    = '/views/partials/';
+    protected string $viewsFolder = '/views/';
 
     public function renderView(string $view, array $params = []) {
         $viewContent   = $this->renderOnlyView($view, $params);
@@ -38,7 +39,7 @@ class View {
     protected function renderOnlyView(string $view, array $params = []) {
         foreach ($params as $key => $value) $$key = $value;
         ob_start(); ?>
-            <?php include_once Application::$ROOT_DIR . '/views/' . $view . '.tpl.php'; ?>
+            <?php include_once Application::$ROOT_DIR . $this->viewsFolder . $view . '.tpl.php'; ?>
         <?php return ob_get_clean();
     }
 

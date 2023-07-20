@@ -18,7 +18,7 @@ class View {
     protected string $layouts     = '/views/layouts/';
     protected string $partials    = '/views/partials/';
     protected string $viewsFolder = '/views/';
-    protected const FILE_EXTENSION = '.tpl.php';
+    protected const TPL_FILE_EXTENSION = '.tpl.php';
 
     public function renderView(string $view, array $params = []) {
         $viewContent   = $this->renderOnlyView($view, $params);

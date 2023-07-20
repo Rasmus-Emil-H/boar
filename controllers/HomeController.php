@@ -22,7 +22,6 @@ class HomeController extends Controller {
     }
 
     public function index() {
-        $this->setChildData(['Header'], $this);
         return $this->render('home');
     }
 

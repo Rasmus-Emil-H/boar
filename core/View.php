@@ -18,6 +18,7 @@ class View {
     protected string $layouts     = '/views/layouts/';
     protected string $partials    = '/views/partials/';
     protected string $viewsFolder = '/views/';
+    protected const FILE_EXTENSION = '.tpl.php';
 
     public function renderView(string $view, array $params = []) {
         $viewContent   = $this->renderOnlyView($view, $params);
@@ -33,13 +34,13 @@ class View {
     }
 
     protected function socketFiles(string $layout): void {
-        require_once Application::$ROOT_DIR . $this->layouts . $layout . '.tpl.php';
+        require_once Application::$ROOT_DIR . $this->layouts . $layout . self::TPL_FILE_EXTENSION;
     }
 
     protected function renderOnlyView(string $view, array $params = []) {
         foreach ($params as $key => $value) $$key = $value;
         ob_start(); ?>
-            <?php include_once Application::$ROOT_DIR . $this->viewsFolder . $view . '.tpl.php'; ?>
+            <?php include_once Application::$ROOT_DIR . $this->viewsFolder . $view . self::TPL_FILE_EXTENSION; ?>
         <?php return ob_get_clean();
     }
 
@@ -47,7 +48,7 @@ class View {
     * @return string
     */
     public function getTemplate(string $template) : string {
-        $templateFile = Application::$ROOT_DIR . $this->partials . $template . ".tpl.php";
+        $templateFile = Application::$ROOT_DIR . $this->partials . $template . self::TPL_FILE_EXTENSION;
         if (!file_exists($templateFile)) throw new NotFoundException();
         return $templateFile;
     }

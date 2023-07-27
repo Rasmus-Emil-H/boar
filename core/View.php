@@ -9,8 +9,7 @@
 namespace app\core;
 
 use app\core\exceptions\NotFoundException;
-use \app\controllers\HeaderController;
-use \app\controllers\FooterController;
+use app\core\File;
 
 class View {
 
@@ -19,6 +18,12 @@ class View {
     protected string $partials    = '/views/partials/';
     protected string $viewsFolder = '/views/';
     protected const TPL_FILE_EXTENSION = '.tpl.php';
+
+    protected File $fileHandler;
+
+    public function __construct() {
+        $this->fileHandler = new File();
+    }
 
     public function renderView(string $view, array $params = []) {
         $viewContent   = $this->renderOnlyView($view, $params);
@@ -34,15 +39,15 @@ class View {
     }
 
     protected function socketFiles(string $layout): void {
-        require_once Application::$ROOT_DIR . $this->partials . 'header' . self::TPL_FILE_EXTENSION;
-        require_once Application::$ROOT_DIR . $this->layouts . $layout . self::TPL_FILE_EXTENSION;
-        require_once Application::$ROOT_DIR . $this->partials . 'footer' . self::TPL_FILE_EXTENSION;
+        $this->fileHandler->requireApplicationFile($this->partials, 'header');
+        $this->fileHandler->requireApplicationFile($this->layouts, $layout);
+        $this->fileHandler->requireApplicationFile($this->partials, 'footer');
     }
 
     protected function renderOnlyView(string $view, array $params = []) {
         foreach ($params as $key => $value) $$key = $value;
         ob_start(); ?>
-            <?php include_once Application::$ROOT_DIR . $this->viewsFolder . $view . self::TPL_FILE_EXTENSION; ?>
+            <?php $this->fileHandler->requireApplicationFile($this->viewsFolder, $view); ?>
         <?php return ob_get_clean();
     }
 

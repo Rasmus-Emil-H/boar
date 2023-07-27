@@ -34,7 +34,9 @@ class View {
     }
 
     protected function socketFiles(string $layout): void {
+        require_once Application::$ROOT_DIR . $this->partials . 'header' . self::TPL_FILE_EXTENSION;
         require_once Application::$ROOT_DIR . $this->layouts . $layout . self::TPL_FILE_EXTENSION;
+        require_once Application::$ROOT_DIR . $this->partials . 'footer' . self::TPL_FILE_EXTENSION;
     }
 
     protected function renderOnlyView(string $view, array $params = []) {

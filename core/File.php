@@ -15,11 +15,6 @@ class File extends FileModel {
 
     public const INVALID_EXTENSION = 'Invalid file extension';
     public const INVALID_FILE_NAME = 'Invalid file name';
-
-    protected string $includes    = '/views/includes/';
-    protected string $layouts     = '/views/layouts/';
-    protected string $partials    = '/views/partials/';
-    protected string $viewsFolder = '/views/';
     protected const TPL_FILE_EXTENSION = '.tpl.php';
 
     /** 

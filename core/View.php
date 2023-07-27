@@ -22,11 +22,11 @@ class View {
 
     public function renderView(string $view, array $params = []) {
         $viewContent   = $this->renderOnlyView($view, $params);
-        $layoutContent = $this->getLayoutContent($params['title'] ?? 'No title');
+        $layoutContent = $this->getLayoutContent();
         return preg_replace('/{{content}}/', $viewContent, $layoutContent);
     }
 
-    protected function getLayoutContent(string $title) {
+    protected function getLayoutContent() {
         $layout = Application::$app->controller->layout ?: Application::$app->layout;
         ob_start();
             $this->socketFiles($layout);

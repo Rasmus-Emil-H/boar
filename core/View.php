@@ -13,10 +13,10 @@ use app\core\File;
 
 class View {
 
-    protected string $includes    = '/views/includes/';
-    protected string $layouts     = '/views/layouts/';
-    protected string $partials    = '/views/partials/';
-    protected string $viewsFolder = '/views/';
+    protected string $includesDir    = '/views/includes/';
+    protected string $layoutsDir     = '/views/layouts/';
+    protected string $partialsDir    = '/views/partials/';
+    protected string $viewsDir       = '/views/';
     protected const TPL_FILE_EXTENSION = '.tpl.php';
 
     protected File $fileHandler;
@@ -39,15 +39,15 @@ class View {
     }
 
     protected function socketFiles(string $layout): void {
-        $this->fileHandler->requireApplicationFile($this->partials, 'header');
-        $this->fileHandler->requireApplicationFile($this->layouts, $layout);
-        $this->fileHandler->requireApplicationFile($this->partials, 'footer');
+        $this->fileHandler->requireApplicationFile($this->partialsDir, 'header');
+        $this->fileHandler->requireApplicationFile($this->layoutsDir, $layout);
+        $this->fileHandler->requireApplicationFile($this->partialsDir, 'footer');
     }
 
     protected function renderOnlyView(string $view, array $params = []) {
         foreach ($params as $key => $value) $$key = $value;
         ob_start(); ?>
-            <?php $this->fileHandler->requireApplicationFile($this->viewsFolder, $view); ?>
+            <?php $this->fileHandler->requireApplicationFile($this->viewsDir, $view); ?>
         <?php return ob_get_clean();
     }
 
@@ -55,7 +55,7 @@ class View {
     * @return string
     */
     public function getTemplate(string $template) : string {
-        $templateFile = Application::$ROOT_DIR . $this->partials . $template . self::TPL_FILE_EXTENSION;
+        $templateFile = Application::$ROOT_DIR . $this->partialsDir . $template . self::TPL_FILE_EXTENSION;
         if (!file_exists($templateFile)) throw new NotFoundException();
         return $templateFile;
     }

@@ -69,7 +69,7 @@ class Controller {
 
     /**
      * Get data from child
-     * Then set data on called controller
+     * Then set data on instantiated controller
      * @param array [strings of to be \app\core\Controller]
      * @param \app\core\controller Parent controller
      * @return void

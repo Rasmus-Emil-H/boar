@@ -39,7 +39,7 @@ class View {
     }
 
     protected function socketFiles(string $layout): void {
-        (new \app\controllers\HeaderController())->index();
+        $this->fileHandler->requireApplicationFile($this->partialsDir, 'header');
         $this->fileHandler->requireApplicationFile($this->layoutsDir, $layout);
         $this->fileHandler->requireApplicationFile($this->partialsDir, 'footer');
     }

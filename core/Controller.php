@@ -106,17 +106,36 @@ class Controller {
         return $view;
     }
 
-    public function render(string $view) {
+    /**
+     * Render view based on data
+     * @return void
+    */
+
+    public function render(string $view): void {
         echo Application::$app->view->renderView($view, $this->data);
     }
 
-    public function setLayout(string $layout) {
+    /**
+     * Set layout for the current controller
+     * @return void
+    */
+
+    public function setLayout(string $layout): void {
         $this->layout = $layout;
     }
 
-    public function registerMiddleware(Middleware $middleware) {
+    /**
+     * Set middlewares for the current controller
+     * @return void
+    */
+
+    public function registerMiddleware(Middleware $middleware): void {
         $this->middlewares[] = $middleware;
     }   
+
+    /**
+     * @return array
+    */
 
     public function getMiddlewares(): array {
         return $this->middlewares;

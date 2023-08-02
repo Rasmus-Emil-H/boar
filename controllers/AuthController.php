@@ -4,10 +4,7 @@ namespace app\controllers;
 
 use app\core\Application;
 use app\core\Controller;
-use app\core\Request;
 use app\models\UserModel;
-use app\models\LoginForm;
-use app\core\Response;
 use app\models\Authenticator;
 
 class AuthController extends Controller {

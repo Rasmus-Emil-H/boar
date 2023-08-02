@@ -46,7 +46,7 @@ class Authenticator {
      * @return array $data
     */
 
-    public function api(): array {
+    public function api(): string {
         $curl = new Curl();
         foreach ( $this->data as $key => $values ) $curl->{"set".ucfirst($key)($values)};
         $curl->send();

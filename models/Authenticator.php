@@ -32,7 +32,7 @@ class Authenticator {
         $status = false;
         $user = UserModel::search(['email' => $this->data['email']]);
         if(!empty($user)) {
-            $user = $user[array_key_first($user)];
+            $user = $user[array_key_first((array)$user)];
             $status = password_verify($this->data['password'], $user->get('Password'));
             if($status === true) {
                 Application::$app->session->set('user', $user->key());

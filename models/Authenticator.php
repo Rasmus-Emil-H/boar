@@ -50,7 +50,7 @@ class Authenticator {
         $curl = new Curl();
         foreach ( $this->data as $key => $values ) $curl->{"set".ucfirst($key)($values)};
         $curl->send();
-        $content = (array)$curl->content;
+        $content = $curl->content;
         $curl->close();
         return $content;
     }

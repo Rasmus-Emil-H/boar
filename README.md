@@ -1,5 +1,5 @@
 # 🐗 B0AR MVC 🐗
-###### Mvc like PHP application
+### Mvc like PHP application
 
 ### Init application by running the setup migration 
 ###### Create your database

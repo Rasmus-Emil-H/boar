@@ -27,7 +27,7 @@
 ###### ->select("Users u", ["u.email", "u.firstname", "p.body"])
 ###### ->join('Posts p', 'UserID')
 ###### ->where(["u.status" => "0"])
-###### ->limit()
+###### ->limit(100)
 ###### ->execute();
 
 ## Handle files through 

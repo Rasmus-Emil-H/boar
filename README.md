@@ -24,9 +24,9 @@
 
 ## Build manual queries through 
 ###### Application::$app->connection
-###### ->select("Users u", ["u.email", "u.firstname", "p.body"])
+###### ->select('Users u', ['u.email', 'u.firstname', 'p.body')
 ###### ->join('Posts p', 'UserID')
-###### ->where(["u.status" => "0"])
+###### ->where(['u.status' => '0'])
 ###### ->limit(100)
 ###### ->execute();
 

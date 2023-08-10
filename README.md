@@ -1,6 +1,5 @@
 # 🐗 
-#  B0AR MVC 
-# 🐗
+#  B0AR MVC
 # Mvc like PHP application
 
 #### Init application by running the setup migration 

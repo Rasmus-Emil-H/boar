@@ -1,6 +1,6 @@
 <?php
 
-/*******************************
+/**
  * Bootstrap AuthMiddleware 
  * AUTHOR: RE_WEB
  * @package app\core\AuthMiddleware

@@ -132,7 +132,7 @@ abstract class Entity extends Relations {
     */
 
     public function restore(): self {
-		$this->deletedAt = null;
+	    $this->deletedAt = null;
         $this->save();
         return $this;
 	}

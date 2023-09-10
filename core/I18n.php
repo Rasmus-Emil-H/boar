@@ -10,6 +10,8 @@ namespace app\core;
 
 use \app\models\LanguageModel;
 
+#[\AllowDynamicProperties]
+
 class I18n {
 
     public function __construct() {

@@ -9,6 +9,8 @@ namespace app\core\database;
 
 use app\core\Application;
 
+#[\AllowDynamicProperties]
+
 class Connection {
 
     private bool $transactionStarted = false;

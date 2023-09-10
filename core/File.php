@@ -24,8 +24,8 @@ class File extends FileModel {
 
     public string $fileName;
 
-    public function getUploadedFile() {
-        return $_FILES['file']['name'] ?? 'invalid';
+    public function getUploadedFile(): string {
+        return $_FILES['file']['name'] ?? self::FILE_NOT_FOUND;
     }
     
     public function getCurrentFiles() {

@@ -51,18 +51,7 @@ class Application {
         self::$ROOT_DIR = dirname(__DIR__);
 
         $this->config      = new Config();
-
-        $applicationConfig = [
-            'authenticationClass' => \app\models\UserModel::class,
-            'pdo' => [
-                'dsn' => $this->config->get('database')->dsn, 
-                'user' => $this->config->get('database')->user, 
-                'password' => $this->config->get('database')->password
-            ]
-        ];
-
-        $this->authenticationClass = $applicationConfig['authenticationClass'];
-        $this->connection  = new Connection($applicationConfig['pdo']);
+        $this->setupConnection();
 
         if ( $applicationIsMigrating ) return;
         
@@ -79,6 +68,20 @@ class Application {
         $this->checkLanguage();
         $this->checkUserBasedOnSession();
 
+    }
+
+    protected function setupConnection() {
+        $applicationConfig = [
+            'authenticationClass' => \app\models\UserModel::class,
+            'pdo' => [
+                'dsn' => $this->config->get('database')->dsn, 
+                'user' => $this->config->get('database')->user, 
+                'password' => $this->config->get('database')->password
+            ]
+        ];
+
+        $this->authenticationClass = $applicationConfig['authenticationClass'];
+        $this->connection  = new Connection($applicationConfig['pdo']);
     }
 
     public function checkLanguage() {

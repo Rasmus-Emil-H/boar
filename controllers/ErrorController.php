@@ -9,7 +9,7 @@ class ErrorController extends Controller {
 
     public function __construct(\Exception $e) {
         Application::$app->response->setStatusCode($e->getCode());
-        $this->data['exception'] = $e;
+        $this->setData(['exception' => $e]);
         return $this->render('error');
     }
 

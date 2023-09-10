@@ -22,7 +22,7 @@ class Cache {
      * @param array $options
     */
 
-    public function __construct(array $options = array()) {
+    public function __construct(array $options = []) {
         $available_options = array('cache_dir');
         foreach ($available_options as $name)
             if (isset($options[$name]))
@@ -72,7 +72,7 @@ class Cache {
      * @return bool
     */
 
-    public function save($id, $data, $lifetime = 3600) {
+    public function save(string $id, $data, int $lifetime = 3600) {
         $dir = $this->getDirectory($id);
         if (!is_dir($dir)) if (!mkdir($dir, 0755, true)) return false;
         $file_name  = $this->getFileName($id);
@@ -89,7 +89,7 @@ class Cache {
      * @return string
     */
 
-    protected function getDirectory($id) {
+    protected function getDirectory(string $id) {
         $hash = sha1($id, false);
         $dirs = [$this->getCacheDirectory(), substr($hash, 0, 2), substr($hash, 2, 2)];
         return join(DIRECTORY_SEPARATOR, $dirs);
@@ -110,7 +110,7 @@ class Cache {
      * @return string
     */
 
-    protected function getFileName($id) {
+    protected function getFileName(string $id) {
         $directory  = $this->getDirectory($id);
         $hash       = sha1($id, false);
         $file       = $directory . DIRECTORY_SEPARATOR . $hash . '.cache';

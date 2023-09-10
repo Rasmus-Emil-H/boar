@@ -13,27 +13,24 @@ class Cache {
     /**
      * The root cache directory.
      * @var string
-     */
+    */
+
     private string $cache_dir = '/tmp/cache';
 
     /**
      * Creates a FileCache object
-     *
      * @param array $options
     */
 
     public function __construct(array $options = array()) {
         $available_options = array('cache_dir');
-        foreach ($available_options as $name) {
-            if (isset($options[$name])) {
+        foreach ($available_options as $name)
+            if (isset($options[$name]))
                 $this->$name = $options[$name];
-            }
-        }
     }
 
     /**
      * Fetches an entry from the cache.
-     *
      * @param string $id
     */
 
@@ -68,7 +65,6 @@ class Cache {
 
     /**
      * Puts data into the cache.
-     *
      * @param string $id
      * @param mixed  $data
      * @param int    $lifetime
@@ -78,18 +74,12 @@ class Cache {
 
     public function save($id, $data, $lifetime = 3600) {
         $dir = $this->getDirectory($id);
-        if (!is_dir($dir)) {
-            if (!mkdir($dir, 0755, true)) {
-                return false;
-            }
-        }
+        if (!is_dir($dir)) if (!mkdir($dir, 0755, true)) return false;
         $file_name  = $this->getFileName($id);
         $lifetime   = time() + $lifetime;
         $serialized = serialize($data);
         $result     = file_put_contents($file_name, $lifetime . PHP_EOL . $serialized);
-        if ($result === false) {
-            return false;
-        }
+        if ($result === false) return false;
         return true;
     }
 
@@ -101,11 +91,7 @@ class Cache {
 
     protected function getDirectory($id) {
         $hash = sha1($id, false);
-        $dirs = array(
-            $this->getCacheDirectory(),
-            substr($hash, 0, 2),
-            substr($hash, 2, 2)
-        );
+        $dirs = [$this->getCacheDirectory(), substr($hash, 0, 2), substr($hash, 2, 2)];
         return join(DIRECTORY_SEPARATOR, $dirs);
     }
 

@@ -15,7 +15,7 @@
   <body>
     <?php if ($flashMessage): ?>
       <div class="alert alert-success">
-        <?= $flashMessage ?>
+        <?= $flashMessage; ?>
       </div>
     <?php endif; ?>
     

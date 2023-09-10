@@ -171,5 +171,13 @@ class Application {
     public function isCLI(): bool {
         return php_sapi_name() === 'cli';     
     }
+
+    public static function isGuest(): bool {
+        return is_null(Application::$app->session->get('user')) || self::$app->session->get('user') === '';
+    }
+
+    public function logout(): void {
+        $this->session->unset('user');
+    }
     
 }

@@ -12,9 +12,7 @@ try {
     $app = new Application(applicationIsMigrating: false);
     $app->run();
 } catch (\Throwable $e) {
-    echo '<div style="background:#e63946;padding:1rem;color:#fff;">';
-        echo '<pre>';
-            print_r($e->getMessage() . ' on line: ' . $e->getLine() . ' in file: ' . $e->getFile());
-        echo '</pre>';
-    echo '</div>';
+    echo '<div style="background:#e63946;padding:1rem;color:#fff;">
+        '.$e->getMessage() . ' on line: ' . $e->getLine() . ' in file: ' . $e->getFile().'
+    </div>';
 }

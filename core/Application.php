@@ -160,23 +160,6 @@ class Application {
         exit;
     }
 
-    public function logout(): void {
-        $this->session->unset('user');
-    }
-
-    /**
-     * @param value To be, translated, string
-     * @return void
-    */
-
-    public function translate(string $value): string {
-        return $this->i18n->translate($value);
-    }
-
-    public static function isGuest(): bool {
-        return is_null(self::$app->session->get('user')) || self::$app->session->get('user') === '';
-    }
-
     /**
      * Determine is current execution context is CLI
      * @return bool

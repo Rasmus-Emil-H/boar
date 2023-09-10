@@ -20,10 +20,17 @@ class UserController extends Controller {
     }
 
     public function index() {
-
         return $this->render(self::DEFAULT_VIEW, [
             'users' => UserModel::all()
         ]);
+    }
+
+    public static function isGuest(): bool {
+        return is_null(Application::$app->session->get('user')) || self::$app->session->get('user') === '';
+    }
+
+    public function logout(): void {
+        $this->session->unset('user');
     }
 
 }

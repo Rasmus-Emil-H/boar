@@ -1,6 +1,6 @@
 <?php
 
-/*******************************
+/**
  * Bootstrap Cache 
  * AUTHOR: RE_WEB
  * @package app\core\Cache

@@ -16,6 +16,7 @@ class File extends FileModel {
     public const INVALID_EXTENSION = 'Invalid file extension';
     public const INVALID_FILE_NAME = 'Invalid file name';
     protected const TPL_FILE_EXTENSION = '.tpl.php';
+    protected const FILE_NOT_FOUND = 'File not found';
 
     /** 
      * @var string $currentString
@@ -50,7 +51,7 @@ class File extends FileModel {
     }
 
     public function getFile() {
-        if ( !file_exists(Application::UPLOAD_FOLDER . $this->fileName)) throw new \Exception('File not found');
+        if ( !file_exists(Application::UPLOAD_FOLDER . $this->fileName)) throw new \Exception(self::FILE_NOT_FOUND);
     }
     
     public function fileSize(string $type, string $quality) {

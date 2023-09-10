@@ -3,7 +3,7 @@
       <form class="login" method="POST" id="login-form">
         <div class="login__field">
             <i class="login__icon fas fa-user"></i>
-            <input type="text" class="login__input" required name="name" placeholder="Name" />
+            <input type="text" class="login__input" required name="email" placeholder="Name" />
         </div>
         <div class="login__field">
             <i class="login__icon fas fa-user"></i>

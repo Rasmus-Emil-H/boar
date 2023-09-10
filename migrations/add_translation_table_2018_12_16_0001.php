@@ -10,20 +10,22 @@
 
 use \app\core\Application;
 
-class add_meta_table_2019_01_03_0001 {
+class add_translation_table_2018_12_16_0001 {
 
     public function up() {
-        $SQL = "CREATE TABLE IF NOT EXISTS Meta (
-            MetaId INT AUTO_INCREMENT PRIMARY KEY,
-            EntityType VARCHAR(255) NOT NULL,
-            EntityID VARCHAR(255) NOT NULL,
-            Data INT(1) DEFAULT 0)";
+        $SQL = "CREATE TABLE IF NOT EXISTS Translations (
+            TranlationID INT AUTO_INCREMENT PRIMARY KEY,
+            Translation VARCHAR(50) NOT NULL,
+            LanguageID int(5) NOT NULL,
+            CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (LanguageID) REFERENCES Languages(LanguageID)
+        )";
         Application::$app->connection->rawSQL($SQL);
         Application::$app->connection->execute();
     }
 
     public function down() {
-        $SQL = "DROP TABLE Users;";
+        $SQL = "DROP TABLE Translations;";
         Application::$app->connection->rawSQL($SQL);
         Application::$app->connection->execute();
     }

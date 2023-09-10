@@ -102,13 +102,8 @@ class Application {
     public function run(): void {
         try {
             $this->router->resolve();
-        } catch (\Throwable $e) {
-            $this->exceptionCodeHandler($e->getCode());
-            $this->response->setStatusCode($e->getCode());
-            echo $this->view->renderView('error', [
-                'exception' => $e,
-                'isDev' => $this->isDevSite()
-            ]);
+        } catch (\Throwable $applicationError) {
+            $this->setController(new \app\controllers\ErrorController($applicationError));
         }
     }
 

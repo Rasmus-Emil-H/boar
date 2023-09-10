@@ -13,9 +13,3 @@
     <link rel="icon" type="image/x-icon" href="/favicon.ico">
   </head>
   <body>
-    <?php if ($flashMessage): ?>
-      <div class="alert alert-success">
-        <?= $flashMessage; ?>
-      </div>
-    <?php endif; ?>
-    

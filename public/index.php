@@ -16,5 +16,6 @@ try {
         <h3>🧙🏻‍♂️ Error 🧙🏻‍♂️</h3>
         <hr />
         <p>'.$e->getMessage() . '</p> <p> on line: ' . $e->getLine() . '</p> <p> in file: ' . $e->getFile().'</p>
+        <p><pre>'.$e->getTraceAsString().'</pre></p>
     </div>';
 }

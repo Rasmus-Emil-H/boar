@@ -23,7 +23,7 @@ class add_meta_table_2019_01_03_0001 {
     }
 
     public function down() {
-        $SQL = "DROP TABLE Users;";
+        $SQL = "DROP TABLE Meta;";
         Application::$app->connection->rawSQL($SQL);
         Application::$app->connection->execute();
     }

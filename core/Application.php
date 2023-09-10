@@ -13,13 +13,7 @@ use \app\config\Config;
 
 class Application {
 
-    /**
-     * Application requirements
-     * @var resources
-    */
-
     public static string $ROOT_DIR;
-
     public string $layout = 'main';
     public string $authenticationClass;
     
@@ -118,11 +112,6 @@ class Application {
         throw new \Exception($message);
     }
 
-    /**
-     * Exception code handler
-     * @param code
-    */
-
     protected function exceptionCodeHandler($code) {
         if( !is_int($code) ) 
             throw new \Exception('Invalid status code. Must be int, however ' . gettype($code) . ' is provided.');
@@ -132,41 +121,26 @@ class Application {
         return in_array($_SERVER['REMOTE_ADDR'], self::$app->config->get('env')->developmentArrayIPs) || $this->env->get('isDev') === 'true';
     }
 
-    /**
-     * Getter/ Setter for controllers
-     * @return Controller 
-    */
-
     public function getController(): Controller {
         return $this->controller;
     }
-
-    /**
-     * @param controller The desired controller
-     * @return void
-    */
 
     public function setController(Controller $controller): void {
         $this->controller = $controller;
     }
 
     /**
-     * @param mixed $target
-     * Die and dump your target
+     * @param mixed $data
+     * Die and dump your data
      * @return void
     */
 
-    public function dd(mixed $target): void {
+    public function dd(mixed $data): void {
         echo '<pre>';
             var_dump($target);
         echo '</pre>';
         exit;
     }
-
-    /**
-     * Determine is current execution context is CLI
-     * @return bool
-    */
 
     public function isCLI(): bool {
         return php_sapi_name() === 'cli';     

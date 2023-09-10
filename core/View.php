@@ -45,9 +45,8 @@ class View {
     }
 
     protected function renderOnlyView(string $view, array $params = []) {
-        foreach ($params as $key => $value) $$key = $value;
         ob_start(); ?>
-            <?php $this->fileHandler->requireApplicationFile($this->viewsDir, $view); ?>
+            <?php $this->fileHandler->requireApplicationFile($this->viewsDir, $view, $params); ?>
         <?php return ob_get_clean();
     }
 

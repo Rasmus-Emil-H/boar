@@ -6,9 +6,15 @@ error_reporting(E_ALL);
 
 use app\core\Application;
 
-define('PASSWORD_PASSWORD_DEFAULT', 'qwd');
-
-require_once dirname(__DIR__) . '/vendor/autoload.php';
-
-$app = new Application(applicationIsMigrating: false);
-$app->run();
+try {
+    define('PASSWORD_PASSWORD_DEFAULT', 'qwd');
+    require_once dirname(__DIR__) . '/vendor/autoload.php';
+    $app = new Application(applicationIsMigrating: false);
+    $app->run();
+} catch (\Throwable $e) {
+    echo '<div style="background:#e63946;padding:1rem;color:#fff;">';
+        echo '<pre>';
+            var_dump($e);
+        echo '</pre>';
+    echo '</div>';
+}

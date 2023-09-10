@@ -13,10 +13,10 @@ use app\core\File;
 
 class View {
 
-    protected string $includesDir    = '/views/includes/';
-    protected string $layoutsDir     = '/views/layouts/';
-    protected string $partialsDir    = '/views/partials/';
-    protected string $viewsDir       = '/views/';
+    protected string $includesDir      = '/views/includes/';
+    protected string $layoutsDir       = '/views/layouts/';
+    protected string $partialsDir      = '/views/partials/';
+    protected string $viewsDir         = '/views/';
     protected const TPL_FILE_EXTENSION = '.tpl.php';
 
     protected File $fileHandler;

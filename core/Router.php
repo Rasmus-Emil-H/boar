@@ -32,7 +32,7 @@ class Router {
     }
 
     protected function checkController() {
-        if (empty($this->queryPattern)) $this->defaultRoute();
+        if (empty($this->queryPattern)) $this->getDefaultRoute();
         $handler = ucfirst($this->queryPattern[0] ?? '').self::CONTROLLER;
         $controller = '\\app\controllers\\'.$handler;
         if (!class_exists($controller)) throw new NotFoundException();
@@ -40,7 +40,7 @@ class Router {
         Application::$app->setController($currentController);
     }
 
-    public function defaultRoute() {
+    public function getDefaultRoute() {
         $this->location(Application::$app::$defaultRoute);
     }
 
@@ -65,7 +65,6 @@ class Router {
     */
 
     public function resolve() {
-
         $this->checkController();
         $this->checkMethod();
         $this->runMiddlewares();

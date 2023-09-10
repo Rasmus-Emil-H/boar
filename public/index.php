@@ -14,7 +14,7 @@ try {
 } catch (\Throwable $e) {
     echo '<div style="background:#e63946;padding:1rem;color:#fff;">';
         echo '<pre>';
-            var_dump($e);
+            print_r($e->getMessage() . ' on line: ' . $e->getLine() . ' in file: ' . $e->getFile());
         echo '</pre>';
     echo '</div>';
 }

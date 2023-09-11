@@ -25,8 +25,8 @@ class View {
         $this->fileHandler = new File();
     }
 
-    public function renderView(string $view, array $params = []) {
-        $viewContent   = $this->renderOnlyView($view, $params);
+    public function renderView(string $view, array $data = []) {
+        $viewContent   = $this->renderOnlyView($view, $data);
         $layoutContent = $this->getLayoutContent();
         return preg_replace('/{{content}}/', $viewContent, $layoutContent);
     }
@@ -44,9 +44,9 @@ class View {
         $this->fileHandler->requireApplicationFile($this->partialsDir, 'footer');
     }
 
-    protected function renderOnlyView(string $view, array $params = []) {
+    protected function renderOnlyView(string $view, array $data = []) {
         ob_start(); ?>
-            <?php $this->fileHandler->requireApplicationFile($this->viewsDir, $view, $params); ?>
+            <?php $this->fileHandler->requireApplicationFile($this->viewsDir, $view, $data); ?>
         <?php return ob_get_clean();
     }
 

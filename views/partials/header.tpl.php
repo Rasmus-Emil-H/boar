@@ -12,4 +12,5 @@
     <link rel="stylesheet" href="/resources/css/main.css">
     <link rel="icon" type="image/x-icon" href="/favicon.ico">
   </head>
-  <body>
+<body>
+<?= $navbar; ?>

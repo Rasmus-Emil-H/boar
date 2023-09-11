@@ -32,11 +32,9 @@ class View {
     }
 
     protected function getLayoutContent() {
-        $layout = Application::$app->controller->layout ?: Application::$app->layout;
-        ob_start();
-            $this->fileHandler->requireApplicationFile($this->partialsDir, 'header');
+        $layout = Application::$app->controller->layout ?? Application::$app->layout;
+          ob_start();
             $this->fileHandler->requireApplicationFile($this->layoutsDir, $layout);
-            $this->fileHandler->requireApplicationFile($this->partialsDir, 'footer');
         return ob_get_clean();
     }
 

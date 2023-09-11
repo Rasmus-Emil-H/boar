@@ -13,8 +13,9 @@ use app\core\Controller;
 
 class FooterController extends Controller {
 
-    public function __construct() { 
-        return $this->render('footer');   
-    }
+  public function index() {
+    $this->data['footer'] = $this->getTemplatePath('header');
+    return $this;
+  }
 
 }

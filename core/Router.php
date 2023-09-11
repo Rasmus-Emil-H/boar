@@ -59,6 +59,11 @@ class Router {
         foreach (Application::$app->controller->getMiddlewares() as $middleware) $middleware->execute();
     }
 
+    protected function setTemplateControllers() {
+      if(php_sapi_name() === 'cli') return;
+      Application::$app->controller->setChildData(['Header', 'Footer'], Application::$app->controller);
+    }
+
     /** 
      * Resolver for the routing module
      * Middlewares are controller implemented
@@ -68,6 +73,7 @@ class Router {
         $this->checkController();
         $this->checkMethod();
         $this->runMiddlewares();
+        $this->setTemplateControllers();
 
         Application::$app->controller->{$this->method}();
 

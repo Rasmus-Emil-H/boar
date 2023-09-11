@@ -76,10 +76,11 @@ class Controller {
      * @return void
     */
 
-    protected function setChildData(array $childControllers, Controller $currentObject): void {
+    public function setChildData(array $childControllers, Controller $currentObject): void {
         foreach ( $childControllers as $childController ) {
             [$controller, $method] = preg_match('/:/', $childController) ? explode(':', $childController) : [$childController, self::DEFAULT_METHOD];
             $cController = '\\app\controllers\\'.$controller.'Controller';
+            var_dump($controller, $method);
             if (!class_exists($cController)) throw new NotFoundException(self::INVALID_CONTROLLER_TEXT);
             if (!method_exists($cController, $method)) throw new NotFoundException(self::INVALID_METHOD_TEXT);
             $static = new $cController();

@@ -26,9 +26,9 @@ class View {
     }
 
     public function renderView(string $view, array $data = []) {
-        $viewContent   = $this->renderOnlyView($view, $data);
-        $layoutContent = $this->getLayoutContent();
-        return preg_replace('/{{content}}/', $viewContent, $layoutContent);
+        $currentView   = $this->renderOnlyView($view, $data);
+        $currentLayout = $this->getLayoutContent();
+        return preg_replace('/{{content}}/', $currentView, $currentLayout);
     }
 
     protected function getLayoutContent() {

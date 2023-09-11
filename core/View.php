@@ -34,14 +34,10 @@ class View {
     protected function getLayoutContent() {
         $layout = Application::$app->controller->layout ?: Application::$app->layout;
         ob_start();
-            $this->socketFiles($layout);
+            $this->fileHandler->requireApplicationFile($this->partialsDir, 'header');
+            $this->fileHandler->requireApplicationFile($this->layoutsDir, $layout);
+            $this->fileHandler->requireApplicationFile($this->partialsDir, 'footer');
         return ob_get_clean();
-    }
-
-    protected function socketFiles(string $layout): void {
-        $this->fileHandler->requireApplicationFile($this->partialsDir, 'header');
-        $this->fileHandler->requireApplicationFile($this->layoutsDir, $layout);
-        $this->fileHandler->requireApplicationFile($this->partialsDir, 'footer');
     }
 
     protected function renderOnlyView(string $view, array $data = []) {

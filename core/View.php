@@ -26,7 +26,7 @@ class View {
     }
 
     public function renderView(string $view, array $data = []) {
-        $currentView   = $this->renderOnlyView($view, $data);
+        $currentView   = $this->getTemplateContent($view, $data);
         $currentLayout = $this->getLayoutContent();
         return preg_replace('/{{content}}/', $currentView, $currentLayout);
     }
@@ -40,7 +40,7 @@ class View {
         return ob_get_clean();
     }
 
-    protected function renderOnlyView(string $view, array $data = []) {
+    protected function getTemplateContent(string $view, array $data = []) {
         ob_start(); ?>
             <?php $this->fileHandler->requireApplicationFile($this->viewsDir, $view, $data); ?>
         <?php return ob_get_clean();

@@ -61,7 +61,8 @@ class Router {
 
     protected function setTemplateControllers() {
       if(php_sapi_name() === 'cli') return;
-      Application::$app->controller->setChildData(['Header', 'Footer'], Application::$app->controller);
+      Application::$app->controller->children[] = 'Header';
+      Application::$app->controller->children[] = 'Footer';
     }
 
     /** 
@@ -74,7 +75,7 @@ class Router {
         $this->checkMethod();
         $this->runMiddlewares();
         $this->setTemplateControllers();
-
+        Application::$app->controller->execChildData();
         Application::$app->controller->{$this->method}();
 
     }

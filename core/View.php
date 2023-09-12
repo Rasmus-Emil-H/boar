@@ -25,26 +25,26 @@ class View {
         $this->fileHandler = new File();
     }
 
-    public function renderView(string $view, array $data = []) {
+    public function renderView(string $view, array $data = []): string {
         $currentView   = $this->getTemplateContent($view, $data);
-        $currentLayout = $this->getLayoutContent();
+        $currentLayout = $this->getLayoutContent($data);
         return preg_replace('/{{content}}/', $currentView, $currentLayout);
     }
 
-    protected function getLayoutContent() {
+    protected function getLayoutContent(array $data): string {
         $layout = Application::$app->controller->layout ?? Application::$app->layout;
           ob_start();
             $this->fileHandler->requireApplicationFile($this->layoutsDir, $layout);
         return ob_get_clean();
     }
 
-    protected function getTemplateContent(string $view, array $data = []) {
+    protected function getTemplateContent(string $view, array $data = []): string {
         ob_start(); ?>
             <?php $this->fileHandler->requireApplicationFile($this->viewsDir, $view, $data); ?>
         <?php return ob_get_clean();
     }
 
-    public function getTemplate(string $template) : string {
+    public function getTemplate(string $template): string {
         $templateFile = Application::$ROOT_DIR . $this->partialsDir . $template . self::TPL_FILE_EXTENSION;
         if (!file_exists($templateFile)) throw new NotFoundException();
         return $templateFile;

@@ -40,7 +40,7 @@ class Controller {
      * Support for additional controller logic, partials
     */
 
-    protected array $children = [];
+    public array $children = [];
 
     /**
      * Set data in current controller
@@ -80,7 +80,6 @@ class Controller {
         foreach ( $childControllers as $childController ) {
             [$controller, $method] = preg_match('/:/', $childController) ? explode(':', $childController) : [$childController, self::DEFAULT_METHOD];
             $cController = '\\app\controllers\\'.$controller.'Controller';
-            var_dump($controller, $method);
             if (!class_exists($cController)) throw new NotFoundException(self::INVALID_CONTROLLER_TEXT);
             if (!method_exists($cController, $method)) throw new NotFoundException(self::INVALID_METHOD_TEXT);
             $static = new $cController();
@@ -96,6 +95,10 @@ class Controller {
 
     public function getChildren() : array {
         return $this->children;
+    }
+
+    public function execChildData() {
+      $this->setChildData($this->getChildren(), $this);
     }
 
     /**

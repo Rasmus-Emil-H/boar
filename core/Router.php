@@ -76,7 +76,7 @@ class Router {
         $this->runMiddlewares();
         $this->setTemplateControllers();
         Application::$app->controller->execChildData();
-        var_dump(Application::$app->controller);
+        extract(Application::$app->controller->getData());
         Application::$app->controller->{$this->method}();
 
     }

@@ -26,6 +26,7 @@ class View {
     }
 
   public function renderView(string $view, array $data = []): string {
+        var_dump($data);
         $currentView   = $this->getTemplateContent($view, $data);
         $currentLayout = $this->getLayoutContent($data);
         return preg_replace('/{{content}}/', $currentView, $currentLayout);

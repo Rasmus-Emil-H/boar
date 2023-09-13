@@ -26,7 +26,6 @@ class View {
     }
 
   public function renderView(string $view, array $data = []): string {
-        var_dump($data);
         $currentView   = $this->getTemplateContent($view, $data);
         $currentLayout = $this->getLayoutContent($data);
         return preg_replace('/{{content}}/', $currentView, $currentLayout);
@@ -34,8 +33,10 @@ class View {
 
     protected function getLayoutContent(array $data): string {
         $layout = Application::$app->controller->layout ?? Application::$app->layout;
-          ob_start();
+          ob_start(); 
+            require $data['header'];
             $this->fileHandler->requireApplicationFile($this->layoutsDir, $layout);
+            require $data['footer'];
         return ob_get_clean();
     }
 

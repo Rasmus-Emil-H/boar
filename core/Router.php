@@ -78,7 +78,6 @@ class Router {
         Application::$app->controller->execChildData();
         extract(Application::$app->controller->getData());
         Application::$app->controller->{$this->method}();
-
     }
 
 }

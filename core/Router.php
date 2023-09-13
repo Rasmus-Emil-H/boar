@@ -50,7 +50,7 @@ class Router {
     }
 
     protected function checkMethod() {
-        $method = $this->queryPattern[1] ?? $this->method = self::INDEX_METHOD;
+        $method = $this->queryPattern[1] ?? self::INDEX_METHOD;
         if (!method_exists(Application::$app->controller, $method)) throw new NotFoundException();
         $this->method = $method;
     }
@@ -76,6 +76,7 @@ class Router {
         $this->runMiddlewares();
         $this->setTemplateControllers();
         Application::$app->controller->execChildData();
+        var_dump(Application::$app->controller);
         Application::$app->controller->{$this->method}();
 
     }

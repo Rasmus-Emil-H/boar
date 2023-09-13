@@ -25,9 +25,10 @@ class View {
         $this->fileHandler = new File();
     }
 
-  public function renderView(string $view, array $data = []) {
+  public function renderView(string $view, array $data = []): string {
         $currentView   = $this->getTemplateContent($view, $data);
         $currentLayout = $this->getLayoutContent($data);
+        return preg_replace('/{{content}}/', $currentView, $currentLayout);
     }
 
     protected function getLayoutContent(array $data): string {

@@ -75,8 +75,9 @@ class Router {
         $this->runMiddlewares();
         $this->setTemplateControllers();
         Application::$app->controller->execChildData();
-        extract(Application::$app->controller->getData());
         Application::$app->controller->{$this->method}();
+        extract(Application::$app->controller->getData());
+        dd(Application::$app->controller);
     }
 
 }

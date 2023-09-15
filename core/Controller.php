@@ -44,10 +44,11 @@ class Controller {
 
     /**
      * Set data in current controller
+     * @var array|object [\Controller]
      * @return void
     */
 
-    public function setData(array $data): void {
+    public function setData(array|object $data): void {
         $merged = array_merge($this->data, $data);
         $this->data = $merged;
     }
@@ -80,7 +81,7 @@ class Controller {
      * @return void
     */
 
-    public function setChildData(array $childControllers, Controller $currentObject): void {
+    public function setChildData(array $childControllers): void {
         foreach ( $childControllers as $childController ) {
             [$controller, $method] = preg_match('/:/', $childController) ? explode(':', $childController) : [$childController, self::DEFAULT_METHOD];
             $cController = '\\app\controllers\\'.$controller.'Controller';
@@ -88,7 +89,8 @@ class Controller {
             if (!method_exists($cController, $method)) throw new NotFoundException(self::INVALID_METHOD_TEXT);
             $static = new $cController();
             $static->{$method}();
-            $currentObject->setData($static->getData());
+            $static->execChildData();
+            Application::$app->controller->setData([$static]);
         }
     }
 
@@ -111,8 +113,7 @@ class Controller {
     */
 
     public function getTemplatePath(string $template): string {
-        $view = Application::$ROOT_DIR . self::PARTIALS_TEXT . $template . '.tpl.php';
-        return $view;
+        return Application::$ROOT_DIR . self::PARTIALS_TEXT . $template . '.tpl.php';
     }
 
     /**

@@ -22,7 +22,7 @@ class AuthController extends Controller {
         return $this->render('login');
     }
 
-    public function register() {
+    public function logout() {
         Application::$app->session->unset('user');
         Application::$app->response->redirect('/');
     }

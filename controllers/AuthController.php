@@ -23,25 +23,6 @@ class AuthController extends Controller {
     }
 
     public function register() {
-        $user = new UserModel();
-        if (Application::$app->request->isPost()) {
-            $user->set(Application::$app->request->getBody());
-            if ($user->validate() && $user->save()) {
-                Application::$app->session->setFlashMessage('success', 'User created');
-                Application::$app->response->redirect('/');
-                return;
-            }
-            return $this->render('register', [
-                'model' => $user,
-            ]);
-        }
-        $this->setLayout('auth');
-        return $this->render('register', [
-            'model' => $user,
-        ]);
-    }
-
-    public function logout() {
         Application::$app->session->unset('user');
         Application::$app->response->redirect('/');
     }

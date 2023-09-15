@@ -40,7 +40,7 @@ class View {
 
   protected function getTemplateContent(): string {
     ob_start(); ?>
-      <?php $this->fileHandler->requireApplicationFile($this->viewsDir); ?>
+      <?php $this->fileHandler->requireApplicationFile($this->viewsDir, ''); ?>
     <?php return ob_get_clean();
   }
 

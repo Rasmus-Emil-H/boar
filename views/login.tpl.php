@@ -1,9 +1,9 @@
 <div class="screen fade-in">
   <div class="screen__content">
-      <form class="login" method="POST" id="login-form">
+      <form class="login" method="POST" id="login-form">   
         <div class="login__field">
             <i class="login__icon fas fa-user"></i>
-            <input type="text" class="login__input" required name="email" placeholder="Name" />
+            <input type="password" class="login__input" required name="email" placeholder="Email" />
         </div>
         <div class="login__field">
             <i class="login__icon fas fa-user"></i>

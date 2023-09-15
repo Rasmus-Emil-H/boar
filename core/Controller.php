@@ -40,7 +40,7 @@ class Controller {
      * Support for additional controller logic, partials
     */
 
-    public array $children = [];
+    protected array $children = [];
 
     /**
      * Set data in current controller
@@ -67,6 +67,10 @@ class Controller {
     */
 
     protected array $middlewares = [];
+
+    public function setChildren(array $children): void {
+      foreach ( $children as $child ) $this->children[] = $child; 
+    }
 
     /**
      * Get data from child

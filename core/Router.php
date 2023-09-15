@@ -64,20 +64,15 @@ class Router {
       Application::$app->controller->setChildren(['Header', 'Footer']);
     }
 
-    /** 
-     * Resolver for the routing module
-     * Middlewares are controller implemented
-    */
-
     public function resolve() {
         $this->checkController();
         $this->checkMethod();
         $this->runMiddlewares();
         $this->setTemplateControllers();
-        Application::$app->controller->execChildData();
         Application::$app->controller->{$this->method}();
-        extract(Application::$app->controller->getData());
-        dd(Application::$app->controller);
+        Application::$app->controller->execChildData();
+        extract(Application::$app->controller->getData(), EXTR_SKIP);
+        return Application::$app->controller->getView();
     }
 
 }

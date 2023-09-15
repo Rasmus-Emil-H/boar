@@ -94,6 +94,10 @@ class Controller {
         }
     }
 
+    public function getView() {
+        return $this->view;
+    }
+
     /**
      * Get names of children controllers
      * @return array
@@ -122,7 +126,7 @@ class Controller {
     */
 
     public function render(string $view): void {
-        echo Application::$app->view->renderView($view, $this->data);
+        Application::$app->view->renderView();
     }
 
     /**

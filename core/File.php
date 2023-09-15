@@ -59,7 +59,6 @@ class File extends FileModel {
     }
 
     public function requireApplicationFile(string $folder, string $file, array $params = []): void {
-        foreach ($params as $key => $value) $$key = $value;
         require_once Application::$ROOT_DIR . $folder . $file . self::TPL_FILE_EXTENSION;
     }
 

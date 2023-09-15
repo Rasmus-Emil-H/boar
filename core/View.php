@@ -25,22 +25,22 @@ class View {
     $this->fileHandler = new File();
   }
 
-  public function renderView(string $view, array $data = []): string {
-    $currentView   = $this->getTemplateContent($view, $data);
-    $currentLayout = $this->getLayoutContent($data);
+  public function renderView(): string {
+    $currentView   = $this->getTemplateContent();
+    $currentLayout = $this->getLayoutContent();
     return preg_replace('/{{content}}/', $currentView, $currentLayout);
   }
 
-  protected function getLayoutContent(array $data): string {
+  protected function getLayoutContent(): string {
     $layout = Application::$app->controller->layout ?? Application::$app->layout;
     ob_start(); 
       $this->fileHandler->requireApplicationFile($this->layoutsDir, $layout);
     return ob_get_clean();
   }
 
-  protected function getTemplateContent(string $view, array $data = []): string {
+  protected function getTemplateContent(): string {
     ob_start(); ?>
-      <?php $this->fileHandler->requireApplicationFile($this->viewsDir, $view, $data); ?>
+      <?php $this->fileHandler->requireApplicationFile($this->viewsDir); ?>
     <?php return ob_get_clean();
   }
 

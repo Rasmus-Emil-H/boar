@@ -89,15 +89,17 @@ class Controller {
     */
 
     public function setChildData(array $childControllers): void {
-        foreach ( $childControllers as $childController ) {
+        try {
+          foreach ( $childControllers as $childController ) {
             [$controller, $method] = preg_match('/:/', $childController) ? explode(':', $childController) : [$childController, self::DEFAULT_METHOD];
             $cController = '\\app\controllers\\'.$controller.'Controller';
-            if (!class_exists($cController)) throw new NotFoundException(self::INVALID_CONTROLLER_TEXT);
-            if (!method_exists($cController, $method)) throw new NotFoundException(self::INVALID_METHOD_TEXT);
             $static = new $cController();
             $static->{$method}();
             $static->execChildData();
             Application::$app->controller->setData([strtolower($controller) => $static]);
+          }
+        } catch (\Throwable $applicationError) {
+          $this->setController(new \app\controllers\ErrorController($applicationError)); 
         }
     }
 
@@ -120,7 +122,7 @@ class Controller {
     }
 
     public function execChildData() {
-      $this->setChildData($this->getChildren(), $this);
+      $this->setChildData($this->getChildren());
     }
 
 

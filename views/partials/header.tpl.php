@@ -13,5 +13,6 @@
     <link rel="icon" type="image/x-icon" href="/favicon.ico">
   </head>
 <body>
+
 <?php require_once $domnode->getView(); ?>
 

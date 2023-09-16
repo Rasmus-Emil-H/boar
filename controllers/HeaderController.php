@@ -15,6 +15,8 @@ class HeaderController extends Controller {
 
     public function index() {
       $this->setView('partials/', 'header');
+      $this->setData(['domnode' => '123']);
+      return $this;
     }
 
 }

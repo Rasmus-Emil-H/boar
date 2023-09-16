@@ -6,7 +6,6 @@ error_reporting(E_ALL);
 
 use app\core\Application;
 require_once dirname(__DIR__) . '/vendor/autoload.php';
-define('PASSWORD_PASSWORD_DEFAULT', 'qwd');
 
 require_once 'yard.php';
 

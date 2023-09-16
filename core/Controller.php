@@ -10,6 +10,7 @@ namespace app\core;
 
 use \app\core\middlewares\Middleware;
 use \app\core\exceptions\NotFoundException;
+use \app\controllers\ErrorController;
 
 class Controller {
 
@@ -99,7 +100,7 @@ class Controller {
             Application::$app->controller->setData([strtolower($controller) => $static]);
           }
         } catch (\Throwable $applicationError) {
-          Application::$app->setController(new \app\controllers\ErrorController($applicationError)); 
+          Application::$app->setController(new ErrorController($applicationError)); 
         }
     }
 

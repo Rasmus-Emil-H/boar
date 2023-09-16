@@ -16,7 +16,7 @@ class HeaderController extends Controller {
     public function index() {
         $this->data['flashMessage'] = Application::$app->session->getFlashMessage('success');
         $this->setChildren(['DOMNode:navbar']);
-        $this->data['view'] = $this->getTemplatePath('header');
+        $this->data['view'] = $this->getPartialTemplate('header');
     }
 
 }

@@ -72,7 +72,8 @@ class Router {
         Application::$app->controller->{$this->method}();
         Application::$app->controller->execChildData();
         extract(Application::$app->controller->getData(), EXTR_SKIP);
-        return Application::$app->controller->getView();
+        require Application::$app->controller->getView();
+        dd(Application::$app->controller);
     }
 
 }

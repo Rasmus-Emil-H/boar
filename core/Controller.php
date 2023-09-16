@@ -30,6 +30,13 @@ class Controller {
 
     protected $data = [];
 
+
+    /**
+     * @var string $view
+     */
+
+    protected string $view = '';
+
     /*
      * Default layout
     */
@@ -98,6 +105,11 @@ class Controller {
         return $this->view;
     }
 
+
+    protected function setView(string $view) {
+      $this->view = $this->getTemplatePath('', $view);
+    }
+
     /**
      * Get names of children controllers
      * @return array
@@ -111,13 +123,21 @@ class Controller {
       $this->setChildData($this->getChildren(), $this);
     }
 
+
+    public function getPartialTemplate(string $partial): string {
+      return $this->getTemplatePath('partials/', $partial);
+    }
+
+    public function getTemplate(string $partial): string {
+      return $this->getTemplatePath('', $partial);
+    }
     /**
      * @param string template name
      * @return string
     */
 
-    public function getTemplatePath(string $template): string {
-        return Application::$ROOT_DIR . self::PARTIALS_TEXT . $template . '.tpl.php';
+    public function getTemplatePath(string $folder, string $template): string {
+        return Application::$ROOT_DIR .  '/views/' . $folder . $template . '.tpl.php';
     }
 
     /**

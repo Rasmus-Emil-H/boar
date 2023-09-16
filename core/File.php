@@ -11,6 +11,8 @@ namespace app\core;
 use app\models\FileModel;
 use app\core\Application;
 
+use app\core\exceptions\NotFoundException;
+
 class File extends FileModel {
 
     public const INVALID_EXTENSION = 'Invalid file extension';
@@ -58,8 +60,14 @@ class File extends FileModel {
         
     }
 
+    public function exists($file) {
+      if(!file_exists($file)) throw new NotFoundException();
+    }
+
     public function requireApplicationFile(string $folder, string $file, array $params = []): void {
-        require_once Application::$ROOT_DIR . $folder . $file . self::TPL_FILE_EXTENSION;
+      $file = Application::$ROOT_DIR . $folder . $file . self::TPL_FILE_EXTENSION;
+      $this->exists($file);
+      require_once $file;
     }
 
 }

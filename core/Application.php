@@ -98,8 +98,9 @@ class Application {
 
     public function run(): void {
         try {
-            require_once $this->router->resolve();
+            $this->router->resolve();
         } catch (\Throwable $applicationError) {
+            var_dump($applicationError);
             $this->setController(new \app\controllers\ErrorController($applicationError));
         }
     }

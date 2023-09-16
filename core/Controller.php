@@ -56,8 +56,7 @@ class Controller {
     */
 
     public function setData(array|object $data): void {
-        $merged = array_merge($this->data, $data);
-        $this->data = $merged;
+      $this->data = array_merge($this->data, $data);
     }
 
     /**
@@ -97,7 +96,7 @@ class Controller {
             $static = new $cController();
             $static->{$method}();
             $static->execChildData();
-            $this->setData([strtolower($controller) => $static]);
+            Application::$app->controller->setData([strtolower($controller) => $static]);
         }
     }
 
@@ -106,8 +105,8 @@ class Controller {
     }
 
 
-    protected function setView(string $view) {
-      $this->view = $this->getTemplatePath('', $view);
+    protected function setView(string $dir, string $view) {
+      $this->view = $this->getTemplatePath($dir, $view);
     }
 
     /**

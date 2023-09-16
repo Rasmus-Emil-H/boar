@@ -14,9 +14,7 @@ use app\core\Controller;
 class HeaderController extends Controller {
 
     public function index() {
-        $this->data['flashMessage'] = Application::$app->session->getFlashMessage('success');
-        $this->setChildren(['DOMNode:navbar']);
-        $this->data['view'] = $this->getPartialTemplate('header');
+      $this->setView('partials/', 'header');
     }
 
 }

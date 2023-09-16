@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="utf-8">
@@ -13,4 +13,4 @@
     <link rel="icon" type="image/x-icon" href="/favicon.ico">
   </head>
 <body>
-<?= $navbar; ?>
+<?= $domnode; ?>

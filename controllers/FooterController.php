@@ -14,7 +14,7 @@ use app\core\Controller;
 class FooterController extends Controller {
 
   public function index() {
-    $this->data['view'] = $this->getPartialTemplate('footer');
+    $this->setView('partials/', 'footer');
     return $this;
   }
 

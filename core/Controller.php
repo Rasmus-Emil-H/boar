@@ -99,7 +99,7 @@ class Controller {
             Application::$app->controller->setData([strtolower($controller) => $static]);
           }
         } catch (\Throwable $applicationError) {
-          $this->setController(new \app\controllers\ErrorController($applicationError)); 
+          Application::$app->setController(new \app\controllers\ErrorController($applicationError)); 
         }
     }
 

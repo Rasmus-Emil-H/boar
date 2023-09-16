@@ -8,12 +8,7 @@ use app\core\Application;
 require_once dirname(__DIR__) . '/vendor/autoload.php';
 define('PASSWORD_PASSWORD_DEFAULT', 'qwd');
 
-function dd($input) {
-    echo '<pre>';
-    var_dump($input);
-    echo '</pre>';
-    exit;
-}
+require_once 'yard.php';
 
 try {
     $app = new Application(applicationIsMigrating: false);

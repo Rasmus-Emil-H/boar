@@ -97,7 +97,7 @@ class Controller {
             $static = new $cController();
             $static->{$method}();
             $static->execChildData();
-            $this->setData([$static]);
+            $this->setData([strtolower($controller) => $static]);
         }
     }
 

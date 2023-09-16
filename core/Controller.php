@@ -10,7 +10,6 @@ namespace app\core;
 
 use \app\core\middlewares\Middleware;
 use \app\core\exceptions\NotFoundException;
-use \app\controllers\ErrorController;
 
 class Controller {
 
@@ -90,18 +89,14 @@ class Controller {
     */
 
     public function setChildData(array $childControllers): void {
-        try {
-          foreach ( $childControllers as $childController ) {
-            [$controller, $method] = preg_match('/:/', $childController) ? explode(':', $childController) : [$childController, self::DEFAULT_METHOD];
-            $cController = '\\app\controllers\\'.$controller.'Controller';
-            $static = new $cController();
-            $static->{$method}();
-            $static->execChildData();
-            Application::$app->controller->setData([strtolower($controller) => $static]);
-          }
-        } catch (\Throwable $applicationError) {
-          Application::$app->setController(new ErrorController($applicationError)); 
-        }
+      foreach ( $childControllers as $childController ) {
+        [$controller, $method] = preg_match('/:/', $childController) ? explode(':', $childController) : [$childController, self::DEFAULT_METHOD];
+        $cController = '\\app\controllers\\'.$controller.'Controller';
+        $static = new $cController();
+        $static->{$method}();
+        $static->execChildData();
+        Application::$app->controller->setData([strtolower($controller) => $static]);
+      }
     }
 
     public function getView() {

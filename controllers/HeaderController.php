@@ -15,7 +15,7 @@ class HeaderController extends Controller {
 
     public function index() {
       $this->setView('partials/', 'header');
-      $this->setChildren(['DOMNode:navbar']);
+      $this->setChildren(['domnode' => 'DOMNode:navbar']);
       return $this;
     }
 

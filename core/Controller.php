@@ -55,9 +55,9 @@ class Controller {
      * @return void
     */
 
-    public function setData(array|object $data): void {
-      $data = array_merge($this->data, $data);
-      $this->data = $data;
+    public function setData($data): void {
+      $merged = array_merge($this->getData(), $data);
+      $this->data = $merged;
     }
 
     /**

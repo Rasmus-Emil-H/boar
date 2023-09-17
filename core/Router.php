@@ -69,12 +69,13 @@ class Router {
         $this->checkMethod();
         $this->runMiddlewares();
         $this->setTemplateControllers();
+
         Application::$app->controller->{$this->method}();
         Application::$app->controller->execChildData();
         extract(Application::$app->controller->getData(), EXTR_SKIP);
-        require_once Application::$app->controller->getData()['header']->getView();
+        require_once Application::$app->controller->getData()['header'];
         require_once Application::$app->controller->getView();    
-        require_once Application::$app->controller->getData()['footer']->getView();
+        require_once Application::$app->controller->getData()['footer'];
     }
 
 }

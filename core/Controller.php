@@ -89,13 +89,13 @@ class Controller {
     */
 
     public function setChildData(array $childControllers): void {
-      foreach ( $childControllers as $childController ) {
+      foreach ( $childControllers as $childKey => $childController ) {
         [$controller, $method] = preg_match('/:/', $childController) ? explode(':', $childController) : [$childController, self::DEFAULT_METHOD];
         $cController = '\\app\controllers\\'.$controller.'Controller';
         $static = new $cController();
         $static->{$method}();
+        Application::$app->controller->setData($static->getData());
         $static->execChildData();
-        Application::$app->controller->setData([strtolower($controller) => $static]);
       }
     }
 

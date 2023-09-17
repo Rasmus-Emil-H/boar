@@ -15,7 +15,7 @@ class FooterController extends Controller {
 
   public function index() {
     $this->setView('partials/', 'footer');
-    return $this;
+    $this->setData(['footer' => $this->getView()]);
   }
 
 }

@@ -8,3 +8,10 @@ function dd($input) {
   echo '</pre>';
   exit;
 }
+
+function d($input) {
+  echo '<pre>';
+  var_dump($input);
+  echo '</pre>';
+  echo '<hr />';
+}

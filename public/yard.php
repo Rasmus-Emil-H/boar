@@ -3,15 +3,15 @@
 define('PASSWORD_PASSWORD_DEFAULT', 'qwd');
 
 function dd($input) {
-  echo '<pre>';
+  echo '<pre> DEBUGGING';
   var_dump($input);
-  echo '</pre>';
+  echo ' END OF DEBUGGING </pre>';
   exit;
 }
 
 function d($input) {
-  echo '<pre>';
+  echo '<pre> DEBUGGING ';
   var_dump($input);
-  echo '</pre>';
+  echo ' END OF DEBUGGING </pre>';
   echo '<hr />';
 }

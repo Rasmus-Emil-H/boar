@@ -38,6 +38,9 @@ class Router {
         if (!class_exists($controller)) $controller = '\\app\controllers\\AuthController';
         $currentController = new $controller();
         Application::$app->setController($currentController);
+        $method = $this->queryPattern[1] ?? self::INDEX_METHOD;
+        if (!method_exists(Application::$app->controller, $method)) throw new NotFoundException();
+        $this->method = $method;
     }
 
     public function getDefaultRoute() {
@@ -49,12 +52,6 @@ class Router {
         exit;
     }
 
-    protected function checkMethod() {
-        $method = $this->queryPattern[1] ?? self::INDEX_METHOD;
-        if (!method_exists(Application::$app->controller, $method)) throw new NotFoundException();
-        $this->method = $method;
-    }
-
     protected function runMiddlewares() {
         foreach (Application::$app->controller->getMiddlewares() as $middleware) $middleware->execute();
     }
@@ -64,18 +61,24 @@ class Router {
       Application::$app->controller->setChildren(['Header', 'Footer']);
     }
 
-    public function resolve() {
-        $this->checkController();
-        $this->checkMethod();
-        $this->runMiddlewares();
-        $this->setTemplateControllers();
-
+    protected function runController() {
         Application::$app->controller->{$this->method}();
         Application::$app->controller->execChildData();
+    }
+
+    protected function hydrateDOM() {
         extract(Application::$app->controller->getData(), EXTR_SKIP);
         require_once Application::$app->controller->getData()['header'];
         require_once Application::$app->controller->getView();    
         require_once Application::$app->controller->getData()['footer'];
+    }
+
+    public function resolve() {
+        $this->checkController();
+        $this->runMiddlewares();
+        $this->setTemplateControllers();
+        $this->runController();
+        $this->hydrateDOM();
     }
 
 }

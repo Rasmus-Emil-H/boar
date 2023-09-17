@@ -94,7 +94,6 @@ class Controller {
         $cController = '\\app\controllers\\'.$controller.'Controller';
         $static = new $cController();
         $static->{$method}();
-        d($static);
         Application::$app->controller->setData($static->getData());
         $static->execChildData();
       }

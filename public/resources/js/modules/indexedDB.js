@@ -28,16 +28,16 @@ const DatabaseManager = {
     create(objectStoreName, data) {
         return new Promise((resolve, reject) => {
             if (!this.db) {
-                reject('Database not connected');
+                reject("Database not connected");
                 return;
             }
 
-            const transaction = this.db.transaction(objectStoreName, 'readwrite');
+            const transaction = this.db.transaction(objectStoreName, "readwrite");
             const objectStore = transaction.objectStore(objectStoreName);
             const request = objectStore.add(data);
 
             request.onsuccess = () => {
-                resolve('Record added successfully');
+                resolve("Record added successfully");
             };
 
             request.onerror = (event) => {
@@ -48,11 +48,11 @@ const DatabaseManager = {
     read(objectStoreName, key) {
         return new Promise((resolve, reject) => {
             if (!this.db) {
-                reject('Database not connected');
+                reject("Database not connected");
                 return;
             }
 
-            const transaction = this.db.transaction(objectStoreName, 'readonly');
+            const transaction = this.db.transaction(objectStoreName, "readonly");
             const objectStore = transaction.objectStore(objectStoreName);
             const request = objectStore.get(key);
 
@@ -73,16 +73,16 @@ const DatabaseManager = {
     update(objectStoreName, key, newData) {
         return new Promise((resolve, reject) => {
             if (!this.db) {
-                reject('Database not connected');
+                reject("Database not connected");
                 return;
             }
 
-            const transaction = this.db.transaction(objectStoreName, 'readwrite');
+            const transaction = this.db.transaction(objectStoreName, "readwrite");
             const objectStore = transaction.objectStore(objectStoreName);
             const request = objectStore.put(newData, key);
 
             request.onsuccess = () => {
-                resolve('Record updated successfully');
+                resolve("Record updated successfully");
             };
 
             request.onerror = (event) => {
@@ -93,16 +93,16 @@ const DatabaseManager = {
     delete(objectStoreName, key) {
         return new Promise((resolve, reject) => {
             if (!this.db) {
-                reject('Database not connected');
+                reject("Database not connected");
                 return;
             }
 
-            const transaction = this.db.transaction(objectStoreName, 'readwrite');
+            const transaction = this.db.transaction(objectStoreName, "readwrite");
             const objectStore = transaction.objectStore(objectStoreName);
             const request = objectStore.delete(key);
 
             request.onsuccess = () => {
-                resolve('Record deleted successfully');
+                resolve("Record deleted successfully");
             };
 
             request.onerror = (event) => {
@@ -112,33 +112,32 @@ const DatabaseManager = {
     },
 };
 
+export default DatabaseManager;
+
 /**
- * Example below if you don't wanna have to think 
+ * Example below if you don"t wanna have to think 
  * 
 */
 
-DatabaseManager.open('myDatabase', 1, (db) => {})
-    .then(() => {
-        console.log('Connected to the database');
-        const data = {id: 1, name: 'Boar'};
-        return DatabaseManager.create('myObjectStore', data);
+/*
+
+DatabaseManager.open("BoarIndexedDB", 1, function(db) {})
+    .then(function() {
+        const data = {id: 1, name: "Boar"};
+        return DatabaseManager.create("ApplicationStore", data);
     })
-    .then((result) => {
+    .then(function(result) {
         console.log(result);
-        return DatabaseManager.read('myObjectStore', 1);
+        return DatabaseManager.read("ApplicationStore", 1);
     })
-    .then((data) => {
-        console.log('Read data:', data);
-        const newData = {id: 1, name: 'Updated Boar'};
-        return DatabaseManager.update('myObjectStore', 1, newData);
+    .then(function(data) {
+        const newData = {id: 1, name: "Updated Boar"};
+        return DatabaseManager.update("ApplicationStore", 1, newData);
     })
-    .then((result) => {
-        console.log(result);
-        return DatabaseManager.delete('myObjectStore', 1);
+    .then(function(result) {
+        return DatabaseManager.delete("ApplicationStore", 1);
     })
-    .then((result) => {
-        console.log(result);
-    })
-    .catch((error) => {
-        console.error(error);
+    .catch(function(error) {
     });
+
+*/

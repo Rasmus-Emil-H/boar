@@ -1,6 +1,5 @@
 const DatabaseManager = {
     db: null,
-
     open(databaseName, version, upgradeCallback) {
         return new Promise((resolve, reject) => {
             const request = window.indexedDB.open(databaseName, version);
@@ -23,11 +22,9 @@ const DatabaseManager = {
             };
         });
     },
-
     isConnected() {
         return this.db !== null;
     },
-
     create(objectStoreName, data) {
         return new Promise((resolve, reject) => {
             if (!this.db) {
@@ -48,7 +45,6 @@ const DatabaseManager = {
             };
         });
     },
-
     read(objectStoreName, key) {
         return new Promise((resolve, reject) => {
             if (!this.db) {
@@ -74,7 +70,6 @@ const DatabaseManager = {
             };
         });
     },
-
     update(objectStoreName, key, newData) {
         return new Promise((resolve, reject) => {
             if (!this.db) {
@@ -95,7 +90,6 @@ const DatabaseManager = {
             };
         });
     },
-
     delete(objectStoreName, key) {
         return new Promise((resolve, reject) => {
             if (!this.db) {
@@ -126,10 +120,7 @@ const DatabaseManager = {
 DatabaseManager.open('myDatabase', 1, (db) => {})
     .then(() => {
         console.log('Connected to the database');
-        const data = {
-            id: 1,
-            name: 'John'
-        };
+        const data = {id: 1, name: 'Boar'};
         return DatabaseManager.create('myObjectStore', data);
     })
     .then((result) => {
@@ -138,10 +129,7 @@ DatabaseManager.open('myDatabase', 1, (db) => {})
     })
     .then((data) => {
         console.log('Read data:', data);
-        const newData = {
-            id: 1,
-            name: 'Updated John'
-        };
+        const newData = {id: 1, name: 'Updated Boar'};
         return DatabaseManager.update('myObjectStore', 1, newData);
     })
     .then((result) => {

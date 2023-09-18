@@ -17,11 +17,8 @@ use app\core\middlewares\AuthMiddleware;
 
 class HomeController extends Controller {
 
-    public function __construct() { 
+  public function index() {
+    $this->setView('', 'home');
+  }
     
-    }
-
-    public function index() {
-      $this->setView('', 'home');
-    }
 }

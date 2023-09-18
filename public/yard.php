@@ -1,9 +1,9 @@
 <?php
 
-function displayDD($input): void {
-  echo '<pre class="debug"><h2 class="text-center">DEBUGGING</h2> ';
+function displayDD($input, $title = null): void {
+  echo '<pre class="debug"><h2 class="text-center">'.($title ?? 'Debugging').'</h2> ';
   var_dump($input);
-  echo ' <h2 class="text-center">END OF DEBUGGING</h2> </pre>';
+  echo ' <h2 class="text-center">END OF '.($title ?? 'Debugging').'</h2> </pre>';
 }
 
 function dd($input) {

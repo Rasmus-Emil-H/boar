@@ -1,10 +1,10 @@
 <?php
 
-/*******************************
+/**
  * Bootstrap application 
  * AUTHOR: RE_WEB
  * @package app\core\application
-*******************************/
+*/
 
 namespace app\core;
 
@@ -82,12 +82,8 @@ class Application {
         if ( $this->session->get('language') === '' ) $this->session->set('language', 'Danish');
     }
 
-    public function checkUserBasedOnSession(): void {
-        $this->session->get('user') ? null : $this->setApplicationUser();
-    }
-
-    public function setApplicationUser(): void {
-        
+    public function checkUserBasedOnSession(): bool {
+        return $this->session->get('user');
     }
 
     /**
@@ -118,8 +114,8 @@ class Application {
             throw new \Exception('Invalid status code. Must be int, however ' . gettype($code) . ' is provided.');
     }
 
-    public function isDevSite(): bool {
-        return in_array($_SERVER['REMOTE_ADDR'], self::$app->config->get('env')->developmentArrayIPs) || $this->env->get('isDev') === 'true';
+    public static function isDevSite(): bool {
+        return in_array($_SERVER['REMOTE_ADDR'], self::$app->config->get('env')->developmentArrayIPs) || self::$app->env->get('isDev') === 'true';
     }
 
     public function getController(): Controller {
@@ -128,19 +124,6 @@ class Application {
 
     public function setController(Controller $controller): void {
         $this->controller = $controller;
-    }
-
-    /**
-     * @param mixed $data
-     * Die and dump your data
-     * @return void
-    */
-
-    public function dd(mixed $data): void {
-        echo '<pre>';
-            var_dump($target);
-        echo '</pre>';
-        exit;
     }
 
     public function isCLI(): bool {

@@ -57,7 +57,7 @@ class Router {
     }
 
     protected function setTemplateControllers() {
-      if(php_sapi_name() === 'cli') return;
+      if(Application::isDevSite()) return;
       Application::$app->controller->setChildren(['Header', 'Footer']);
     }
 

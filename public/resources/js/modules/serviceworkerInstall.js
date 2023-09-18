@@ -73,3 +73,7 @@ self.addEventListener("install", function(event) {
 self.addEventListener("fetch", function(event) {
     event.respondWith(cacheFirst({request: event.request, preloadResponsePromise: event.preloadResponse, fallbackUrl: "/favicon.ico"}));
 });
+
+self.addEventListener("message", function(event) {
+    console.log("Message received ", event);
+});  

@@ -17,7 +17,16 @@ export default {
                 console.error(`Registration failed with ${error}`);
               }
             }
-          };
-          registerServiceWorker();          
+        };
+        registerServiceWorker();          
+    },
+    getCurrentCaches: function() {
+        caches.open("v1").then(function(cache) {
+            cache.keys().then(function(keys) {
+                keys.forEach(function(request) {
+                    console.log(request.url);
+                });
+            });
+        });
     }
 }

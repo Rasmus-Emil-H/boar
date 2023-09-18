@@ -57,7 +57,7 @@ class Router {
     }
 
     protected function setTemplateControllers() {
-      if(Application::isDevSite()) return;
+      if(Application::isCLI()) return;
       Application::$app->controller->setChildren(['Header', 'Footer']);
     }
 

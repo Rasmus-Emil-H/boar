@@ -79,7 +79,7 @@ class Application {
     }
 
     public function checkLanguage() {
-        if ( $this->session->get('language') === '' ) $this->session->set('language', 'Danish');
+        if ( !$this->session->get('language') ) $this->session->set('language', 'Danish');
     }
 
     public function checkUserBasedOnSession(): bool {
@@ -96,7 +96,6 @@ class Application {
         try {
             $this->router->resolve();
         } catch (\Throwable $applicationError) {
-            var_dump($applicationError);
             $this->setController(new \app\controllers\ErrorController($applicationError));
         }
     }
@@ -114,10 +113,6 @@ class Application {
             throw new \Exception('Invalid status code. Must be int, however ' . gettype($code) . ' is provided.');
     }
 
-    public static function isDevSite(): bool {
-        return in_array($_SERVER['REMOTE_ADDR'], self::$app->config->get('env')->developmentArrayIPs) || self::$app->env->get('isDev') === 'true';
-    }
-
     public function getController(): Controller {
         return $this->controller;
     }
@@ -126,7 +121,15 @@ class Application {
         $this->controller = $controller;
     }
 
-    public function isCLI(): bool {
+    public function logout(): void {
+        $this->session->unset('user');
+    }
+
+    /**
+     * STATIC AREA
+     */
+
+    public static function isCLI(): bool {
         return php_sapi_name() === 'cli';     
     }
 
@@ -134,8 +137,8 @@ class Application {
         return is_null(Application::$app->session->get('user')) || self::$app->session->get('user') === '';
     }
 
-    public function logout(): void {
-        $this->session->unset('user');
+    public static function isDevSite(): bool {
+        return in_array($_SERVER['REMOTE_ADDR'], self::$app->config->get('env')->developmentArrayIPs) || self::$app->env->get('isDev') === 'true';
     }
     
 }

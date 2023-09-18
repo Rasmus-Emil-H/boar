@@ -280,7 +280,8 @@ class Connection {
     }
 
     public function createMigrationsTable() {
-        $this->pdo->exec($this->sqlMigrationTable);
+        $this->rawSQL($this->sqlMigrationTable);
+        $this->execute();
     }
 
     /**

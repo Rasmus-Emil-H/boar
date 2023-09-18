@@ -28,8 +28,6 @@ class EntityMetaData extends Entity {
 
     protected function getTableName(): string {
         return 'Meta';
-    }
-
-    
+    } 
 
 }

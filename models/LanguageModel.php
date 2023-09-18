@@ -26,7 +26,7 @@ class LanguageModel extends Entity {
 	*/
 	
 	public function getTableName(): string {
-		return 'languages';
+		return 'Languages';
 	}
 	
 	/*

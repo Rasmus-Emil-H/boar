@@ -1,6 +1,6 @@
 <?php
 
-/*******************************
+/**
  * Authentication mechanism for whatever you need
  * Use this object to authenticate with the application, external api, ect
  * AUTHOR: RE_WEB

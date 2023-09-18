@@ -1,3 +1,19 @@
+AuthType Basic
+AuthName "DMS"
+AuthUserFile /usr/home/appkat/sync/.htpasswd
+# Require valid-user
+
+Header add x-skip-access-control-check "true"
+
+Options +FollowSymlinks
+RewriteEngine On
+
+# RewriteCond %{HTTPS} off
+# RewriteRule .* https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# RewriteCond %{HTTP_HOST} ^www [NC]
+# RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+
 <IfModule mod_rewrite.c>
     RewriteEngine On
 
@@ -57,3 +73,5 @@
 	# Remove browser bugs (only needed for really old browsers)
 	Header append Vary User-Agent
 </ifmodule>
+
+FcgidWrapper "/home/httpd/cgi-bin/php81-fcgi-starter.fcgi" .php

@@ -1,11 +1,9 @@
 export default {
     init: function() {
-        const registerServiceWorker = async () => {
+        const registerServiceWorker = async function() {
             if ("serviceWorker" in navigator) {
                 try {
-                    const registration = await navigator.serviceWorker.register("/resources/js/modules/serviceWorkerInstall.js", {
-                        scope: "/resources/js/modules/",
-                    });
+                    const registration = await navigator.serviceWorker.register("/resources/js/modules/serviceWorkerInstall.js", {scope: "/resources/js/modules/"});
                     if (registration.installing) {
                         console.log("Service worker installing");
                     } else if (registration.waiting) {

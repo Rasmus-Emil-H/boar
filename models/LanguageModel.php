@@ -13,8 +13,8 @@ use \app\core\Application;
 
 class LanguageModel extends Entity {
 
-	const keyID     = 'languageID';
-	const tableName = 'languages';
+	const keyID     = 'LanguageID';
+	const tableName = 'Languages';
 
 	public function getAttributes(): array {
 		return ['language'];
@@ -35,7 +35,7 @@ class LanguageModel extends Entity {
 	*/
 	
 	public function getKeyField(): string {
-		return 'languageID';
+		return 'LanguageID';
 	}
 
 	public function getForeignKeys(): array {

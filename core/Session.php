@@ -15,7 +15,6 @@ class Session {
     protected const FLASH_ARRAY = 'FLASH_MESSAGES';
 
     public function __construct() {
-        session_start();
         $this->checkFlashMessages();
     }
 

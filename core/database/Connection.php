@@ -260,7 +260,7 @@ class Connection {
 
     protected function saveMigrations(array $migrations) {
         $migrations = implode(',', array_map(fn($m) => "('$m')", $migrations));
-        $stmt = $this->pdo->prepare("INSERT INTO migrations (migration) VALUES $migrations");
+        $stmt = $this->pdo->prepare("INSERT INTO Migrations (migration) VALUES $migrations");
         $stmt->execute();
     }
 
@@ -274,7 +274,7 @@ class Connection {
     }
 
     public function getAppliedMigrations() {
-        $statement = $this->pdo->prepare("SELECT migration FROM migrations");
+        $statement = $this->pdo->prepare("SELECT migration FROM Migrations");
         $statement->execute();
         return $statement->fetchAll(\PDO::FETCH_COLUMN);
     }

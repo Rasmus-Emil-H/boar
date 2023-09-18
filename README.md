@@ -48,3 +48,12 @@
 #### Handle Database changes through migrations
 
 ###### @migrations folder
+
+### Service workers
+#### A service worker will automatically be avaliable for you, once the application has been initially migrated
+#### In the console the worker can be found by boar.serviceWorker
+
+### IndexedDB
+#### A connection to Indexed DB will automatically be avaliable for you, once the application has been initially migrated
+#### In the console the worker can be found by boar.indexedDB
+#### Do not use this for sensitive data

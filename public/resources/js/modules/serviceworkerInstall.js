@@ -57,7 +57,6 @@ const deleteOldCaches = async function() {
     await Promise.all(cachesToDelete.map(deleteCache));
 };
 
-
 self.addEventListener("activate", function(event) {
     event.waitUntil(deleteOldCaches());
     event.waitUntil(enableNavigationPreload());

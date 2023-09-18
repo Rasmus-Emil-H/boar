@@ -1,14 +1,16 @@
-const cacheResponseName = "v1";
-const networkErrorMessage = "Network error happened";
-const responseError = 408;
+const serviceworkerConfigs = {
+    cacheResponseName: "v1",
+    networkErrorMessage: "Network error happened",
+    responseError: 408
+};
 
 const addResourcesToCache = async function(resources) {
-    const cache = await caches.open(cacheResponseName);
+    const cache = await caches.open(serviceworkerConfigs.cacheResponseName);
     await cache.addAll(resources);
 };
 
 const putInCache = async function(request, response) {
-    const cache = await caches.open(cacheResponseName);
+    const cache = await caches.open(serviceworkerConfigs.cacheResponseName);
     await cache.put(request, response);
 };
 
@@ -29,8 +31,8 @@ const cacheFirst = async function({request, preloadResponsePromise, fallbackUrl}
     } catch (error) {
         const fallbackResponse = await caches.match(fallbackUrl);
         if (fallbackResponse) return fallbackResponse;
-        return new Response(networkErrorMessage, {
-            status: responseError,
+        return new Response(serviceworkerConfigs.networkErrorMessage, {
+            status: serviceworkerConfigs.responseError,
             headers: {
                 "Content-Type": "text/plain"
             },
@@ -49,7 +51,7 @@ const deleteCache = async function(key) {
 };
 
 const deleteOldCaches = async function() {
-    const cacheKeepList = [cacheResponseName];
+    const cacheKeepList = [serviceworkerConfigs.cacheResponseName];
     const keyList = await caches.keys();
     const cachesToDelete = keyList.filter((key) => !cacheKeepList.includes(key));
     await Promise.all(cachesToDelete.map(deleteCache));

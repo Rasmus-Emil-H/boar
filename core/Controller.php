@@ -104,7 +104,6 @@ class Controller {
         return $this->view ?? self::INVALID_VIEW;
     }
 
-
     protected function setView(string $dir, string $view) {
       $this->view = $this->getTemplatePath($dir, $view);
     }

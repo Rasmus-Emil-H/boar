@@ -32,7 +32,7 @@ export default {
             }
         });
     },
-    delete: async function (id) {
+    delete: async function(id) {
         return new Promise((resolve, reject) => {
 
             let request = indexedDBConfigs.testConnection();
@@ -56,7 +56,7 @@ export default {
 
         });
     },
-    get: async function (id) {
+    get: async function(id) {
         return new Promise((resolve, reject) => {
             
             let request = indexedDBConfigs.testConnection();

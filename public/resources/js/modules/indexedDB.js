@@ -1,24 +1,21 @@
 const DatabaseManager = {
     db: null,
     open(databaseName, version, upgradeCallback) {
-        return new Promise((resolve, reject) => {
+        return new Promise(function(resolve, reject) {
             const request = window.indexedDB.open(databaseName, version);
 
-            request.onerror = (event) => {
+            request.onerror = function(event) {
                 reject(`Database error: ${event.target.error}`);
             };
 
-            request.onsuccess = (event) => {
+            request.onsuccess = function(event) {
                 this.db = event.target.result;
                 resolve(this.db);
             };
 
-            request.onupgradeneeded = (event) => {
+            request.onupgradeneeded = function(event) {
                 const db = event.target.result;
-
-                if (upgradeCallback) {
-                    upgradeCallback(db);
-                }
+                if (upgradeCallback) upgradeCallback(db);
             };
         });
     },
@@ -26,7 +23,7 @@ const DatabaseManager = {
         return this.db !== null;
     },
     create(objectStoreName, data) {
-        return new Promise((resolve, reject) => {
+        return new Promise(function(resolve, reject) {
             if (!this.db) {
                 reject("Database not connected");
                 return;
@@ -36,17 +33,17 @@ const DatabaseManager = {
             const objectStore = transaction.objectStore(objectStoreName);
             const request = objectStore.add(data);
 
-            request.onsuccess = () => {
+            request.onsuccess = function() {
                 resolve("Record added successfully");
             };
 
-            request.onerror = (event) => {
+            request.onerror = function(event) {
                 reject(`Error adding record: ${event.target.error}`);
             };
         });
     },
     read(objectStoreName, key) {
-        return new Promise((resolve, reject) => {
+        return new Promise(function(resolve, reject) {
             if (!this.db) {
                 reject("Database not connected");
                 return;
@@ -56,22 +53,18 @@ const DatabaseManager = {
             const objectStore = transaction.objectStore(objectStoreName);
             const request = objectStore.get(key);
 
-            request.onsuccess = (event) => {
+            request.onsuccess = function(event) {
                 const result = event.target.result;
-                if (result) {
-                    resolve(result);
-                } else {
-                    reject(`Record not found for key: ${key}`);
-                }
+                result ? resolve(result) : reject(`Record not found for key: ${key}`);
             };
 
-            request.onerror = (event) => {
+            request.onerror = function(event) {
                 reject(`Error reading record: ${event.target.error}`);
             };
         });
     },
     update(objectStoreName, key, newData) {
-        return new Promise((resolve, reject) => {
+        return new Promise(function(resolve, reject) {
             if (!this.db) {
                 reject("Database not connected");
                 return;
@@ -81,17 +74,17 @@ const DatabaseManager = {
             const objectStore = transaction.objectStore(objectStoreName);
             const request = objectStore.put(newData, key);
 
-            request.onsuccess = () => {
+            request.onsuccess = function() {
                 resolve("Record updated successfully");
             };
 
-            request.onerror = (event) => {
+            request.onerror = function(event) {
                 reject(`Error updating record: ${event.target.error}`);
             };
         });
     },
     delete(objectStoreName, key) {
-        return new Promise((resolve, reject) => {
+        return new Promise(function(resolve, reject) {
             if (!this.db) {
                 reject("Database not connected");
                 return;
@@ -101,11 +94,11 @@ const DatabaseManager = {
             const objectStore = transaction.objectStore(objectStoreName);
             const request = objectStore.delete(key);
 
-            request.onsuccess = () => {
+            request.onsuccess = function() {
                 resolve("Record deleted successfully");
             };
 
-            request.onerror = (event) => {
+            request.onerror = function(event) {
                 reject(`Error deleting record: ${event.target.error}`);
             };
         });

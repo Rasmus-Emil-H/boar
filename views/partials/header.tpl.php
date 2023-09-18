@@ -14,4 +14,4 @@
   </head>
 <body>
   
-<?php require_once $domnode->getView(); ?>
+<?php require_once $navbar; ?>

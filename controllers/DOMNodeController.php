@@ -15,7 +15,7 @@ class DOMNodeController extends Controller {
 
     public function navbar() {
       $this->setView('partials/', 'navbar');
-      $this->setData(['q' => 'qq']);
+      $this->setData(['navbar' => $this->getView()]);
     }
 
 }

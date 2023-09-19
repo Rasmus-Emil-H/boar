@@ -9,8 +9,10 @@ class ErrorController extends Controller {
 
     public function __construct(\Throwable $e) {
         Application::$app->response->setStatusCode($e->getCode());
+        $this->setView('', 'error');
         $this->setData(['exception' => $e]);
-        return $this->render('error');
+        extract($this->getData());
+        require_once $this->getView();
     }
 
 }

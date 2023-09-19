@@ -1,20 +1,16 @@
-<div class="fullscreen center">
-  <div class="screen fade-in">
-    <div class="screen__content">
-        <form class="login fullscreen center flex-row" method="POST" id="login-form">
-          <div class="flex-row">
-            <div class="login__field">
-                <i class="login__icon fas fa-user"></i>
-                <input type="email" class="login__input" required name="email" placeholder="Email" />
-                <input type="password" class="login__input" required name="password" placeholder="Password" />
-            </div>
-            <button class="button login__submit" id="submit">Login</button>
-          </div>
-          <?= (new app\core\tokens\CsrfToken())->insertHiddenToken(); ?>
-        </form>
-    </div>
-    <div class="screen__background">
-        <span class="screen__background__shape screen__background__shape1"></span>
-    </div>
+<div>
+  <div class="background">
+    <div class="shape"></div>
+    <div class="shape"></div>
   </div>
+  <form class="login-form center flex-column">
+    <h1 class="header mb-4">B🐗AR</h1>
+    <div class="form-group w-100 mb-3">
+      <input type="email" required name="email" class="form-control" placeholder="Email" aria-label="Username" aria-describedby="basic-addon1">
+    </div>
+    <div class="form-group w-100 mb-3">
+      <input type="text" required name="pw" class="form-control" placeholder="Password" aria-label="Username" aria-describedby="basic-addon1">
+    </div>
+    <button type="submit" class="btn btn-primary btn-lg mt-2 w-100">Log In</button>
+  </form>
 </div>

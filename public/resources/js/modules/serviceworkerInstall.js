@@ -4,7 +4,7 @@ const serviceworkerConfigs = {
     responseError: 408
 };
 
-const serviceWorkerManager = {
+export const serviceWorkerManager = {
     async addResourcesToCache(resources) {
         const cache = await caches.open(serviceworkerConfigs.cacheResponseName);
         await cache.addAll(resources);

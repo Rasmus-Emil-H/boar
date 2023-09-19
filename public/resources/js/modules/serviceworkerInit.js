@@ -1,3 +1,5 @@
+import {serviceWorkerManager} from "./serviceworkerInstall.js";
+
 export default {
     init: function() {
         const registerServiceWorker = async function() {
@@ -26,5 +28,6 @@ export default {
                 });
             });
         });
-    }
+    },
+    serviceWorkerManager
 }

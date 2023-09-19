@@ -4,7 +4,7 @@ const serviceworkerConfigs = {
     responseError: 408
 };
 
-export const serviceWorkerManager = {
+const serviceWorkerManager = {
     async addResourcesToCache(resources) {
         const cache = await caches.open(serviceworkerConfigs.cacheResponseName);
         await cache.addAll(resources);
@@ -63,6 +63,7 @@ self.addEventListener("install", function(event) {
     event.waitUntil(
         serviceWorkerManager.addResourcesToCache([
             "/favicon.ico",
+            "/images/logo.png"
         ]),
     );
 });
@@ -73,4 +74,6 @@ self.addEventListener("fetch", function(event) {
 
 self.addEventListener("message", function(event) {
     console.log("Message received ", event);
-});  
+});
+
+export default serviceWorkerManager;

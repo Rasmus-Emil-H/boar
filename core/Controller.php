@@ -19,6 +19,16 @@ class Controller {
     private const PARTIALS_TEXT = '/views/partials/';
     private const INVALID_VIEW = 'Invalid view';
 
+    public function setRequest(object $request) {
+      $this->request = $request;
+    }
+
+    protected object $request;
+
+    protected function getRequest() {
+      return $this->request;
+    }
+
     /**
      * @var string $currentAction
     */

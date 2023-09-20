@@ -50,6 +50,12 @@ class Request {
         return $this->method() === 'post';
     }
 
+    public function getCompleteRequestBody() {
+        $obj = ["files" => $_FILES, "server" => $_SERVER, "cookie" => $_COOKIE];
+        $obj[($this->isGet() ? 'get' : 'post')] = $this->getBody();
+        return (object)$obj;
+    }
+
     public function getBody(): array {
         $body = [];
 

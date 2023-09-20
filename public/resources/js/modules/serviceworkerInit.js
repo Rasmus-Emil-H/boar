@@ -1,4 +1,4 @@
-import serviceWorkerManager from "./serviceworkerInstall.js";
+let worker = {};
 
 export default {
     init: function() {
@@ -6,13 +6,7 @@ export default {
             if ("serviceWorker" in navigator) {
                 try {
                     const registration = await navigator.serviceWorker.register("/resources/js/modules/serviceworkerInstall.js", {scope: "/resources/js/modules/"});
-                    if (registration.installing) {
-                        console.log("Service worker installing");
-                    } else if (registration.waiting) {
-                        console.log("Service worker installed");
-                    } else if (registration.active) {
-                        console.log("Service worker active");
-                    }
+                    if (registration.active) worker = registration.active;
                 } catch (error) {
                     console.error(`Registration failed with ${error}`);
                 }
@@ -20,14 +14,14 @@ export default {
         };
         registerServiceWorker();
     },
-    getCurrentCaches: function() {
-        caches.open("v1").then(function(cache) {
-            cache.keys().then(function(keys) {
-                keys.forEach(function(request) {
-                    console.log(request.url);
-                });
-            });
-        });
+    triggerEvent: function(action, resource) {
+        worker.postMessage({action, resource});
     },
-    serviceWorkerManager
+    unset: function() {
+        navigator.serviceWorker.getRegistrations().then(function (registrations) {
+            for (let registration of registrations) {
+              registration.unregister();
+            }
+        });
+    }
 }

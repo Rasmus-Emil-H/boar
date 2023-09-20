@@ -1,5 +1,5 @@
 const serviceworkerConfigs = {
-    cacheResponseName: "v1",
+    cacheResponseName: "v2",
     networkErrorMessage: "Network error happened",
     responseError: 408
 };
@@ -32,16 +32,12 @@ const serviceWorkerManager = {
             if (fallbackResponse) return fallbackResponse;
             return new Response(serviceworkerConfigs.networkErrorMessage, {
                 status: serviceworkerConfigs.responseError,
-                headers: {
-                    "Content-Type": "text/plain"
-                },
+                headers: { "Content-Type": "text/plain" }
             });
         }
     },
     async enableNavigationPreload() {
-        if (self.registration.navigationPreload) {
-            await self.registration.navigationPreload.enable();
-        }
+        if (self.registration.navigationPreload) await self.registration.navigationPreload.enable();
     },
     async deleteCache(key) {
         await caches.delete(key);
@@ -50,7 +46,7 @@ const serviceWorkerManager = {
         const cacheKeepList = [serviceworkerConfigs.cacheResponseName];
         const keyList = await caches.keys();
         const cachesToDelete = keyList.filter((key) => !cacheKeepList.includes(key));
-        await Promise.all(cachesToDelete.map(deleteCache));
+        await Promise.all(cachesToDelete.map(serviceWorkerManager.deleteCache()));
     },
 };
 
@@ -63,7 +59,8 @@ self.addEventListener("install", function(event) {
     event.waitUntil(
         serviceWorkerManager.addResourcesToCache([
             "/favicon.ico",
-            "/images/logo.png"
+            "/resources/images/lost.png",
+            "/resources/images/lost.png"
         ]),
     );
 });
@@ -73,7 +70,5 @@ self.addEventListener("fetch", function(event) {
 });
 
 self.addEventListener("message", function(event) {
-    console.log("Message received ", event);
+    console.log(123);
 });
-
-export default serviceWorkerManager;

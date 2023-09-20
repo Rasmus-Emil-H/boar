@@ -51,9 +51,9 @@ const serviceWorkerManager = {
     async estimateStorageSpace() {
         if ('storage' in navigator && 'estimate' in navigator.storage) {
             navigator.storage.estimate().then(function (estimate) {
-                console.log('Quota: ' + estimate.quota); // Total storage space in bytes
-                console.log('Usage: ' + estimate.usage); // Used storage space in bytes
-                console.log('Remaining: ' + (estimate.quota - estimate.usage) + ' bytes'); // Remaining storage space in bytes
+                console.log('Quota: ' + estimate.quota);
+                console.log('Usage: ' + estimate.usage);
+                console.log('Remaining: ' + (estimate.quota - estimate.usage) + ' bytes');
             });
         } else {
             console.log('Storage Estimation API is not supported in this browser.');

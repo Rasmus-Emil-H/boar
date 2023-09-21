@@ -83,3 +83,11 @@ self.addEventListener("fetch", function(event) {
 self.addEventListener("message", function(event) {
     console.log(123);
 });
+
+self.addEventListener("offline", function(event) {
+    console.log("Service worker is offline");
+});
+  
+self.addEventListener("online", function(event) {
+    console.log("Service worker is online");
+});

@@ -7,21 +7,24 @@ export default {
                 try {
                     const registration = await navigator.serviceWorker.register("/resources/js/modules/serviceworkerInstall.js", {scope: "/resources/js/modules/"});
                     if (registration.active) worker = registration.active;
+                    if (registration.installing) console.log("Is installing service worker...");
                 } catch (error) {
-                    console.error(`Registration failed with ${error}`);
+                    console.error(`Service worker failed: ${error}`);
                 }
             }
         };
         registerServiceWorker();
     },
     triggerEvent: function(action, resource) {
-        worker.postMessage({action, resource});
+        if(typeof worker.postMessage === 'function') console.log(worker.postMessage({action, resource}));
     },
     unset: function() {
-        navigator.serviceWorker.getRegistrations().then(function (registrations) {
+        console.log("Unsetting SW");
+        navigator.serviceWorker.getRegistrations().then(function(registrations) {
             for (let registration of registrations) {
               registration.unregister();
             }
         });
+        console.log("Done unsetting SW");
     }
 }

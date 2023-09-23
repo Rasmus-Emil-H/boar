@@ -8,14 +8,11 @@ import utilities     from "./modules/utilities.js";
 import components    from "./modules/components.js";
 import http          from "./modules/http.js";
 import behavior      from "./modules/behaviour.js";
-import indexedDB     from "./modules/indexedDB.js";
+import geolocation   from "./modules/geolocation.js";
+import bluetooth     from "./modules/bluetooth.js";
 
 document.addEventListener("DOMContentLoaded", function() {
 
-  /**
-   * Register serviceworker
-   */
-  
   serviceWorker.init();
   
   window.boar = {
@@ -23,7 +20,8 @@ document.addEventListener("DOMContentLoaded", function() {
     components,
     http,
     serviceWorker,
-    indexedDB
+    geolocation,
+    bluetooth
   }
 
   /**
@@ -31,5 +29,6 @@ document.addEventListener("DOMContentLoaded", function() {
    */
 
   behavior.init();
+  geolocation.init();
 
 });

@@ -9,7 +9,14 @@ export default {
             const y = event.accelerationIncludingGravity.y;
             const z = event.accelerationIncludingGravity.z;
             const acceleration = event.acceleration;
-            const rotatoin = event.rotationRate;
+            const rotation = event.rotationRate;
+            console.log(`
+                x: ${x} -
+                y: ${y} -
+                z: ${z} -
+                acceleration: ${acceleration} -
+                rotation: ${rotation} -
+            `);
         });
     }
 }

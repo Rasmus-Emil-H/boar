@@ -69,6 +69,9 @@ self.addEventListener("activate", function(event) {
 self.addEventListener("install", function(event) {
     event.waitUntil(
         serviceWorkerManager.addResourcesToCache([
+            "/",
+            "/auth/login",
+            "/home",
             "/favicon.ico",
             "/resources/images/lost.png",
             "/resources/images/lost.png"

@@ -3,34 +3,39 @@
  * Split properly
  */
 
-import serviceWorker from "../../serviceworkerInit.js";
-import utilities     from "./modules/utilities.js";
-import components    from "./modules/components.js";
-import http          from "./modules/http.js";
-import behavior      from "./modules/behaviour.js";
-import geolocation   from "./modules/geolocation.js";
-import bluetooth     from "./modules/bluetooth.js";
+const modulesToImport = [
+  "../../serviceworkerInit.js",
+  "./modules/utilities.js",
+  "./modules/components.js",
+  "./modules/http.js",
+  "./modules/behaviour.js",
+  "./modules/geolocation.js",
+  "./modules/bluetooth.js"
+];
 
-document.addEventListener("DOMContentLoaded", function() {
 
-  serviceWorker.init();
+document.addEventListener("DOMContentLoaded", async function() {
+
+  window.boar = {};
   
-  window.boar = {
-    utilities,
-    components,
-    http,
-    serviceWorker,
-    geolocation,
-    bluetooth
+  for (const modulePath of modulesToImport) {
+    try {
+      const module = await import(modulePath);
+      const moduleName = modulePath.split('/').pop().replace('.js', '');
+      window.boar[moduleName] = module.default;
+    } catch (error) {
+      console.error(`Error importing module ${modulePath}:`, error);
+    }
   }
+
+  await window.boar.serviceworkerInit.init();
 
   /**
    * Init application requirements
    */
 
-  behavior.init();
-  geolocation.init();
-
-  window.boar.components.initToast((navigator.onLine ? 'online' : 'offline'), (navigator.onLine ? 'online' : 'danger'));
+  await window.boar.behaviour.init();
+  await window.boar.geolocation.init();
+  await window.boar.components.initToast((navigator.onLine ? 'online' : 'offline'), (navigator.onLine ? 'success' : 'danger'));
 
 });

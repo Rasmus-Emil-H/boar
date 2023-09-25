@@ -2,7 +2,7 @@ let worker = {};
 
 export default {
     init: function() {
-        navigator.serviceWorker.register('/resources/js/modules/serviceworkerInstall.js', {scope: '/'})
+        navigator.serviceWorker.register('/serviceworkerInstall.js', {scope: '/'})
             .then(function(registration) {
                 console.log('Service Worker registered with scope:', registration.scope);
             })

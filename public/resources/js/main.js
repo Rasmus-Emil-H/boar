@@ -3,7 +3,7 @@
  * Split properly
  */
 
-import serviceWorker from "./modules/serviceworkerInit.js";
+import serviceWorker from "../../serviceworkerInit.js";
 import utilities     from "./modules/utilities.js";
 import components    from "./modules/components.js";
 import http          from "./modules/http.js";
@@ -30,5 +30,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
   behavior.init();
   geolocation.init();
+
+  window.boar.components.initToast((navigator.onLine ? 'online' : 'offline'), (navigator.onLine ? 'online' : 'danger'));
 
 });

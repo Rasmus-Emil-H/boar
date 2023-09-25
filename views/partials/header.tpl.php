@@ -12,5 +12,6 @@
     <link rel="stylesheet" href="/resources/css/bootstrap.min.css">
     <link rel="stylesheet" href="/resources/css/main.css">
     <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <meta name="theme-color" content="#03045e"/>
   </head>
 <body>

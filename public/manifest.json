@@ -1,9 +1,28 @@
 {
-    "name": "Boar",
-    "description" : "Boar application",
-    "version": "1.0",
-    "manifest_version": 3,
-    "background": {
-      "service_worker": "serviceworkerInstall.js"
+  "name": "Boar",
+  "description" : "Boar applicaton",
+  "version": "1.0",
+  "manifest_version": 3,
+  "background": {
+    "service_worker": "serviceworkerInstall.js",
+    "color": "#f44336"
+  },
+  "start_url": "/auth/home",
+  "theme_color": "03045e",
+  "background_color": "03045e",
+  "icons": [
+    {
+      "src": "/resources/images/maskable_icon.png",
+      "sizes": " 512x512 192x192 64x64 32x32 24x24 16x16",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/resources/images/logo.png",
+      "sizes": " 512x512 192x192 64x64 32x32 24x24 16x16",
+      "type": "image/png",
+      "purpose": "any"
     }
-  }
+  ],
+  "display": "standalone"
+}

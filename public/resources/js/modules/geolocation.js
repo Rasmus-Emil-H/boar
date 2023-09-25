@@ -1,8 +1,8 @@
 export default {
     init: function() {
-        window.navigator.geolocation.getCurrentPosition(function(res) {
-            console.log(res);
-        });
+        // window.navigator.geolocation.getCurrentPosition(function(res) {
+        //     console.log(res);
+        // });
 
         window.addEventListener("devicemotion", function(event) {
             const x = event.accelerationIncludingGravity.x;

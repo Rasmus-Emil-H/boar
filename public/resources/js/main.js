@@ -36,6 +36,5 @@ document.addEventListener("DOMContentLoaded", async function() {
 
   await window.boar.behaviour.init();
   await window.boar.geolocation.init();
-  await window.boar.components.initToast((navigator.onLine ? 'online' : 'offline'), (navigator.onLine ? 'success' : 'danger'));
 
 });

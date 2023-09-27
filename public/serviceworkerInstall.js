@@ -1,4 +1,5 @@
 const cacheName = 'v2';
+const fileCache = 'v2files';
 
 self.addEventListener('install', e => {
   console.log('Service Worker: Installed');
@@ -30,4 +31,30 @@ self.addEventListener('fetch', e => {
       })
       .catch(err => caches.match(e.request).then(res => res))
   );
+});
+
+self.addEventListener('message', (event) => {
+  if (event.data.action === 'cache-page') {
+    const { url, content } = event.data;
+    event.waitUntil(
+        caches.open(cacheName).then((cache) => {
+            return fetch(url)
+                .then((response) => {
+                    const resClone = response.clone();
+                    caches.open(cacheName).then(cache => { cache.put(url.request, resClone); });
+                })
+                .catch((e) => {
+                    console.log(e);
+                });
+        })
+    );
+  } else if (event.data.action === 'cache-file') {
+    const { blob } = event.data;
+    event.waitUntil(
+      caches.open(fileCache).then((cache) => {
+        const key = `file-${Date.now()}`;
+        return cache.put(key, blob);
+      })
+    );
+  }
 });

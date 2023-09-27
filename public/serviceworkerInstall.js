@@ -49,9 +49,7 @@ self.addEventListener('fetch', e => {
 
 self.addEventListener('message', (event) => {
     if (event.data.action === actions.message.CACHE_PAGE) {
-        const {
-            url
-        } = event.data;
+        const { url } = event.data;
         event.waitUntil(
             caches.open(cacheName).then((cache) => {
                 return fetch(url)
@@ -67,9 +65,7 @@ self.addEventListener('message', (event) => {
             })
         );
     } else if (event.data.action === actions.message.CACHE_FILE) {
-        const {
-            file
-        } = event.data;
+        const { file } = event.data;
         event.waitUntil(
             caches.open(fileCache)
             .then((cache) => {

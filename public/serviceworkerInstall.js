@@ -116,19 +116,9 @@ self.addEventListener('message', (event) => {
 });
 
 self.addEventListener('online', event => {
-    caches.open(tempOfflineCache).then(cache => {
-        cache.keys().then(requests => {
-            requests.forEach(request => {
-                fetch(request).then(response => {
-                    cache.delete(request);
-                }).catch(error => {
-                    console.error('Error sending cached request:', error);
-                });
-            });
-        });
-    });
+  sendCachedPostRequests();
 });
 
 self.addEventListener('offline', event => {
-    console.log('Device is offline');
+  console.log('Device is offline');
 });

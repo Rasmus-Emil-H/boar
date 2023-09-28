@@ -44,7 +44,7 @@ self.addEventListener('fetch', e => {
 async function cachePostRequest(request) {
   const requestClone = request.clone();
   const body = await requestClone.text();
-  const cacheKey = 'post-requests-' + Date.now();
+  const cacheKey = `${requestClone.url}/${Date.now()}`;
   const cacheData = { request: request.clone(), body };
   const cache = await caches.open(postCache);
   await cache.put(cacheKey, new Response(JSON.stringify(cacheData)));
@@ -64,7 +64,7 @@ async function sendCachedPostRequests() {
       if (cachedResponse) {
           const cacheData = await cachedResponse.json();
           try {
-              const response = await fetch(cacheData.request, { method: 'POST', body: cacheData.body,});
+              const response = await fetch(cacheKey.url, { method: 'POST', body: cacheData.body});
               if (response.ok) await cache.delete(cacheKey);
           } catch (error) {
               console.error('Error sending cached POST request:', error);

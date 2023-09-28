@@ -2,6 +2,7 @@ const cacheName = 'v2';
 const postCache = 'post-requests-cache';
 const fileCache = 'file-cache';
 const tempOfflineCache = 'offline-cache';
+const login = '/auth/login';
 
 const actions = {
     message: {
@@ -27,7 +28,7 @@ self.addEventListener('activate', e => {
 });
 
 self.addEventListener('fetch', e => {
-    if ( e.request.url === '/auth/login/' ) return;
+    if ( e.request.url === login ) return;
     if(e.request.method === 'POST') e.respondWith(cachePostRequest(e.request));
     else {
         e.respondWith(
@@ -48,16 +49,39 @@ self.addEventListener('fetch', e => {
 
 async function cachePostRequest(request) {
     const requestClone = request.clone();
-    const requestBody = await requestClone.text();
+    const body = await requestClone.text();
     const cacheKey = 'post-requests-' + Date.now();
-    const cacheData = {
-      request: request.clone(),
-      body: requestBody,
-    };
+    const cacheData = { request: request.clone(), body };
     const cache = await caches.open(postCache);
     await cache.put(cacheKey, new Response(JSON.stringify(cacheData)));
+    sendCachedPostRequests();
     return new Response('POST request cached', { status: 200 });
-  }
+}
+
+async function sendCachedPostRequests() {
+    if (navigator.onLine) {
+      const cache = await caches.open(postCache);
+      const cacheKeys = await cache.keys(); 
+      for (const cacheKey of cacheKeys) {
+        const cachedResponse = await cache.match(cacheKey);
+        if (cachedResponse) {
+          const cacheData = await cachedResponse.json();
+          try {
+            const response = await fetch(cacheData.request, {
+              method: 'POST',
+              body: cacheData.body,
+            });
+  
+            if (response.ok) await cache.delete(cacheKey);
+          } catch (error) {
+            console.error('Error sending cached POST request:', error);
+          }
+        }
+      }
+    } else {
+      console.log('Application is offline. Cannot send cached POST requests.');
+    }
+}  
 
 self.addEventListener('message', (event) => {
     if (event.data.action === actions.message.CACHE_PAGE) {

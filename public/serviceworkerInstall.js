@@ -1,4 +1,5 @@
 const cacheName = 'v2';
+const postCache = 'post-requests-cache';
 const fileCache = 'file-cache';
 const tempOfflineCache = 'offline-cache';
 
@@ -26,26 +27,37 @@ self.addEventListener('activate', e => {
 });
 
 self.addEventListener('fetch', e => {
-    e.respondWith(
-        fetch(e.request)
-        .then(res => {
-            const resClone = res.clone();
-            if (e.request.method !== 'POST') {
-                caches.open(cacheName).then(cache => {
-                    cache.put(e.request, resClone);
-                });
-            } else if (e.request.method === 'POST' && !navigator.onLine) {
-                e.respondWith(
-                    caches.open(tempOfflineCache).then(cache => {
-                        return cache.add(e.request.clone());
-                    })
-                );
-            }
-            return res;
-        })
-        .catch(err => caches.match(e.request).then(res => res))
-    );
+    if ( e.request.url === 'https://app.autologik.dk/' ) return;
+    if(e.request.method === 'POST') e.respondWith(cachePostRequest(e.request));
+    else {
+        e.respondWith(
+            fetch(e.request)
+              .then(async res => {
+                  const resClone = res.clone();
+                  if (e.request.method !== 'POST') {
+                      caches.open(cacheName).then(cache => {
+                          cache.put(e.request, resClone);
+                      });
+                  }
+                  return res;
+              })
+              .catch(err => caches.match(e.request).then(res => res))
+        );
+    }
 });
+
+async function cachePostRequest(request) {
+    const requestClone = request.clone();
+    const requestBody = await requestClone.text();
+    const cacheKey = 'post-requests-' + Date.now();
+    const cacheData = {
+      request: request.clone(),
+      body: requestBody,
+    };
+    const cache = await caches.open(postCache);
+    await cache.put(cacheKey, new Response(JSON.stringify(cacheData)));
+    return new Response('POST request cached', { status: 200 });
+  }
 
 self.addEventListener('message', (event) => {
     if (event.data.action === actions.message.CACHE_PAGE) {
@@ -91,4 +103,8 @@ self.addEventListener('online', event => {
             });
         });
     });
+});
+
+self.addEventListener('offline', event => {
+    console.log('Device is offline');
 });

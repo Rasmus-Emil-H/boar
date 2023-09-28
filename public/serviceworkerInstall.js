@@ -27,7 +27,7 @@ self.addEventListener('activate', e => {
 });
 
 self.addEventListener('fetch', e => {
-    if ( e.request.url === 'https://app.autologik.dk/' ) return;
+    if ( e.request.url === '/auth/login/' ) return;
     if(e.request.method === 'POST') e.respondWith(cachePostRequest(e.request));
     else {
         e.respondWith(

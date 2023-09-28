@@ -79,7 +79,7 @@ async function sendCachedPostRequests() {
         }
       }
     } else {
-      console.log('Application is offline. Cannot send cached POST requests.');
+      console.log('Application is offline. Cannot send cached POST requests... Once your application again is online it will send this caches requests automatically');
     }
 }  
 

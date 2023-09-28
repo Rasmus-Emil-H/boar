@@ -1,3 +1,9 @@
+const cacheName = 'v2';
+const postCache = 'post-requests-cache';
+const fileCache = 'file-cache';
+const tempOfflineCache = 'offline-cache';
+const login = '/auth/login';
+
 const actions = {
   message: {
       CACHE_FILE: 'cache-file',
@@ -43,9 +49,9 @@ self.addEventListener('fetch', e => {
 
 async function cachePostRequest(request) {
   const requestClone = request.clone();
-  const body = await requestClone.text();
+  const formData = await requestClone.formData();
   const cacheKey = `${requestClone.url}/${Date.now()}`;
-  const cacheData = { request: request.clone(), body };
+  const cacheData = { request: request.clone(), formData: Object.fromEntries(formData.entries()), url: request.url };
   const cache = await caches.open(postCache);
   await cache.put(cacheKey, new Response(JSON.stringify(cacheData)));
   sendCachedPostRequests();
@@ -54,7 +60,7 @@ async function cachePostRequest(request) {
 
 async function sendCachedPostRequests() {
   if (!navigator.onLine) {
-      console.log('Application is offline. Cannot send cached POST requests... Once your application again is online it will send this caches requests automatically');
+      console.log('Application is offline. Cannot send cached POST requests... Once your application is online again, it will send these cached requests automatically.');
       return;
   }
   const cache = await caches.open(postCache);
@@ -62,16 +68,18 @@ async function sendCachedPostRequests() {
   for (const cacheKey of cacheKeys) {
       const cachedResponse = await cache.match(cacheKey);
       if (cachedResponse) {
-          const cacheData = await cachedResponse.json();
           try {
-              const response = await fetch(cacheKey.url, { method: 'POST', body: cacheData.body});
-              if (response.ok) await cache.delete(cacheKey);
+              const cachedData = await cachedResponse.json();
+              const fd = new FormData();
+              for (const [key, value] of Object.entries(cachedData.formData)) fd.append(key, value);
+              const response = await fetch(cachedData.url, { method: 'POST', body: fd });
+              response.ok ? await cache.delete(cacheKey) : console.error('Error sending cached POST request. Status:', response.status);
           } catch (error) {
               console.error('Error sending cached POST request:', error);
           }
       }
   }
-}  
+}
 
 self.addEventListener('message', (event) => {
   if (event.data.action === actions.message.CACHE_PAGE) {

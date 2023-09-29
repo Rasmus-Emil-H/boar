@@ -41,13 +41,11 @@ self.addEventListener('fetch', e => {
       e.respondWith(
           fetch(e.request)
             .then(async res => {
-                const resClone = res.clone();
-                if (e.request.method !== 'POST') {
-                    caches.open(cacheName).then(cache => {
-                        cache.put(e.request, resClone);
-                    });
-                }
-                return res;
+              const resClone = res.clone();
+                  caches.open(cacheName).then(cache => {
+                  cache.put(e.request, resClone);
+              });
+              return res;
             })
             .catch(err => caches.match(e.request).then(res => res))
       );
@@ -129,26 +127,15 @@ self.addEventListener('message', (event) => {
       fetch(url, { method: 'POST', body: formData })
           .then((response) => {
               if (response.ok) {
-                  return caches.open(fileCache)
-                      .then((cache) => {
-                          const key = `file-${Date.now()}`;
-                          return cache.put(key, new Response(file));
-                      })
-                      .catch((e) => {
-                          console.error('Error storing file in cache:', e);
-                      }); 
+                   
               } else {
-                  return caches.open(fileCache)
-                      .then((cache) => {
-                          const key = `file-${Date.now()}`;
-                          return cache.put(key, new Response(file));
-                      })
-                      .catch((e) => {
-                          console.error('Error storing file in cache:', e);
-                      });
+                  
               }
           })
           .catch((error) => {
+              
+          })
+          .finally(final => {
               return caches.open(fileCache)
                   .then((cache) => {
                       const key = `file-${Date.now()}`;
@@ -157,9 +144,6 @@ self.addEventListener('message', (event) => {
                   .catch((e) => {
                       console.error('Error storing file in cache:', e);
                   });
-          })
-          .finally(final => {
-              
           });
   }
 });

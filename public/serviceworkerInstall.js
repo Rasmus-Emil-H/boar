@@ -2,7 +2,7 @@ const cacheName = 'v2';
 const postCache = 'post-requests-cache';
 const fileCache = 'file-cache';
 const tempOfflineCache = 'offline-cache';
-const login = 'https://app.autologik.dk/';
+const login = '/auth/login';
 
 const actions = {
     message: {

@@ -63,7 +63,7 @@ async function cachePostRequest(request) {
     const cacheData = { request: request.clone(), formData: Object.fromEntries(formData.entries()), request: requestClone, url: request.url };
     const cache = await caches.open(postCache);
     await cache.put(cacheKey, new Response(JSON.stringify(cacheData)));
-    sendCachedPostRequests();
+    await sendCachedPostRequests();
     return new Response('OK', {status: 302, headers: { 'Location': request.url }});
 }
 
@@ -90,6 +90,11 @@ async function sendCachedPostRequests() {
 }
 
 async function sendCachedFileRequests() {
+    if (!navigator.onLine) {
+        console.log(messages.offline);
+        return;
+    }
+    const cache = await caches.open(fileCache);
     const cacheKeys = await cache.keys();
     for (const cacheKey of cacheKeys) {
         const cacheResponse = await cache.match(cacheKey);
@@ -100,6 +105,7 @@ async function sendCachedFileRequests() {
                 body: body,
                 headers: { 'Content-Type': 'multipart/form-data' },
             });
+            response.ok ? await cache.delete(cacheKey) : console.error(messages.errors.postRequest, response.status);
         } catch (error) {
             console.log("file sync err", error);
         }
@@ -132,6 +138,7 @@ self.addEventListener('message', (event) => {
             .then(async (cache) => {
                 const key = `file-${Date.now()}`;
                 await cache.put(key, new Response(formData));
+                await sendCachedFileRequests();
             })
             .catch((e) => {
                 console.error('Error storing file in cache:', e);

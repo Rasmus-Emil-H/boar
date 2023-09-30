@@ -100,7 +100,7 @@ async function sendCachedFileRequests() {
         const cacheResponse = await cache.match(cacheKey);
         try {
             const body = await cacheResponse.formData();
-            const response = await fetch(url, {
+            const response = await fetch(body.get('url'), {
                 method: 'POST',
                 body: body,
                 headers: { 'Content-Type': 'multipart/form-data' },
@@ -134,6 +134,7 @@ self.addEventListener('message', (event) => {
         const formData = new FormData();
         formData.append('file', file);
         formData.append('EntityID', EntityID);
+        formData.append('url', url);
         return caches.open(fileCache)
             .then(async (cache) => {
                 const key = `file-${Date.now()}`;

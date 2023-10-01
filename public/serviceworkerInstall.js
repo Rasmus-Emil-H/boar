@@ -103,7 +103,6 @@ async function sendCachedFileRequests() {
             const response = await fetch(body.get('url'), {
                 method: 'POST',
                 body: body,
-                headers: { 'Content-Type': 'multipart/form-data' },
             });
             response.ok ? await cache.delete(cacheKey) : console.error(messages.errors.postRequest, response.status);
         } catch (error) {

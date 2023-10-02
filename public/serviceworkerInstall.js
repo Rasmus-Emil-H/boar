@@ -121,14 +121,13 @@ async function sendCachedFileRequests() {
 self.addEventListener('message', (event) => {
   if (event.data.action === actions.message.CACHE_PAGE) {
       const { url } = event.data;
+      if (!url) return;
       event.waitUntil(
           caches.open(cacheName).then((cache) => {
               return fetch(url)
                   .then((response) => {
                       const resClone = response.clone();
-                      caches.open(cacheName).then(cache => {
-                          cache.put(url.request, resClone);
-                      });
+                      cache.put(url, resClone);
                   })
                   .catch((e) => {
                       console.log(e);

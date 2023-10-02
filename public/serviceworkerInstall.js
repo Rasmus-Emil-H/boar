@@ -38,6 +38,7 @@ self.addEventListener('fetch', e => {
   if ( e.request.url === login && e.request.method === 'POST' ) return;
   if(e.request.method === 'POST') e.respondWith(cachePostRequest(e.request));
   else {
+      console.log(e.request);
       e.respondWith(
           fetch(e.request)
             .then(async res => {
@@ -80,6 +81,18 @@ async function synchroniseCaches() {
   await sendCachedPostRequests();
 }
 
+async function appendToGlobalCache(request) {
+  await fetch(request)
+      .then(async res => {
+          const resClone = res.clone();
+          caches.open(cacheName).then(cache => {
+              cache.put(request, resClone);
+          });
+          return res;
+      })
+      .catch(err => caches.match(request).then(res => res))
+}
+
 async function sendCachedPostRequests() {
   if(checkConnection() === 1) return;
   const cache = await caches.open(postCache);
@@ -114,7 +127,7 @@ async function sendCachedFileRequests() {
           const response = await fetch(body.get('url'), { method: 'POST', body });
           if(response.ok) {
               await cache.delete(cacheKey);
-              fetch(body.get(url));
+              appendToGlobalCache(body.get('url'));
           } else {
               console.error(messages.errors.postRequest, response.status);   
           }

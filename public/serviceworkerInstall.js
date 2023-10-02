@@ -67,11 +67,16 @@ async function cachePostRequest(request) {
   return new Response('OK', {status: 302, headers: { 'Location': request.url }});
 }
 
-async function sendCachedPostRequests() {
+function checkConnection() {
   if (!navigator.onLine) {
       console.log(messages.offline);
-      return;
+      return 1;
   }
+  return 0;
+}
+
+async function sendCachedPostRequests() {
+  if(checkConnection() === 1) return;
   const cache = await caches.open(postCache);
   const cacheKeys = await cache.keys(); 
   for (const cacheKey of cacheKeys) {
@@ -90,10 +95,7 @@ async function sendCachedPostRequests() {
 }
 
 async function sendCachedFileRequests() {
-  if (!navigator.onLine) {
-      console.log(messages.offline);
-      return;
-  }
+  if(checkConnection() === 1) return;
   const cache = await caches.open(fileCache);
   const cacheKeys = await cache.keys();
   for (const cacheKey of cacheKeys) {
@@ -129,11 +131,8 @@ self.addEventListener('message', (event) => {
           })
       );
   } else if (event.data.action === actions.message.CACHE_FILE) {
-      const { file, url, EntityID } = event.data;
       const formData = new FormData();
-      formData.append('file', file);
-      formData.append('EntityID', EntityID);
-      formData.append('url', url);
+      for(let obj in event.data) formData.append(obj, event.data[obj]);
       return caches.open(fileCache)
           .then(async (cache) => {
               const key = `file-${Date.now()}`;
@@ -143,6 +142,9 @@ self.addEventListener('message', (event) => {
           .catch((e) => {
               console.error('Error storing file in cache:', e);
           });
+  } else if(event.data.action === 'check-status') {
+      sendCachedFileRequests();
+      sendCachedPostRequests(); 
   }
 });
 

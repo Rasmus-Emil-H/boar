@@ -1,9 +1,3 @@
-const cacheName = 'v2';
-const postCache = 'post-requests-cache';
-const fileCache = 'file-cache';
-const tempOfflineCache = 'offline-cache';
-const login = '/auth/login';
-
 const actions = {
   message: {
       CACHE_FILE: 'cache-file',
@@ -42,7 +36,7 @@ self.addEventListener('fetch', e => {
           fetch(e.request)
             .then(async res => {
               const resClone = res.clone();
-                  caches.open(cacheName).then(cache => {
+              caches.open(cacheName).then(cache => {
                   cache.put(e.request, resClone);
               });
               return res;
@@ -75,6 +69,11 @@ function checkConnection() {
   return 0;
 }
 
+function synchroniseCaches() {
+  sendCachedFileRequests();
+  sendCachedPostRequests();
+}
+
 async function sendCachedPostRequests() {
   if(checkConnection() === 1) return;
   const cache = await caches.open(postCache);
@@ -87,7 +86,11 @@ async function sendCachedPostRequests() {
           const fd = new FormData();
           for (const [key, value] of Object.entries(cachedData.formData)) fd.append(key, value);
           const response = await fetch(cachedData.url, { method: 'POST', body: fd });
-          response.ok ? await cache.delete(cacheKey) : console.error(messages.errors.postRequest, response.status);
+          if(response.ok) {
+              await cache.delete(cacheKey);
+          } else {
+              console.error(messages.errors.postRequest, response.status);
+          }
       } catch (error) {
           console.error(messages.errors.postRequest, error);
       }
@@ -102,11 +105,13 @@ async function sendCachedFileRequests() {
       const cacheResponse = await cache.match(cacheKey);
       try {
           const body = await cacheResponse.formData();
-          const response = await fetch(body.get('url'), {
-              method: 'POST',
-              body: body,
-          });
-          response.ok ? await cache.delete(cacheKey) : console.error(messages.errors.postRequest, response.status);
+          const response = await fetch(body.get('url'), { method: 'POST', body });
+          if(response.ok) {
+              await cache.delete(cacheKey);
+              fetch(body.get(url));
+          } else {
+              console.error(messages.errors.postRequest, response.status);   
+          }
       } catch (error) {
           console.log("file sync err", error);
       }
@@ -138,20 +143,18 @@ self.addEventListener('message', (event) => {
               const key = `file-${Date.now()}`;
               await cache.put(key, new Response(formData));
               await sendCachedFileRequests();
+              return new Response('OK', {status: 302, headers: { 'Location': formData.get('url') }});
           })
           .catch((e) => {
               console.error('Error storing file in cache:', e);
           });
   } else if(event.data.action === 'check-status') {
-      sendCachedFileRequests();
-      sendCachedPostRequests(); 
+      synchroniseCaches();
   }
 });
 
 self.addEventListener('online', event => {
-  console.log('Online');
-  sendCachedFileRequests();
-  sendCachedPostRequests();
+  synchroniseCaches()
 });
 
 self.addEventListener('offline', event => {

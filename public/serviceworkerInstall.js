@@ -35,10 +35,9 @@ self.addEventListener('activate', e => {
 });
 
 self.addEventListener('fetch', e => {
-  if ( e.request.url === login && e.request.method === 'POST' ) return;
-  if(e.request.method === 'POST') e.respondWith(cachePostRequest(e.request));
+  if (e.request.url === login && e.request.method === 'POST') return;
+  if (e.request.method === 'POST') e.respondWith(cachePostRequest(e.request));
   else {
-      console.log(e.request);
       e.respondWith(
           fetch(e.request)
             .then(async res => {
@@ -52,10 +51,6 @@ self.addEventListener('fetch', e => {
       );
   }
 });
-
-async function setResponse(status, url) {
-  return {status, headers: { 'Location': url, }};
-}
 
 async function cachePostRequest(request) {
   const requestClone = request.clone();
@@ -81,18 +76,6 @@ async function synchroniseCaches() {
   await sendCachedPostRequests();
 }
 
-async function appendToGlobalCache(request) {
-  await fetch(request)
-      .then(async res => {
-          const resClone = res.clone();
-          caches.open(cacheName).then(cache => {
-              cache.put(request, resClone);
-          });
-          return res;
-      })
-      .catch(err => caches.match(request).then(res => res))
-}
-
 async function sendCachedPostRequests() {
   if(checkConnection() === 1) return;
   const cache = await caches.open(postCache);
@@ -102,14 +85,10 @@ async function sendCachedPostRequests() {
       if (!cachedResponse) return;
       try {
           const cachedData = await cachedResponse.json();
-          const fd = new FormData();
-          for (const [key, value] of Object.entries(cachedData.formData)) fd.append(key, value);
-          const response = await fetch(cachedData.url, { method: 'POST', body: fd });
-          if(response.ok) {
-              await cache.delete(cacheKey);
-          } else {
-              console.error(messages.errors.postRequest, response.status);
-          }
+          const body = new FormData();
+          for (const [key, value] of Object.entries(cachedData.formData)) body.append(key, value);
+          const response = await fetch(cachedData.url, { method: 'POST', body });
+          response.ok ? await cache.delete(cacheKey) : console.error(messages.errors.postRequest, response.status);
       } catch (error) {
           console.error(messages.errors.postRequest, error);
       }
@@ -124,13 +103,14 @@ async function sendCachedFileRequests() {
       const cacheResponse = await cache.match(cacheKey);
       try {
           const body = await cacheResponse.formData();
-          const response = await fetch(body.get('url'), { method: 'POST', body });
-          if(response.ok) {
-              await cache.delete(cacheKey);
-              appendToGlobalCache(body.get('url'));
-          } else {
-              console.error(messages.errors.postRequest, response.status);   
-          }
+          await fetch(body.get('url'), { method: 'POST', body })
+              .then(async res => {
+                  await cache.delete(cacheKey);
+                  return new Response('OK', {status: 302, headers: { 'Location': body.get('url') }});
+              })
+              .catch(err => {
+                  console.log(err);
+              });
       } catch (error) {
           console.log("file sync err", error);
       }

@@ -75,9 +75,9 @@ function checkConnection() {
   return 0;
 }
 
-function synchroniseCaches() {
-  sendCachedFileRequests();
-  sendCachedPostRequests();
+async function synchroniseCaches() {
+  await sendCachedFileRequests();
+  await sendCachedPostRequests();
 }
 
 async function sendCachedPostRequests() {

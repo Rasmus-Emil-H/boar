@@ -1,3 +1,9 @@
+const cacheName = 'v2';
+const postCache = 'post-requests-cache';
+const fileCache = 'file-cache';
+const tempOfflineCache = 'offline-cache';
+const login = '/auth/login';
+
 const actions = {
   message: {
       CACHE_FILE: 'cache-file',
@@ -154,7 +160,7 @@ self.addEventListener('message', (event) => {
 });
 
 self.addEventListener('online', event => {
-  synchroniseCaches()
+  synchroniseCaches();
 });
 
 self.addEventListener('offline', event => {

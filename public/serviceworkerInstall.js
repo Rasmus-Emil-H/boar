@@ -88,7 +88,7 @@ async function sendCachedPostRequests() {
           const body = new FormData();
           for (const [key, value] of Object.entries(cachedData.formData)) body.append(key, value);
           const response = await fetch(cachedData.url, { method: 'POST', body });
-          response.ok ? await cache.delete(cacheKey) : console.error(messages.errors.postRequest, response.status);
+          response.ok ? cache.delete(cacheKey) : console.error(messages.errors.postRequest, response.status);
       } catch (error) {
           console.error(messages.errors.postRequest, error);
       }

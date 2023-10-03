@@ -1,136 +1,123 @@
-const DatabaseManager = {
-    db: null,
-    open(databaseName, version, upgradeCallback) {
-        return new Promise(function(resolve, reject) {
-            const request = window.indexedDB.open(databaseName, version);
+const databaseName = 'db';
+const objectStoreName = 'dbobjects';
 
-            request.onerror = function(event) {
-                reject(`Database error: ${event.target.error}`);
-            };
+class IndexedDBManager {
+  constructor() {
+    this.db = null;
+  }
 
-            request.onsuccess = function(event) {
-                this.db = event.target.result;
-                resolve(this.db);
-            };
+  async openDatabase() {
+    return new Promise((resolve, reject) => {
+      const request = window.indexedDB.open(databaseName, 1);
 
-            request.onupgradeneeded = function(event) {
-                const db = event.target.result;
-                if (upgradeCallback) upgradeCallback(db);
-            };
-        });
-    },
-    isConnected() {
-        return this.db !== null;
-    },
-    create(objectStoreName, data) {
-        return new Promise(function(resolve, reject) {
-            if (!this.db) {
-                reject("Database not connected");
-                return;
-            }
+      request.onupgradeneeded = (event) => {
+        const db = event.target.result;
+        if (!db.objectStoreNames.contains(objectStoreName)) {
+          db.createObjectStore(objectStoreName, { keyPath: 'id', autoIncrement: true });
+        }
+      };
 
-            const transaction = this.db.transaction(objectStoreName, "readwrite");
-            const objectStore = transaction.objectStore(objectStoreName);
-            const request = objectStore.add(data);
+      request.onsuccess = (event) => {
+        this.db = event.target.result;
+        resolve(this.db);
+      };
 
-            request.onsuccess = function() {
-                resolve("Record added successfully");
-            };
-
-            request.onerror = function(event) {
-                reject(`Error adding record: ${event.target.error}`);
-            };
-        });
-    },
-    read(objectStoreName, key) {
-        return new Promise(function(resolve, reject) {
-            if (!this.db) {
-                reject("Database not connected");
-                return;
-            }
-
-            const transaction = this.db.transaction(objectStoreName, "readonly");
-            const objectStore = transaction.objectStore(objectStoreName);
-            const request = objectStore.get(key);
-
-            request.onsuccess = function(event) {
-                const result = event.target.result;
-                result ? resolve(result) : reject(`Record not found for key: ${key}`);
-            };
-
-            request.onerror = function(event) {
-                reject(`Error reading record: ${event.target.error}`);
-            };
-        });
-    },
-    update(objectStoreName, key, newData) {
-        return new Promise(function(resolve, reject) {
-            if (!this.db) {
-                reject("Database not connected");
-                return;
-            }
-
-            const transaction = this.db.transaction(objectStoreName, "readwrite");
-            const objectStore = transaction.objectStore(objectStoreName);
-            const request = objectStore.put(newData, key);
-
-            request.onsuccess = function() {
-                resolve("Record updated successfully");
-            };
-
-            request.onerror = function(event) {
-                reject(`Error updating record: ${event.target.error}`);
-            };
-        });
-    },
-    delete(objectStoreName, key) {
-        return new Promise(function(resolve, reject) {
-            if (!this.db) {
-                reject("Database not connected");
-                return;
-            }
-
-            const transaction = this.db.transaction(objectStoreName, "readwrite");
-            const objectStore = transaction.objectStore(objectStoreName);
-            const request = objectStore.delete(key);
-
-            request.onsuccess = function() {
-                resolve("Record deleted successfully");
-            };
-
-            request.onerror = function(event) {
-                reject(`Error deleting record: ${event.target.error}`);
-            };
-        });
-    },
-};
-
-export default DatabaseManager;
-
-/**
- * Example below if you don"t wanna have to think 
- * 
-*/
-
-/*
-
-DatabaseManager.open("BoarIndexedDB", 1, function(db) {})
-    .then(function() {
-        const data = {id: 1, name: "Boar"};
-        return DatabaseManager.create("ApplicationStore", data);
-    })
-    .then(function(result) {
-        console.log(result);
-        return DatabaseManager.read("ApplicationStore", 1);
-    })
-    .then(function(data) {
-        const newData = {id: 1, name: "Updated Boar"};
-        return DatabaseManager.update("ApplicationStore", 1, newData);
-    })
-    .then(function(result) {
-        return DatabaseManager.delete("ApplicationStore", 1);
-    })
-    .catch(function(error) {
+      request.onerror = (event) => {
+        reject(event.target.error);
+      };
     });
+  }
 
-*/
+  async createRecord(data) {
+    const db = await this.openDatabase();
+    return new Promise((resolve, reject) => {
+      const transaction = db.transaction(objectStoreName, 'readwrite');
+      const objectStore = transaction.objectStore(objectStoreName);
+
+      const request = objectStore.add(data);
+
+      request.onsuccess = (event) => {
+        resolve(event.target.result);
+      };
+
+      request.onerror = (event) => {
+        reject(event.target.error);
+      };
+    });
+  }
+
+  async readRecord(id) {
+    const db = await this.openDatabase();
+    return new Promise((resolve, reject) => {
+      const transaction = db.transaction(objectStoreName, 'readonly');
+      const objectStore = transaction.objectStore(objectStoreName);
+
+      const request = objectStore.get(id);
+
+      request.onsuccess = (event) => {
+        resolve(event.target.result);
+      };
+
+      request.onerror = (event) => {
+        reject(event.target.error);
+      };
+    });
+  }
+
+  async updateRecord(id, newData) {
+    const db = await this.openDatabase();
+    return new Promise((resolve, reject) => {
+      const transaction = db.transaction(objectStoreName, 'readwrite');
+      const objectStore = transaction.objectStore(objectStoreName);
+
+      const request = objectStore.put({ id, ...newData });
+
+      request.onsuccess = (event) => {
+        resolve(event.target.result);
+      };
+
+      request.onerror = (event) => {
+        reject(event.target.error);
+      };
+    });
+  }
+
+  async deleteRecord(id) {
+    const db = await this.openDatabase();
+    return new Promise((resolve, reject) => {
+      const transaction = db.transaction(objectStoreName, 'readwrite');
+      const objectStore = transaction.objectStore(objectStoreName);
+
+      const request = objectStore.delete(id);
+
+      request.onsuccess = () => {
+        resolve();
+      };
+
+      request.onerror = (event) => {
+        reject(event.target.error);
+      };
+    });
+  }
+
+  // Read all records in the object store
+  async getAllRecords() {
+    const db = await this.openDatabase();
+    return new Promise((resolve, reject) => {
+      const transaction = db.transaction(objectStoreName, 'readonly');
+      const objectStore = transaction.objectStore(objectStoreName);
+
+      const request = objectStore.getAll();
+
+      request.onsuccess = (event) => {
+        resolve(event.target.result);
+      };
+
+      request.onerror = (event) => {
+        reject(event.target.error);
+      };
+    });
+  }
+}
+
+export default IndexedDBManager;

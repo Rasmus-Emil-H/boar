@@ -100,7 +100,6 @@ class IndexedDBManager {
     });
   }
 
-  // Read all records in the object store
   async getAllRecords() {
     const db = await this.openDatabase();
     return new Promise((resolve, reject) => {

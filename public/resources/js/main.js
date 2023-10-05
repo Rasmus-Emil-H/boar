@@ -24,7 +24,7 @@ document.addEventListener("DOMContentLoaded", async function() {
       const moduleName = modulePath.split('/').pop().replace('.js', '');
       window.boar[moduleName] = module.default;
     } catch (error) {
-      console.error(`Error importing module ${modulePath}:`, error);
+      console.log(error);
     }
   }
 

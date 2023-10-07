@@ -118,7 +118,12 @@ async function sendCachedFileRequests() {
   }
 }
 
+function val(event) {
+  console.log(event);
+}
+
 self.addEventListener('message', (event) => {
+  val(event);
   if (event.data.action === actions.message.CACHE_PAGE) {
       const { url } = event.data;
       if (!url) return;

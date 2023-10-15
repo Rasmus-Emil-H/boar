@@ -43,43 +43,23 @@ class CsrfToken {
         return bin2hex(openssl_random_pseudo_bytes(32));
     }
 
-    /*
-     * @return string
-    */
-
     public function insertHiddenToken(): string {
         return "<input type=\"hidden\"" . " name=\"" . $this->xssafe($this->formTokenLabel) . "\"" . " value=\"" . $this->xssafe($this->getToken()) . "\"" . " />";
     }
 
-    /*
-     * @return string
-    */
-
     public function xssafe($data, $encoding = 'UTF-8'): string {
         return htmlspecialchars($data, ENT_QUOTES | ENT_HTML401, $encoding);
     }
-
-    /*
-     * @return string
-    */
 
     private function hMacWithIp(string $token): string {
         $hashHmac = hash_hmac($this->hashAlgo, app()->config->get('tokens')->csrf->hMacData, $token);
         return $hashHmac;
     }
 
-    /*
-     * @return string
-    */
-
     private function getCurrentRequestUrl(): string {
         $currentUrl = 'https://' . $this->server['HTTP_HOST'] . $this->server['REQUEST_URI'];
         return $currentUrl;
     }
-
-    /*
-     * @return bool
-    */
 
     public function validate(): bool {
         if (!in_array($this->getCurrentRequestUrl(), $this->excludeUrl)) {
@@ -90,11 +70,6 @@ class CsrfToken {
         }
     }
 
-    /*
-     * Validate current request
-     * @return bool
-    */
-
     public function isValidRequest(): bool {
         $isValid = false;
         $currentUrl = $this->getCurrentRequestUrl();
@@ -103,11 +78,6 @@ class CsrfToken {
                 $isValid = $this->validateRequest();
         return $isValid;
     }
-
-    /*
-     * Validate request
-     * @return bool
-    */
     
     public function validateRequest(): bool {
         if ($this->session->get($this->sessionTokenLabel)) return false;
@@ -116,11 +86,6 @@ class CsrfToken {
         $expected = $this->hmac_ip ? $this->hMacWithIp($this->session->get($this->sessionTokenLabel)) : $this->session->get($this->sessionTokenLabel);
         return hash_equals($token, $expected);
     }
-
-    /**
-     * removes the token from the session
-     * @return void
-    */
 
     public function unsetToken() {
         if ($this->session->get($this->sessionTokenLabel)) $this->session->unset($this->sessionTokenLabel);

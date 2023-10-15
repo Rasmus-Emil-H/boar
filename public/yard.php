@@ -15,3 +15,7 @@ function d($input) {
   displayDD($input);
   echo '<hr />';
 }
+
+function hs($input) {
+  return htmlspecialchars($input);
+}

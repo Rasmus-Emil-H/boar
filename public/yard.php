@@ -17,5 +17,5 @@ function d($input) {
 }
 
 function hs($input) {
-  return htmlspecialchars($input);
+  return \app\core\miscellaneous\Html::escape($input);
 }

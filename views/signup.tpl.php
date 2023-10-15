@@ -10,6 +10,6 @@
     <div class="form-group w-100 mb-3">
       <input type="text" required name="pw" class="form-control" placeholder="Password" aria-label="Username" aria-describedby="basic-addon1">
     </div>
-    <button type="submit" class="btn btn-primary btn-lg mt-2 w-100">Create account</button>
+    <button type="submit" class="btn btn-primary btn-lg mt-2 w-100"><?= hs('Create account'); ?></button>
   </form>
 </div>

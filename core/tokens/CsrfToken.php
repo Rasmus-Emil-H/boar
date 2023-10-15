@@ -62,12 +62,9 @@ class CsrfToken {
     }
 
     public function validate(): bool {
-        if (!in_array($this->getCurrentRequestUrl(), $this->excludeUrl)) {
-            if (!empty($this->post)) {
-                if (!$this->validateRequest()) return false;
-                return true;
-            }
-        }
+        if (!in_array($this->getCurrentRequestUrl(), $this->excludeUrl)) 
+            if (!empty($this->post)) 
+                return $this->validateRequest();
     }
 
     public function isValidRequest(): bool {

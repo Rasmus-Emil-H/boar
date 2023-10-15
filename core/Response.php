@@ -22,9 +22,8 @@ class Response {
         header('Content-Type: ' . $type);
     }
     
-    public function setResponse(int $code, string $content, array $message) {
+    public function setResponse(int $code, array $message) {
         $this->setStatusCode($code);
-        $this->setContentType($content);
         exit(json_encode($message));
     }
 

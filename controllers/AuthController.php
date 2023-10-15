@@ -25,7 +25,12 @@ class AuthController extends Controller {
     public function signup() {
         if (app()->request->isGet()) return $this->setView('', 'signup');
         $body = app()->request->getBody();
-        UserModel::search(['email' => $body['email']]) ? '' : '' ;
+        $search = UserModel::search(['Email' => $body['email']]);
+        if ($search) app()->response->setResponse(409, ['errors' => 'Email exists']);
+        $static = new UserModel();
+        $static->set(['Email' => $body['email'], 'Name' => $body['name'], 'Password' => password_hash($body['pw'], PASSWORD_DEFAULT)]);
+        $static->save();
+        app()->response->setResponse(201, ['data' => 'User created']);
     }
 
 }

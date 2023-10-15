@@ -25,9 +25,7 @@ class Router {
     protected const CONTROLLER   = 'Controller';
     protected const INDEX_METHOD = 'index';
 
-    public function __construct(Request $request, Response $response) {
-        $this->request = $request;
-        $this->response = $response;
+    public function __construct() {
         $this->queryPattern = Application::$app->regex->validateRoute();
     }
 
@@ -62,8 +60,8 @@ class Router {
     }
 
     protected function runController() {
-        Application::$app->controller->{$this->method}();
         Application::$app->controller->execChildData();
+        Application::$app->controller->{$this->method}();
     }
 
     protected function hydrateDOM() {

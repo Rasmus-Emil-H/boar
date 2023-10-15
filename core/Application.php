@@ -52,7 +52,7 @@ class Application {
         $this->request     = new Request();
         $this->response    = new Response();
         $this->regex       = new Regex($this->request->getPath());
-        $this->router      = new Router($this->request, $this->response);
+        $this->router      = new Router();
         $this->session     = new Session();
         $this->cookie      = new Cookie();
         $this->view        = new View();

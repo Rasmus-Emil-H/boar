@@ -11,10 +11,6 @@ class AuthController extends Controller {
 
     public string $defaultRoute = 'login';
 
-    public function __construct() {
-        
-    }
-
     public function login() {
         if (Application::$app->session->get('user')) Application::$app->response->redirect('/home');
         if (Application::$app->request->isPost()) new Authenticator(Application::$app->request->getBody(), 'login');
@@ -32,6 +28,9 @@ class AuthController extends Controller {
     }
 
     public function signup() {
+        if (Application::$app->request->isPost()) {
+            var_dump(123);exit;
+        }
         return $this->setView('', 'signup'); 
     }
 

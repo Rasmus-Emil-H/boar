@@ -19,3 +19,7 @@ function d($input) {
 function hs($input) {
   return \app\core\miscellaneous\Html::escape($input);
 }
+
+function app() {
+  return \app\core\Application::$app;
+}

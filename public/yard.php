@@ -16,10 +16,14 @@ function d($input) {
   echo '<hr />';
 }
 
-function hs($input) {
+function hs($input): string {
   return \app\core\miscellaneous\Html::escape($input);
 }
 
-function app() {
+function app(): object {
   return \app\core\Application::$app;
+}
+
+function validateCSRF(): bool {
+  return (new \app\core\tokens\CsrfToken())->validate();
 }

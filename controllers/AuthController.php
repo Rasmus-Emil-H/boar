@@ -24,7 +24,7 @@ class AuthController extends Controller {
 
     public function signup() {
         if (app()->request->isGet()) return $this->setView('', 'signup');
-        if(!(new \app\core\tokens\CsrfToken())->validate()) return false;
+        if(!validateCSRF()) return false;
         $body = app()->request->getBody();
         $search = UserModel::search(['Email' => $body['email']]);
         if ($search) app()->response->setResponse(409, ['errors' => 'Email exists']);

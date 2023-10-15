@@ -31,4 +31,8 @@ class AuthController extends Controller {
         return $this->render('profile');
     }
 
+    public function signup() {
+        return $this->setView('', 'signup'); 
+    }
+
 }

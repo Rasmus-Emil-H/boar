@@ -1,11 +1,11 @@
 <?php
 
-/*******************************
+/**
  * Bootstrap CsrfToken
  * Hardware based validation
  * AUTHOR: RE_WEB
  * @package app\core\CsrfToken
-*/
+ */
 
 namespace app\core\tokens;
 

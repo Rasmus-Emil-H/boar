@@ -23,10 +23,6 @@ class AuthController extends Controller {
         Application::$app->response->redirect('/');
     }
 
-    public function profile() {
-        return $this->render('profile');
-    }
-
     public function signup() {
         if (Application::$app->request->isPost()) {
             var_dump(123);exit;

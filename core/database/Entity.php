@@ -51,7 +51,7 @@ abstract class Entity extends Relations {
         if ($data !== null && gettype($data) !== "array") $data = [$key => $data];
 
         if(isset($data[$key])) {
-            $exists = Application::$app->connection->fetchRow($this->getTableName(), [$key => $data[$key]]);
+            $exists = app()->connection->fetchRow($this->getTableName(), [$key => $data[$key]]);
             if(!empty($exists)) {
                 $this->key = $exists->{$this->getKeyField()};
                 $this->data = (array)$exists;
@@ -91,16 +91,16 @@ abstract class Entity extends Relations {
     public function save() {
         try {
             if ($this->exists() === true) {
-                Application::$app->connection->patch($this->getTableName(), $this->data, $this->getKeyField(), $this->key)->execute('fetch');
+                app()->connection->patch($this->getTableName(), $this->data, $this->getKeyField(), $this->key)->execute('fetch');
                 return $this->data;
             } else {
                 if(empty($this->data)) throw new \Exception("Data variable is empty");
-                Application::$app->connection->create($this->getTableName(), $this->data)->execute();
-                $this->key = Application::$app->connection->getLastID();
+                app()->connection->create($this->getTableName(), $this->data)->execute();
+                $this->key = app()->connection->getLastID();
                 return $this->key;
             }
         } catch(\Exception $e) {
-            Application::$app->globalThrower($e->getMessage());
+            app()->globalThrower($e->getMessage());
         }
     }
 
@@ -110,7 +110,7 @@ abstract class Entity extends Relations {
     */
 
     public function init() {
-		return Application::$app->connection->init($this->getTableName(), $this->data);
+		return app()->connection->init($this->getTableName(), $this->data);
 	}
 
     /**
@@ -148,7 +148,7 @@ abstract class Entity extends Relations {
     }
 
     public static function all() {
-        $rows = Application::$app->connection->select(static::tableName, ['*'])->execute();
+        $rows = app()->connection->select(static::tableName, ['*'])->execute();
         return self::load(array_column($rows, static::keyID));
     }
 
@@ -159,7 +159,7 @@ abstract class Entity extends Relations {
     */
 
     public function __call($name, $arguments) {
-        Application::$app->globalThrower("Invalid method [{$name}]");
+        app()->globalThrower("Invalid method [{$name}]");
     }
 
     /** 
@@ -169,7 +169,7 @@ abstract class Entity extends Relations {
     */
 
     public static function __callStatic($name, $arguments) {
-        Application::$app->globalThrower("Invalid static method [{$name}]");
+        app()->globalThrower("Invalid static method [{$name}]");
     }
 
     /**
@@ -217,7 +217,7 @@ abstract class Entity extends Relations {
     */
 
     public static function search(array $criterias, array $values = ['*'], array $additionalQueryBuilding = []): array {
-        $rows = Application::$app->connection->select(static::tableName, $values)->whereClause($criterias);
+        $rows = app()->connection->select(static::tableName, $values)->whereClause($criterias);
         foreach ( $additionalQueryBuilding as $key => $value ) $rows = $rows->{$key}($value);
         $rows = $rows->execute();
         return self::load(array_column($rows, static::keyID));
@@ -229,7 +229,7 @@ abstract class Entity extends Relations {
     */
 
     public function getRelatedObject(string $key): string {
-		return $this->relatedObjects[$key] ?? Application::$app->globalThrower('Invalid relation');
+		return $this->relatedObjects[$key] ?? app()->globalThrower('Invalid relation');
 	}
 
     /**
@@ -238,7 +238,7 @@ abstract class Entity extends Relations {
     */
 
     public function delete() {
-        return Application::$app->connection->delete($this->getTableName())->where([$this->getKeyField() => $this->key()])->execute();
+        return app()->connection->delete($this->getTableName())->where([$this->getKeyField() => $this->key()])->execute();
     }
 
     /**

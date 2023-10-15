@@ -24,9 +24,9 @@ class CsrfToken {
 
     public function __construct($excludeUrl = null) {
         if (!is_null($excludeUrl)) $this->excludeUrl = $excludeUrl;
-        $this->post = Application::$app->request->getBody();
+        $this->post = app()->request->getBody();
         $this->server = &$_SERVER;
-        $this->session = Application::$app->session;
+        $this->session = app()->session;
     }
 
     public function setToken(): void {
@@ -64,7 +64,7 @@ class CsrfToken {
     */
 
     private function hMacWithIp(string $token): string {
-        $hashHmac = hash_hmac($this->hashAlgo, Application::$app->config->get('tokens')->csrf->hMacData, $token);
+        $hashHmac = hash_hmac($this->hashAlgo, app()->config->get('tokens')->csrf->hMacData, $token);
         return $hashHmac;
     }
 
@@ -113,9 +113,7 @@ class CsrfToken {
         if ($this->session->get($this->sessionTokenLabel)) return false;
         if (!empty($this->post[$this->formTokenLabel])) $token = $this->post[$this->formTokenLabel];
         else return false;
-        // Grab the stored token for testing
         $expected = $this->hmac_ip ? $this->hMacWithIp($this->session->get($this->sessionTokenLabel)) : $this->session->get($this->sessionTokenLabel);
-
         return hash_equals($token, $expected);
     }
 

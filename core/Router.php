@@ -23,7 +23,7 @@ class Router {
     protected const INDEX_METHOD = 'index';
 
     public function __construct() {
-        $this->queryPattern = Application::$app->regex->validateRoute();
+        $this->queryPattern = app()->regex->validateRoute();
     }
 
     protected function checkController() {
@@ -32,14 +32,14 @@ class Router {
         $controller = '\\app\controllers\\'.$handler;
         if (!class_exists($controller)) $controller = '\\app\controllers\\AuthController';
         $currentController = new $controller();
-        Application::$app->setController($currentController);
+        app()->setController($currentController);
         $method = $this->queryPattern[1] ?? self::INDEX_METHOD;
-        if (!method_exists(Application::$app->controller, $method)) throw new NotFoundException();
+        if (!method_exists(app()->controller, $method)) throw new NotFoundException();
         $this->method = $method;
     }
 
     public function getDefaultRoute() {
-        $this->location(Application::$app::$defaultRoute);
+        $this->location(app()::$defaultRoute);
     }
 
     public function location(string $location): void {
@@ -48,28 +48,28 @@ class Router {
     }
 
     protected function runMiddlewares() {
-        foreach (Application::$app->controller->getMiddlewares() as $middleware) $middleware->execute();
+        foreach (app()->controller->getMiddlewares() as $middleware) $middleware->execute();
     }
 
     protected function setTemplateControllers() {
       if(Application::isCLI()) return;
-      Application::$app->controller->setChildren(['Header', 'Footer']);
+      app()->controller->setChildren(['Header', 'Footer']);
     }
 
     protected function runController() {
-        Application::$app->controller->execChildData();
-        Application::$app->controller->{$this->method}();
+        app()->controller->execChildData();
+        app()->controller->{$this->method}();
     }
 
     protected function hydrateDOM() {
-        extract(Application::$app->controller->getData(), EXTR_SKIP);
-        require_once Application::$app->controller->getData()['header'];
-        require_once Application::$app->controller->getView();    
-        require_once Application::$app->controller->getData()['footer'];
+        extract(app()->controller->getData(), EXTR_SKIP);
+        require_once app()->controller->getData()['header'];
+        require_once app()->controller->getView();    
+        require_once app()->controller->getData()['footer'];
     }
 
     public function setRequest() {
-        Application::$app->controller->setRequest(Application::$app->request->getCompleteRequestBody());
+        app()->controller->setRequest(app()->request->getCompleteRequestBody());
     }
 
     public function resolve() {

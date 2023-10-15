@@ -19,9 +19,6 @@ class Router {
     protected array $routes = [];
     protected array $queryPattern;
 
-    public Request $request;
-    public Response $response;
-
     protected const CONTROLLER   = 'Controller';
     protected const INDEX_METHOD = 'index';
 

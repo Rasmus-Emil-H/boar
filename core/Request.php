@@ -38,7 +38,7 @@ class Request {
         return $indexes;
     }
 
-    public function method(): string {
+    public function method(): string { 
         return strtolower($_SERVER['REQUEST_METHOD']) ?? 'get';
     }
 

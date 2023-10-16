@@ -31,7 +31,7 @@ class Relations {
     */
 
     protected function newRelatedInstance(string $class) {
-        Application::$app->classCheck($class);
+        app()->classCheck($class);
         return new $class();
     }
 

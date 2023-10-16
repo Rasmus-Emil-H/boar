@@ -113,7 +113,7 @@ class Controller {
         $cController = '\\app\controllers\\'.$controller.'Controller';
         $static = new $cController();
         $static->{$method}();
-        Application::$app->controller->setData($static->getData());
+        app()->controller->setData($static->getData());
         $static->execChildData();
       }
     }
@@ -162,7 +162,7 @@ class Controller {
     */
 
     public function render(string $view): void {
-        Application::$app->view->renderView();
+        app()->view->renderView();
     }
 
     /**

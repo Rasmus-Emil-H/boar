@@ -11,6 +11,7 @@ namespace app\core;
 use app\core\Regex;
 use app\core\exceptions\NotFoundException;
 use app\core\middlewares\AuthMiddleware;
+
 use app\controllers;
 
 class Router {

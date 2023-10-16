@@ -17,7 +17,7 @@ class add_translations_table_2018_12_16_0001 {
             TranslationID INT AUTO_INCREMENT PRIMARY KEY,
             Translation VARCHAR(50) NOT NULL,
             LanguageID int(5) NOT NULL,
-            TranslationHash VARCHAR(100) NOT NULL,
+            TranslationHash VARCHAR(50) NOT NULL,
             CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             FOREIGN KEY (LanguageID) REFERENCES Languages(LanguageID)
         )";

@@ -174,9 +174,9 @@ class Connection {
             return $result;
         } catch (\PDOException $e) {
             $errorQuery = $this->query;
+            $errorQuery .= $e;
             $this->resetQuery();
             throw new \PDOException("ERROR WITH THE FOLLOWING QUERY: $errorQuery");
-            //exit("[ SQL ERROR ] " . $e);
         }
     }
 

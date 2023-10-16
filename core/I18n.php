@@ -24,15 +24,18 @@ class I18n {
     }
 
     public function translate(string $toTranslate): string {
-        return TranslationModel::search(['LanguageID' => $this->languageID, 'TranslationKey' => $toTranslate]) ?? $this->registerMissingTranslation($toTranslate);
+        $translationExists = TranslationModel::search(['LanguageID' => $this->languageID, 'Translation' => $toTranslate]);
+        if (!$translationExists) {
+            $this->registerMissingTranslation($toTranslate);
+            return $toTranslate;
+        }
+        else return $translationExists[array_key_first($translationExists)]->get('Translation');
     }
 
-    public function registerMissingTranslation(string $missingTranslation): string {
-        foreach ( LanguageModel::all() as $language ) {
-            $translation = new TranslationModel();
-            $translation
-                ->set(['translation' => $missingTranslation, 'languageID' => $language->key()])
-                ->save();
-        }
+    public function registerMissingTranslation(string $missingTranslation) {
+        $translation = new TranslationModel();
+        $translation
+            ->set(['Translation' => $missingTranslation, 'LanguageID' => $this->languageID, 'TranslationHash' => \app\core\miscellaneous\Hash::create()])
+            ->save();
     }
 }

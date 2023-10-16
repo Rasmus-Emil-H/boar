@@ -15,6 +15,6 @@
     </div>
     <?= (new \app\core\tokens\CsrfToken())->insertHiddenToken(); ?>
     <button type="submit" class="btn btn-primary btn-lg mt-2 w-100"><?= hs('Create account'); ?></button>
-    <a href="/" class="btn btn-primary btn-lg mt-2 w-100"><?= hts('Go back'); ?></a>
+    <a href="/" class="btn btn-primary btn-lg mt-2 w-100"><?= ths('Go back'); ?></a>
   </form>
 </div>

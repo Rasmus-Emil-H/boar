@@ -51,6 +51,6 @@ function validateCSRF(): bool {
  * @return string
  */
 
-function hts(string $input): string {
+function ths(string $input): string {
   return hs(app()->i18n->translate($input));
 }

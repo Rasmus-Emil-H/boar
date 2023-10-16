@@ -15,12 +15,11 @@ use \app\models\TranslationModel;
 
 class I18n {
 
-    protected string $currentLanguage;
     protected int $languageID;
 
     public function __construct() {
-        $this->currentlanguage = app()->session->get('language');
-        $this->languageID = 1;
+        $language = LanguageModel::search(['name' => app()->session->get('language')]);
+        $this->languageID = $language[array_key_first($language)]->key();
     }
 
     public function translate(string $toTranslate): string {

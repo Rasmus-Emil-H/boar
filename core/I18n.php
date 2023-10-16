@@ -39,4 +39,5 @@ class I18n {
             ->set(['Translation' => $missingTranslation, 'LanguageID' => $this->languageID, 'TranslationHash' => \app\core\miscellaneous\Hash::create()])
             ->save();
     }
+    
 }

@@ -12,7 +12,7 @@
       <input type="text" required name="password" class="form-control" placeholder="Password" aria-label="Username" aria-describedby="basic-addon1">
     </div>
     <?= (new \app\core\tokens\CsrfToken())->insertHiddenToken(); ?>
-    <button type="submit" class="btn btn-primary btn-lg mt-2 w-100"><?= hs('Log in'); ?></button>
-    <a href="signup" class="btn btn-primary btn-lg mt-2 w-100"><?= hs('Create account'); ?></a>
+    <button type="submit" class="btn btn-primary btn-lg mt-2 w-100"><?= ths('Log in'); ?></button>
+    <a href="signup" class="btn btn-primary btn-lg mt-2 w-100"><?= ths('Create account'); ?></a>
   </form>
 </div>

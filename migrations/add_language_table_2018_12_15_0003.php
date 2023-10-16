@@ -18,14 +18,14 @@ class add_language_table_2018_12_15_0003 {
             TranslationKey VARCHAR(100) NOT NULL,
             Name VARCHAR(50) NOT NULL,
             CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP)";
-        Application::$app->connection->rawSQL($SQL);
-        Application::$app->connection->execute();
+        app()->connection->rawSQL($SQL);
+        app()->connection->execute();
     }
 
     public function down() {
         $SQL = "DROP TABLE Languages;";
-        Application::$app->connection->rawSQL($SQL);
-        Application::$app->connection->execute();
+        app()->connection->rawSQL($SQL);
+        app()->connection->execute();
     }
 
 }

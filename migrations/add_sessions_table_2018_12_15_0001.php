@@ -17,14 +17,14 @@ class add_sessions_table_2018_12_15_0001 {
             SessionID INT AUTO_INCREMENT PRIMARY KEY,
             Value VARCHAR(50) NOT NULL,
             CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP)";
-        Application::$app->connection->rawSQL($SQL);
-        Application::$app->connection->execute();
+        app()->connection->rawSQL($SQL);
+        app()->connection->execute();
     }
 
     public function down() {
         $SQL = "DROP TABLE Sessions;";
-        Application::$app->connection->rawSQL($SQL);
-        Application::$app->connection->execute();
+        app()->connection->rawSQL($SQL);
+        app()->connection->execute();
     }
 
 }

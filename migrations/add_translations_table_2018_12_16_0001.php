@@ -21,14 +21,14 @@ class add_translations_table_2018_12_16_0001 {
             CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             FOREIGN KEY (LanguageID) REFERENCES Languages(LanguageID)
         )";
-        Application::$app->connection->rawSQL($SQL);
-        Application::$app->connection->execute();
+        app()->connection->rawSQL($SQL);
+        app()->connection->execute();
     }
 
     public function down() {
         $SQL = "DROP TABLE Translations;";
-        Application::$app->connection->rawSQL($SQL);
-        Application::$app->connection->execute();
+        app()->connection->rawSQL($SQL);
+        app()->connection->execute();
     }
 
 }

@@ -17,8 +17,8 @@ class edit_sessions_table_add_user_id_and_ip_2019_01_10_0001 {
             ADD COLUMN UserID INT(10) NOT NULL,
             ADD COLUMN IP VARCHAR(30) NOT NULL
         ";
-        Application::$app->connection->rawSQL($SQL);
-        Application::$app->connection->execute();
+        app()->connection->rawSQL($SQL);
+        app()->connection->execute();
     }
 
     public function down() {
@@ -26,8 +26,8 @@ class edit_sessions_table_add_user_id_and_ip_2019_01_10_0001 {
             REMOVE COLUMN UserID,
             REMOVE COLUMN IP
         ;";
-        Application::$app->connection->rawSQL($SQL);
-        Application::$app->connection->execute();
+        app()->connection->rawSQL($SQL);
+        app()->connection->execute();
     }
 
 }

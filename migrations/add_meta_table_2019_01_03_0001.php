@@ -18,14 +18,14 @@ class add_meta_table_2019_01_03_0001 {
             EntityType VARCHAR(20) NOT NULL,
             EntityID int(10) NOT NULL,
             Data TEXT)";
-        Application::$app->connection->rawSQL($SQL);
-        Application::$app->connection->execute();
+        app()->connection->rawSQL($SQL);
+        app()->connection->execute();
     }
 
     public function down() {
         $SQL = "DROP TABLE Meta;";
-        Application::$app->connection->rawSQL($SQL);
-        Application::$app->connection->execute();
+        app()->connection->rawSQL($SQL);
+        app()->connection->execute();
     }
 
 }

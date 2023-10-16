@@ -20,14 +20,14 @@ class add_role_user_table_2018_12_15_0001 {
             FOREIGN KEY (UserID) REFERENCES Users(UserID),
             FOREIGN KEY (RoleID) REFERENCES Roles(RoleID)
         )";
-        Application::$app->connection->rawSQL($SQL);
-        Application::$app->connection->execute();
+        app()->connection->rawSQL($SQL);
+        app()->connection->execute();
     }
 
     public function down() {
         $SQL = "DROP TABLE Roles;";
-        Application::$app->connection->rawSQL($SQL);
-        Application::$app->connection->execute();
+        app()->connection->rawSQL($SQL);
+        app()->connection->execute();
     }
 
 }

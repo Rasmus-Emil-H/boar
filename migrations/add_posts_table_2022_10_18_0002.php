@@ -18,14 +18,14 @@ class add_posts_table_2022_10_18_0002 {
             Title VARCHAR(50) NOT NULL,
             Body TEXT NOT NULL,
             CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP)";
-        Application::$app->connection->rawSQL($SQL);
-        Application::$app->connection->execute();
+        app()->connection->rawSQL($SQL);
+        app()->connection->execute();
     }
 
     public function down() {
         $SQL = "DROP TABLE Posts;";
-        Application::$app->connection->rawSQL($SQL);
-        Application::$app->connection->execute();
+        app()->connection->rawSQL($SQL);
+        app()->connection->execute();
     }
 
 }

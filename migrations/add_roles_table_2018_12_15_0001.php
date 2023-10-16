@@ -17,14 +17,14 @@ class add_roles_table_2018_12_15_0001 {
             RoleID INT AUTO_INCREMENT PRIMARY KEY,
             Name VARCHAR(50) NOT NULL
         )";
-        Application::$app->connection->rawSQL($SQL);
-        Application::$app->connection->execute();
+        app()->connection->rawSQL($SQL);
+        app()->connection->execute();
     }
 
     public function down() {
         $SQL = "DROP TABLE Roles;";
-        Application::$app->connection->rawSQL($SQL);
-        Application::$app->connection->execute();
+        app()->connection->rawSQL($SQL);
+        app()->connection->execute();
     }
 
 }

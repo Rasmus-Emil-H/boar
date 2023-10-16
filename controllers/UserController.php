@@ -12,9 +12,8 @@ use app\models\UserModel;
 class UserController extends Controller {
 
     public function index() {
-        return $this->render(self::DEFAULT_VIEW, [
-            'users' => UserModel::all()
-        ]);
+        $this->setView('', 'users');
+        $this->setData(['qwd' => 'qwd']);
     }
 
     public function profile() {

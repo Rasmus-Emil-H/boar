@@ -5,15 +5,11 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item">
-          <a aria-label="dashboardbutton" class="nav-link text-white" href="/"><?= hs('Dashboard'); ?></a>
-        </li>
-        <li class="nav-item">
-          <a aria-label="dashboardbutton" class="nav-link text-white" href="/user/profile"><?= hs('Profile'); ?></a>
-        </li>
-        <li class="nav-item">
-          <a aria-label="dashboardbutton" class="nav-link text-white" href="/auth/logout"><?= hs('Logout'); ?></a>
-        </li>
+        <?php foreach ( $navigationItems as $navigationName => $href): ?>
+          <li class="nav-item">
+            <a aria-label="dashboardbutton" class="nav-link text-white" href="<?= $href ?>"><?= hs($navigationName); ?></a>
+          </li>
+        <?php endforeach; ?>
       </ul>
     </div>
   </div>

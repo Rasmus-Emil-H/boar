@@ -20,7 +20,6 @@ class I18n {
     public function __construct() {
         $this->currentlanguage = app()->session->get('language');
         $this->languageID = 1;
-        $this->languages = LanguageModel::all();
     }
 
     public function translate(string $toTranslate): string {
@@ -28,7 +27,7 @@ class I18n {
     }
 
     public function registerMissingTranslation(string $missingTranslation): string {
-        foreach ( $this->languages() as $language ) {
+        foreach ( LanguageModel::all() as $language ) {
             $translation = new TranslationModel();
             $translation
                 ->set(['translation' => $missingTranslation, 'languageID' => $language->key()])

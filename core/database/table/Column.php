@@ -18,4 +18,15 @@ class Column {
         $this->options['primary'] = true;
     }
 
+    public function get(string $key) {
+        return $this->{$key} ?? 'Invalid';
+    }
+
+    public function queryString(): string {
+        return 
+            $this->name . ' ' . 
+            strtoupper($this->type) .
+            (isset($this->get('options')['length']) ? '('.$this->get('options')['length'].')' : null);
+    }
+
 }

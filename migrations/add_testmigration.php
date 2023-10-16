@@ -13,9 +13,9 @@
 class add_testmigration {
 
     public function up() {
-        $static = new \app\core\database\Schema();
-        $static->create('qwd', function($table) {
+        (new \app\core\database\Schema())->create('test', function($table) {
             $table->string('qwd');
+            $table->text('d');
         });
         exit;
     }

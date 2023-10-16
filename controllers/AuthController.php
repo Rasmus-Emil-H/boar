@@ -26,8 +26,8 @@ class AuthController extends Controller {
         if (app()->request->isGet()) return $this->setView('', 'signup');
         if(!validateCSRF()) return false;
         $body = app()->request->getBody();
-        $search = UserModel::search(['Email' => $body['email']]);
-        if ($search) app()->response->setResponse(409, ['errors' => 'Email exists']);
+        $emailExists = UserModel::search(['Email' => $body['email']]);
+        if ($emailExists) app()->response->setResponse(409, ['errors' => 'Email exists']);
         $static = new UserModel();
         $static
             ->set(['Email' => $body['email'], 'Name' => $body['name'], 'Password' => password_hash($body['password'], PASSWORD_DEFAULT)])

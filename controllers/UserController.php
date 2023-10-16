@@ -13,7 +13,6 @@ class UserController extends Controller {
 
     public function index() {
         $this->setView('', 'users');
-        $this->setData(['qwd' => 'qwd']);
     }
 
     public function profile() {

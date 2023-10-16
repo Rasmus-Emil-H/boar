@@ -8,6 +8,8 @@
 
 namespace app\core;
 
+use app\core\exceptions\NotFoundException;
+
 use \app\models\LanguageModel;
 use \app\models\TranslationModel;
 
@@ -19,6 +21,7 @@ class I18n {
 
     public function __construct() {
         $language = LanguageModel::search(['name' => app()->session->get('language')]);
+        if (!$language) throw new \NotFoundException("Language was not found");
         $this->languageID = $language[array_key_first($language)]->key();
     }
 

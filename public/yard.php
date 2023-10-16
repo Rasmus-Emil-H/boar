@@ -3,7 +3,7 @@
 /**
  * Minor convenience for those methods that's used throughout the system
  * @package none
- * @author REWEB
+ * @author RE_WEB
  */
 
 function displayDD($input, $title = null): void {

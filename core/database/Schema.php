@@ -18,11 +18,8 @@ class Schema {
 
     public function formSQL(table\Table $table) {
         $query = 'CREATE TABLE IF NOT EXISTS ' . $table->getName() . '(';
-        foreach ( $table->getColumns() as $columnKey => $columnOptions ) {
-            $query .= $columnOptions->queryString() .
-                (array_key_last($table->getColumns()) === $columnKey ? null : ', ')
-            ;
-        }
+        foreach ( $table->getColumns() as $columnKey => $columnOptions )
+            $query .= $columnOptions->queryString() . (array_key_last($table->getColumns()) === $columnKey ? null : ', ');
         $query .= ')';
         var_dump($query);
         app()->connection->rawSQL($query);

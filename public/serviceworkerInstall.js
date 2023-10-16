@@ -96,6 +96,14 @@ async function sendCachedPostRequests() {
   }
 }
 
+function respondToClient(msg) {
+  self.clients.matchAll().then(clients => {
+      clients.forEach(client => {
+          client.postMessage(msg);
+      });
+  });
+}
+
 async function sendCachedFileRequests() {
   if(checkConnection() === 1) return;
   const cache = await caches.open(fileCache);
@@ -118,12 +126,7 @@ async function sendCachedFileRequests() {
   }
 }
 
-function val(event) {
-  console.log(event);
-}
-
 self.addEventListener('message', (event) => {
-  val(event);
   if (event.data.action === actions.message.CACHE_PAGE) {
       const { url } = event.data;
       if (!url) return;

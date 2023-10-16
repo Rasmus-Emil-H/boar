@@ -15,6 +15,7 @@ class add_language_table_2022_12_20_0003 {
     public function up() {
         $SQL = "CREATE TABLE IF NOT EXISTS Languages (
             LanguageID INT AUTO_INCREMENT PRIMARY KEY,
+            TranslationKey VARCHAR(100) NOT NULL,
             Name VARCHAR(50) NOT NULL,
             CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP)";
         Application::$app->connection->rawSQL($SQL);

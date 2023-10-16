@@ -9,6 +9,9 @@
           <a aria-label="dashboardbutton" class="nav-link text-white" href="/"><?= hs('Dashboard'); ?></a>
         </li>
         <li class="nav-item">
+          <a aria-label="dashboardbutton" class="nav-link text-white" href="/user/profile"><?= hs('Profile'); ?></a>
+        </li>
+        <li class="nav-item">
           <a aria-label="dashboardbutton" class="nav-link text-white" href="/auth/logout"><?= hs('Logout'); ?></a>
         </li>
       </ul>

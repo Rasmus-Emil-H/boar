@@ -11,18 +11,14 @@ use app\models\UserModel;
 
 class UserController extends Controller {
 
-    protected const DEFAULT_VIEW = 'profile';
-
-    public string $defaultRoute = 'index';
-
-    public function __construct() { 
-        
-    }
-
     public function index() {
         return $this->render(self::DEFAULT_VIEW, [
             'users' => UserModel::all()
         ]);
+    }
+
+    public function profile() {
+        $this->setView('', 'profile');
     }
 
 }

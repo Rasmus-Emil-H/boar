@@ -247,7 +247,7 @@ abstract class Entity extends Relations {
     */
 
     public function __toString() {
-        $result = get_class($this)."($this->key:\n";
+        $result = get_class($this)."($this->key):\n";
         foreach ($this->data as $key => $value) $result .= "[$key]:$value\n";
         return $result;
     }

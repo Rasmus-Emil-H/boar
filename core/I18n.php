@@ -18,7 +18,7 @@ class I18n {
     protected int $languageID;
 
     public function __construct() {
-        $this->currentlanguage = Application::$app->session->get('language');
+        $this->currentlanguage = app()->session->get('language');
         $this->languageID = 1;
         $this->languages = LanguageModel::all();
     }

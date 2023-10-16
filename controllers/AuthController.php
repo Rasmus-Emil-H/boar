@@ -28,8 +28,7 @@ class AuthController extends Controller {
         $body = app()->request->getBody();
         $emailExists = UserModel::search(['Email' => $body['email']]);
         if ($emailExists) app()->response->setResponse(409, ['errors' => 'Email exists']);
-        $static = new UserModel();
-        $static
+        $static = (new UserModel())
             ->set(['Email' => $body['email'], 'Name' => $body['name'], 'Password' => password_hash($body['password'], PASSWORD_DEFAULT)])
             ->save();
         app()->response->setResponse(201, ['data' => 'User created']);

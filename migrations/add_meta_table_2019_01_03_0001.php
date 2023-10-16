@@ -14,7 +14,7 @@ class add_meta_table_2019_01_03_0001 {
 
     public function up() {
         $SQL = "CREATE TABLE IF NOT EXISTS Meta (
-            MetaId INT AUTO_INCREMENT PRIMARY KEY,
+            MetaID INT AUTO_INCREMENT PRIMARY KEY,
             EntityType VARCHAR(20) NOT NULL,
             EntityID int(10) NOT NULL,
             Data TEXT)";

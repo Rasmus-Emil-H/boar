@@ -10,22 +10,20 @@
 
 use \app\core\Application;
 
-class add_translation_table_2018_12_16_0001 {
+class add_language_table_2018_12_15_0003 {
 
     public function up() {
-        $SQL = "CREATE TABLE IF NOT EXISTS Translations (
-            TranlationID INT AUTO_INCREMENT PRIMARY KEY,
-            Translation VARCHAR(50) NOT NULL,
-            LanguageID int(5) NOT NULL,
-            CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            FOREIGN KEY (LanguageID) REFERENCES Languages(LanguageID)
-        )";
+        $SQL = "CREATE TABLE IF NOT EXISTS Languages (
+            LanguageID INT AUTO_INCREMENT PRIMARY KEY,
+            TranslationKey VARCHAR(100) NOT NULL,
+            Name VARCHAR(50) NOT NULL,
+            CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP)";
         Application::$app->connection->rawSQL($SQL);
         Application::$app->connection->execute();
     }
 
     public function down() {
-        $SQL = "DROP TABLE Translations;";
+        $SQL = "DROP TABLE Languages;";
         Application::$app->connection->rawSQL($SQL);
         Application::$app->connection->execute();
     }

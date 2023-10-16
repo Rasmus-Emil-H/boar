@@ -9,6 +9,7 @@
 namespace app\core;
 
 use \app\models\LanguageModel;
+use \app\models\TranslationModel;
 
 #[\AllowDynamicProperties]
 
@@ -23,7 +24,7 @@ class I18n {
     }
 
     public function translate(string $toTranslate): string {
-        return LanguageModel::search(['LanguageID' => $this->languageID, 'TranslationKey' => $toTranslate]) ?? $this->registerMissingTranslation($toTranslate);
+        return TranslationModel::search(['LanguageID' => $this->languageID, 'TranslationKey' => $toTranslate]) ?? $this->registerMissingTranslation($toTranslate);
     }
 
     public function registerMissingTranslation(string $missingTranslation): string {

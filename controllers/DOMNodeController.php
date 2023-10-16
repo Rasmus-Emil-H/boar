@@ -15,7 +15,7 @@ class DOMNodeController extends Controller {
 
     public function navbar() {
       $this->setView('partials/', 'navbar');
-      $this->setData(['navbar' => $this->getView(), 'navigationItems' => ['Dashboard' => '/', 'Profile' => '/user/profile', 'Logout' => '/auth/logout']]);
+      $this->setData(['navbar' => $this->getView(), 'navigationItems' => ['Dashboard' => '/home', 'Profile' => '/user/profile', 'Logout' => '/auth/logout']]);
     }
 
 }

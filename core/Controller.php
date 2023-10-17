@@ -153,7 +153,7 @@ class Controller {
     */
 
     public function getTemplatePath(string $folder, string $template): string {
-        return Application::$ROOT_DIR .  '/views/' . $folder . $template . '.tpl.php';
+        return app()::$ROOT_DIR .  '/views/' . $folder . $template . '.tpl.php';
     }
 
     /**

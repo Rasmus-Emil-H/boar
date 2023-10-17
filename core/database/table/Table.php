@@ -24,7 +24,7 @@ class Table {
     }
 
     public function string(string $columnName, int $length = 75) {
-        $this->columns[] = new Column($columnName, self::VARCHAR_COLUMN_TYPE, ['length' => $length]);
+        $this->columns[] = new Column($columnName, self::VARCHAR_COLUMN_TYPE, ['LENGTH' => '('.$length.')']);
     }
 
     public function text(string $columnName) {

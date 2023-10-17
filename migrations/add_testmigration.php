@@ -14,9 +14,9 @@ class add_testmigration {
 
     public function up() {
         (new \app\core\database\Schema())->create('test', function($table) {
-            $table->increments('id');
             $table->string('qwd');
             $table->text('d');
+            $table->increments('id');
             $table->primary('id');
         });
         exit;

@@ -4,9 +4,10 @@ namespace app\core\database\table;
 
 class Column {
 
-    protected $name;
-    protected $type;
-    protected $options = [];
+    protected string $name;
+    protected string $type;
+    protected array  $options = [];
+    protected array  $exclude = ['LENGTH'];
 
     public function __construct(string $name, string $type, array $options = []) {
         $this->name = $name;
@@ -15,7 +16,7 @@ class Column {
     }
 
     public function setPrimary() {
-        $this->options['primary'] = true;
+        $this->options['PRIMARY KEY'] = '()';
     }
 
     public function get(string $key) {
@@ -24,7 +25,8 @@ class Column {
 
     public function queryString(): string {
         $options = '';
-        foreach ( $this->get('options') as $optionKey => $option ) $options .= ' ' . strtoupper($optionKey) . ' ' . $option ?? '';
+        foreach ( $this->get('options') as $optionKey => $option ) 
+            $options .= ' ' . (in_array($optionKey, $this->exclude) ? '' : $optionKey) . ' ' . $option ?? '';
         return 
             $this->name . ' ' . 
             strtoupper($this->type) .

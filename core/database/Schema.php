@@ -26,6 +26,8 @@ class Schema {
         $this->createIfNotExists($table);
     }
 
+    // CREATE TABLE IF NOT EXISTS test(id INT AUTO_INCREMENT , qwd VARCHAR (75), PRIMARY KEY(id) ); 
+
     public function createIfNotExists(table\Table $table) {
         $query = 'CREATE TABLE IF NOT EXISTS ' . $table->getName() . '(';
         foreach ( $table->getColumns() as $columnKey => $columnOptions )

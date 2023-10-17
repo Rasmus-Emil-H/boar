@@ -60,8 +60,8 @@ class curl {
 					] );
 				break;
 			}
-			$this->content = curl_exec ( $this->handler );
-			$this->info = curl_getinfo( $this->handler );
+			$this->content = curl_exec($this->handler);
+			$this->info = curl_getinfo($this->handler);
 		} catch( \Exception $e ) {
 			die( $e->getMessage() );
 		}

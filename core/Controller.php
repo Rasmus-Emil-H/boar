@@ -111,6 +111,7 @@ class Controller {
       foreach ( $childControllers as $childKey => $childController ) {
         [$controller, $method] = preg_match('/:/', $childController) ? explode(':', $childController) : [$childController, self::DEFAULT_METHOD];
         $cController = '\\app\controllers\\'.$controller.'Controller';
+        app()->classCheck($cController);
         $static = new $cController();
         $static->{$method}();
         app()->controller->setData($static->getData());

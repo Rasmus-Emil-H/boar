@@ -41,19 +41,19 @@ class curl {
 
 	public function send(bool $specificDataEntry = false) {
 		try {
-			if( $this->handler == null ) $this->handler = curl_init();
-			switch( strtolower( $this->method ) ) {
+			if ($this->handler == null) $this->handler = curl_init();
+			switch (strtolower($this->method)) {
 				case 'post':
 					curl_setopt_array ( $this->handler , [
 						CURLOPT_URL => $this->url,
 						CURLOPT_RETURNTRANSFER => true,
 						CURLOPT_HTTPHEADER => $this->headers,
 						CURLOPT_POST => count((array)$this->data),
-						CURLOPT_POSTFIELDS => ( $specificDataEntry === false ? $this->data : $this->data[0] ),
+						CURLOPT_POSTFIELDS => ($specificDataEntry === false ? $this->data : $this->data[0] ),
 					] );
 				break;
 				default:
-					curl_setopt_array ( $this->handler , [
+					curl_setopt_array($this->handler , [
 						CURLOPT_URL => $this->url,
 						CURLOPT_HTTPHEADER => $this->headers,
 						CURLOPT_RETURNTRANSFER => true,
@@ -68,7 +68,7 @@ class curl {
 	}		
 
 	public function close() {
-	   curl_close ( $this->handler );
+	   curl_close($this->handler);
 	   $this->handler = null;
 	   $this->headers = [];
 	   $this->data = [];

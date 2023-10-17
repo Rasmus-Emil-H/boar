@@ -82,8 +82,8 @@ class Application {
         if ( !$this->session->get('language') ) $this->session->set('language', 'Danish');
     }
 
-    public function checkUserBasedOnSession(): bool {
-        return $this->session->get('user');
+    public function checkUserBasedOnSession() {
+        !$this->session->get('user') && $this->request->getPath() !== self::$defaultRoute ? $this->router->location(self::$defaultRoute) : '';
     }
 
     /**

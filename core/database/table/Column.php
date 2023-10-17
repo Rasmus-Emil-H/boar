@@ -15,14 +15,16 @@ class Column {
         $this->options = $options;
     }
 
-    public function get(string $key) {
+    public function get(string $key): string|array {
         return $this->{$key} ?? 'Invalid';
     }
 
     public function queryString(): string {
         $options = '';
-        foreach ( $this->get('options') as $optionKey => $option ) 
+        foreach ( $this->get('options') as $optionKey => $option ) {
             $options .= ' ' . (in_array($optionKey, $this->exclude) ? '' : $optionKey) . ' ' . $option ?? '';
+        }
+
         return 
             $this->name . ' ' . 
             strtoupper($this->type) .

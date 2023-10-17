@@ -14,6 +14,7 @@ class Table {
     private const INT_COLUMN_TYPE = 'int';
     private const VARCHAR_COLUMN_TYPE = 'varchar';
     private const TEXT_COLUMN_TYPE = 'text';
+    private const PRIMARY_KEY = 'primary_key';
 
     public function __construct($name) {
         $this->name = $name;
@@ -32,15 +33,15 @@ class Table {
     }
 
     public function text(string $columnName) {
-        $this->createColumn($columnName, self::TEXT_COLUMN_TYPE, ['LENGTH' => '('.$length.')']);
+        $this->createColumn($columnName, self::TEXT_COLUMN_TYPE);
     }
 
     public function integer(string $columnName) {
         $this->createColumn($columnName, self::INT_COLUMN_TYPE);
     }
 
-    public function primary() {
-        
+    public function primary(string $columnName) {
+        $this->createColumn($columnName, self::PRIMARY_KEY);
     }
 
     public function foreign(string $columnName, string $foreignTable, string $foreignColumn) {

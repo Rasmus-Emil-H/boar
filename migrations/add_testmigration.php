@@ -23,9 +23,7 @@ class add_testmigration {
     }
 
     public function down() {
-        $SQL = "DROP TABLE Translations;";
-        app()->connection->rawSQL($SQL);
-        app()->connection->execute();
+        (new \app\core\database\Schema())->drop('test');
     }
 
 }

@@ -83,7 +83,7 @@ class Application {
     }
 
     public function checkUserBasedOnSession() {
-        !$this->session->get('user') && !in_array($this->request->getPath(), self::$defaultRoute) ? $this->router->location(self::$defaultRoute['login']) : '';
+        !$this->session->get('user') && !in_array($this->request->getPath(), self::$defaultRoute) ? $this->response->redirect(self::$defaultRoute['login']) : '';
     }
 
     /**

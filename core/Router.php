@@ -40,12 +40,7 @@ class Router {
     }
 
     public function getDefaultRoute() {
-        $this->location(app()::$defaultRoute['login']);
-    }
-
-    public function location(string $location): void {
-        header('Location: ' . $location);
-        exit;
+        app()->response->redirect(app()::$defaultRoute['login']);
     }
 
     protected function runMiddlewares() {

@@ -36,7 +36,7 @@ class AuthController extends Controller {
         (new UserModel($static))->addMetaData(['event' => 'user signed up']);
 
         app()->session->set('user', $static);
-        app()->router->location('/home');
+        app()->response->redirect('/home');
     }
 
 }

@@ -19,3 +19,5 @@
 <?php if(!app()::isGuest()): ?>
   <?php require_once $navbar; ?>
 <?php endif; ?>
+
+<div class="wrapper">

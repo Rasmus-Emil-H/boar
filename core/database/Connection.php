@@ -7,8 +7,6 @@
 
 namespace app\core\database;
 
-use app\core\Application;
-
 #[\AllowDynamicProperties]
 
 class Connection {
@@ -235,7 +233,7 @@ class Connection {
     public function applyMigrations() {
         $this->createMigrationsTable();
         $appliedMigrations = $this->getAppliedMigrations();
-        $files = scandir(Application::$ROOT_DIR.'/migrations');
+        $files = scandir(app()::$ROOT_DIR.'/migrations');
         $toBeAppliedMigrations = array_diff($files, $appliedMigrations);
         $this->iterateMigrations($toBeAppliedMigrations);
     }
@@ -246,7 +244,7 @@ class Connection {
 
         foreach ($toBeAppliedMigrations as $migration) {
             if ($migration === '.' || $migration === '..') continue;
-            require_once Application::$ROOT_DIR . '/migrations/' . $migration;
+            require_once app()::$ROOT_DIR . '/migrations/' . $migration;
             $className = pathinfo($migration, PATHINFO_FILENAME);
             $currentMigration = new $className();
             $currentMigration->up();

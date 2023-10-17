@@ -40,7 +40,7 @@ class Router {
     }
 
     public function getDefaultRoute() {
-        $this->location(app()::$defaultRoute);
+        $this->location(app()::$defaultRoute['login']);
     }
 
     public function location(string $location): void {

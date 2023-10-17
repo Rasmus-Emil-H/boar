@@ -39,7 +39,7 @@ class Connection {
      * Pdo instance 
      * @var Pdo;
     */
-    public \Pdo $pdo;
+    private ?\Pdo $pdo;
     
     public function __construct(array $pdoConfigurations) {
         $this->pdo = new \PDO($pdoConfigurations['dsn'], $pdoConfigurations['user'], $pdoConfigurations['password'], $this->defaultPdoOptions);

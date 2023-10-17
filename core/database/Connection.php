@@ -248,7 +248,7 @@ class Connection {
             if ($migration === '.' || $migration === '..') continue;
             require_once app()::$ROOT_DIR . '/migrations/' . $migration;
             $className = pathinfo($migration, PATHINFO_FILENAME);
-            if (strlen($className) > self::MAX_LENGTH) throw new \Exception("Classname is too long!");
+            if (strlen($className) > self::MAX_LENGTH) throw new \Exception("Classname ($className) is too long!");
             $currentMigration = new $className();
             $currentMigration->up();
             $this->log('Applying new migration: ' . $className);

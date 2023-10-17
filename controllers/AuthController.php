@@ -13,6 +13,7 @@ class AuthController extends Controller {
     public function login() {
         if (app()->session->get('user')) app()->response->redirect('/home');
         if (app()->request->isPost()) new Authenticator(app()->request->getBody(), 'login');
+        
         $this->setLayout('auth');
         $this->setView('', 'login');
     }
@@ -25,6 +26,7 @@ class AuthController extends Controller {
     public function signup() {
         if (app()->request->isGet()) return $this->setView('', 'signup');
         if(!validateCSRF()) return false;
+
         $body = app()->request->getBody();
         $emailExists = UserModel::search(['Email' => $body['email']]);
         if ($emailExists) app()->response->setResponse(409, ['errors' => 'Email exists']);
@@ -32,7 +34,9 @@ class AuthController extends Controller {
             ->set(['Email' => $body['email'], 'Name' => $body['name'], 'Password' => password_hash($body['password'], PASSWORD_DEFAULT)])
             ->save();
         (new UserModel($static))->addMetaData(['event' => 'user signed up']);
-        app()->response->setResponse(201, ['data' => 'User created']);
+
+        app()->session->set('user', $static);
+        app()->router->location('/home');
     }
 
 }

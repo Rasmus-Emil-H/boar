@@ -31,7 +31,7 @@ class Application {
     public Config $config;
 
     public static self $app;
-    public static $defaultRoute = '/auth/login';
+    public static $defaultRoute = ['login' => '/auth/login', 'register' => '/auth/signup'];
 
     /**
      * Default file places  
@@ -83,7 +83,7 @@ class Application {
     }
 
     public function checkUserBasedOnSession() {
-        !$this->session->get('user') && $this->request->getPath() !== self::$defaultRoute ? $this->router->location(self::$defaultRoute) : '';
+        !$this->session->get('user') && !in_array($this->request->getPath(), self::$defaultRoute) ? $this->router->location(self::$defaultRoute['login']) : '';
     }
 
     /**

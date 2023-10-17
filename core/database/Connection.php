@@ -203,6 +203,7 @@ class Connection {
         $this->query = '';
         $this->fields = '';
         $this->args = [];
+        $this->placeholders = '';
     }
 
     public function describe() {

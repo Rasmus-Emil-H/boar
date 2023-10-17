@@ -252,4 +252,12 @@ abstract class Entity extends Relations {
         return $result;
     }
 
+    public function addMetaData(array $data): void {
+        var_dump($this->getTableName(), $this->key());
+        $static = new EntityMetaData();
+        $static
+            ->set(['EntityType' => $this->getTableName(), 'EntityID' => $this->key(), 'Data' => json_encode($data)])
+            ->save();
+    }
+
 }

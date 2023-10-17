@@ -31,6 +31,7 @@ class AuthController extends Controller {
         $static = (new UserModel())
             ->set(['Email' => $body['email'], 'Name' => $body['name'], 'Password' => password_hash($body['password'], PASSWORD_DEFAULT)])
             ->save();
+        (new UserModel($static))->addMetaData(['event' => 'user signed up']);
         app()->response->setResponse(201, ['data' => 'User created']);
     }
 

@@ -328,23 +328,6 @@ class Connection {
         return $this->execute('fetch');
     }
 
-    private function keysToSql(?array $array, string $seperator, string $variablePrefix = ""): string {
-
-        if ($array == null) return "1";
-
-        $list = [];
-        foreach ($array as $column => $value) {
-
-            if($value === null && $seperator !== ',') $operator = "<=>";
-            else if(is_array($value)) $operator = "IN";
-            else $operator = '=';
-
-            $list[] = " `$column` $operator :" . $variablePrefix . $column;
-        }
-
-        return implode(' ' . $seperator, $list);
-    }
-
     protected function log(string $message): void {
         echo date('Y-m-d H:i:s') . ' ' . $message . PHP_EOL;
     }

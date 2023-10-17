@@ -278,8 +278,9 @@ class Connection {
     }
 
     public function createMigrationsTable() {
-        $this->rawSQL($this->sqlMigrationTable);
-        $this->execute();
+        $this
+            ->rawSQL($this->sqlMigrationTable)
+            ->execute();
     }
 
     /**

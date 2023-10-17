@@ -12,6 +12,8 @@ namespace app\core\database;
 class Connection {
 
     private bool $transactionStarted = false;
+
+    protected const MAX_LENGTH = 255;
     
     protected string $query  = '';
     protected string $where  = '';
@@ -225,7 +227,7 @@ class Connection {
     */
     protected string $sqlMigrationTable = 'CREATE TABLE IF NOT EXISTS Migrations (
         MigrationID int NOT NULL AUTO_INCREMENT,
-        migration VARCHAR(255),
+        migration VARCHAR('.self::MAX_LENGTH.'),
         created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         PRIMARY KEY (MigrationID)
     );';
@@ -246,6 +248,7 @@ class Connection {
             if ($migration === '.' || $migration === '..') continue;
             require_once app()::$ROOT_DIR . '/migrations/' . $migration;
             $className = pathinfo($migration, PATHINFO_FILENAME);
+            if (strlen($className) > self::MAX_LENGTH) throw new \Exception("Classname is too long!");
             $currentMigration = new $className();
             $currentMigration->up();
             $this->log('Applying new migration: ' . $className);

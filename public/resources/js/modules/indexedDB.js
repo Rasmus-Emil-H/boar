@@ -1,6 +1,11 @@
 const databaseName = 'db';
 const objectStoreName = 'dbobjects';
 
+const actions = {
+  write: 'readwrite',
+  read: 'readonly'
+}
+
 class IndexedDBManager {
   constructor() {
     this.db = null;
@@ -31,7 +36,7 @@ class IndexedDBManager {
   async createRecord(data) {
     const db = await this.openDatabase();
     return new Promise((resolve, reject) => {
-      const transaction = db.transaction(objectStoreName, 'readwrite');
+      const transaction = db.transaction(objectStoreName, actions.write);
       const objectStore = transaction.objectStore(objectStoreName);
 
       const request = objectStore.add(data);
@@ -49,7 +54,7 @@ class IndexedDBManager {
   async readRecord(id) {
     const db = await this.openDatabase();
     return new Promise((resolve, reject) => {
-      const transaction = db.transaction(objectStoreName, 'readonly');
+      const transaction = db.transaction(objectStoreName, actions.read);
       const objectStore = transaction.objectStore(objectStoreName);
 
       const request = objectStore.get(id);
@@ -67,7 +72,7 @@ class IndexedDBManager {
   async updateRecord(id, newData) {
     const db = await this.openDatabase();
     return new Promise((resolve, reject) => {
-      const transaction = db.transaction(objectStoreName, 'readwrite');
+      const transaction = db.transaction(objectStoreName, actions.write);
       const objectStore = transaction.objectStore(objectStoreName);
 
       const request = objectStore.put({ id, ...newData });
@@ -85,7 +90,7 @@ class IndexedDBManager {
   async deleteRecord(id) {
     const db = await this.openDatabase();
     return new Promise((resolve, reject) => {
-      const transaction = db.transaction(objectStoreName, 'readwrite');
+      const transaction = db.transaction(objectStoreName, actions.write);
       const objectStore = transaction.objectStore(objectStoreName);
 
       const request = objectStore.delete(id);
@@ -103,7 +108,7 @@ class IndexedDBManager {
   async getAllRecords() {
     const db = await this.openDatabase();
     return new Promise((resolve, reject) => {
-      const transaction = db.transaction(objectStoreName, 'readonly');
+      const transaction = db.transaction(objectStoreName, actions.read);
       const objectStore = transaction.objectStore(objectStoreName);
 
       const request = objectStore.getAll();

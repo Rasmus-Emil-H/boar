@@ -19,24 +19,28 @@ class Table {
         $this->name = $name;
     }
 
+    public function createColumn(string $columnName, string $type, array $options = []) {
+        $this->columns[] = new Column($columnName, $type, $options);
+    }
+
     public function increments(string $columnName) {
-        $this->columns[] = new Column($columnName, self::INT_COLUMN_TYPE, ['AUTO_INCREMENT' => null]);
+        $this->createColumn($columnName, self::INT_COLUMN_TYPE, ['AUTO_INCREMENT' => null]);
     }
 
     public function string(string $columnName, int $length = 75) {
-        $this->columns[] = new Column($columnName, self::VARCHAR_COLUMN_TYPE, ['LENGTH' => '('.$length.')']);
+        $this->createColumn($columnName, self::VARCHAR_COLUMN_TYPE, ['LENGTH' => '('.$length.')']);
     }
 
     public function text(string $columnName) {
-        $this->columns[] = new Column($columnName, self:: TEXT_COLUMN_TYPE);
+        $this->createColumn($columnName, self::TEXT_COLUMN_TYPE, ['LENGTH' => '('.$length.')']);
     }
 
     public function integer(string $columnName) {
-        $this->columns[] = new Column($columnName, self:: INT_COLUMN_TYPE);
+        $this->createColumn($columnName, self::INT_COLUMN_TYPE);
     }
 
     public function primary() {
-        $this->columns[count($this->columns) - 1]->setPrimary();
+        
     }
 
     public function foreign(string $columnName, string $foreignTable, string $foreignColumn) {

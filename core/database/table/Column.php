@@ -15,10 +15,6 @@ class Column {
         $this->options = $options;
     }
 
-    public function setPrimary() {
-        $this->options['PRIMARY KEY'] = '()';
-    }
-
     public function get(string $key) {
         return $this->{$key} ?? 'Invalid';
     }

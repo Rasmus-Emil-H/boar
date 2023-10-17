@@ -132,14 +132,13 @@ class Controller {
      * @return array
     */
 
-    public function getChildren() : array {
+    public function getChildren(): array {
         return $this->children;
     }
 
     public function execChildData() {
       $this->setChildData($this->getChildren());
     }
-
 
     public function getPartialTemplate(string $partial): string {
       return $this->getTemplatePath('partials/', $partial);
@@ -185,7 +184,7 @@ class Controller {
     }   
 
     /**
-     * @return array
+     * @return [\app\core\Middleware]
     */
 
     public function getMiddlewares(): array {

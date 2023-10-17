@@ -12,7 +12,10 @@ class Schema {
 
     public function drop(string $table) {
         $query = ' DROP TABLE IF EXISTS ' . $table;
-        app()->connection->rawSQL($query)->execute();
+        app()
+            ->connection
+            ->rawSQL($query)
+            ->execute();
     }
 
     /**

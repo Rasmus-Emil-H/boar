@@ -23,10 +23,12 @@ class Column {
     }
 
     public function queryString(): string {
+        $options = '';
+        foreach ( $this->get('options') as $optionKey => $option ) $options .= ' ' . strtoupper($optionKey) . ' ' . $option ?? '';
         return 
             $this->name . ' ' . 
             strtoupper($this->type) .
-            (isset($this->get('options')['length']) ? '('.$this->get('options')['length'].')' : null);
+            (count($this->get('options')) ? $options : null);
     }
 
 }

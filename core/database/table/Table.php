@@ -20,7 +20,7 @@ class Table {
     }
 
     public function increments(string $columnName) {
-        $this->columns[] = new Column($columnName, self::INT_COLUMN_TYPE, ['auto_increment' => true]);
+        $this->columns[] = new Column($columnName, self::INT_COLUMN_TYPE, ['AUTO_INCREMENT' => null]);
     }
 
     public function string(string $columnName, int $length = 75) {

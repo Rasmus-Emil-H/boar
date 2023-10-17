@@ -20,14 +20,12 @@ class Schema {
      * @param \Closure $callback
      * @return void
      */
-    
+
     public function create(string $table, \Closure $callback): void {
         $table = new table\Table($table);
         $callback($table);
         $this->createIfNotExists($table);
     }
-
-    // CREATE TABLE IF NOT EXISTS test(id INT AUTO_INCREMENT , qwd VARCHAR (75), PRIMARY KEY(id) ); 
 
     public function createIfNotExists(table\Table $table) {
         $query = 'CREATE TABLE IF NOT EXISTS ' . $table->getName() . '(';
@@ -36,7 +34,6 @@ class Schema {
                 $columnOptions->queryString() . 
                 (array_key_last($table->getColumns()) === $columnKey ? null : ', ');
         $query .= ')';
-        var_dump($query);
         app()->connection->rawSQL($query);
     }
 

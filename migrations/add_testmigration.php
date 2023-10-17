@@ -15,7 +15,6 @@ class add_testmigration {
             $table->increments('id');
             $table->primary('id');
         });
-        exit;
     }
 
     public function down() {

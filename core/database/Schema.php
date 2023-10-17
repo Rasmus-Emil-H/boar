@@ -20,6 +20,7 @@ class Schema {
      * @param \Closure $callback
      * @return void
      */
+    
     public function create(string $table, \Closure $callback): void {
         $table = new table\Table($table);
         $callback($table);

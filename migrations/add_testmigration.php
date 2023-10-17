@@ -1,19 +1,15 @@
 <?php
 
 /**
- * Initial migration
- * @someday i'll refactor this so that
- * it would go something like
- * $this->db->table->field('name')->type('varchar')->length(255)
  * @return migration
 */
 
-
+use \app\core\database\Schema;
 
 class add_testmigration {
 
     public function up() {
-        (new \app\core\database\Schema())->create('test', function($table) {
+        (new Schema())->create('test', function($table) {
             $table->string('qwd');
             $table->text('d');
             $table->increments('id');
@@ -23,7 +19,7 @@ class add_testmigration {
     }
 
     public function down() {
-        (new \app\core\database\Schema())->drop('test');
+        (new Schema())->drop('test');
     }
 
 }

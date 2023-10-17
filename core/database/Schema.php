@@ -34,7 +34,7 @@ class Schema {
                 $columnOptions->queryString() . 
                 (array_key_last($table->getColumns()) === $columnKey ? null : ', ');
         $query .= ')';
-        app()->connection->rawSQL($query);
+        app()->connection->rawSQL($query)->execute();
     }
 
 }

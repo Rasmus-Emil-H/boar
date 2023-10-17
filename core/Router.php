@@ -31,7 +31,7 @@ class Router {
         if (empty($this->queryPattern)) $this->getDefaultRoute();
         $handler = ucfirst($this->queryPattern[0] ?? '').self::CONTROLLER;
         $controller = '\\app\controllers\\'.$handler;
-        if (!class_exists($controller)) $controller = '\\app\controllers\\AuthController';
+        app()->classCheck($controller);
         $currentController = new $controller();
         app()->setController($currentController);
         $method = $this->queryPattern[1] ?? self::INDEX_METHOD;

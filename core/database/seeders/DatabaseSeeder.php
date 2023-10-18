@@ -13,7 +13,7 @@ use \app\models;
 
 class DatabaseSeeder extends Entity {
 
-    public function up(Model $model, array $fields, int $amount): void {
+    public function up(Entity $model, array $fields, int $amount): void {
         for($i = 0; $i < $amount; $i++) {
             $static = $model
                 ->set($fields)

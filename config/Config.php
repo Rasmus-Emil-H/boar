@@ -8,8 +8,6 @@
 
 namespace app\config;
 
-use \app\core\Application;
-
 class Config {
 
     public function get(string $key) {

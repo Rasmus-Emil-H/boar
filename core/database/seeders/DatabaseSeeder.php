@@ -11,11 +11,13 @@ namespace app\core\database\seeders;
 use \app\core\database\Entity;
 use \app\models;
 
-class DatabaseSeeder extends Entity {
+class DatabaseSeeder {
 
-    public function up(Entity $model, array $fields, int $amount): void {
+    public function up(string $model, array $fields, int $amount): void {
         for($i = 0; $i < $amount; $i++) {
-            $static = $model
+            $staticModel = $model.'Model';
+            $static = new $staticModel();
+            $static
                 ->set($fields)
                 ->save();
             (new $model($static))->addMetaData(['event' => 'Database seeder added this user']);

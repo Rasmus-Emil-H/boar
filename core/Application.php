@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Bootstrap application 
+ * Bootstrap application
  * AUTHOR: RE_WEB
  * @package app\core\application
 */
@@ -10,6 +10,7 @@ namespace app\core;
 
 use \app\core\database\Connection;
 use \app\config\Config;
+use \app\utilities\Logger;
 
 class Application {
 
@@ -29,14 +30,10 @@ class Application {
     public Regex $regex;
     public I18n $i18n;
     public Config $config;
+    public Logger $logger;
 
     public static self $app;
     public static $defaultRoute = ['login' => '/auth/login', 'register' => '/auth/signup'];
-
-    /**
-     * Default file places  
-     * @var string $uploadFolder
-    */
 
     public const UPLOAD_FOLDER = __DIR__.'/uploads/';
 
@@ -47,7 +44,7 @@ class Application {
         $this->config      = new Config();
         $this->setupConnection();
 
-        if ( $applicationIsMigrating ) return;
+        if ($applicationIsMigrating) return;
         
         $this->request     = new Request();
         $this->response    = new Response();
@@ -58,10 +55,10 @@ class Application {
         $this->view        = new View();
         $this->env         = new Env();
         $this->i18n        = new I18n();
+        $this->logger      = new Logger();
 
         $this->checkLanguage();
         $this->checkUserBasedOnSession();
-
     }
 
     protected function setupConnection() {
@@ -79,7 +76,7 @@ class Application {
     }
 
     public function checkLanguage() {
-        if ( !$this->session->get('language') ) $this->session->set('language', 'Danish');
+        if (!$this->session->get('language')) $this->session->set('language', 'Danish');
     }
 
     public function checkUserBasedOnSession() {
@@ -96,12 +93,13 @@ class Application {
         try {
             $this->router->resolve();
         } catch (\Throwable $applicationError) {
+            $this->logger->log($applicationError);
             $this->setController(new \app\controllers\ErrorController($applicationError));
         }
     }
 
     public function classCheck(string $class): void {
-        if(!class_exists($class)) $this->response->setResponse(400, 'application/json', ['msg' => 'bad request']);
+        if (!class_exists($class)) $this->response->setResponse(400, 'application/json', ['msg' => 'bad request']);
     }
 
     public function globalThrower(string $message): \Exception {
@@ -109,7 +107,7 @@ class Application {
     }
 
     protected function exceptionCodeHandler($code) {
-        if( !is_int($code) ) 
+        if (!is_int($code))
             throw new \Exception('Invalid status code. Must be int, however ' . gettype($code) . ' is provided.');
     }
 

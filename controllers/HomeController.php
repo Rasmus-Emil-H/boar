@@ -19,7 +19,6 @@ class HomeController extends Controller {
 
   public function index() {
     $this->setView('', 'home');
-    (new \app\core\database\seeders\DatabaseSeeder())->up('User', ['Name' => 'qwd', 'Email' => rand(1,10000).'@live.dk'], 10);
   }
     
 }

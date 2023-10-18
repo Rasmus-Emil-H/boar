@@ -8,8 +8,6 @@
 
 namespace app\core\database\seeders;
 
-use \app\core\Application;
-use \app\core\database\relations\Relations;
 use \app\core\database\Entity;
 use \app\models;
 

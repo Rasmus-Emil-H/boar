@@ -71,18 +71,26 @@ class IndexedDBManager {
 
   async updateRecord(id, newData) {
     const db = await this.openDatabase();
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
       const transaction = db.transaction(objectStoreName, actions.write);
       const objectStore = transaction.objectStore(objectStoreName);
+      const getRequest = objectStore.get(id);
+      getRequest.onsuccess = function(event) {
+        let data = event.target.result;
+        if (newData.genericEntry) {
+          data.genericEntries[newData.genericEntry].data = newData;
+          var request = objectStore.put({ id, ...data });
+        } else {
+          var request = objectStore.put({ id, ...newData });
+        } 
 
-      const request = objectStore.put({ id, ...newData });
+        request.onsuccess = (event) => {
+          resolve(data);
+        };
 
-      request.onsuccess = (event) => {
-        resolve(event.target.result);
-      };
-
-      request.onerror = (event) => {
-        reject(event.target.error);
+        request.onerror = (event) => {
+          reject(event.target.error);
+        };
       };
     });
   }
@@ -105,16 +113,17 @@ class IndexedDBManager {
     });
   }
 
-  async getAllRecords() {
+  async getAllRecords(id) {
     const db = await this.openDatabase();
     return new Promise((resolve, reject) => {
       const transaction = db.transaction(objectStoreName, actions.read);
       const objectStore = transaction.objectStore(objectStoreName);
 
-      const request = objectStore.getAll();
+      const request = objectStore.getAll(id);
 
       request.onsuccess = (event) => {
-        resolve(event.target.result);
+        delete event.target.result[0].id;
+        resolve({genericEntries: event.target.result[0]});
       };
 
       request.onerror = (event) => {

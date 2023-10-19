@@ -61,16 +61,16 @@ class Connection {
         return $this;
     }
 
-    /**
-     * Init method for needing objects
-     * @return Database
-    */
-
     public function replaceWithPlaceholders(string $value): string {
         return '?';
     }
 
-    public function init(string $table, array $data) {
+    /**
+     * Init method
+     * @return void
+    */
+
+    public function init(string $table, array $data): void {
         $this->tableName = $table;
         $this->bindFields($data); 
         $this->bindValues($data);
@@ -159,11 +159,12 @@ class Connection {
         return $this;
     }
 
-    /*
+    /**
      * Global query executioner
      * Responsible for executing the desired query
      * @return object | array
     */
+
     public function execute(string $fetchType = 'fetchAll') {
         try {
             $stmt = $this->prepare($this->query);
@@ -194,6 +195,11 @@ class Connection {
         return $this;
     }
 
+    /**
+     * Reset information needed in order to execute the query
+     * @return void
+     */
+
     public function resetQuery() {
         $this->type = '';
         $this->selector = '';
@@ -222,10 +228,9 @@ class Connection {
 
     /**
      * Migration table sql
-     * table for migration so that we dont forking overwrite stuff
-     * mkay?
      * @var sqlMigrationTable
     */
+
     protected string $sqlMigrationTable = 'CREATE TABLE IF NOT EXISTS Migrations (
         MigrationID int NOT NULL AUTO_INCREMENT,
         migration VARCHAR('.self::MAX_LENGTH.'),
@@ -242,7 +247,6 @@ class Connection {
     }
 
     public function iterateMigrations(array $toBeAppliedMigrations) {
-
         $newMigrations = [];
 
         foreach ($toBeAppliedMigrations as $migration) {
@@ -303,10 +307,11 @@ class Connection {
     }
 
     /**
-    * Commits a transaction, returning the database connection to autocommit mode.
-    * @throws PDOException
-    * @return boolean
+     * Commits a transaction, returning the database connection to autocommit mode.
+     * @throws PDOException
+     * @return boolean
     */
+
     public function commit() : bool {
         if($this->transactionStarted === true) {
             return $this->pdo->commit();
@@ -316,10 +321,11 @@ class Connection {
     }
 
     /**
-    * Rolls back the current transaction
-    * @throws PDOException
-    * @return boolean
+     * Rolls back the current transaction
+     * @throws PDOException
+     * @return boolean
     */
+
     public function rollback() : bool {
         return $this->transactionStarted ? $this->pdo->rollBack() : false;
     }

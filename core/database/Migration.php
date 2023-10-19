@@ -3,7 +3,6 @@
 namespace app\core\database;
 
 class Migration {
-
     protected const MAX_LENGTH = 255;
 
     public function getAppliedMigrations(): array {
@@ -49,11 +48,13 @@ class Migration {
             app()->classCheck($className);
             $currentMigration = new $className();
             $currentMigration->up();
-            app()->connection->log('Applying new migration: ' . $className);
             app()
                 ->connection
                 ->create('Migrations', ['migration' => $className])
                 ->execute();
+            app()
+                ->connection
+                ->log('Successfully applied new migration: ' . $className);
         }
 
         app()

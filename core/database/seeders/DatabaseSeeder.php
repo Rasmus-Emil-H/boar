@@ -19,7 +19,7 @@ class DatabaseSeeder {
             $static
                 ->set($fields)
                 ->save();
-            (new $staticModel($static->key()))->addMetaData(['event' => 'Database seeder added this user']);
+            (new $staticModel($static->key()))->addMetaData(['event' => 'Database seeder added this ' . $model]);
         }
     }
 

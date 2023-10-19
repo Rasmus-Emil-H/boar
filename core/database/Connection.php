@@ -77,10 +77,6 @@ class Connection {
         $this->create();
         $this->execute();
     }
-    
-    /**
-     * @return binders for fields and arguments 
-    */
 
     public function bindFields(array $fields): void {
         $this->fields = implode(', ', $fields);

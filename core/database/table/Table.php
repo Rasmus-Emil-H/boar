@@ -15,6 +15,7 @@ class Table {
     private const VARCHAR_COLUMN_TYPE = 'varchar';
     private const TEXT_COLUMN_TYPE = 'text';
     private const PRIMARY_KEY = 'primary_key';
+    private const TIMESTAMP = 'timestamp';
 
     public function __construct($name) {
         $this->name = $name;
@@ -42,6 +43,10 @@ class Table {
 
     public function primary(string $columnName) {
         $this->createColumn($columnName, self::PRIMARY_KEY);
+    }
+
+    public function timestamp(string $columnName = 'Timestamp') {
+        $this->createColumn($columnName, self::TIMESTAMP);
     }
 
     public function foreign(string $columnName, string $foreignTable, string $foreignColumn) {

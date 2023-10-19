@@ -237,16 +237,22 @@ class Connection {
     public function applyMigrations() {
         $this->createMigrationsTable();
         $appliedMigrations = $this->getAppliedMigrations();
-        $files = scandir(app()::$ROOT_DIR.'/migrations');
-        $toBeAppliedMigrations = array_diff($files, $appliedMigrations);
-        $this->iterateMigrations($toBeAppliedMigrations);
+        $migrationsFolder = app()::$ROOT_DIR.'/migrations';
+        $migrations = scandir($migrationsFolder);
+        $missingMigrations = [];
+        foreach ( $migrations as $migration ) {
+            $migrationFile = $migrationsFolder.'/'.$migration;
+            if (!is_file($migrationFile) || in_array($migrationFile, $appliedMigrations)) continue;
+            $missingMigrations[filemtime($migrationFile)] = $migration;
+        }
+        ksort($missingMigrations);
+        $this->iterateMigrations($missingMigrations);
     }
 
-    public function iterateMigrations(array $toBeAppliedMigrations) {
+    public function iterateMigrations(array $toBeAppliedMigrations): void {
         $newMigrations = [];
 
         foreach ($toBeAppliedMigrations as $migration) {
-            if ($migration === '.' || $migration === '..') continue;
             require_once app()::$ROOT_DIR . '/migrations/' . $migration;
             $className = pathinfo($migration, PATHINFO_FILENAME);
             if (strlen($className) > self::MAX_LENGTH) throw new \Exception("Classname ($className) is too long!");

@@ -15,7 +15,7 @@ class Table {
     private const VARCHAR_COLUMN_TYPE = 'varchar';
     private const TEXT_COLUMN_TYPE = 'text';
     private const PRIMARY_KEY = 'primary_key';
-    private const TIMESTAMP = 'timestamp';
+    private const TIMESTAMP = 'TIMESTAMP DEFAULT CURRENT_TIMESTAMP';
 
     public function __construct($name) {
         $this->name = $name;
@@ -29,7 +29,7 @@ class Table {
         $this->createColumn($columnName, self::INT_COLUMN_TYPE, ['AUTO_INCREMENT' => null]);
     }
 
-    public function string(string $columnName, int $length = 75) {
+    public function varchar(string $columnName, int $length = 75) {
         $this->createColumn($columnName, self::VARCHAR_COLUMN_TYPE, ['LENGTH' => '('.$length.')']);
     }
 
@@ -41,7 +41,7 @@ class Table {
         $this->createColumn($columnName, self::INT_COLUMN_TYPE);
     }
 
-    public function primary(string $columnName) {
+    public function primaryKey(string $columnName) {
         $this->createColumn($columnName, self::PRIMARY_KEY);
     }
 

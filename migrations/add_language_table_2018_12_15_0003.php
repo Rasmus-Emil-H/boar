@@ -1,31 +1,28 @@
 <?php
 
 /**
- * Initial migration
- * @someday i'll refactor this so that
- * it would go something like
- * $this->db->table->field('name')->type('varchar')->length(255)
- * @return migration
+ * Language table migration
 */
 
 use \app\core\Application;
 
+use \app\core\database\table\Table;
+use \app\core\database\Schema;
+
 class add_language_table_2018_12_15_0003 {
 
     public function up() {
-        $SQL = "CREATE TABLE IF NOT EXISTS Languages (
-            LanguageID INT AUTO_INCREMENT PRIMARY KEY,
-            TranslationKey VARCHAR(100) NOT NULL,
-            Name VARCHAR(50) NOT NULL,
-            CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP)";
-        app()->connection->rawSQL($SQL);
-        app()->connection->execute();
+        (new Schema())->up('Languages', function(Table $table) {
+            $table->integer('LanguageID');
+            $table->varchar('TranslationKey', 100);
+            $table->varchar('Name', 50);
+            $table->timestamp('CreatedAt');
+            $table->primaryKey('LanguageID');
+        });
     }
 
     public function down() {
-        $SQL = "DROP TABLE Languages;";
-        app()->connection->rawSQL($SQL);
-        app()->connection->execute();
+        (new Schema())->drop('Languages');
     }
 
 }

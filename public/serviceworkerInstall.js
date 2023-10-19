@@ -7,7 +7,8 @@ const login = '/auth/login';
 const actions = {
   message: {
       CACHE_FILE: 'cache-file',
-      CACHE_PAGE: 'cache-page'
+      CACHE_PAGE: 'cache-page',
+      CHECK_STATUS: 'check-status'
   }
 };
 
@@ -65,11 +66,9 @@ async function cachePostRequest(request) {
 }
 
 function checkConnection() {
-  if (!navigator.onLine) {
-      console.log(messages.offline);
-      return 1;
-  }
-  return 0;
+  if (navigator.onLine) return 0;
+  console.log(messages.offline);
+  return 1;
 }
 
 async function synchroniseCaches() {
@@ -112,14 +111,9 @@ async function sendCachedFileRequests() {
       const cacheResponse = await cache.match(cacheKey);
       try {
           const body = await cacheResponse.formData();
-          await fetch(body.get('url'), { method: 'POST', body })
-              .then(async res => {
-                  await cache.delete(cacheKey);
-                  return new Response('OK', {status: 302, headers: { 'Location': body.get('url') }});
-              })
-              .catch(err => {
-                  console.log(err);
-              });
+          const response = await fetch(body.get('url'), { method: 'POST', body });
+          response.ok ? await cache.delete(cacheKey) : console.error(messages.errors.postRequest, response.status);
+          return new Response('OK', {status: 302, headers: { 'Location': body.get('url') }});
       } catch (error) {
           console.log("file sync err", error);
       }
@@ -155,9 +149,7 @@ self.addEventListener('message', (event) => {
           .catch((e) => {
               console.error('Error storing file in cache:', e);
           });
-  } else if(event.data.action === 'check-status') {
-      synchroniseCaches();
-  }
+  } else if(event.data.action === actions.message.CHECK_STATUS) synchroniseCaches();
 });
 
 self.addEventListener('online', event => {

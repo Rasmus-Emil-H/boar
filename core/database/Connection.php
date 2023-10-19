@@ -222,89 +222,27 @@ class Connection {
         $this->query = "ALTER TABLE {$this->tableName} CHANGE {$oldColumn} {$newColumn}";
     }
 
-    /**
-     * Migration table sql
-     * @var sqlMigrationTable
-    */
-
-    protected string $sqlMigrationTable = 'CREATE TABLE IF NOT EXISTS Migrations (
-        MigrationID int NOT NULL AUTO_INCREMENT,
-        migration VARCHAR('.self::MAX_LENGTH.'),
-        created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        PRIMARY KEY (MigrationID)
-    );';
-
-    public function applyMigrations() {
-        $this->createMigrationsTable();
-        $appliedMigrations = $this->getAppliedMigrations();
-        $migrationsFolder = app()::$ROOT_DIR.'/migrations';
-        $migrations = scandir($migrationsFolder);
-        $missingMigrations = [];
-        foreach ( $migrations as $migration ) {
-            $migrationFile = $migrationsFolder.'/'.$migration;
-            if (!is_file($migrationFile) || in_array($migrationFile, $appliedMigrations)) continue;
-            $missingMigrations[filemtime($migrationFile)] = $migration;
-        }
-        ksort($missingMigrations);
-        $this->iterateMigrations($missingMigrations);
-    }
-
-    public function iterateMigrations(array $toBeAppliedMigrations): void {
-        $newMigrations = [];
-
-        foreach ($toBeAppliedMigrations as $migration) {
-            require_once app()::$ROOT_DIR . '/migrations/' . $migration;
-            $className = pathinfo($migration, PATHINFO_FILENAME);
-            if (strlen($className) > self::MAX_LENGTH) throw new \Exception("Classname ($className) is too long!");
-            $currentMigration = new $className();
-            $currentMigration->up();
-            $this->log('Applying new migration: ' . $className);
-            $newMigrations[] = $migration;
-        }
-
-        if (!empty($newMigrations)) $this->saveMigrations($newMigrations);
-        else $this->log('Currently all migrations are applied.');
-    }
-
-    protected function saveMigrations(array $migrations) {
-        $migrations = implode(',', array_map(fn($m) => "('$m')", $migrations));
-        $stmt = $this->pdo->prepare("INSERT INTO Migrations (migration) VALUES $migrations");
-        $stmt->execute();
-    }
-
     protected function rawSQL(string $sql): self {
         $this->query = $sql;
         return $this;
     }
 
-    public function prepare(string $sql) {
+    public function prepare(string $sql): \PDOStatement {
         return $this->pdo->prepare($sql);
-    }
-
-    public function getAppliedMigrations() {
-        $statement = $this->pdo->prepare("SELECT migration FROM Migrations");
-        $statement->execute();
-        return $statement->fetchAll(\PDO::FETCH_COLUMN);
-    }
-
-    public function createMigrationsTable() {
-        $this
-            ->rawSQL($this->sqlMigrationTable)
-            ->execute();
     }
 
     /**
     * Begin transaction
     * @return boolean
     */
-    public function beginTransaction() : bool {
+    public function beginTransaction(): bool {
         return $this->transactionStarted = $this->pdo->beginTransaction();
     }
 
     /**
     * @return boolean
     */
-    public function transaction() : bool {
+    public function transaction(): bool {
         return $this->beginTransaction();
     }
 
@@ -314,12 +252,8 @@ class Connection {
      * @return boolean
     */
 
-    public function commit() : bool {
-        if($this->transactionStarted === true) {
-            return $this->pdo->commit();
-        } else {
-            throw new \PDOException("Attempted to commit when not in transaction, or transaction failed to start.");
-        }
+    public function commit(): bool|\PDOException {
+        return $this->transactionStarted === true ? $this->pdo->commit() : throw new \PDOException("Attempted to commit when not in transaction, or transaction failed to start.");
     }
 
     /**
@@ -328,7 +262,7 @@ class Connection {
      * @return boolean
     */
 
-    public function rollback() : bool {
+    public function rollback(): bool {
         return $this->transactionStarted ? $this->pdo->rollBack() : false;
     }
 
@@ -337,8 +271,14 @@ class Connection {
         return $this->execute('fetch');
     }
 
-    protected function log(string $message): void {
+    /**
+     * Log current execution context
+     * @return void
+     */
+
+    protected function log(string $message, bool $exit = false): void {
         echo date('Y-m-d H:i:s') . ' ' . $message . PHP_EOL;
+        if ($exit) exit();
     }
 
 }

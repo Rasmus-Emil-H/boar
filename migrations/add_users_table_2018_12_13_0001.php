@@ -10,7 +10,7 @@
 
 use \app\core\Application;
 
-class add_users_table_2018_12_14_0001 {
+class add_users_table_2018_12_13_0001 {
 
     public function up() {
         $SQL = "CREATE TABLE IF NOT EXISTS Users (

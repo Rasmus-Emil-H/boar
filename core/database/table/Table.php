@@ -45,7 +45,7 @@ class Table {
         $this->createColumn($columnName, self::PRIMARY_KEY);
     }
 
-    public function timestamp(string $columnName = 'Timestamp') {
+    public function timestamp(string $columnName = 'CreatedAt') {
         $this->createColumn($columnName, self::TIMESTAMP);
     }
 

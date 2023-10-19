@@ -15,6 +15,7 @@ class DatabaseSeeder {
     public function up(string $model, array $fields, int $amount): void {
         for($i = 0; $i < $amount; $i++) {
             $staticModel = '\\app\models\\'.$model.'Model';
+            app()->classCheck($staticModel);
             $static = new $staticModel();
             $static
                 ->set($fields)

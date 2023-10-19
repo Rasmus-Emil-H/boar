@@ -10,7 +10,7 @@
 
 use \app\core\Application;
 
-class add_role_user_table_2018_12_15_0001 {
+class add_role_user_table_2018_12_16_0001 {
 
     public function up() {
         $SQL = "CREATE TABLE IF NOT EXISTS role_user (

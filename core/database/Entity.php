@@ -189,8 +189,8 @@ abstract class Entity extends Relations {
     }
 
     /**
-    * Gets the current entity data
-    * @return array
+     * Gets the current entity data
+     * @return array
      */
 
     public function getData(): array {
@@ -198,8 +198,8 @@ abstract class Entity extends Relations {
     }
 
     /**
-    * Get value based on key
-    * @return array
+     * Get value based on key
+     * @return array
      */
 
     public function __get(string $key) {

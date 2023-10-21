@@ -27,7 +27,7 @@ class Migration {
     public function applyMigrations() {
         $this->createMigrationsTable();
         $appliedMigrations = $this->getAppliedMigrations();
-        $migrationsFolder = app()::$ROOT_DIR.self::MIGRATION_DIR;
+        $migrationsFolder = app()::$ROOT_DIR . self::MIGRATION_DIR;
         $migrations = scandir($migrationsFolder);
         $missingMigrations = [];
         foreach ( $migrations as $migration ) {

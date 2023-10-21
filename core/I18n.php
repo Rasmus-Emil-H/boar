@@ -35,7 +35,7 @@ class I18n {
     }
 
     public function registerMissingTranslation(string $missingTranslation) {
-        $translation = (new TranslationModel())
+        (new TranslationModel())
             ->set(['Translation' => $missingTranslation, 'LanguageID' => $this->languageID, 'TranslationHash' => \app\core\miscellaneous\Hash::create()])
             ->save();
     }

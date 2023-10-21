@@ -66,8 +66,8 @@ abstract class Entity extends Relations {
     }
     
     /**
-    * get pk
-    * @return bool
+     * get pk
+     * @return bool
      */
 
     public function key() {
@@ -75,8 +75,8 @@ abstract class Entity extends Relations {
     }
 
     /**
-    * Determine if the loaded entity exists in db
-    * @return bool
+     * Determine if the loaded entity exists in db
+     * @return bool
      */
 
     public function exists(): bool {
@@ -84,7 +84,7 @@ abstract class Entity extends Relations {
     }
 
     /**
-    * @return string
+     * @return string
      */
 
     public function save() {
@@ -168,10 +168,10 @@ abstract class Entity extends Relations {
     }
 
     /**
-    * Load one or more ID's into entities
-    * @param mixed $ids an array of ID's or an integer to load
-    * @return mixed The loaded entities
-    * @throws Exception
+     * Load one or more ID's into entities
+     * @param mixed $ids an array of ID's or an integer to load
+     * @return mixed The loaded entities
+     * @throws Exception
      */
 
     public static function load(array|int $ids) {
@@ -221,7 +221,7 @@ abstract class Entity extends Relations {
     /**
      * @param string key
      * @return mixed 
-    */
+     */
 
     public function getRelatedObject(string $key): string {
 		return $this->relatedObjects[$key] ?? app()->globalThrower('Invalid relation');
@@ -248,8 +248,7 @@ abstract class Entity extends Relations {
     }
 
     public function addMetaData(array $data): void {
-        $static = new EntityMetaData();
-        $static
+        (new EntityMetaData())
             ->set(['EntityType' => $this->getTableName(), 'EntityID' => $this->key(), 'Data' => json_encode($data)])
             ->save();
     }

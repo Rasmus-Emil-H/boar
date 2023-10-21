@@ -233,7 +233,11 @@ abstract class Entity extends Relations {
      */
 
     public function delete() {
-        return app()->connection->delete($this->getTableName())->where([$this->getKeyField() => $this->key()])->execute();
+        return app()
+            ->connection
+            ->delete($this->getTableName())
+            ->where([$this->getKeyField() => $this->key()])
+            ->execute();
     }
 
     /**

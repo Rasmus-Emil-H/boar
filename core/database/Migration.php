@@ -2,8 +2,11 @@
 
 namespace app\core\database;
 
+use \app\models\MigrationModel;
+
 class Migration {
     protected const MAX_LENGTH = 255;
+    protected const MIGRATION_DIR = '/migrations/';
 
     public function getAppliedMigrations(): array {
         return app()
@@ -42,16 +45,15 @@ class Migration {
         $newMigrations = [];
 
         foreach ($toBeAppliedMigrations as $migration) {
-            require_once app()::$ROOT_DIR . '/migrations/' . $migration;
+            require_once app()::$ROOT_DIR . self::MIGRATION_DIR . $migration;
             $className = pathinfo($migration, PATHINFO_FILENAME);
             if (strlen($className) > self::MAX_LENGTH) app()->connection->log("Classname ($className) is too long!", true);
             app()->classCheck($className);
             $currentMigration = new $className();
             $currentMigration->up();
-            app()
-                ->connection
-                ->create('Migrations', ['migration' => $className])
-                ->execute();
+            (new MigrationModel())
+                ->set(['migration' => $className])
+                ->save();
             app()
                 ->connection
                 ->log('Successfully applied new migration: ' . $className);

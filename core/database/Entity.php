@@ -179,7 +179,7 @@ abstract class Entity extends Relations {
     * @throws Exception
     */
 
-    public static function load(array|integer $ids) {
+    public static function load(array|int $ids) {
         $class = get_called_class();
 
         if(is_array($ids)) {

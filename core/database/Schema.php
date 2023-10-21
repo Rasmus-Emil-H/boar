@@ -9,6 +9,7 @@
 namespace app\core\database;
 
 use \app\core\database\table\Table;
+use \app\utilities\Utilities;
 
 class Schema {
 
@@ -38,7 +39,7 @@ class Schema {
     public function createIfNotExists(Table $table) {
         $query = self::CREATE_TABLE_SYNTAX . $table->getName() . '(';
         foreach ( $table->getColumns() as $columnKey => $columnOptions )
-            $query .= $columnOptions->queryString() . (array_key_last($table->getColumns()) === $columnKey ? null : ', ');
+            $query .= $columnOptions->queryString() . Utilities::appendToStringIfKeyNotLast($table->getColumns(), $columnKey, ',');
         $query .= ')';
         app()
             ->connection

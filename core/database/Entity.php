@@ -19,8 +19,7 @@ abstract class Entity extends Relations {
     /**
      * Related object array
      * @format like: 'objectIdentifier' => Model::class
-    */
-    // protected array $relatedObjects = [];
+     */
 
     abstract protected function getKeyField()  : string;
     abstract protected function getTableName() : string;
@@ -29,7 +28,7 @@ abstract class Entity extends Relations {
      * Loads a given entity, instantiates a new if none given.
      * @param mixed $data Can be either an array of existing data or an entity ID to load.
      * @return void
-    */
+     */
     
     public function __construct($data = null, ?array $allowedFields = null) {
         $this->set($data, $allowedFields);
@@ -39,7 +38,7 @@ abstract class Entity extends Relations {
      * @param array $values key:value pairs of values to set
      * @param array $allowedFields keys of fields allowed to be altered
      * @return object The current entity instance
-    */
+     */
 
     public function set($data = null, ?array $allowedFields = null): Entity {
         if(is_object($data) === true) $data = (array) $data;
@@ -69,7 +68,7 @@ abstract class Entity extends Relations {
     /**
     * get pk
     * @return bool
-    */
+     */
 
     public function key() {
         return $this->key;
@@ -78,7 +77,7 @@ abstract class Entity extends Relations {
     /**
     * Determine if the loaded entity exists in db
     * @return bool
-    */
+     */
 
     public function exists(): bool {
         return $this->key !== null;
@@ -86,7 +85,7 @@ abstract class Entity extends Relations {
 
     /**
     * @return string
-    */
+     */
 
     public function save() {
         try {
@@ -107,7 +106,7 @@ abstract class Entity extends Relations {
     /**
      * Initialize new 
      * @return $this
-    */
+     */
 
     public function init() {
 		return app()->connection->init($this->getTableName(), $this->data);
@@ -117,7 +116,7 @@ abstract class Entity extends Relations {
      * Soft delete
      * Don't actually delete the record, but update the delatedAt colmun 
      * @return $this
-    */
+     */
 
     public function softDelete(): self {
 		$this->deletedAt = new \DateTime(date('Y-m-d H:i:s'));
@@ -129,7 +128,7 @@ abstract class Entity extends Relations {
      * Restore
      * Restore object where delatedAt !== null
      * @return $this
-    */
+     */
 
     public function restore(): self {
 	    $this->deletedAt = null;
@@ -141,7 +140,7 @@ abstract class Entity extends Relations {
      * Gets value based on key
      * @param string key
      * @return \Iteratable
-    */
+     */
 
     public function get(string $key) {
         return $this->data[$key] ?? "Invalid key: $key"; 
@@ -153,20 +152,16 @@ abstract class Entity extends Relations {
     }
 
     /** 
-     * For those annoying bits
-     * Maybe this should be used for executing something cool
-     * @return \Exception
-    */
+     * @throw \Exception
+     */
 
     public function __call($name, $arguments) {
         app()->globalThrower("Invalid method [{$name}]");
     }
 
     /** 
-     * For those annoying bits
-     * Maybe this should be used for executing something cool
-     * @return \Exception
-    */
+     * @throw \Exception
+     */
 
     public static function __callStatic($name, $arguments) {
         app()->globalThrower("Invalid static method [{$name}]");
@@ -177,7 +172,7 @@ abstract class Entity extends Relations {
     * @param mixed $ids an array of ID's or an integer to load
     * @return mixed The loaded entities
     * @throws Exception
-    */
+     */
 
     public static function load(array|int $ids) {
         $class = get_called_class();
@@ -196,7 +191,7 @@ abstract class Entity extends Relations {
     /**
     * Gets the current entity data
     * @return array
-    */
+     */
 
     public function getData(): array {
         return $this->data;
@@ -205,7 +200,7 @@ abstract class Entity extends Relations {
     /**
     * Get value based on key
     * @return array
-    */
+     */
 
     public function __get(string $key) {
         return $this->data[$key] ?? new \Exception("Invalid key");
@@ -214,7 +209,7 @@ abstract class Entity extends Relations {
     /**
      * Search for model with specific criteria
      * @return \Iteratable
-    */
+     */
 
     public static function search(array $criterias, array $values = ['*'], array $additionalQueryBuilding = []): array {
         $rows = app()->connection->select(static::tableName, $values)->whereClause($criterias);
@@ -235,7 +230,7 @@ abstract class Entity extends Relations {
     /**
      * Delete obj based on primary
      * @return 
-    */
+     */
 
     public function delete() {
         return app()->connection->delete($this->getTableName())->where([$this->getKeyField() => $this->key()])->execute();
@@ -244,7 +239,7 @@ abstract class Entity extends Relations {
     /**
      * Model debugging
      * @return string
-    */
+     */
 
     public function __toString() {
         $result = get_class($this)."($this->key):\n";

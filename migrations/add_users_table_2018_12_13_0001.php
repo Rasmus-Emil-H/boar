@@ -13,20 +13,18 @@ use \app\core\Application;
 class add_users_table_2018_12_13_0001 {
 
     public function up() {
-        $SQL = "CREATE TABLE IF NOT EXISTS Users (
-            UserID INT AUTO_INCREMENT PRIMARY KEY,
-            Email VARCHAR(255) NOT NULL,
-            Name VARCHAR(255) NOT NULL,
-            Status INT(1) DEFAULT 0,
-            CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP)";
-        app()->connection->rawSQL($SQL);
-        app()->connection->execute();
+        (new Schema())->up('Users', function(Table $table) {
+            $table->increments('UserID');
+            $table->varchar('Email', 100);
+            $table->varchar('Name', 50);
+            $table->integer('Status', 1);
+            $table->timestamp();
+            $table->primaryKey('UserID');
+        });
     }
 
     public function down() {
-        $SQL = "DROP TABLE Users;";
-        app()->connection->rawSQL($SQL);
-        app()->connection->execute();
+        (new Schema())->down('Users');
     }
 
 }

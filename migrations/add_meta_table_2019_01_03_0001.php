@@ -10,22 +10,23 @@
 
 use \app\core\Application;
 
+use \app\core\database\table\Table;
+use \app\core\database\Schema;
+
 class add_meta_table_2019_01_03_0001 {
 
     public function up() {
-        $SQL = "CREATE TABLE IF NOT EXISTS Meta (
-            MetaID INT AUTO_INCREMENT PRIMARY KEY,
-            EntityType VARCHAR(20) NOT NULL,
-            EntityID int(10) NOT NULL,
-            Data TEXT)";
-        app()->connection->rawSQL($SQL);
-        app()->connection->execute();
+        (new Schema())->up('Meta', function(Table $table) {
+            $table->increments('MetaID');
+            $table->varchar('EntityType', 20);
+            $table->integer('EntityID', 10);
+            $table->timestamp();
+            $table->primaryKey('MetaID');
+        });
     }
 
     public function down() {
-        $SQL = "DROP TABLE Meta;";
-        app()->connection->rawSQL($SQL);
-        app()->connection->execute();
+        (new Schema())->drop('Meta');
     }
 
 }

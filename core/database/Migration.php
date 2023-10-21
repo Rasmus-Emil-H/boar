@@ -31,7 +31,7 @@ class Migration {
         $migrations = scandir($migrationsFolder);
         $missingMigrations = [];
         foreach ( $migrations as $migration ) {
-            $migrationFile = $migrationsFolder.$migration;
+            $migrationFile = $migrationsFolder . $migration;
             if (!is_file($migrationFile) || in_array(substr($migration, 0, -4), $appliedMigrations)) continue;
             $date = preg_replace('/\_/', '-', substr(substr($migration, -19), 0, 10));
             if (!strtotime($date)) app()->connection->log("Invalid migration name ($migration), must be formatted: migration_YYYY_mm_dd_xxxx", true);
@@ -42,8 +42,6 @@ class Migration {
     }
 
     public function iterateMigrations(array $toBeAppliedMigrations): void {
-        $newMigrations = [];
-
         foreach ($toBeAppliedMigrations as $migration) {
             require_once app()::$ROOT_DIR . self::MIGRATION_DIR . $migration;
             $className = pathinfo($migration, PATHINFO_FILENAME);

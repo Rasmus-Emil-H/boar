@@ -13,22 +13,18 @@ use \app\core\Application;
 class add_translations_table_2018_12_16_0001 {
 
     public function up() {
-        $SQL = "CREATE TABLE IF NOT EXISTS Translations (
-            TranslationID INT AUTO_INCREMENT PRIMARY KEY,
-            Translation VARCHAR(50) NOT NULL,
-            LanguageID int(5) NOT NULL,
-            TranslationHash VARCHAR(50) NOT NULL,
-            CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            FOREIGN KEY (LanguageID) REFERENCES Languages(LanguageID)
-        )";
-        app()->connection->rawSQL($SQL);
-        app()->connection->execute();
+        (new Schema())->up('Translations', function(Table $table) {
+            $table->increments('TranslationID');
+            $table->varchar('Translation', 100);
+            $table->integer('LanguageID', 2);
+            $table->timestamp();
+            $table->primaryKey('TranslationID');
+            $table->foreignKey('LanguageID', 'Language', 'LanguageID');
+        });
     }
 
     public function down() {
-        $SQL = "DROP TABLE Translations;";
-        app()->connection->rawSQL($SQL);
-        app()->connection->execute();
+        (new Schema())->down('Translations'); 
     }
 
 }

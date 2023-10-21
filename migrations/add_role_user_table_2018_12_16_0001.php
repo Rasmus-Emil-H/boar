@@ -13,21 +13,17 @@ use \app\core\Application;
 class add_role_user_table_2018_12_16_0001 {
 
     public function up() {
-        $SQL = "CREATE TABLE IF NOT EXISTS role_user (
-            PivotID INT AUTO_INCREMENT PRIMARY KEY,
-            UserID INT(10),
-            RoleID INT(2),
-            FOREIGN KEY (UserID) REFERENCES Users(UserID),
-            FOREIGN KEY (RoleID) REFERENCES Roles(RoleID)
-        )";
-        app()->connection->rawSQL($SQL);
-        app()->connection->execute();
+        (new Schema())->up('role_user', function(Table $table) {
+            $table->increments('PivotID');
+            $table->integer('UserID', 10);
+            $table->integer('RoleID', 2);
+            $table->timestamp();
+            $table->primaryKey('PivotID');
+        });
     }
 
     public function down() {
-        $SQL = "DROP TABLE Roles;";
-        app()->connection->rawSQL($SQL);
-        app()->connection->execute();
+        (new Schema())->down('role_user');
     }
 
 }

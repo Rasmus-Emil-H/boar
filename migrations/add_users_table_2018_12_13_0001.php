@@ -1,6 +1,7 @@
 <?php
 
-use \app\core\Application;
+use \app\core\database\table\Table;
+use \app\core\database\Schema;
 
 class add_users_table_2018_12_13_0001 {
 

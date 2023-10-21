@@ -1,5 +1,8 @@
 <?php
 
+use \app\core\database\table\Table;
+use \app\core\database\Schema;
+
 class add_sessions_table_2018_12_15_0001 {
 
     public function up() {

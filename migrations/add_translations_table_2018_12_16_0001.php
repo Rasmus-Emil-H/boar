@@ -1,6 +1,7 @@
 <?php
 
-use \app\core\Application;
+use \app\core\database\table\Table;
+use \app\core\database\Schema;
 
 class add_translations_table_2018_12_16_0001 {
 

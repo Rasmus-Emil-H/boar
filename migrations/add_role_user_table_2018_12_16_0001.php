@@ -1,5 +1,8 @@
 <?php
 
+use \app\core\database\table\Table;
+use \app\core\database\Schema;
+
 class add_role_user_table_2018_12_16_0001 {
 
     public function up() {

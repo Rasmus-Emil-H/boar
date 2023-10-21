@@ -1,15 +1,5 @@
 <?php
 
-/**
- * Initial migration
- * @someday i'll refactor this so that
- * it would go something like
- * $this->db->table->field('name')->type('varchar')->length(255)
- * @return migration
-*/
-
-use \app\core\Application;
-
 use \app\core\database\table\Table;
 use \app\core\database\Schema;
 

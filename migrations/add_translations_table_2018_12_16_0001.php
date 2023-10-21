@@ -1,13 +1,5 @@
 <?php
 
-/**
- * Initial migration
- * @someday i'll refactor this so that
- * it would go something like
- * $this->db->table->field('name')->type('varchar')->length(255)
- * @return migration
-*/
-
 use \app\core\Application;
 
 class add_translations_table_2018_12_16_0001 {

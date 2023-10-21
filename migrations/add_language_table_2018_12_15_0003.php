@@ -1,11 +1,5 @@
 <?php
 
-/**
- * Language table migration
-*/
-
-use \app\core\Application;
-
 use \app\core\database\table\Table;
 use \app\core\database\Schema;
 

@@ -29,7 +29,7 @@ class Migration {
         $appliedMigrations = $this->getAppliedMigrations();
         $migrationsFolder = app()::$ROOT_DIR . self::MIGRATION_DIR;
         $migrations = scandir($migrationsFolder);
-        $mappedMigrations = array_map(function($object) { return $object->migration; }, $appliedMigrations);
+        $mappedMigrations = array_map(fn($object) => $object->migration, $appliedMigrations);
         $missingMigrations = [];
         foreach ( $migrations as $migration ) {
             $migrationFile = $migrationsFolder . $migration;

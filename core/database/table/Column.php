@@ -9,7 +9,7 @@ class Column {
 
     protected string $name;
     protected string $type;
-    
+
     protected array  $options = [];
     protected array  $exclude = ['LENGTH'];
 
@@ -27,7 +27,7 @@ class Column {
         $options = '';
         foreach ( $this->get('options') as $optionKey => $option )  
             $options .= ' ' . (in_array($optionKey, $this->exclude) ? '' : $optionKey) . ' ' . ($option ?? '');
-        switch (strtoupper($this->type)) {
+        switch ($this->type) {
             case self::PRIMARY_KEY:
                 $query = " PRIMARY KEY ($this->name) ";
                 break;
@@ -35,7 +35,7 @@ class Column {
                 $query = " FOREIGN KEY ($this->name) REFERENCES $this->foreignTable($this->foreignColumn)";
                 break;
             default:
-                $query = $this->name . ' ' .  strtoupper($this->type) . (count($this->get('options')) ? $options : null);
+                $query = $this->name . ' ' .  $this->type . (count($this->get('options')) ? $options : null);
                 break;
         }
         return $query;

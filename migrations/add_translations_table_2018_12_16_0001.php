@@ -12,7 +12,7 @@ class add_translations_table_2018_12_16_0001 {
             $table->integer('LanguageID', 2);
             $table->timestamp();
             $table->primaryKey('TranslationID');
-            $table->foreignKey('LanguageID', 'Language', 'LanguageID');
+            $table->foreignKey('LanguageID', 'Languages', 'LanguageID');
         });
     }
 

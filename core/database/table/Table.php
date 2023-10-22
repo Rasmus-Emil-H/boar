@@ -11,10 +11,10 @@ class Table {
     protected $name;
     protected $columns = [];
 
-    private const INT_COLUMN_TYPE = 'int';
-    private const VARCHAR_COLUMN_TYPE = 'varchar';
-    private const TEXT_COLUMN_TYPE = 'text';
-    private const PRIMARY_KEY = 'primary_key';
+    private const INT_COLUMN_TYPE = 'INT';
+    private const VARCHAR_COLUMN_TYPE = 'VARCHAR';
+    private const TEXT_COLUMN_TYPE = 'TEXT';
+    private const PRIMARY_KEY = 'PRIMARY_KEY';
     private const TIMESTAMP = 'TIMESTAMP DEFAULT CURRENT_TIMESTAMP';
 
     public function __construct($name) {
@@ -54,7 +54,7 @@ class Table {
     }
 
     public function dropColumns(array|string $columns) {
-        
+
     }
 
     public function getColumns(): array {

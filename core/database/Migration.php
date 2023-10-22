@@ -29,10 +29,11 @@ class Migration {
         $appliedMigrations = $this->getAppliedMigrations();
         $migrationsFolder = app()::$ROOT_DIR . self::MIGRATION_DIR;
         $migrations = scandir($migrationsFolder);
+        $mappedMigrations = array_map(function($object) { return $object->migration; }, $appliedMigrations);
         $missingMigrations = [];
         foreach ( $migrations as $migration ) {
             $migrationFile = $migrationsFolder . $migration;
-            if (!is_file($migrationFile) || in_array(substr($migration, 0, -4), $appliedMigrations)) continue;
+            if (!is_file($migrationFile) || in_array(substr($migration, 0, -4), $mappedMigrations)) continue;
             $date = preg_replace('/\_/', '-', substr(substr($migration, -19), 0, 10));
             if (!strtotime($date)) app()->connection->log("Invalid migration name ($migration), must be formatted: migration_YYYY_mm_dd_xxxx", true);
             isset($missingMigrations[strtotime($date)]) ? $missingMigrations[strtotime($date)+1] = $migration : $missingMigrations[strtotime($date)] = $migration;

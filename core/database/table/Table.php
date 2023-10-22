@@ -49,7 +49,7 @@ class Table {
         $this->createColumn($columnName, self::TIMESTAMP);
     }
 
-    public function foreign(string $columnName, string $foreignTable, string $foreignColumn) {
+    public function foreignKey(string $columnName, string $foreignTable, string $foreignColumn) {
         $this->columns[] = new ForeignKey($columnName, $foreignTable, $foreignColumn);
     }
 

@@ -1,5 +1,7 @@
 <?php
 
+namespace app\core\database\table;
+
 class ForeignKey extends Column {
 
     protected $foreignTable;

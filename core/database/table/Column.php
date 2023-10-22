@@ -26,7 +26,7 @@ class Column {
         $options = '';
         foreach ( $this->get('options') as $optionKey => $option )  
             $options .= ' ' . (in_array($optionKey, $this->exclude) ? '' : $optionKey) . ' ' . ($option ?? '');
-        switch ($this->type) {
+        switch (strtoupper($this->type)) {
             case self::PRIMARY_KEY:
                 $query = " PRIMARY KEY ($this->name) ";
                 break;

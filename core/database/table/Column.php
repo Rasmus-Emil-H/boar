@@ -9,6 +9,7 @@ class Column {
 
     protected string $name;
     protected string $type;
+    
     protected array  $options = [];
     protected array  $exclude = ['LENGTH'];
 

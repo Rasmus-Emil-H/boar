@@ -53,6 +53,10 @@ class Table {
         $this->columns[] = new ForeignKey($columnName, $foreignTable, $foreignColumn);
     }
 
+    public function dropColumns(array|string $columns) {
+        
+    }
+
     public function getColumns(): array {
         return $this->columns;
     }

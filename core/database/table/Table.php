@@ -54,7 +54,10 @@ class Table {
     }
 
     public function dropColumns(array|string $columns) {
-
+        if (is_string($columns)) (array)$columns;
+        foreach ( $columns as $column ) {
+            $static = new Column($columnName);
+        }
     }
 
     public function getColumns(): array {

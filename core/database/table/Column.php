@@ -41,4 +41,12 @@ class Column {
         return $query;
     }
 
+    public function change() {
+
+    }
+
+    public function drop() {
+        
+    }
+
 }

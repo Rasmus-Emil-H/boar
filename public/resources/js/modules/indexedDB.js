@@ -6,6 +6,10 @@ const actions = {
   read: 'readonly'
 }
 
+const messages = {
+  invalidEntry: "Invalid entry"
+}
+
 class IndexedDBManager {
   constructor() {
     this.db = null;
@@ -27,9 +31,7 @@ class IndexedDBManager {
         resolve(this.db);
       };
 
-      request.onerror = (event) => {
-        reject(event.target.error);
-      };
+      request.onerror = (event) => { reject(event.target.error); };
     });
   }
 
@@ -41,13 +43,9 @@ class IndexedDBManager {
 
       const request = objectStore.add(data);
 
-      request.onsuccess = (event) => {
-        resolve(event.target.result);
-      };
+      request.onsuccess = (event) => { resolve(event.target.result); };
 
-      request.onerror = (event) => {
-        reject(event.target.error);
-      };
+      request.onerror = (event) => { reject(event.target.error); };
     });
   }
 
@@ -59,12 +57,29 @@ class IndexedDBManager {
 
       const request = objectStore.get(id);
 
-      request.onsuccess = (event) => {
-        resolve(event.target.result);
-      };
+      request.onsuccess = (event) => { resolve(event.target.result); };
 
-      request.onerror = (event) => {
-        reject(event.target.error);
+      request.onerror = (event) => { reject(event.target.error); };
+    });
+  }
+
+  async updateSpecificEntryWithinRecord(id, newData) {
+    const db = await this.openDatabase();
+    return new Promise(async (resolve, reject) => {
+      const transaction = db.transaction(objectStoreName, actions.write);
+      const objectStore = transaction.objectStore(objectStoreName);
+      const getRequest = objectStore.get(id);
+      getRequest.onsuccess = function(event) {
+        if (!event.target.result[newData.data.id] || !event.target.result[newData.data.id].data[newData.data.targetProp]) {
+          console.log(messages.invalidEntry);
+          reject(messages.invalidEntry);
+        };
+
+        event.target.result[newData.data.id].data[newData.data.targetProp][`${id}notSynced${Date.now()}`] = newData.data;
+        let request = objectStore.put({id, ...event.target.result});
+
+        request.onsuccess = (event) => { resolve(event);};
+        request.onerror = (event) => { reject(event.target.error);};
       };
     });
   }
@@ -77,20 +92,15 @@ class IndexedDBManager {
       const getRequest = objectStore.get(id);
       getRequest.onsuccess = function(event) {
         let data = event.target.result;
-        if (newData.genericEntry) {
-          data.genericEntries[newData.genericEntry].data = newData;
+        if (newData.trip) {
+          data[newData.trip].data.information = newData;
           var request = objectStore.put({ id, ...data });
         } else {
           var request = objectStore.put({ id, ...newData });
         } 
-
-        request.onsuccess = (event) => {
-          resolve(data);
-        };
-
-        request.onerror = (event) => {
-          reject(event.target.error);
-        };
+        
+        request.onsuccess = (event) => { resolve(data); };
+        request.onerror = (event) => { reject(event.target.error);};
       };
     });
   }
@@ -103,13 +113,8 @@ class IndexedDBManager {
 
       const request = objectStore.delete(id);
 
-      request.onsuccess = () => {
-        resolve();
-      };
-
-      request.onerror = (event) => {
-        reject(event.target.error);
-      };
+      request.onsuccess = () => { resolve(); };
+      request.onerror = (event) => { reject(event.target.error);};
     });
   }
 
@@ -123,12 +128,10 @@ class IndexedDBManager {
 
       request.onsuccess = (event) => {
         delete event.target.result[0].id;
-        resolve({genericEntries: event.target.result[0]});
+        resolve({trips: event.target.result[0]});
       };
 
-      request.onerror = (event) => {
-        reject(event.target.error);
-      };
+      request.onerror = (event) => { reject(event.target.error); };
     });
   }
 }

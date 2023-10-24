@@ -6,6 +6,7 @@ class Column {
 
     protected const PRIMARY_KEY = 'PRIMARY_KEY';
     protected const FOREIGN_KEY = 'FOREIGN_KEY';
+    protected const DROP        = 'DROP';
 
     protected string $name;
     protected string $type;
@@ -24,29 +25,28 @@ class Column {
     }
 
     public function queryString(): string {
-        $options = '';
-        foreach ( $this->get('options') as $optionKey => $option )  
-            $options .= ' ' . (in_array($optionKey, $this->exclude) ? '' : $optionKey) . ' ' . ($option ?? '');
-        switch ($this->type) {
-            case self::PRIMARY_KEY:
-                $query = " PRIMARY KEY ($this->name) ";
-                break;
-            case self::FOREIGN_KEY:
-                $query = " FOREIGN KEY ($this->name) REFERENCES $this->foreignTable($this->foreignColumn)";
-                break;
-            default:
-                $query = $this->name . ' ' .  $this->type . (count($this->get('options')) ? $options : null);
-                break;
+        try {
+            $options = '';
+            foreach ( $this->get('options') as $optionKey => $option )  
+                $options .= ' ' . (in_array($optionKey, $this->exclude) ? '' : $optionKey) . ' ' . ($option ?? '');
+                
+            switch ($this->type) {
+                case self::PRIMARY_KEY:
+                    $query = " PRIMARY KEY ($this->name) ";
+                    break;
+                case self::FOREIGN_KEY:
+                    $query = " FOREIGN KEY ($this->name) REFERENCES $this->foreignTable($this->foreignColumn)";
+                    break;
+                case self::DROP:
+                    $query = " DROP $this->name ";
+                default:
+                    $query = $this->name . ' ' .  $this->type . (count($this->get('options')) ? $options : null);
+                    break;
+            }
+            return $query;
+        } catch (\Exception $e) {
+            app()->globalThrower("Column generator failed: " . $e->getMessage());
         }
-        return $query;
-    }
-
-    public function change() {
-
-    }
-
-    public function drop() {
-        
     }
 
 }

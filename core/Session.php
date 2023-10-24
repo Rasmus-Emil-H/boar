@@ -47,7 +47,7 @@ class Session {
         return $_SESSION[$key] ?? '';
     }
 
-    public function unset($key): void {
+    public function unset(string $key): void {
         unset($_SESSION[$key]);
     }
 

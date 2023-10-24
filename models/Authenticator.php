@@ -9,7 +9,6 @@
 
 namespace app\models;
 
-use \app\core\Application;
 use \app\core\Curl;
 
 class Authenticator {
@@ -34,8 +33,8 @@ class Authenticator {
             $user = $user[array_key_first((array)$user)];
             $passwordVerify = password_verify($this->data['password'], $user->get('Password'));
             if(!$passwordVerify) return;
-            Application::$app->session->set('user', $user->key());
-            Application::$app->response->redirect('/home');
+            app()->session->set('user', $user->key());
+            app()->response->redirect('/home');
         }
     }
 

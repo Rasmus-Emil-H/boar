@@ -9,7 +9,6 @@
 namespace app\core\middlewares;
 
 use app\core\exceptions\ForbiddenException;
-use app\core\Application;
 
 class AuthMiddleware extends Middleware {
 
@@ -20,8 +19,8 @@ class AuthMiddleware extends Middleware {
     }
 
     public function execute() {
-        if (Application::isGuest()) 
-            if (empty($this->actions) || in_array(Application::$app->controller->action, $this->actions)) 
+        if (app()::isGuest()) 
+            if (empty($this->actions) || in_array(app()::$app->controller->action, $this->actions)) 
                 throw new ForbiddenException();
     }
 

@@ -28,7 +28,7 @@ function hs($input): string {
 
 /**
  * Getter
- * @return object
+ * @return Application object
  */
 
 function app(): object {

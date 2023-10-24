@@ -9,7 +9,6 @@
 namespace app\core;
 
 use app\models\FileModel;
-use app\core\Application;
 
 use app\core\exceptions\NotFoundException;
 
@@ -45,15 +44,15 @@ class File extends FileModel {
     }
 
     public function checkFileName(): bool {
-        return Application::$app->regex->match('/a-zA-Z0-9/', $this->fileName);
+        return app()->regex->match('/a-zA-Z0-9/', $this->fileName);
     }
 
     public function unlinkFile(): bool {
-        return unlink(Application::UPLOAD_FOLDER . $this->fileName);
+        return unlink(app()::UPLOAD_FOLDER . $this->fileName);
     }
 
     public function getFile() {
-        if ( !file_exists(Application::UPLOAD_FOLDER . $this->fileName)) throw new \Exception(self::FILE_NOT_FOUND);
+        if ( !file_exists(app()::UPLOAD_FOLDER . $this->fileName)) throw new \Exception(self::FILE_NOT_FOUND);
     }
     
     public function fileSize(string $type, string $quality) {
@@ -65,7 +64,7 @@ class File extends FileModel {
     }
 
     public function requireApplicationFile(string $folder, string $file, array $params = []): void {
-      $file = Application::$ROOT_DIR . $folder . $file . self::TPL_FILE_EXTENSION;
+      $file = app()::$ROOT_DIR . $folder . $file . self::TPL_FILE_EXTENSION;
       $this->exists($file);
       require_once $file;
     }

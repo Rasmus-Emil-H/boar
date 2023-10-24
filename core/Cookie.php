@@ -17,7 +17,7 @@ class Cookie {
     public function get(string $key): string {
         $cookie = $_COOKIE[$key] ?? '';
         if ( !$cookie ) return '';
-        if ( !password_verify($cookie, Application::$app->config->get('password.default')) ) throw new \Exception('Invalid cookie');
+        if ( !password_verify($cookie, app()::$app->config->get('password.default')) ) throw new \Exception('Invalid cookie');
         return $_COOKIE[$key];
     }
 

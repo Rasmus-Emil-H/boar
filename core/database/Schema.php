@@ -16,7 +16,7 @@ class Schema {
     private const CREATE_TABLE_SYNTAX = 'CREATE TABLE IF NOT EXISTS ';
     private const DROP_TABLE_SYNTAX   = ' DROP TABLE IF EXISTS ';
 
-    public function drop(string $table) {
+    public function down(string $table) {
         $query = self::DROP_TABLE_SYNTAX . $table;
         app()
             ->connection

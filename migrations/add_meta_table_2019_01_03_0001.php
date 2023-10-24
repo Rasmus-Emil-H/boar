@@ -16,7 +16,7 @@ class add_meta_table_2019_01_03_0001 {
     }
 
     public function down() {
-        (new Schema())->drop('Meta');
+        (new Schema())->down('Meta');
     }
 
 }

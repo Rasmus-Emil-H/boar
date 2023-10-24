@@ -16,7 +16,7 @@ class add_language_table_2018_12_15_0003 {
     }
 
     public function down() {
-        (new Schema())->drop('Languages');
+        (new Schema())->down('Languages');
     }
 
 }

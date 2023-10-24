@@ -36,7 +36,7 @@ class File extends FileModel {
     public function moveFile(): bool {
         if ( !$this->checkFileType() ) throw new \Exception(self::INVALID_EXTENSION);
         if ( !$this->checkFileName() ) throw new \Exception(self::INVALID_FILE_NAME);
-        return move_uploaded_file(sys_get_temp_dir(), Application::UPLOAD_FOLDER);
+        return move_uploaded_file(sys_get_temp_dir(), app()::UPLOAD_FOLDER);
     }
 
     protected function checkFileType(): bool {

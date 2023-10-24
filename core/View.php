@@ -23,11 +23,11 @@ class View {
   }
 
   public function renderView() {
-    require_once Application::$app->controller->getView(); 
+    require_once app()->controller->getView(); 
   }
 
   public function getTemplate(string $template): string {
-    $templateFile = Application::$ROOT_DIR . $this->partialsDir . $template . self::TPL_FILE_EXTENSION;
+    $templateFile = app()::$ROOT_DIR . $this->partialsDir . $template . self::TPL_FILE_EXTENSION;
     if (!file_exists($templateFile)) throw new NotFoundException();
     return $templateFile;
   }

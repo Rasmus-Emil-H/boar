@@ -74,7 +74,7 @@ class Connection {
         $this->tableName = $table;
         $this->bindFields($data); 
         $this->bindValues($data);
-        $this->create();
+        $this->create($this->getTable(), $data);
         $this->execute();
     }
 

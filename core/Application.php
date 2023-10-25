@@ -76,7 +76,7 @@ class Application {
     }
 
     public function checkLanguage() {
-        if (!$this->session->get('language')) $this->session->set('language', 'Danish');
+        if (!$this->session->get('language')) $this->session->set('language', 'EN');
     }
 
     public function checkUserBasedOnSession() {
@@ -118,14 +118,6 @@ class Application {
     public function setController(Controller $controller): void {
         $this->controller = $controller;
     }
-
-    public function logout(): void {
-        $this->session->unset('user');
-    }
-
-    /**
-     * STATIC AREA
-     */
 
     public static function isCLI(): bool {
         return php_sapi_name() === 'cli';     

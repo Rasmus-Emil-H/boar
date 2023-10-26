@@ -16,12 +16,13 @@ use app\controllers;
 
 class Router {
 
-    protected string $method;
-    protected array $routes = [];
-    protected array $queryPattern;
-
     protected const CONTROLLER   = 'Controller';
     protected const INDEX_METHOD = 'index';
+
+    protected string $method;
+
+    protected array $routes = [];
+    protected array $queryPattern;
 
     public function __construct() {
         $this->queryPattern = app()->regex->validateRoute();

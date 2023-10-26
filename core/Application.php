@@ -14,6 +14,8 @@ use \app\utilities\Logger;
 
 class Application {
 
+    public const UPLOAD_FOLDER = __DIR__.'/uploads/';
+
     public static string $ROOT_DIR;
     public string $layout = 'main';
     public string $authenticationClass;
@@ -34,8 +36,6 @@ class Application {
 
     public static self $app;
     public static $defaultRoute = ['login' => '/auth/login', 'register' => '/auth/signup'];
-
-    public const UPLOAD_FOLDER = __DIR__.'/uploads/';
 
     public function __construct(bool $applicationIsMigrating) {
         self::$app = $this;

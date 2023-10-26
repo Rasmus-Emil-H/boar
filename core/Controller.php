@@ -14,9 +14,6 @@ use \app\core\exceptions\NotFoundException;
 class Controller {
 
     private const DEFAULT_METHOD = 'index';
-    private const INVALID_METHOD_TEXT = 'Invalid method';
-    private const INVALID_CONTROLLER_TEXT = 'Invalid controller';
-    private const PARTIALS_TEXT = '/views/partials/';
     private const INVALID_VIEW = 'Invalid view';
 
     protected object $request;

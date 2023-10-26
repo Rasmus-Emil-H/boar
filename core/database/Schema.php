@@ -24,12 +24,6 @@ class Schema {
             ->execute();
     }
 
-    /**
-     * @param string $tablename
-     * @param \Closure $callback
-     * @return void
-     */
-
     public function up($table, \Closure $callback): void {
         $table = new Table($table);
         $callback($table);
@@ -46,6 +40,14 @@ class Schema {
             ->rawSQL($query)
             ->execute();
     }
+
+    /**
+     * Used for CRUDing existing tables
+     * 
+     * @param string $table
+     * @param \Closure $callback
+     * @return void
+     */
     
     public function table($table, \Closure $callback): void {
         $table = new Table($table);

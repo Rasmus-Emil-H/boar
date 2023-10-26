@@ -77,7 +77,6 @@ async function synchroniseCaches() {
 }
 
 async function sendCachedPostRequests() {
-  if(checkConnection() === 1) return;
   const cache = await caches.open(postCache);
   const cacheKeys = await cache.keys(); 
   for (const cacheKey of cacheKeys) {
@@ -88,9 +87,9 @@ async function sendCachedPostRequests() {
           const body = new FormData();
           for (const [key, value] of Object.entries(cachedData.formData)) body.append(key, value);
           const response = await fetch(cachedData.url, { method: 'POST', body });
-          response.ok ? cache.delete(cacheKey) : console.error(messages.errors.postRequest, response.status);
+          response.ok ? cache.delete(cacheKey) : console.log(messages.errors.postRequest, response.status);
       } catch (error) {
-          console.error(messages.errors.postRequest, error);
+          console.log(messages.errors.postRequest, error);
       }
   }
 }
@@ -103,14 +102,15 @@ function respondToClient(msg) {
   });
 }
 
-async function sendCachedFileRequests() {
-  if(checkConnection() === 1) return;
+async function sendCachedFileRequests(fileKey) {
   const cache = await caches.open(fileCache);
   const cacheKeys = await cache.keys();
   for (const cacheKey of cacheKeys) {
       const cacheResponse = await cache.match(cacheKey);
       try {
           const body = await cacheResponse.formData();
+          const date = new Date().toLocaleString().replaceAll('/', '-').replaceAll(',', '');
+          if(fileKey) respondToClient({meta: body.get('meta'), data: {cachedPath: fileKey, 'Path': body.get('fileName'), id: body.get('EntityID'), UploadID: null, EntityID: body.get('EntityID'), Created: date, targetProp: 'uploads'}});
           const response = await fetch(body.get('url'), { method: 'POST', body });
           response.ok ? await cache.delete(cacheKey) : console.error(messages.errors.postRequest, response.status);
           return new Response('OK', {status: 302, headers: { 'Location': body.get('url') }});
@@ -143,8 +143,7 @@ self.addEventListener('message', (event) => {
           .then(async (cache) => {
               const key = `file-${Date.now()}`;
               await cache.put(key, new Response(formData));
-              await sendCachedFileRequests();
-              return new Response('OK', {status: 302, headers: { 'Location': formData.get('url') }});
+              await sendCachedFileRequests(key);
           })
           .catch((e) => {
               console.error('Error storing file in cache:', e);

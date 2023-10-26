@@ -74,8 +74,11 @@ class IndexedDBManager {
           console.log(messages.invalidEntry);
           reject(messages.invalidEntry);
         };
+        
+        console.log(newData.data.targetProp, newData.data);
 
         event.target.result[newData.data.id].data[newData.data.targetProp][`${id}notSynced${Date.now()}`] = newData.data;
+        console.log(event.target.result);
         let request = objectStore.put({id, ...event.target.result});
 
         request.onsuccess = (event) => { resolve(event);};
@@ -97,7 +100,7 @@ class IndexedDBManager {
           var request = objectStore.put({ id, ...data });
         } else {
           var request = objectStore.put({ id, ...newData });
-        } 
+        }
         
         request.onsuccess = (event) => { resolve(data); };
         request.onerror = (event) => { reject(event.target.error);};

@@ -4,7 +4,7 @@
  * Schema modifier
  * @package app\core\database
  * @author RE_WEB
-*/
+ */
 
 namespace app\core\database;
 

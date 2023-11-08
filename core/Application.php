@@ -3,7 +3,7 @@
 /**
  * Bootstrap application
  * AUTHOR: RE_WEB
- * @package app\core\application
+ * @package app\core
 */
 
 namespace app\core;

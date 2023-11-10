@@ -8,9 +8,7 @@ const modulesToImport = [
   "./modules/utilities.js",
   "./modules/components.js",
   "./modules/http.js",
-  "./modules/behaviour.js",
-  "./modules/geolocation.js",
-  "./modules/bluetooth.js"
+  "./modules/behaviour.js"
 ];
 
 

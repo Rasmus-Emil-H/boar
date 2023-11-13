@@ -57,6 +57,7 @@ class Application {
         $this->i18n        = new I18n();
         $this->logger      = new Logger();
 
+
         $this->checkLanguage();
         $this->checkUserBasedOnSession();
     }
@@ -76,7 +77,7 @@ class Application {
     }
 
     public function checkLanguage() {
-        if (!$this->session->get('language')) $this->session->set('language', 'EN');
+        if (!$this->session->get('language')) $this->session->set('language', self::$app->config->get('locale')->default);
     }
 
     public function checkUserBasedOnSession() {

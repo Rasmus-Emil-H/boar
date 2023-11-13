@@ -31,5 +31,8 @@
         "csrf": {
             "hMacData": ""    
         }
+    },
+    "locale": {
+        "default": "EN"
     }
 }

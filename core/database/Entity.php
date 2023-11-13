@@ -8,7 +8,6 @@
 
 namespace app\core\database;
 
-use \app\core\Application;
 use \app\core\database\relations\Relations;
 
 abstract class Entity extends Relations {
@@ -92,12 +91,11 @@ abstract class Entity extends Relations {
             if ($this->exists() === true) {
                 app()->connection->patch($this->getTableName(), $this->data, $this->getKeyField(), $this->key)->execute('fetch');
                 return $this->data;
-            } else {
-                if(empty($this->data)) throw new \Exception("Data variable is empty");
-                app()->connection->create($this->getTableName(), $this->data)->execute();
-                $this->key = app()->connection->getLastID();
-                return $this->key;
             }
+            if(empty($this->data)) throw new \Exception("Data variable is empty");
+            app()->connection->create($this->getTableName(), $this->data)->execute();
+            $this->key = app()->connection->getLastID();
+            return $this->key;
         } catch(\Exception $e) {
             app()->globalThrower($e->getMessage());
         }

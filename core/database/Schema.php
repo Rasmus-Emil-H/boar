@@ -14,7 +14,7 @@ use \app\utilities\Utilities;
 class Schema {
 
     private const CREATE_TABLE_SYNTAX = 'CREATE TABLE IF NOT EXISTS ';
-    private const DROP_TABLE_SYNTAX   = ' DROP TABLE IF EXISTS ';
+    private const DROP_TABLE_SYNTAX   = 'DROP TABLE IF EXISTS ';
 
     public function down(string $table) {
         $query = self::DROP_TABLE_SYNTAX . $table;

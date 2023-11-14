@@ -46,16 +46,16 @@ class Application {
 
         if ($applicationIsMigrating) return;
         
-        $this->request     = new Request();
-        $this->response    = new Response();
-        $this->regex       = new Regex($this->request->getPath());
-        $this->router      = new Router();
-        $this->session     = new Session();
-        $this->cookie      = new Cookie();
-        $this->view        = new View();
-        $this->env         = new Env();
-        $this->i18n        = new I18n();
-        $this->logger      = new Logger();
+        $this->request   = new Request();
+        $this->response  = new Response();
+        $this->regex     = new Regex($this->request->getPath());
+        $this->router    = new Router();
+        $this->session   = new Session();
+        $this->cookie    = new Cookie();
+        $this->view      = new View();
+        $this->env       = new Env();
+        $this->i18n      = new I18n();
+        $this->logger    = new Logger();
 
 
         $this->checkLanguage();

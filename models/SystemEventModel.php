@@ -10,13 +10,13 @@ namespace app\models;
 
 use \app\core\database\Entity;
 
-class LanguageModel extends Entity {
+class SystemEventModel extends Entity {
 
-	const keyID     = 'LanguageID';
-	const tableName = 'Languages';
+	const keyID     = 'SystemEventID';
+	const tableName = 'SystemEvents';
 
 	public function getAttributes(): array {
-		return ['language'];
+		return [''];
 	}
 	
 	/*
@@ -25,7 +25,7 @@ class LanguageModel extends Entity {
 	*/
 	
 	public function getTableName(): string {
-		return 'Languages';
+		return 'SystemEvents';
 	}
 	
 	/*
@@ -34,7 +34,7 @@ class LanguageModel extends Entity {
 	*/
 	
 	public function getKeyField(): string {
-		return 'LanguageID';
+		return 'SystemEventID';
 	}
 
 	public function getForeignKeys(): array {
@@ -46,7 +46,7 @@ class LanguageModel extends Entity {
 	}
 
 	public function getRelationObjects() {
-		return ['Translation'];
+		return [];
 	}
 
 }

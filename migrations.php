@@ -11,4 +11,7 @@ require_once __DIR__ . '/vendor/autoload.php';
 require_once __DIR__ . '/public/yard.php';
 
 $app = new Application(true);
-(new Migration())->applyMigrations();
+
+$migration = new Migration();
+$migration->applyMigrations();
+$migration->initialApplicationSeed();

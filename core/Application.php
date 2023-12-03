@@ -11,6 +11,7 @@ namespace app\core;
 use \app\core\database\Connection;
 use \app\config\Config;
 use \app\utilities\Logger;
+use \app\models\SystemEventModel;
 
 class Application {
 
@@ -129,6 +130,12 @@ class Application {
 
     public static function isDevSite(): bool {
         return in_array($_SERVER['REMOTE_ADDR'], self::$app->config->get('env')->developmentArrayIPs) || self::$app->env->get('isDev') === 'true';
+    }
+
+    public function addSystemEvent(array $data): void {
+        (new SystemEventModel())
+            ->set(['Data' => json_encode($data)])
+            ->save();
     }
     
 }

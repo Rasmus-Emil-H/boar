@@ -8,8 +8,6 @@
 
 namespace app\core\database\seeders;
 
-use \app\core\database\Entity;
-
 class DatabaseSeeder {
 
     public function up(string $model, array $fields, int $amount): void {
@@ -20,7 +18,7 @@ class DatabaseSeeder {
             $static
                 ->set($fields)
                 ->save();
-            (new $staticModel($static->key()))->addMetaData(['event' => 'Database seeder added this ' . $model]);
+            (new $staticModel($static->key()))->addMetaData(['event' => 'Database seeder added: ' . $model]);
         }
     }
 

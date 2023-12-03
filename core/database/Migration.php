@@ -3,6 +3,7 @@
 namespace app\core\database;
 
 use \app\models\MigrationModel;
+use \app\core\database\seeders\DatabaseSeeder;
 
 class Migration {
     protected const MAX_LENGTH = 255;
@@ -60,6 +61,11 @@ class Migration {
 
         app()
             ->connection
-            ->log("Done", true);
+            ->log("Done");
     }
+
+    public function initialApplicationSeed() {
+       (new DatabaseSeeder())->up('Language', ['Name' => 'English', 'Code' => 'en'], 1); 
+    }
+
 }

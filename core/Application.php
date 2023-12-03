@@ -102,7 +102,8 @@ class Application {
     }
 
     public function classCheck(string $class): void {
-        if (!class_exists($class)) $this->response->setResponse(400, ['msg' => 'bad request']);
+        //var_dump($class);
+        //if (!class_exists($class)) $this->response->setResponse(400, ['msg' => 'bad request']);
     }
 
     public function globalThrower(string $message): \Exception {

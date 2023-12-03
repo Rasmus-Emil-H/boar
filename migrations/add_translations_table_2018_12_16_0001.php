@@ -10,6 +10,7 @@ class add_translations_table_2018_12_16_0001 {
             $table->increments('TranslationID');
             $table->varchar('Translation', 100);
             $table->integer('LanguageID', 2);
+            $table->varchar('TranslationHash', 50);
             $table->timestamp();
             $table->primaryKey('TranslationID');
             $table->foreignKey('LanguageID', 'Languages', 'LanguageID');

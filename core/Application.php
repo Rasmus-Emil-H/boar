@@ -55,11 +55,12 @@ class Application {
         $this->cookie    = new Cookie();
         $this->view      = new View();
         $this->env       = new Env();
-        $this->i18n      = new I18n();
         $this->logger    = new Logger();
 
         $this->checkLanguage();
         $this->checkUserBasedOnSession();
+        
+        $this->i18n      = new I18n();
     }
 
     protected function setupConnection() {
@@ -77,11 +78,12 @@ class Application {
     }
 
     public function checkLanguage() {
-        if (!$this->session->get('language')) $this->session->set('language', self::$app->config->get('locale')->default);
+        if (!$this->session->get('language'))
+            $this->session->set('language', self::$app->config->get('locale')->default);
     }
 
     public function checkUserBasedOnSession() {
-        !$this->session->get('user') && !in_array($this->request->getPath(), self::$defaultRoute) ? $this->response->redirect(self::$defaultRoute['login']) : '';
+        !$this->session->get('user') && !in_array($this->request->getPath(), self::$defaultRoute) ? $this->response->redirect(self::$defaultRoute['login']) : null;
     }
 
     /**

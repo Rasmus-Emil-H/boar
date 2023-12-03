@@ -19,7 +19,7 @@ class I18n {
     protected int $languageID;
 
     public function __construct() {
-        $language = LanguageModel::search(['name' => app()->session->get('language')]);
+        $language = LanguageModel::search(['code' => strtolower(app()->session->get('language'))]);
         if (!$language) throw new NotFoundException("Language was not found");
         $this->languageID = $language[array_key_first((array)$language)]->key();
     }

@@ -12,8 +12,7 @@ use app\core\exceptions\NotFoundException;
 
 use \app\models\LanguageModel;
 use \app\models\TranslationModel;
-
-#[\AllowDynamicProperties]
+use \app\core\miscellaneous\Hash;
 
 class I18n {
 
@@ -36,7 +35,7 @@ class I18n {
 
     public function registerMissingTranslation(string $missingTranslation) {
         (new TranslationModel())
-            ->set(['Translation' => $missingTranslation, 'LanguageID' => $this->languageID, 'TranslationHash' => \app\core\miscellaneous\Hash::create()])
+            ->set(['Translation' => $missingTranslation, 'LanguageID' => $this->languageID, 'TranslationHash' => Hash::create()])
             ->save();
     }
     

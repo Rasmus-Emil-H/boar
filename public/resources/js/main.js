@@ -11,7 +11,6 @@ const modulesToImport = [
   "./modules/behaviour.js"
 ];
 
-
 document.addEventListener("DOMContentLoaded", async function() {
 
   window.boar = {};

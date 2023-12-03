@@ -57,7 +57,6 @@ class Application {
         $this->i18n      = new I18n();
         $this->logger    = new Logger();
 
-
         $this->checkLanguage();
         $this->checkUserBasedOnSession();
     }

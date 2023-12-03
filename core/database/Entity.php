@@ -15,11 +15,6 @@ abstract class Entity extends Relations {
     private   $key;
     protected $data = [];
 
-    /**
-     * Related object array
-     * @format like: 'objectIdentifier' => Model::class
-     */
-
     abstract protected function getKeyField()  : string;
     abstract protected function getTableName() : string;
 
@@ -145,7 +140,10 @@ abstract class Entity extends Relations {
     }
 
     public static function all() {
-        $rows = app()->connection->select(static::tableName, ['*'])->execute();
+        $rows = app()
+            ->connection
+            ->select(static::tableName, ['*'])
+            ->execute();
         return self::load(array_column($rows, static::keyID));
     }
 
@@ -175,11 +173,11 @@ abstract class Entity extends Relations {
     public static function load(array|int $ids) {
         $class = get_called_class();
 
-        if(is_array($ids)) {
+        if (is_array($ids)) {
             $objects = [];
             foreach($ids as $id) $objects[$id] = new $class($id);
             return $objects;
-        } else if(is_numeric($ids)) {
+        } else if (is_numeric($ids)) {
             return new $class((int) $ids);
         }
 
@@ -211,7 +209,7 @@ abstract class Entity extends Relations {
 
     public static function search(array $criterias, array $values = ['*'], array $additionalQueryBuilding = []): array {
         $rows = app()->connection->select(static::tableName, $values)->whereClause($criterias);
-        foreach ( $additionalQueryBuilding as $key => $value ) $rows = $rows->{$key}($value);
+        foreach ($additionalQueryBuilding as $key => $value) $rows = $rows->{$key}($value);
         $rows = $rows->execute();
         return self::load(array_column($rows, static::keyID));
     }
@@ -226,7 +224,7 @@ abstract class Entity extends Relations {
 	}
 
     /**
-     * Delete obj based on primary
+     * Delete obj
      * @return 
      */
 

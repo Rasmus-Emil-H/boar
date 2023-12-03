@@ -6,10 +6,10 @@
  * @author RE_WEB
  */
 
-function displayDD($input, $title = null): void {
-  echo '<pre class="debug"><h2 class="text-center">'.($title ?? 'Debugging').'</h2> ';
+function displayDD($input, $title = 'Debugging'): void {
+  echo '<pre class="debug"><h2 class="text-center">' . $title . '</h2> ';
   var_dump($input);
-  echo ' <h2 class="text-center">END OF '.($title ?? 'Debugging').'</h2> </pre>';
+  echo ' <h2 class="text-center">END OF ' . $title . '</h2> </pre>';
 }
 
 function dd($input) {

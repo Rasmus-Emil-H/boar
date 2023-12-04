@@ -57,8 +57,8 @@ class Application {
         $this->env       = new Env();
         $this->logger    = new Logger();
 
-        $this->checkLanguage();
-        $this->checkUserBasedOnSession();
+        $this->getSessionLanguage();
+        $this->getSessionUser();
         
         $this->i18n      = new I18n();
     }
@@ -77,12 +77,12 @@ class Application {
         $this->connection  = new Connection($applicationConfig['pdo']);
     }
 
-    public function checkLanguage() {
+    public function getSessionLanguage() {
         if (!$this->session->get('language'))
             $this->session->set('language', self::$app->config->get('locale')->default);
     }
 
-    public function checkUserBasedOnSession() {
+    public function getSessionUser() {
         !$this->session->get('user') && !in_array($this->request->getPath(), self::$defaultRoute) ? $this->response->redirect(self::$defaultRoute['login']) : null;
     }
 

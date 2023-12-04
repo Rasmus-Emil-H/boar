@@ -56,7 +56,7 @@ class Request {
         return (object)$obj;
     }
 
-    public function getBody(): array {
+    public function getBody(): object {
         $body = [];
 
         if ($this->method() === 'get') 
@@ -67,7 +67,7 @@ class Request {
             foreach ($_POST as $key => $value) 
                 $body[$key] = filter_input(INPUT_POST, $key, FILTER_SANITIZE_SPECIAL_CHARS);
 
-        return $body;
+        return (object)$body;
     }
     
     public function getPHPInput() {

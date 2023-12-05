@@ -7,8 +7,8 @@ class edit_sessions_table_add_user_id_and_ip_2019_01_10_0001 {
 
     public function up() {
         (new Schema())->table('Meta', function(Table $table) {
-            $table->integer('UserID');
-            $table->varchar('IP', 20);
+            $table->integer('UserID')->add();
+            $table->varchar('IP', 20)->add();
         });
     }
 

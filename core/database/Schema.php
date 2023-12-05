@@ -33,7 +33,7 @@ class Schema {
     public function createIfNotExists(Table $table) {
         $query = self::CREATE_TABLE_SYNTAX . $table->getName() . '(';
         foreach ($table->getColumns() as $columnKey => $columnOptions)
-            $query .= $columnOptions->queryString() . Utilities::appendToStringIfKeyNotLast($table->getColumns(), $columnKey, ',');
+            $query .= $columnOptions->queryString() . Utilities::appendToStringIfKeyNotLast($table->getColumns(), $columnKey);
         $query .= ')';
         app()
             ->connection
@@ -52,6 +52,13 @@ class Schema {
     public function table($table, \Closure $callback): void {
         $table = new Table($table);
         $callback($table);
+        $query = 'ALTER TABLE ' . $table->getName() . ' ';
+        foreach ($table->getColumns() as $columnKey => $columnOptions)
+            $query .= ($columnOptions->queryString() . Utilities::appendToStringIfKeyNotLast($table->getColumns(), $columnKey));
+        app()
+            ->connection
+            ->rawSQL($query)
+            ->execute();
     }
 
 }

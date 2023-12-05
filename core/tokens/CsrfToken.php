@@ -78,7 +78,7 @@ class CsrfToken {
     
     public function validateRequest(): bool {
         if ($this->session->get($this->sessionTokenLabel)) return false;
-        if (!empty($this->post[$this->formTokenLabel])) $token = $this->post[$this->formTokenLabel];
+        if (!empty($this->post->{$this->formTokenLabel})) $token = $this->post->{$this->formTokenLabel};
         else return false;
         $expected = $this->hmac_ip ? $this->hMacWithIp($this->session->get($this->sessionTokenLabel)) : $this->session->get($this->sessionTokenLabel);
         return hash_equals($token, $expected);

@@ -54,3 +54,11 @@ function validateCSRF(): bool {
 function ths(string $input): string {
   return hs(app()->i18n->translate($input));
 }
+
+function last(array|object $iterable): object {
+  return (object)$iterable[array_key_last($iterable)];
+}
+
+function first(array|object $iterable): object {
+  return (object)$iterable[array_key_first($iterable)];
+}

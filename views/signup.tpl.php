@@ -3,7 +3,7 @@
     <div class="shape"></div>
     <div class="shape"></div>
   </div>
-  <form class="login-form center flex-column" method="POST" action="/auth/signup">
+  <form class="login-form center flex-column" method="POST">
     <div class="form-group w-100 mb-3">
       <input type="email" required name="email" class="form-control" placeholder="Email" aria-label="Username" aria-describedby="basic-addon1">
     </div>

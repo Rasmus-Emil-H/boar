@@ -1,10 +1,10 @@
 <?php
 
-/*******************************
+/**
  * Bootstrap Response 
  * AUTHOR: RE_WEB
  * @package app\core\Response
-*/
+ */
 
 namespace app\core;
 
@@ -25,6 +25,10 @@ class Response {
     public function setResponse(int $code, array $message) {
         $this->setStatusCode($code);
         exit(json_encode($message));
+    }
+
+    public function badToken() {
+        $this->setResponse(400, ['Bad token']);
     }
 
 }

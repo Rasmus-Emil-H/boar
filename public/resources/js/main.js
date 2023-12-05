@@ -25,7 +25,7 @@ document.addEventListener("DOMContentLoaded", async function() {
     }
   }
 
-  await window.boar.serviceworkerInit.init();
+  // await window.boar.serviceworkerInit.init();
   await window.boar.behaviour.init();
 
 });

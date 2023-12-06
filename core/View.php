@@ -4,7 +4,7 @@
  * Bootstrap View
  * AUTHOR: RE_WEB
  * @package app\core\View
-*/
+ */
 
 namespace app\core;
 

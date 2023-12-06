@@ -13,11 +13,11 @@ use \app\core\Curl;
 
 class Authenticator {
 
-    protected array $data;
+    protected Object $data;
 
-    public function __construct(array $data, string $method) {
+    public function __construct(Object $data, string $method) {
         $this->data = $data;
-        if (!method_exists($this, $method)) throw new \Exception('Invalid method');
+        if (!method_exists($this, $method)) throw new \app\core\exceptions\NotFoundException();
         $this->$method();
     }
 
@@ -27,15 +27,14 @@ class Authenticator {
     */
 
     public function login() {
-        if(!validateCSRF()) return false;
-        $user = UserModel::search(['email' => $this->data['email']]);
-        if(!empty($user)) {
-            $user = $user[array_key_first((array)$user)];
-            $passwordVerify = password_verify($this->data['password'], $user->get('Password'));
-            if(!$passwordVerify) return;
-            app()->session->set('user', $user->key());
-            app()->response->redirect('/home');
-        }
+        if (!validateCSRF()) return false;
+        $user = UserModel::search(['email' => $this->data->email]);
+        if (empty($user)) return false;
+        $user = first($user);
+        $passwordVerify = password_verify($this->data->password, $user->get('Password'));
+        if (!$passwordVerify) return;
+        app()->session->set('user', $user->key());
+        app()->response->redirect('/home');
     }
 
     /**

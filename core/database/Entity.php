@@ -247,10 +247,28 @@ abstract class Entity extends Relations {
         return $result;
     }
 
-    public function addMetaData(array $data): void {
+    /**
+     * Add meta data to current entity
+     * @param array data
+     * @return self
+     */
+
+    public function addMetaData(array $data): self {
         (new EntityMetaData())
             ->set(['EntityType' => $this->getTableName(), 'EntityID' => $this->key(), 'Data' => json_encode($data)])
             ->save();
+        return $this;
+    }
+
+    /**
+     * Set status on current entity
+     * @param int status
+     * @return self
+     */
+
+    public function setStatus(int $status): self {
+        
+        return $this;
     }
 
 }

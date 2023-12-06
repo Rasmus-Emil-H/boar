@@ -4,7 +4,7 @@
  * Bootstrap Cookie 
  * AUTHOR: RE_WEB
  * @package app\core\Cookie
-*/
+ */
 
 namespace app\core;
 

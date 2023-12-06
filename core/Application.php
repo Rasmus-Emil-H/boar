@@ -4,7 +4,7 @@
  * Bootstrap application
  * AUTHOR: RE_WEB
  * @package app\core
-*/
+ */
 
 namespace app\core;
 
@@ -90,7 +90,7 @@ class Application {
      * Run the application 
      * Custom exceptions should be written inside \core\exceptions
      * @return void
-    */
+     */
 
     public function run(): void {
         try {

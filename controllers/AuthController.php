@@ -29,13 +29,18 @@ class AuthController extends Controller {
         
         $body = app()->request->getBody();
         $emailExists = UserModel::search(['Email' => $body->email]);
-        if ($emailExists) app()->response->setResponse(409, ['errors' => 'Email exists']);
-        $static = (new UserModel())
+        if ($emailExists) app()->response->dataConflict();
+
+        $userID = (new UserModel())
             ->set(['Email' => $body->email, 'Name' => $body->name, 'Password' => password_hash($body->password, PASSWORD_DEFAULT)])
             ->save();
-        (new UserModel($static))->addMetaData(['event' => 'user signed up']);
 
-        app()->session->set('user', $static);
+        $user = new UserModel($userID);
+        $user
+            ->addMetaData(['event' => 'user signed up'])
+            ->setRole('User');
+
+        app()->session->set('userID', $userID);
         app()->response->redirect('/home');
     }
 

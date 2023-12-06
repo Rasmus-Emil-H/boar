@@ -31,4 +31,8 @@ class Response {
         $this->setResponse(400, ['Bad token']);
     }
 
+    public function dataConflict() {
+        $this->setResponse(409, ['The requested resource already exists and can\'t coexist.']);
+    }
+
 }

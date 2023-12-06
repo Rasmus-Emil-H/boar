@@ -56,7 +56,7 @@ class Column {
             }
             return $query;
         } catch (\Exception $e) {
-            app()->globalThrower("Column generator failed: " . $e->getMessage());
+            app()->globalThrower('Column generator failed: ' . $e->getMessage());
         }
     }
 

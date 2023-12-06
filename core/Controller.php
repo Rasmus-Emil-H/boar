@@ -4,7 +4,7 @@
  * Bootstrap Controller 
  * AUTHOR: RE_WEB
  * @package app\core\Controller
-*/
+ */
 
 namespace app\core;
 

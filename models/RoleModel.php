@@ -10,10 +10,10 @@ namespace app\models;
 
 use \app\core\database\Entity;
 
-class UserModel extends Entity {
+class RoleModel extends Entity {
 
-    const keyID     = 'UserID';
-	const tableName = 'Users';
+    const keyID     = 'RoleID';
+	const tableName = 'Roles';
 	
 	/*
 	 * Tablename
@@ -21,7 +21,7 @@ class UserModel extends Entity {
 	*/
 	
 	public function getTableName(): string {
-		return 'Users';
+		return 'Roles';
 	}
 	
 	/*
@@ -30,15 +30,11 @@ class UserModel extends Entity {
 	*/
 	
 	public function getKeyField(): string {
-		return 'UserID';
+		return 'RoleID';
 	}
 
 	public function getForeignKeys(): array {
 		return [];
-	}
-
-	public function setRole(string $role): void {
-
 	}
 	
 }

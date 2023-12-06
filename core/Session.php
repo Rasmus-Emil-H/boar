@@ -1,10 +1,10 @@
 <?php
 
-/*******************************
+/**
  * Bootstrap Session 
  * AUTHOR: RE_WEB
  * @package app\core\Session
-*/
+ */
 
 namespace app\core;
 

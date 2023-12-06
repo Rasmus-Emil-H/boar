@@ -1,11 +1,11 @@
 <?php
 
-/*******************************
+/**
  * Bootstrap Query 
  * AUTHOR: RE_WEB
  * @package app\core\Regex
  * Global regex handler
-*/
+ */
 
 namespace app\core;
 

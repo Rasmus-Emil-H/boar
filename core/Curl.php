@@ -4,7 +4,7 @@
  * Bootstrap Curl 
  * AUTHOR: RE_WEB
  * @package app\core\Curl
-*/
+ */
 
 namespace app\core;
 
@@ -16,7 +16,7 @@ class curl {
 	protected $data = [];
 	protected $headers = [];
 	protected $method = 'get';
-	public $content = '';
+	public $content;
 	
 	public function setUrl(string $url = '') {
 		$this->url = $url;

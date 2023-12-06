@@ -1,11 +1,11 @@
 <?php
 
-/*******************************
+/**
  * Bootstrap Query 
  * AUTHOR: RE_WEB
  * @package app\core\Query
  * Minor thoughts for some query validation at some point
-*/
+ */
 
 namespace app\core;
 

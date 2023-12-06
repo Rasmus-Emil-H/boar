@@ -5,9 +5,9 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <?php foreach ( $navigationItems as $navigationName => $href): ?>
-          <li class="nav-item">
-            <a aria-label="dashboardbutton" class="nav-link text-white" href="<?= $href ?>"><?= hs($navigationName); ?></a>
+        <?php foreach ( $navigationItems as $navItem => $classes): ?>
+          <li class="nav-item text-white <?= implode(' ', $classes); ?>">
+            <?= $navItem; ?>
           </li>
         <?php endforeach; ?>
       </ul>

@@ -65,7 +65,7 @@ class Relations {
     
     public function belongsTo(string $related) {
         $instance = $this->newRelatedInstance($related);
-        return $instance::search([self::ENTITY_TYPE => $instance->getTableName(), self::ENTITY_ID => $this->key()]);
+        return self::search([$instance->getKeyField() => $instance->key()]);
     }
 
 }

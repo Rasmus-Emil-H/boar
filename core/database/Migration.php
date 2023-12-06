@@ -28,6 +28,7 @@ class Migration {
     public function applyMigrations() {
         $this->createMigrationsTable();
         $appliedMigrations = $this->getAppliedMigrations();
+        var_dump($appliedMigrations);exit;
         $migrationsFolder = app()::$ROOT_DIR . self::MIGRATION_DIR;
         $migrations = scandir($migrationsFolder);
         $mappedMigrations = array_map(fn($object) => $object->migration, $appliedMigrations);

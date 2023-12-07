@@ -28,14 +28,15 @@ class Migration {
     public function applyMigrations() {
         $this->createMigrationsTable();
         $appliedMigrations = $this->getAppliedMigrations();
-        var_dump($appliedMigrations);exit;
         $migrationsFolder = app()::$ROOT_DIR . self::MIGRATION_DIR;
         $migrations = scandir($migrationsFolder);
         $mappedMigrations = array_map(fn($object) => $object->migration, $appliedMigrations);
         $missingMigrations = [];
         foreach ( $migrations as $migration ) {
             $migrationFile = $migrationsFolder . $migration;
-            if (!is_file($migrationFile) || in_array(preg_replace('/[.php]/', '', $migration), $mappedMigrations)) continue;
+            if ($migration === '.' || $migration === '..') continue;
+            $actualMigration = str_replace('.php', '', $migration);
+            if (!is_file($migrationFile) || in_array($actualMigration, $mappedMigrations)) continue;
             $date = preg_replace('/\_/', '-', substr(substr($migration, -19), 0, 10));
             if (!strtotime($date)) app()->connection->log("Invalid migration name ($migration), must be formatted: migration_yyyy_mm_dd_xxxx", true);
             isset($missingMigrations[strtotime($date)]) ? $missingMigrations[strtotime($date)+1] = $migration : $missingMigrations[strtotime($date)] = $migration;

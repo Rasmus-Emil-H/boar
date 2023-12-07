@@ -30,7 +30,7 @@ class Relations {
      * @return mixed
      */
 
-    protected function newRelatedInstance(string $class) {
+    protected function getInstanceOf(string $class) {
         app()->classCheck($class);
         return new $class();
     }
@@ -43,7 +43,7 @@ class Relations {
      */
 
     public function hasOne(string $related, string $foreignKey) {
-        $instance = $this->newRelatedInstance($related);
+        $instance = $this->getInstanceOf($related);
     }
 
     /**
@@ -54,7 +54,7 @@ class Relations {
      */
     
     public function hasMany(string $related) {
-        $instance = $this->newRelatedInstance($related);
+        $instance = $this->getInstanceOf($related);
         return $instance::search([self::ENTITY_TYPE => $this->getTableName(), self::ENTITY_ID => $this->key()]);
     }
 
@@ -64,7 +64,7 @@ class Relations {
      */
     
     public function belongsTo(string $related) {
-        $instance = $this->newRelatedInstance($related);
+        $instance = $this->getInstanceOf($related);
         return self::search([$instance->getKeyField() => $instance->key()]);
     }
 

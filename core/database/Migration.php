@@ -31,7 +31,6 @@ class Migration {
         $missingMigrations = [];
         foreach ( $migrations as $migration ) {
             $migrationFile = $migrationsFolder . $migration;
-            if ($migration === '.' || $migration === '..') continue;
             $actualMigration = str_replace('.php', '', $migration);
             if (!is_file($migrationFile) || in_array($actualMigration, $mappedMigrations)) continue;
             $date = preg_replace('/\_/', '-', substr(substr($migration, -19), 0, 10));
@@ -46,12 +45,12 @@ class Migration {
         foreach ($toBeAppliedMigrations as $migration) {
             require_once app()::$ROOT_DIR . self::MIGRATION_DIR . $migration;
             $className = pathinfo($migration, PATHINFO_FILENAME);
-            if (strlen($className) > self::MAX_LENGTH) app()->connection->log("Classname ($className) is too long!", true);
+            if (strlen($className) > self::MAX_LENGTH) app()->connection->log("Classname ($className) is too long!", exit: true);
             app()->classCheck($className);
             $currentMigration = new $className();
             $currentMigration->up();
             (new MigrationModel())
-                ->set(['migration' => $className])
+                ->set(['Migration' => $className])
                 ->save();
             app()
                 ->connection

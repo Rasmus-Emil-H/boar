@@ -19,7 +19,7 @@ class Migration {
     public function createMigrationsTable() {
         (new Schema())->up('Migrations', function(table\Table $table) {
             $table->increments('MigrationID');
-            $table->varchar('migration', self::MAX_LENGTH);
+            $table->varchar('Migration', self::MAX_LENGTH);
             $table->timestamp();
             $table->primaryKey('MigrationID');
         });
@@ -30,7 +30,7 @@ class Migration {
         $appliedMigrations = $this->getAppliedMigrations();
         $migrationsFolder = app()::$ROOT_DIR . self::MIGRATION_DIR;
         $migrations = scandir($migrationsFolder);
-        $mappedMigrations = array_map(fn($object) => $object->migration, $appliedMigrations);
+        $mappedMigrations = array_map(fn($object) => $object->Migration, $appliedMigrations);
         $missingMigrations = [];
         foreach ( $migrations as $migration ) {
             $migrationFile = $migrationsFolder . $migration;

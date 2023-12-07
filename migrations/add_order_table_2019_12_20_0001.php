@@ -11,6 +11,7 @@ class add_order_table_2019_12_20_0001 {
             $table->timestamp('CreatedAt');
             $table->integer('Total', 10);
             $table->primaryKey('OrderID');
+            $table->integer('UserID', 10);
             $table->foreignKey('UserID', 'Users', 'UserID');
         });
     }

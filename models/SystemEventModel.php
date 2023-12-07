@@ -1,10 +1,10 @@
 <?php
 
-/*******************************
+/**
  * Bootstrap Query 
  * AUTHOR: RE_WEB
  * @package app\models\Query
-*******************************/
+ */
 
 namespace app\models;
 
@@ -19,19 +19,9 @@ class SystemEventModel extends Entity {
 		return [''];
 	}
 	
-	/*
-	 * Tablename
-	 * @return string
-	*/
-	
 	public function getTableName(): string {
 		return 'SystemEvents';
 	}
-	
-	/*
-	 * Primary key
-	 * @return string
-	*/
 	
 	public function getKeyField(): string {
 		return 'SystemEventID';

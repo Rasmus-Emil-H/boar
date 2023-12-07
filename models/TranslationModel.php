@@ -1,10 +1,10 @@
 <?php
 
-/*******************************
+/**
  * Bootstrap Query 
  * AUTHOR: RE_WEB
  * @package app\models\Query
-*******************************/
+ */
 
 namespace app\models;
 
@@ -18,20 +18,10 @@ class TranslationModel extends Entity {
 	public function getAttributes(): array {
 		return ['translation'];
 	}
-	
-	/*
-	 * Tablename
-	 * @return string
-	*/
-	
+
 	public function getTableName(): string {
 		return 'Translations';
 	}
-	
-	/*
-	 * Primary key
-	 * @return string
-	*/
 	
 	public function getKeyField(): string {
 		return 'TranslationID';

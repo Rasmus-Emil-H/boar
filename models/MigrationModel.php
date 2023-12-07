@@ -19,19 +19,9 @@ class MigrationModel extends Entity {
 		return [];
 	}
 	
-	/*
-	 * Tablename
-	 * @return string
-	*/
-	
 	public function getTableName(): string {
 		return 'Migrations';
 	}
-	
-	/*
-	 * Primary key
-	 * @return string
-	*/
 	
 	public function getKeyField(): string {
 		return 'MigrationID';

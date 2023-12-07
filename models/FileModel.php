@@ -10,11 +10,6 @@ namespace app\models;
 
 class FileModel {
 
-    /** 
-     * Allowed file extensions
-     * @var array
-    */
-
     protected array $allowedFileExtensions = ['jpg', 'jpeg', 'webp', 'png'];
 
 }

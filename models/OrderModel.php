@@ -14,20 +14,10 @@ class OrderModel extends Entity {
 
     const keyID     = 'OrderID';
 	const tableName = 'Orders';
-	
-	/*
-	 * Tablename
-	 * @return string
-	*/
-	
+
 	public function getTableName(): string {
 		return 'Orders';
 	}
-	
-	/*
-	 * Primary key
-	 * @return string
-	*/
 	
 	public function getKeyField(): string {
 		return 'OrderID';

@@ -19,19 +19,9 @@ class LanguageModel extends Entity {
 		return ['language'];
 	}
 	
-	/*
-	 * Tablename
-	 * @return string
-	*/
-	
 	public function getTableName(): string {
 		return 'Languages';
 	}
-	
-	/*
-	 * Primary key
-	 * @return string
-	*/
 	
 	public function getKeyField(): string {
 		return 'LanguageID';

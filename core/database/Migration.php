@@ -10,10 +10,7 @@ class Migration {
     protected const MIGRATION_DIR = '/migrations/';
 
     public function getAppliedMigrations(): array {
-        return app()
-            ->connection
-            ->rawSQL("SELECT migration FROM Migrations")
-            ->execute();
+        return MigrationModel::all();
     }
 
     public function createMigrationsTable() {

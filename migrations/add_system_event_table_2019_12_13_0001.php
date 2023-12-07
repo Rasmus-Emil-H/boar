@@ -6,7 +6,7 @@ use \app\core\database\Schema;
 class add_system_event_table_2019_12_13_0001 {
 
     public function up() {
-        (new Schema())->up('SystemEvent', function(Table $table) {
+        (new Schema())->up('SystemEvents', function(Table $table) {
             $table->increments('SystemEventID');
             $table->text('Data');
             $table->timestamp('CreatedAt');

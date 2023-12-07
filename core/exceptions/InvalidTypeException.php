@@ -8,9 +8,9 @@
 
 namespace app\core\exceptions;
 
-class NotFoundException extends \Exception {
+class InvalidTypeException extends \Exception {
 
-    protected $code = 404;
-    protected $message = 'Not found';
+    protected $code = 409;
+    protected $message = 'Invalid type was provided';
 
 }

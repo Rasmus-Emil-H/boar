@@ -1,10 +1,10 @@
 <?php
 
-/*******************************
+/**
  * Bootstrap ForbiddenException 
  * AUTHOR: RE_WEB
  * @package app\core\ForbiddenException
-*/
+ */
 
 namespace app\core\exceptions;
 

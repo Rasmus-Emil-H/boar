@@ -181,7 +181,7 @@ abstract class Entity extends Relations {
             return new $class((int) $ids);
         }
 
-        throw new \Exception("$class::load(); expects either an array or integer. '".gettype($ids)."' was provided.");
+        throw new \app\core\exceptions\InvalidTypeException("$class::load(); expects either an array or integer. '".gettype($ids)."' was provided.");
     }
 
     /**
@@ -210,7 +210,6 @@ abstract class Entity extends Relations {
     public static function search(array $criterias, array $values = ['*'], array $additionalQueryBuilding = []): array {
         $rows = app()->connection->select(static::tableName, $values)->whereClause($criterias);
         foreach ($additionalQueryBuilding as $key => $value) $rows = $rows->{$key}($value);
-        var_dump($rows);
         $rows = $rows->execute();
         return self::load(array_column($rows, static::keyID));
     }

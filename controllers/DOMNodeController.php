@@ -4,7 +4,7 @@
  * Home Controller 
  * AUTHOR: RE_WEB
  * @package app\controllers
-*/
+ */
 
 namespace app\controllers;
 
@@ -17,9 +17,8 @@ class DOMNodeController extends Controller {
       $this->setData([
         'navbar' => $this->getView(), 
         'navigationItems' => [
-          '<a class="text-white" href="/home"><i class="bi bi-house"></i></a>' => [],
-          '<a class="text-white" href="/user/profile"><i class="bi bi-person"></i></a>' => [],
-          '<a class="text-white float-right" href="/auth/logout"><i class="bi bi-box-arrow-left"></i></a>' => ['float-right']
+          '<a class="dropdown-item" href="/user/profile">Profile</a>',
+          '<a class="dropdown-item" href="/auth/logout">Logout</a>'
         ]
       ]);
     }

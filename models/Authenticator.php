@@ -33,6 +33,10 @@ class Authenticator {
         $user = first($user);
         $passwordVerify = password_verify($this->data->password, $user->get('Password'));
         if (!$passwordVerify) return;
+        $this->authenticateUser($user);
+    }
+
+    public function authenticateUser(UserModel $user): void {
         app()->session->set('user', $user->key());
         app()->response->redirect('/home');
     }

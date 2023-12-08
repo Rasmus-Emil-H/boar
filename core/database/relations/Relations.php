@@ -10,13 +10,6 @@ namespace app\core\database\relations;
 
 class Relations {
 
-    private const ENTITY_TYPE = 'entityType';
-    private const ENTITY_ID   = 'entityID';
-
-    public function __construct() {
-
-    }
-
     /**
      * RELATIONSHIP SECTION
      * @return \app\models\Entity

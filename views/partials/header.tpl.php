@@ -9,7 +9,7 @@
     <meta content="width=device-width, initial-scale=1, user-scalable=1, minimum-scale=1, maximum-scale=5" name="viewport" />
     <meta name="description" content="boar application">
     <meta name="msapplication-tap-highlight" content="no">
-    <link rel="stylesheet" href="/resources/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/resources/css/bootstrap.min.css" integrity="n8Y/JJLqKoftErk/S6vn+OQ2Uc9LSclD8twqxiOCyOo8JwgmwRnX+64SWlS5dG29">
     <link rel="stylesheet" href="/resources/css/main.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.min.css">
     <link rel="icon" type="image/x-icon" href="/favicon.ico">
@@ -20,5 +20,3 @@
 <?php if(!app()::isGuest()): ?>
   <?php require_once $navbar; ?>
 <?php endif; ?>
-
-<div class="wrapper">

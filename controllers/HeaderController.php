@@ -8,7 +8,6 @@
 
 namespace app\controllers;
 
-use app\core\Application;
 use app\core\Controller;
 
 class HeaderController extends Controller {

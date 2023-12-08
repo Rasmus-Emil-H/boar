@@ -142,7 +142,7 @@ class Connection {
     }
 
     public function limit(int $limit = self::DEFAULT_LIMIT): self {
-        $this->query .= ' LIMIT ' . $limit;
+        $this->query .= " LIMIT $limit ";
         return $this;
     }
 

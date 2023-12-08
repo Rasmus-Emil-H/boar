@@ -62,3 +62,7 @@ function last(array|object $iterable): object {
 function first(array|object $iterable): object {
   return (object)$iterable[array_key_first($iterable)];
 }
+
+function loopAndEcho(array|object $iterable, bool $echoKey = false): void {
+  foreach ($iterable as $key => $value) echo $echoKey ? $key : $value;
+}

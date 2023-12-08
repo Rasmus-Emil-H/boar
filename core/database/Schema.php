@@ -54,7 +54,7 @@ class Schema {
         $callback($table);
         $query = 'ALTER TABLE ' . $table->getName() . ' ';
         foreach ($table->getColumns() as $columnKey => $columnOptions)
-            $query .= ($columnOptions->queryString() . Utilities::appendToStringIfKeyNotLast($table->getColumns(), $columnKey));
+            $query .= ($columnOptions->queryString(isAlteringTable: true) . Utilities::appendToStringIfKeyNotLast($table->getColumns(), $columnKey));
         app()
             ->connection
             ->rawSQL($query)

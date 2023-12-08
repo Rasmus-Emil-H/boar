@@ -32,7 +32,7 @@ class Column {
         $this->type = $type;
     }
 
-    public function queryString() {
+    public function queryString(bool $isAlteringTable = false) {
         try {
             $options = '';
             foreach ( $this->get('options') as $optionKey => $option )  
@@ -42,7 +42,7 @@ class Column {
                     $query = " PRIMARY KEY ($this->name) ";
                     break;
                 case self::FOREIGN_KEY:
-                    $query = " FOREIGN KEY ($this->name) REFERENCES $this->foreignTable($this->foreignColumn)";
+                    $query = ( $isAlteringTable ? 'ADD CONSTRAINT fk_' . $this->foreignColumn : '' ) . " FOREIGN KEY ($this->name) REFERENCES $this->foreignTable($this->foreignColumn)";
                     break;
                 case self::DROP_COLUMN:
                     $query = 'DROP COLUMN ' . $this->type . ' ' . $this->name;

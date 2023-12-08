@@ -6,6 +6,7 @@ use \app\models\MigrationModel;
 use \app\core\database\seeders\DatabaseSeeder;
 
 class Migration {
+    
     protected const MAX_LENGTH = 255;
     protected const MIGRATION_DIR = '/migrations/';
 

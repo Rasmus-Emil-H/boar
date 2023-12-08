@@ -220,7 +220,7 @@ abstract class Entity extends Relations {
      */
 
     public function getRelatedObject(string $key): string {
-		return $this->relatedObjects[$key] ?? app()->globalThrower('Invalid relation');
+		return $this->relatedObjects[$key] ?? throw new \app\core\exceptions\NotFoundException("$key was not found on this entity.");
 	}
 
     /**
@@ -267,7 +267,8 @@ abstract class Entity extends Relations {
      */
 
     public function setStatus(int $status): self {
-        
+        $this->status = $status;
+        $this->save();
         return $this;
     }
 

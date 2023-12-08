@@ -30,5 +30,9 @@ class UserModel extends Entity {
 	public function setRole(string $role): void {
 
 	}
+
+	public function orders() {
+		return $this->hasMany(OrderModel::class);
+	}
 	
 }

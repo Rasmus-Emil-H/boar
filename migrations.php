@@ -10,7 +10,7 @@ use app\core\database\Migration;
 require_once __DIR__ . '/vendor/autoload.php';
 require_once __DIR__ . '/public/yard.php';
 
-$app = new Application(true);
+$app = new Application(applicationIsMigrating: true);
 
 $migration = new Migration();
 $migration->applyMigrations();

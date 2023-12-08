@@ -4,11 +4,9 @@
  * Bootstrap relations between entities 
  * AUTHOR: RE_WEB
  * @package app\core\relations
-*/
+ */
 
 namespace app\core\database\relations;
-
-use app\core\Application;
 
 class Relations {
 
@@ -55,7 +53,7 @@ class Relations {
     
     public function hasMany(string $related) {
         $instance = $this->getInstanceOf($related);
-        return $instance::search([self::ENTITY_TYPE => $this->getTableName(), self::ENTITY_ID => $this->key()]);
+        return $instance::search([$this->getKeyField() => $this->key()]);
     }
 
     /*

@@ -126,7 +126,6 @@ class Connection {
             $this->fields .= $key.(array_key_last($fields) === $key ? '' : ',');
             $this->placeholders .= ($fieldSetter === 'insert' ? '' : $key.'=')."?".(array_key_last($fields) === $key ? '' : ',');
             $this->args[] = $field;
-            // $this->setArgumentPair($key, $field);
         }
         return $this;
     }
@@ -138,7 +137,7 @@ class Connection {
     }
 
     public function delete(string $table): self {
-        $this->query .= "DELETE FROM {$table} {$this->where}";
+        $this->query .= "DELETE FROM {$table} ";
         return $this;
     }
 

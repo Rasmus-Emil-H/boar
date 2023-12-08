@@ -45,7 +45,7 @@ class Relations {
     }
 
     /**
-     * Define a one-to-many relationship.
+     * Define a has-many relationship.
      * @param  string  $related
      * @param  string  $foreignKey
      * @return \core\database\relations\hasMany

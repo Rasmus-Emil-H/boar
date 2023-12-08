@@ -94,11 +94,6 @@ class Connection {
         return $this;
     }
 
-    public function where(array $conditions): self {
-        $this->preparePlaceholdersAndBoundValues($conditions, 'insert');
-        return $this;
-    }
-
     public function innerJoin(string $table, string $using): self {
         $this->query .= self::INNERJOIN . " {$table} USING({$using}) ";
         return $this;
@@ -146,7 +141,7 @@ class Connection {
         return $this;
     }
 
-    public function whereClause(array $arguments): self {
+    public function where(array $arguments): self {
         foreach($arguments as $selector => $value) {
             $this->query .= ( array_key_first($arguments) === $selector ? self::WHERE : self::AND ) . $selector . '=? ';
             $this->args[] = $value;
@@ -266,7 +261,7 @@ class Connection {
     }
 
     public function fetchRow(string $table, ?array $criteria) {
-        $this->select($table, ['*'])->whereClause($criteria);
+        $this->select($table, ['*'])->where($criteria);
         return $this->execute('fetch');
     }
 

@@ -84,10 +84,13 @@ class Application {
             $this->session->set('language', self::$app->config->get('locale')->default);
     }
 
-    public function getSessionUser(): null | UserModel {
+    public function getSessionUser() {
         $session = (new SessionModel())::search(['Value' => $this->session->get('SessionID'), 'UserID' => $this->session->get('user')]);
         $validSession = !empty($session) && first($session)->exists();
-        if (!$this->session->get('user') && !in_array($this->request->getPath(), self::$defaultRoute) && !$validSession) $this->response->redirect(self::$defaultRoute['login']);
+        if (!in_array($this->request->getPath(), self::$defaultRoute) && !$validSession) {
+            $this->response->redirect(self::$defaultRoute['login']);
+            return null;
+        }
         $user = new UserModel();
         return first($user::search([$user->getKeyField() => $this->session->get('user')]));
     }

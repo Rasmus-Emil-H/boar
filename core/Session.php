@@ -53,7 +53,7 @@ class Session {
 
     public function __destruct() {
         $flashMessages = $this->getAllFlashMessages();
-        foreach ($flashMessages as $key => &$flashMessage) if ($flashMessage['remove']) unset($flashMessages[$key]);
+        foreach ($flashMessages as $key => &$flashMessage) if ($flashMessage['remove']) $this->unset($flashMessages[$key]);
         $_SESSION[self::FLASH_ARRAY] = $flashMessages;
     }
 

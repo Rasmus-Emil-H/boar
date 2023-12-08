@@ -2,9 +2,10 @@
 
 namespace app\controllers;
 
-use app\core\Controller;
-use app\models\UserModel;
-use app\models\Authenticator;
+use \app\core\Controller;
+use \app\models\UserModel;
+use \app\models\SessionModel;
+use \app\models\Authenticator;
 
 class AuthController extends Controller {
 
@@ -19,6 +20,7 @@ class AuthController extends Controller {
     }
 
     public function logout() {
+        (new UserModel())->logout();
         app()->session->unset('user');
         app()->session->unset('SessionID');
         app()->response->redirect('/');

@@ -34,5 +34,13 @@ class UserModel extends Entity {
 	public function orders() {
 		return $this->hasMany(OrderModel::class);
 	}
+
+	public function logout() {
+		app()
+			->connection
+            ->delete('Sessions')
+            ->where(['UserID' => app()->session->get('user')])
+            ->execute();
+	}
 	
 }

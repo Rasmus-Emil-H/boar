@@ -16,6 +16,7 @@ class Response {
 
     public function redirect(string $location) {
         header('Location: ' . $location);
+        exit;
     }
     
     public function setContentType(string $type) {

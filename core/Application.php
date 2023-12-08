@@ -13,6 +13,7 @@ use \app\config\Config;
 use \app\utilities\Logger;
 use \app\models\SystemEventModel;
 use \app\models\SessionModel;
+use \app\models\UserModel;
 
 class Application {
 
@@ -83,10 +84,12 @@ class Application {
             $this->session->set('language', self::$app->config->get('locale')->default);
     }
 
-    public function getSessionUser() {
+    public function getSessionUser(): null | UserModel {
         $session = (new SessionModel())::search(['Value' => $this->session->get('SessionID'), 'UserID' => $this->session->get('user')]);
         $validSession = !empty($session) && first($session)->exists();
-        !$this->session->get('user') && !in_array($this->request->getPath(), self::$defaultRoute) && !$validSession ? $this->response->redirect(self::$defaultRoute['login']) : null;
+        if (!$this->session->get('user') && !in_array($this->request->getPath(), self::$defaultRoute) && !$validSession) $this->response->redirect(self::$defaultRoute['login']);
+        $user = new UserModel();
+        return first($user::search([$user->getKeyField() => $this->session->get('user')]));
     }
 
     /**

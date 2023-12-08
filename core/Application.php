@@ -12,6 +12,7 @@ use \app\core\database\Connection;
 use \app\config\Config;
 use \app\utilities\Logger;
 use \app\models\SystemEventModel;
+use \app\models\SessionModel;
 
 class Application {
 
@@ -83,7 +84,9 @@ class Application {
     }
 
     public function getSessionUser() {
-        !$this->session->get('user') && !in_array($this->request->getPath(), self::$defaultRoute) ? $this->response->redirect(self::$defaultRoute['login']) : null;
+        $session = (new SessionModel())::search(['Value' => $this->session->get('SessionID'), 'UserID' => $this->session->get('user')]);
+        $validSession = !empty($session) && first($session)->exists();
+        !$this->session->get('user') && !in_array($this->request->getPath(), self::$defaultRoute) && !$validSession ? $this->response->redirect(self::$defaultRoute['login']) : null;
     }
 
     /**

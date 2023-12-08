@@ -5,7 +5,7 @@
  * Use this object to authenticate with the application, external api, ect
  * AUTHOR: RE_WEB
  * @package app\models\Authenticator
-*/
+ */
 
 namespace app\models;
 
@@ -24,7 +24,7 @@ class Authenticator {
     /**
      * Application authentication mechanism
      * @return void
-    */
+     */
 
     public function login() {
         if (!validateCSRF()) return false;
@@ -49,11 +49,11 @@ class Authenticator {
     /**
      * API authentication mechanism
      * @return array $content
-    */
+     */
 
     public function api(): array {
         $curl = new Curl();
-        foreach ( $this->data as $key => $values ) $curl->{"set".ucfirst($key)($values)};
+        foreach ($this->data as $key => $values) $curl->{"set".ucfirst($key)($values)};
         $curl->send();
         $content = $curl->content;
         $curl->close();

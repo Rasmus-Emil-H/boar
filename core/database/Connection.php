@@ -149,8 +149,8 @@ class Connection {
         return $this;
     }
 
-    public function between(string $from, string $to, int $interval, $dateFormat = '%Y-m-d%'): self {
-        $this->query .= " AND str_to_date(:dateFormat) BETWEEN DATE(:from) - INTERVAL :interval DAY AND DATE(:from) + INTERVAL :interval DAY ";
+    public function between(string $from, string $to, int $interval, $dateFormat = '%Y-%m-%d'): self {
+        $this->query .= " AND STR_TO_DATE(:dateFormat) BETWEEN DATE(:from) - INTERVAL :interval DAY AND DATE(:from) + INTERVAL :interval DAY ";
         $this->args['dateFormat'] = $dateFormat;
         $this->args['from'] = $from;
         $this->args['to'] = $to;

@@ -9,6 +9,7 @@
 namespace app\core\database;
 
 use \app\core\database\relations\Relations;
+use DateTime;
 
 abstract class Entity extends Relations {
 
@@ -112,8 +113,9 @@ abstract class Entity extends Relations {
      */
 
     public function softDelete(): self {
-		$this->deletedAt = new \DateTime(date('Y-m-d H:i:s'));
-        $this->save();
+		$this
+            ->set(['DeletedAt' => new \DateTime('Y-m-d H:i:s')])
+            ->save();
         return $this;
 	}
 
@@ -124,8 +126,9 @@ abstract class Entity extends Relations {
      */
 
     public function restore(): self {
-	    $this->deletedAt = null;
-        $this->save();
+	    $this
+            ->set(['DeletedAt' => null])
+            ->save();
         return $this;
 	}
 
@@ -267,8 +270,9 @@ abstract class Entity extends Relations {
      */
 
     public function setStatus(int $status): self {
-        $this->status = $status;
-        $this->save();
+        $this
+            ->set(['Status' => $status])
+            ->save();
         return $this;
     }
 

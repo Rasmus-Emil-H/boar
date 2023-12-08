@@ -20,6 +20,7 @@ class AuthController extends Controller {
 
     public function logout() {
         app()->session->unset('user');
+        app()->session->unset('SessionID');
         app()->response->redirect('/');
     }
 

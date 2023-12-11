@@ -239,6 +239,18 @@ abstract class Entity extends Relations {
             ->execute();
     }
 
+   /**
+     * Truncate entity
+     * @return void
+     */
+
+     public function truncate() {
+        return app()
+            ->connection
+            ->delete($this->getTableName())
+            ->execute();
+    } 
+
     /**
      * Model debugging
      * @return string

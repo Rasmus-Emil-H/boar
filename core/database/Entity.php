@@ -249,7 +249,20 @@ abstract class Entity extends Relations {
             ->connection
             ->delete($this->getTableName())
             ->execute();
-    } 
+    }
+
+    /**
+     * Get trashed entities
+     * @return [\app\core\database\Entity]
+     */
+
+     public function trashed() {
+        return app()
+            ->connection
+            ->select($this->getTableName(), ['*'])
+            ->where(['DeletedAt' => 'IS NOT NULL'])
+            ->execute();
+    }
 
     /**
      * Model debugging

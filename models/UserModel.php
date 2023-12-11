@@ -36,7 +36,7 @@ class UserModel extends Entity {
 	}
 
 	public function logout() {
-		$session = first((new SessionModel())::search([$this->getKeyField() => app()->getSessionUser()->key()]));
+		$session = first((new SessionModel())::search([$this->getKeyField() => applicationUser()->key()]));
 		$session->delete();
 	}
 	

@@ -2,8 +2,9 @@
     "appName": "boar",
     "version": "0.1",
     "env": {
-        "developmentArrayIPs": [""]
+        
     },
+    "inDevelopment": true,
     "database": {
         "dsn": "",
         "user": "",

@@ -12,7 +12,7 @@ class AuthController extends Controller {
 
     public function login() {
         if (app()->session->get('user')) app()->response->redirect('/home');
-        if (app()->request->isPost()) new Authenticator(app()->request->getBody(), 'login');
+        if (app()->request->isPost()) new Authenticator(app()->request->getBody(), 'applicationLogin');
         
         $this->setLayout('auth');
         $this->setView('', 'login');

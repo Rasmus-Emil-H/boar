@@ -26,7 +26,7 @@ class Authenticator {
      * @return void
      */
 
-    public function login() {
+    public function applicationLogin() {
         if (!validateCSRF()) return false;
         $user = UserModel::search(['email' => $this->data->email]);
         if (empty($user)) return false;
@@ -51,7 +51,7 @@ class Authenticator {
      * @return array $content
      */
 
-    public function api(): array {
+    public function apiLogin(): array {
         $curl = new Curl();
         foreach ($this->data as $key => $values) $curl->{"set".ucfirst($key)($values)};
         $curl->send();

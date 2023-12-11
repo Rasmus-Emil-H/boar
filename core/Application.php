@@ -63,6 +63,8 @@ class Application {
         $this->getSessionUser();
         
         $this->i18n      = new I18n();
+
+        var_dump(applicationUser()->orders()->where(['OrderID' => 13]));
     }
 
     protected function setupConnection() {
@@ -139,7 +141,7 @@ class Application {
     }
 
     public static function isDevSite(): bool {
-        return in_array($_SERVER['REMOTE_ADDR'], self::$app->config->get('env')->developmentArrayIPs) || self::$app->env->get('isDev') === 'true';
+        return self::$app->config->get('inDevelopment') === true;
     }
 
     public function addSystemEvent(array $data): void {

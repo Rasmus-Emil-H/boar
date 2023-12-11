@@ -1,15 +1,15 @@
 <?php
 
 /**
- * Minor convenience for those methods that's used throughout the system
+ * Minor convenience for those methods that's used frequently throughout the system
  * @package none
  * @author RE_WEB
  */
 
 function displayDD($input, $title = 'Debugging'): void {
-  echo '<pre class="debug"><h2 class="text-center">' . $title . '</h2> ';
+  echo '<pre style="padding: 2rem; background-color: #588157; color: white; border-radius: 4px;" class="debug"><h2 class="text-center">' . $title . '</h2> ';
   var_dump($input);
-  echo ' <h2 class="text-center">END OF ' . $title . '</h2> </pre>';
+  echo ' <h2 style="margin:0;padding:0;" class="text-center">END OF ' . $title . '</h2> </pre>';
 }
 
 function dd($input) {
@@ -65,4 +65,9 @@ function first(array|object $iterable): object {
 
 function loopAndEcho(array|object $iterable, bool $echoKey = false): void {
   foreach ($iterable as $key => $value) echo $echoKey ? $key : $value;
+}
+
+function applicationUser(): ?\app\models\UserModel {
+  $tryUser = app()->getSessionUser();
+  return empty($tryUser) ? null : first($tryUser);
 }

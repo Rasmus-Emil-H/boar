@@ -2,6 +2,7 @@
 :root{
     --debug-color: #368497;
     --primary-color: #368497;
+    --debug-red: #d62828;
 }
 *{
     margin:0;
@@ -370,4 +371,8 @@ navbar{
 }
 .wrapper{
     padding:1rem;
+}
+.error {
+    background-color: var(--debug-red);
+    color: white;
 }

@@ -59,27 +59,28 @@ class Application {
         $this->env       = new Env();
         $this->logger    = new Logger();
 
-        $this->getSessionLanguage();
+        $this->checkSessionLanguage();
         $this->getSessionUser();
         
         $this->i18n      = new I18n();
     }
 
     protected function setupConnection() {
+        $database = $this->config->get('database');
         $applicationConfig = [
-            'authenticationClass' => \app\models\UserModel::class,
+            'authenticationClass' => UserModel::class,
             'pdo' => [
-                'dsn' => $this->config->get('database')->dsn, 
-                'user' => $this->config->get('database')->user, 
-                'password' => $this->config->get('database')->password
+                'dsn' => $database->dsn,
+                'user' => $database->user,
+                'password' => $database->password
             ]
         ];
 
         $this->authenticationClass = $applicationConfig['authenticationClass'];
-        $this->connection  = new Connection($applicationConfig['pdo']);
+        $this->connection = new Connection($applicationConfig['pdo']);
     }
 
-    public function getSessionLanguage() {
+    public function checkSessionLanguage() {
         if (!$this->session->get('language'))
             $this->session->set('language', self::$app->config->get('locale')->default);
     }
@@ -87,9 +88,10 @@ class Application {
     public function getSessionUser() {
         $session = (new SessionModel())::search(['Value' => $this->session->get('SessionID'), 'UserID' => $this->session->get('user')]);
         $validSession = !empty($session) && first($session)->exists();
-        if (!in_array($this->request->getPath(), self::$defaultRoute) && !$validSession) $this->response->redirect(self::$defaultRoute['login']);
+        $loginRoute = self::$defaultRoute['login'];
+        if ($loginRoute !== $this->request->getPath() && !$validSession) $this->response->redirect($loginRoute);
         $user = new UserModel();
-        return first($user::search([$user->getKeyField() => $this->session->get('user')]));
+        return $user::search([$user->getKeyField() => $this->session->get('user')]);
     }
 
     /**

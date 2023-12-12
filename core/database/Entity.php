@@ -210,9 +210,9 @@ abstract class Entity extends Relations {
      * @return \Iteratable
      */
 
-    public static function search(array $criterias, array $values = ['*'], array $additionalQueryBuilding = []): array {
+    public static function search(array $criterias, array $values = ['*'], array $sqlClauses = []): array {
         $rows = app()->connection->select(static::tableName, $values)->where($criterias);
-        foreach ($additionalQueryBuilding as $key => $value) $rows = $rows->{$key}($value);
+        foreach ($sqlClauses as $key => $value) $rows = $rows->{$key}($value);
         $rows = $rows->execute();
         return self::load(array_column($rows, static::keyID));
     }
@@ -239,7 +239,7 @@ abstract class Entity extends Relations {
             ->execute();
     }
 
-   /**
+    /**
      * Truncate entity
      * @return void
      */

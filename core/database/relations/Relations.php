@@ -10,17 +10,6 @@ namespace app\core\database\relations;
 
 class Relations {
 
-    /**
-     * RELATIONSHIP SECTION
-     * @return \app\models\Entity
-     */
-
-    /**
-     * Create a new model instance for a related model.
-     * @param  string  $class
-     * @return mixed
-     */
-
     protected function getInstanceOf(string $class) {
         app()->classCheck($class);
         return new $class();

@@ -44,8 +44,8 @@ class QueryBuilder implements Builder {
         $this->tableName = $table;
         $this->bindFields($data); 
         $this->bindValues($data);
-        $this->create($this->getTable(), $data);
-        $this->execute();
+        $this->create($table, $data);
+        $this->run();
     }
 
     public function bindFields(array $fields): void {

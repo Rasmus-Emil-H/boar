@@ -2,6 +2,8 @@
 
 namespace app\utilities;
 
-class Builder {
+interface Builder {
     
+    public function run();
+
 }

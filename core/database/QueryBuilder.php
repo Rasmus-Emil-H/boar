@@ -4,7 +4,7 @@ namespace app\core\database;
 
 use \app\utilities\Builder;
 
-class QueryBuilder extends Builder {
+class QueryBuilder implements Builder {
 
     public const WHERE       = ' WHERE ';
     public const AND         = ' AND ';
@@ -140,7 +140,7 @@ class QueryBuilder extends Builder {
 
     public function describe() {
         $this->query = "DESCRIBE {$this->tableName}";
-        $this->execute();
+        $this->run();
     }
 
     public function createTable(string $tableName, array $fields) {
@@ -159,7 +159,11 @@ class QueryBuilder extends Builder {
 
     public function fetchRow(string $table, ?array $criteria) {
         $this->select($table, ['*'])->where($criteria);
-        return $this->execute('fetch');
+        return $this->run('fetch');
+    }
+
+    public function run(string $fetchMode = '') {
+        app()->connection->execute($this->query, $this->args, $fetchMode);
     }
 
 }

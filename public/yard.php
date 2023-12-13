@@ -1,10 +1,14 @@
 <?php
 
 /**
- * Minor convenience for those methods that's used frequently throughout the system
- * @package none
- * @author RE_WEB
- */
+|----------------------------------------------------------------------------
+| Convenience for those methods that's used frequently throughout the system
+|----------------------------------------------------------------------------
+|
+| @author RE_WEB
+| @package none
+|
+*/
 
 function displayDD($input, $title = 'Debugging'): void {
   echo '<pre style="padding: 2rem; background-color: #588157; color: white; border-radius: 4px;" class="debug"><h2 class="text-center">' . $title . '</h2> ';
@@ -26,30 +30,13 @@ function hs($input): string {
   return \app\core\miscellaneous\Html::escape($input);
 }
 
-/**
- * Getter
- * @return Application object
- */
-
 function app(): object {
   return \app\core\Application::$app;
 }
 
-/**
- * Eval current CSRF token
- */
-
 function validateCSRF(): bool {
   return (new \app\core\tokens\CsrfToken())->validate();
 }
-
-/**
- * Escape
- * But with translation incoporeated
- * 
- * @param string input
- * @return string
- */
 
 function ths(string $input): string {
   return hs(app()->i18n->translate($input));

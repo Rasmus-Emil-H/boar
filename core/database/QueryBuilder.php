@@ -18,7 +18,8 @@ class QueryBuilder extends Builder {
     protected string $where  = '';
     protected string $fields = '';
     protected string $placeholders = '';
-    protected string $table;
+    protected string $table = '';
+    protected string $tableName = '';
 
     protected array $fieldPlaceholders = [];
     protected array  $args = [];
@@ -144,7 +145,7 @@ class QueryBuilder extends Builder {
 
     public function createTable(string $tableName, array $fields) {
         $tableFields = implode(', ', $fields);
-        $this->query = "CREATE TABLE {$this->exists} {$tableName} ({$tableFields})";
+        $this->query = "CREATE TABLE {$tableName} ({$tableFields})";
     }
 
     public function alterTable(string $oldColumn, string $newColumn) {

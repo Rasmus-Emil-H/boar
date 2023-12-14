@@ -130,7 +130,7 @@ abstract class Entity extends Relations {
     }
 
     public static function all() {
-        $rows = (new QueryBuilder(get_called_class(), static::tableName, static::keyID))
+        return (new QueryBuilder(get_called_class(), static::tableName, static::keyID))
             ->select(['*'])
             ->run();
     }

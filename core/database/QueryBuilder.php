@@ -144,15 +144,11 @@ class QueryBuilder implements Builder {
     }
 
     public function createTable(string $tableName, array $fields): self {
-        $this->query = "CREATE TABLE :tableName ()";
-        $this->args['tableName'] = $tableName;
-        foreach ($fields as $fieldKey => $fieldValue) $this->setArgumentPair($fieldKey, $fieldValue);
-        return $this;
+        exit('Table logic should be done via a migration.');
     }
 
     public function alterTable(string $oldColumn, string $newColumn): self {
-        $this->query = "ALTER TABLE {$this->tableName} CHANGE {$oldColumn} {$newColumn}";
-        return $this;
+        exit('Table logic should be done via a migration.');
     }
 
     protected function rawSQL(string $sql): self {

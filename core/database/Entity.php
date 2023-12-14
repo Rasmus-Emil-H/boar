@@ -9,7 +9,7 @@
 namespace app\core\database;
 
 use \app\core\database\relations\Relations;
-use DateTime;
+use \app\core\database\QueryBuilder;
 
 abstract class Entity extends Relations {
 
@@ -45,7 +45,7 @@ abstract class Entity extends Relations {
         if ($data !== null && gettype($data) !== "array") $data = [$key => $data];
 
         if(isset($data[$key])) {
-            $exists = app()->connection->fetchRow($this->getTableName(), [$key => $data[$key]]);
+            $exists = (new QueryBuilder($this->getTableName()))->fetchRow([$key => $data[$key]]);
             if(!empty($exists)) {
                 $this->key = $exists->{$this->getKeyField()};
                 $this->data = (array)$exists;
@@ -59,37 +59,25 @@ abstract class Entity extends Relations {
         $this->data = array_merge($this->data, $data);
         return $this;
     }
-    
-    /**
-     * get pk
-     * @return bool
-     */
 
     public function key() {
         return $this->key;
     }
 
-    /**
-     * Determine if the loaded entity exists in db
-     * @return bool
-     */
-
     public function exists(): bool {
         return $this->key !== null;
     }
 
-    /**
-     * @return string
-     */
-
     public function save() {
         try {
             if ($this->exists() === true) {
-                app()->connection->patch($this->getTableName(), $this->data, $this->getKeyField(), $this->key)->execute('fetch');
+                (new QueryBuilder($this->getTableName()))
+                    ->patch($this->data, $this->getKeyField(), $this->key)
+                    ->run('fetch');
                 return $this->data;
             }
             if(empty($this->data)) throw new \Exception("Data variable is empty");
-            app()->connection->create($this->getTableName(), $this->data)->execute();
+            (new QueryBuilder($this->getTableName()))->create($this->data)->run();
             $this->key = app()->connection->getLastID();
             return $this->key;
         } catch(\Exception $e) {
@@ -103,7 +91,7 @@ abstract class Entity extends Relations {
      */
 
     public function init() {
-		return app()->connection->init($this->getTableName(), $this->data);
+		return (new QueryBuilder($this->getTableName()))->init($this->data);
 	}
 
     /**
@@ -143,10 +131,9 @@ abstract class Entity extends Relations {
     }
 
     public static function all() {
-        $rows = app()
-            ->connection
-            ->select(static::tableName, ['*'])
-            ->execute();
+        $rows = (new QueryBuilder(static::tableName))
+            ->select(['*'])
+            ->run();
         return self::load(array_column($rows, static::keyID));
     }
 
@@ -187,87 +174,49 @@ abstract class Entity extends Relations {
         throw new \app\core\exceptions\InvalidTypeException("$class::load(); expects either an array or integer. '".gettype($ids)."' was provided.");
     }
 
-    /**
-     * Gets the current entity data
-     * @return array
-     */
-
     public function getData(): array {
         return $this->data;
     }
-
-    /**
-     * Get value based on key
-     * @return array
-     */
 
     public function __get(string $key) {
         return $this->data[$key] ?? new \Exception("Invalid key");
     }
 
     /**
-     * Search current model X Y Z criterias
+     * Search current entity
      * @return \Iteratable
      */
 
     public static function search(array $criterias, array $values = ['*'], array $sqlClauses = []): array {
-        $rows = app()->connection->select(static::tableName, $values)->where($criterias);
+        $rows = (new QueryBuilder(static::tableName))->select($values)->where($criterias);
         foreach ($sqlClauses as $key => $value) $rows = $rows->{$key}($value);
-        $rows = $rows->execute();
+        $rows = $rows->run();
         return self::load(array_column($rows, static::keyID));
     }
-
-    /**
-     * @param string key
-     * @return mixed 
-     */
 
     public function getRelatedObject(string $key): string {
 		return $this->relatedObjects[$key] ?? throw new \app\core\exceptions\NotFoundException("$key was not found on this entity.");
 	}
 
-    /**
-     * Delete obj
-     * @return 
-     */
-
     public function delete() {
-        return app()
-            ->connection
+        return (new QueryBuilder($this->getTableName()))
             ->delete($this->getTableName())
             ->where([$this->getKeyField() => $this->key()])
-            ->execute();
+            ->run();
     }
-
-    /**
-     * Truncate entity
-     * @return void
-     */
 
      public function truncate() {
-        return app()
-            ->connection
-            ->delete($this->getTableName())
-            ->execute();
+        return (new QueryBuilder($this->getTableName()))
+            ->delete()
+            ->run();
     }
-
-    /**
-     * Get trashed entities
-     * @return [\app\core\database\Entity]
-     */
 
      public function trashed() {
-        return app()
-            ->connection
-            ->select($this->getTableName(), ['*'])
+        return (new QueryBuilder($this->getTableName()))
+            ->select(['*'])
             ->where(['DeletedAt' => 'IS NOT NULL'])
-            ->execute();
+            ->run();
     }
-
-    /**
-     * Model debugging
-     * @return string
-     */
 
     public function __toString() {
         $result = get_class($this)."($this->key):\n";
@@ -275,24 +224,12 @@ abstract class Entity extends Relations {
         return $result;
     }
 
-    /**
-     * Add meta data to current entity
-     * @param array data
-     * @return self
-     */
-
     public function addMetaData(array $data): self {
         (new EntityMetaData())
             ->set(['EntityType' => $this->getTableName(), 'EntityID' => $this->key(), 'Data' => json_encode($data)])
             ->save();
         return $this;
     }
-
-    /**
-     * Set status on current entity
-     * @param int status
-     * @return self
-     */
 
     public function setStatus(int $status): self {
         $this

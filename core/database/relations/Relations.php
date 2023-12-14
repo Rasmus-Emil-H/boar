@@ -35,9 +35,7 @@ class Relations {
     
     public function hasMany(string $related) {
         $instance = $this->getInstanceOf($related);
-        return app()
-            ->connection
-            ->where([$this->getKeyField() => $this->key()]);
+        return $instance::search([$this->getKeyField() => $this->key()]);
     }
 
     /*
@@ -47,7 +45,7 @@ class Relations {
     
     public function belongsTo(string $related) {
         $instance = $this->getInstanceOf($related);
-        return self::search([$instance->getKeyField() => $instance->key()]);
+        return $this::search([$instance->getKeyField() => $instance->key()]);
     }
 
 }

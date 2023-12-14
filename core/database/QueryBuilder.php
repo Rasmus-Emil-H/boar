@@ -24,8 +24,11 @@ class QueryBuilder implements Builder {
     protected array $fieldPlaceholders = [];
     protected array  $args = [];
 
-    public function select(string $table, array $fields): self {
-        $this->table  = $table;
+    public function __construct(string $table) {
+        $this->table = $table;
+    }
+
+    public function select(array $fields): self {
         $this->bindFields($fields);
         $this->query .= "SELECT {$this->fields} FROM {$this->table}";
         return $this;
@@ -40,11 +43,10 @@ class QueryBuilder implements Builder {
      * @return void
     */
 
-    public function init(string $table, array $data): void {
-        $this->tableName = $table;
+    public function init(array $data): void {
         $this->bindFields($data); 
         $this->bindValues($data);
-        $this->create($table, $data);
+        $this->create($data);
         $this->run();
     }
 
@@ -80,9 +82,9 @@ class QueryBuilder implements Builder {
         return $this;
     }
 
-    public function create(string $table, array $fields): self {
+    public function create(array $fields): self {
         $this->preparePlaceholdersAndBoundValues($fields, 'insert');
-        $this->query .= "INSERT INTO {$table} ({$this->fields}) VALUES ({$this->placeholders})";
+        $this->query .= "INSERT INTO {$this->table} ({$this->fields}) VALUES ({$this->placeholders})";
         return $this;
     }
 
@@ -95,19 +97,21 @@ class QueryBuilder implements Builder {
         return $this;
     }
 
-    public function patch(string $table, array $fields, string $primaryKey, string $primaryKeyValue): self {
+    public function patch(array $fields, string $primaryKey, string $primaryKeyValue): self {
         $this->preparePlaceholdersAndBoundValues($fields, 'patch');
-        $this->query .= "UPDATE {$table} SET {$this->placeholders} WHERE {$primaryKey} = $primaryKeyValue";
+        $this->query .= "UPDATE {$this->table} SET {$this->placeholders} WHERE {$primaryKey} = $primaryKeyValue";
         return $this;
     }
 
-    public function delete(string $table): self {
-        $this->query .= "DELETE FROM {$table} ";
+    public function delete(): self {
+        $this->query .= ' DELETE FROM :table ';
+        $this->args['table'] = $this->table;
         return $this;
     }
 
     public function limit(int $limit = self::DEFAULT_LIMIT): self {
-        $this->query .= " LIMIT $limit ";
+        $this->query .= " LIMIT :limit ";
+        $this->args['limit'] = $limit;
         return $this;
     }
 
@@ -156,13 +160,15 @@ class QueryBuilder implements Builder {
         return $this;
     }
 
-    public function fetchRow(string $table, ?array $criteria) {
-        $this->select($table, ['*'])->where($criteria);
+    public function fetchRow(?array $criteria) {
+        $this->select(['*'])->where($criteria);
         return $this->run('fetch');
     }
 
-    public function run(string $fetchMode = '') {
-        app()->connection->execute($this->query, $this->args, $fetchMode);
+    public function run(string $fetchMode = 'fetchAll') {
+        $response = app()->connection->execute($this->query, $this->args, $fetchMode);
+        $this->resetQuery();
+        return $response;
     }
 
     public function resetQuery() {

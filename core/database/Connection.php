@@ -30,7 +30,7 @@ class Connection {
 
     public function execute(string $query, array $args = [], string $fetchType = 'fetchAll') {
         try {
-            $stmt = $this->prepare($query);
+            $stmt = $this->pdo->prepare($query);
             $stmt->execute($args);
             $result = $stmt->{$fetchType}();
             $stmt = null;
@@ -44,10 +44,6 @@ class Connection {
 
     public function getLastID() {
         return $this->pdo->lastInsertId();
-    }
-
-    public function prepare(string $sql): \PDOStatement {
-        return $this->pdo->prepare($sql);
     }
 
     public function beginTransaction(): bool {

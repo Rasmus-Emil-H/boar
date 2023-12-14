@@ -63,8 +63,6 @@ class Application {
         $this->getSessionUser();
         
         $this->i18n      = new I18n();
-
-        var_dump(applicationUser()->orders()->where(['OrderID' => 13]));
     }
 
     protected function setupConnection() {

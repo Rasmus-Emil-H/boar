@@ -19,14 +19,14 @@ class File extends FileModel {
     protected const TPL_FILE_EXTENSION = '.tpl.php';
     protected const FILE_NOT_FOUND = 'File not found';
 
-    /** 
-     * @var string $currentString
-    */
-
-    public string $fileName;
+    public function __construct(
+        public string $fileName
+    ) {
+        
+    }
 
     public function getUploadedFile(): string {
-        return $_FILES['file']['name'] ?? self::FILE_NOT_FOUND;
+        return $_FILES['file'][$this->fileName] ?? self::FILE_NOT_FOUND;
     }
     
     public function getCurrentFiles() {
@@ -56,16 +56,16 @@ class File extends FileModel {
     }
     
     public function fileSize(string $type, string $quality) {
-        
+
     }
 
-    public function exists($file) {
-      if(!file_exists($file)) throw new NotFoundException();
+    public function exists() {
+      if(!file_exists($this->fileName)) throw new NotFoundException();
     }
 
     public function requireApplicationFile(string $folder, string $file, array $params = []): void {
       $file = app()::$ROOT_DIR . $folder . $file . self::TPL_FILE_EXTENSION;
-      $this->exists($file);
+      $this->exists();
       require_once $file;
     }
 

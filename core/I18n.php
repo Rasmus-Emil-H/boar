@@ -19,18 +19,16 @@ class I18n {
     protected int $languageID;
 
     public function __construct() {
-        $language = LanguageModel::search(['code' => strtolower(app()->session->get('language'))]);
+        $language = LanguageModel::query()->select()->where(['code' => strtolower(app()->session->get('language'))])->run();
         if (!$language) throw new NotFoundException("Language was not found");
         $this->languageID = $language[array_key_first((array)$language)]->key();
     }
 
     public function translate(string $toTranslate): string {
-        $translationExists = TranslationModel::search(['LanguageID' => $this->languageID, 'Translation' => $toTranslate]);
-        if (!$translationExists) {
-            $this->registerMissingTranslation($toTranslate);
-            return $toTranslate;
-        }
-        else return $translationExists[array_key_first((array)$translationExists)]->get('Translation');
+        $translationExists = TranslationModel::query()->select()->where(['LanguageID' => $this->languageID, 'Translation' => $toTranslate])->run();
+        if ($translationExists) return first($translationExists)->get('Translation');
+        $this->registerMissingTranslation($toTranslate);
+        return $toTranslate;
     }
 
     public function registerMissingTranslation(string $missingTranslation) {

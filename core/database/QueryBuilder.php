@@ -4,6 +4,8 @@ namespace app\core\database;
 
 use \app\utilities\Builder;
 
+use function PHPSTORM_META\type;
+
 class QueryBuilder implements Builder {
 
     public const WHERE       = ' WHERE ';
@@ -11,7 +13,6 @@ class QueryBuilder implements Builder {
     public const BIND        = ' = :';
     public const INNERJOIN   = ' INNER JOIN ';
     public const DEFAULT_LIMIT = 100;
-
     protected const MAX_LENGTH = 255;
     
     protected string $query  = '';
@@ -19,23 +20,23 @@ class QueryBuilder implements Builder {
     protected string $fields = '';
     protected string $placeholders = '';
     protected string $table = '';
-    protected string $tableName = '';
+
+    protected string $keyID;
+    protected string $class;
 
     protected array $fieldPlaceholders = [];
-    protected array  $args = [];
+    protected array $args = [];
 
-    public function __construct(string $table) {
+    public function __construct(string $class, string $table, string $keyID) {
         $this->table = $table;
+        $this->keyID = $keyID;
+        $this->class = $class;
     }
 
-    public function select(array $fields): self {
+    public function select(array $fields = ['*']): self {
         $this->bindFields($fields);
         $this->query .= "SELECT {$this->fields} FROM {$this->table}";
         return $this;
-    }
-
-    public function replaceWithPlaceholders(string $value): string {
-        return '?';
     }
 
     /**
@@ -104,8 +105,7 @@ class QueryBuilder implements Builder {
     }
 
     public function delete(): self {
-        $this->query .= ' DELETE FROM :table ';
-        $this->args['table'] = $this->table;
+        $this->query .= " DELETE FROM $this->table ";
         return $this;
     }
 
@@ -143,7 +143,8 @@ class QueryBuilder implements Builder {
     }
 
     public function describe() {
-        $this->query = "DESCRIBE {$this->tableName}";
+        $this->query = "DESCRIBE :table";
+        $this->args['table'] = $this->table;
         $this->run();
     }
 
@@ -162,13 +163,17 @@ class QueryBuilder implements Builder {
 
     public function fetchRow(?array $criteria) {
         $this->select(['*'])->where($criteria);
-        return $this->run('fetch');
-    }
-
-    public function run(string $fetchMode = 'fetchAll') {
-        $response = app()->connection->execute($this->query, $this->args, $fetchMode);
+        $response = app()->connection->execute($this->query, $this->args, 'fetch');
         $this->resetQuery();
         return $response;
+    }
+
+    public function run(string $fetchMode = 'fetchAll'): array {
+        $response = app()->connection->execute($this->query, $this->args, $fetchMode);
+        $this->resetQuery();
+        $objects = [];
+        foreach ($response as $obj) $objects[] = new $this->class((array)$obj);
+        return $objects;
     }
 
     public function resetQuery() {

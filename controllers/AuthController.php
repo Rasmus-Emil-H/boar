@@ -30,7 +30,7 @@ class AuthController extends Controller {
         if (!validateCSRF()) app()->response->badToken();
         
         $body = app()->request->getBody();
-        $emailExists = UserModel::search(['Email' => $body->email]);
+        $emailExists = UserModel::query()->select()->where(['Email' => $body->email])->run();
         if ($emailExists) app()->response->dataConflict();
 
         $userID = (new UserModel())

@@ -86,12 +86,18 @@ class Application {
     }
 
     public function getSessionUser() {
-        $session = (new SessionModel())::search(['Value' => $this->session->get('SessionID'), 'UserID' => $this->session->get('user')]);
+        $session = (new SessionModel())::query()
+            ->select(['*'])
+            ->where(['Value' => $this->session->get('SessionID'), 'UserID' => $this->session->get('user')])
+            ->run();
         $validSession = !empty($session) && first($session)->exists();
         $loginRoute = self::$defaultRoute['login'];
         if ($loginRoute !== $this->request->getPath() && !$validSession) $this->response->redirect($loginRoute);
         $user = new UserModel();
-        return $user::search([$user->getKeyField() => $this->session->get('user')]);
+        return $user::query()
+            ->select(['*'])
+            ->where([$user->getKeyField() => $this->session->get('user')])
+            ->run();
     }
 
     /**

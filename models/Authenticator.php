@@ -28,7 +28,7 @@ class Authenticator {
 
     public function applicationLogin() {
         if (!validateCSRF()) return false;
-        $user = UserModel::search(['email' => $this->data->email]);
+        $user = UserModel::query()->select()->where(['email' => $this->data->email])->run();
         if (empty($user)) return false;
         $user = first($user);
         $passwordVerify = password_verify($this->data->password, $user->get('Password'));

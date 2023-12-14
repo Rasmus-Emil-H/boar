@@ -17,36 +17,13 @@ class Controller {
 
     protected object $request;
 
-    /**
-     * @var string $currentAction
-    */
-
-    public string $action = '';
-
-    /**
-     * @var array Current \app\core\controller | [Children] data
-    */
-
-    protected $data = [];
-
-
-    /**
-     * @var string $view
-     */
+    protected array $data = [];
+    protected array $children = [];
 
     protected string $view = '';
 
-    /*
-     * Default layout
-    */
-
     public string $layout = 'main';
-
-    /*
-     * Support for additional controller logic, partials
-    */
-
-    protected array $children = [];
+    public string $action = '';
 
     /**
      * Set data in current controller
@@ -104,7 +81,7 @@ class Controller {
     */
 
     public function setChildData(array $childControllers): void {
-      foreach ( $childControllers as $childKey => $childController ) {
+      foreach ( $childControllers as $childController ) {
         [$controller, $method] = preg_match('/:/', $childController) ? explode(':', $childController) : [$childController, self::DEFAULT_METHOD];
         $cController = '\\app\controllers\\'.$controller.'Controller';
         app()->classCheck($cController);
@@ -123,11 +100,6 @@ class Controller {
       $this->view = $this->getTemplatePath($dir, $view);
     }
 
-    /**
-     * Get names of children controllers
-     * @return array
-    */
-
     public function getChildren(): array {
         return $this->children;
     }
@@ -143,45 +115,22 @@ class Controller {
     public function getTemplate(string $partial): string {
       return $this->getTemplatePath('', $partial);
     }
-    /**
-     * @param string template name
-     * @return string
-    */
 
     public function getTemplatePath(string $folder, string $template): string {
         return app()::$ROOT_DIR .  '/views/' . $folder . $template . '.tpl.php';
     }
 
-    /**
-     * Render view based on data
-     * @return void
-    */
-
-    public function render(string $view): void {
+    public function render(): void {
         app()->view->renderView();
     }
-
-    /**
-     * Set layout for the current controller
-     * @return void
-    */
 
     public function setLayout(string $layout): void {
         $this->layout = $layout;
     }
 
-    /**
-     * Set middlewares for the current controller
-     * @return void
-    */
-
     public function registerMiddleware(Middleware $middleware): void {
         $this->middlewares[] = $middleware;
-    }   
-
-    /**
-     * @return [\app\core\Middleware]
-    */
+    }
 
     public function getMiddlewares(): array {
         return $this->middlewares;

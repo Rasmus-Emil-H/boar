@@ -8,6 +8,8 @@
 
 namespace app\core\database\relations;
 
+use app\core\database\QueryBuilder;
+
 class Relations {
 
     protected function getInstanceOf(string $class) {
@@ -33,9 +35,9 @@ class Relations {
      * @return \core\database\relations\hasMany
      */
     
-    public function hasMany(string $related) {
+    public function hasMany(string $related): QueryBuilder {
         $instance = $this->getInstanceOf($related);
-        return $instance::search([$this->getKeyField() => $this->key()]);
+        return $instance::query();
     }
 
     /*
@@ -45,7 +47,7 @@ class Relations {
     
     public function belongsTo(string $related) {
         $instance = $this->getInstanceOf($related);
-        return $this::search([$instance->getKeyField() => $instance->key()]);
+        return $this::query();
     }
 
 }

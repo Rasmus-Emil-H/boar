@@ -35,7 +35,7 @@ abstract class Entity extends Relations {
      * @return object The current entity instance
      */
 
-    public function set($data = null, ?array $allowedFields = null): Entity {
+    public function set($data = null, array $allowedFields = null): Entity {
         if(is_object($data) === true) $data = (array) $data;
         if(is_array($data) === true) foreach($data as $key => $value) $data[$key] = is_string($value) && trim($value) === '' ? null : $value;
 
@@ -43,9 +43,8 @@ abstract class Entity extends Relations {
         if ($allowedFields != null) $data = array_intersect_key($data, array_flip($allowedFields));
         $key = $this->getKeyField();
         if ($data !== null && gettype($data) !== "array") $data = [$key => $data];
-
         if(isset($data[$key])) {
-            $exists = (new QueryBuilder($this->getTableName()))->fetchRow([$key => $data[$key]]);
+            $exists = (new QueryBuilder(get_called_class(), $this->getTableName(), $this->getKeyField()))->fetchRow([$key => $data[$key]]);
             if(!empty($exists)) {
                 $this->key = $exists->{$this->getKeyField()};
                 $this->data = (array)$exists;
@@ -71,13 +70,13 @@ abstract class Entity extends Relations {
     public function save() {
         try {
             if ($this->exists() === true) {
-                (new QueryBuilder($this->getTableName()))
+                (new QueryBuilder(get_called_class(), $this->getTableName(), $this->getKeyField()))
                     ->patch($this->data, $this->getKeyField(), $this->key)
                     ->run('fetch');
                 return $this->data;
             }
             if(empty($this->data)) throw new \Exception("Data variable is empty");
-            (new QueryBuilder($this->getTableName()))->create($this->data)->run();
+            (new QueryBuilder(get_called_class(), $this->getTableName(), $this->getKeyField()))->create($this->data)->run();
             $this->key = app()->connection->getLastID();
             return $this->key;
         } catch(\Exception $e) {
@@ -131,47 +130,17 @@ abstract class Entity extends Relations {
     }
 
     public static function all() {
-        $rows = (new QueryBuilder(static::tableName))
+        $rows = (new QueryBuilder(get_called_class(), static::tableName, static::keyID))
             ->select(['*'])
             ->run();
-        return self::load(array_column($rows, static::keyID));
     }
-
-    /** 
-     * @throw \Exception
-     */
 
     public function __call($name, $arguments) {
         app()->globalThrower("Invalid method [{$name}]");
     }
 
-    /** 
-     * @throw \Exception
-     */
-
     public static function __callStatic($name, $arguments) {
         app()->globalThrower("Invalid static method [{$name}]");
-    }
-
-    /**
-     * Load one or more ID's into entities
-     * @param mixed $ids an array of ID's or an integer to load
-     * @return mixed The loaded entities
-     * @throws Exception
-     */
-
-    public static function load(array|int $ids) {
-        $class = get_called_class();
-
-        if (is_array($ids)) {
-            $objects = [];
-            foreach($ids as $id) $objects[$id] = new $class($id);
-            return $objects;
-        } else if (is_numeric($ids)) {
-            return new $class((int) $ids);
-        }
-
-        throw new \app\core\exceptions\InvalidTypeException("$class::load(); expects either an array or integer. '".gettype($ids)."' was provided.");
     }
 
     public function getData(): array {
@@ -182,16 +151,8 @@ abstract class Entity extends Relations {
         return $this->data[$key] ?? new \Exception("Invalid key");
     }
 
-    /**
-     * Search current entity
-     * @return \Iteratable
-     */
-
-    public static function search(array $criterias, array $values = ['*'], array $sqlClauses = []): array {
-        $rows = (new QueryBuilder(static::tableName))->select($values)->where($criterias);
-        foreach ($sqlClauses as $key => $value) $rows = $rows->{$key}($value);
-        $rows = $rows->run();
-        return self::load(array_column($rows, static::keyID));
+    public static function query(): QueryBuilder {
+        return (new QueryBuilder(get_called_class(), static::tableName, static::keyID));
     }
 
     public function getRelatedObject(string $key): string {
@@ -199,20 +160,20 @@ abstract class Entity extends Relations {
 	}
 
     public function delete() {
-        return (new QueryBuilder($this->getTableName()))
+        return (new QueryBuilder(get_called_class(), $this->getTableName(), $this->getKeyField()))
             ->delete($this->getTableName())
             ->where([$this->getKeyField() => $this->key()])
             ->run();
     }
 
      public function truncate() {
-        return (new QueryBuilder($this->getTableName()))
+        return (new QueryBuilder(get_called_class(), $this->getTableName(), $this->getKeyField()))
             ->delete()
             ->run();
     }
 
      public function trashed() {
-        return (new QueryBuilder($this->getTableName()))
+        return (new QueryBuilder(get_called_class(), $this->getTableName(), $this->getKeyField()))
             ->select(['*'])
             ->where(['DeletedAt' => 'IS NOT NULL'])
             ->run();

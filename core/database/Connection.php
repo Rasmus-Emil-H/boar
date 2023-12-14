@@ -8,8 +8,6 @@
 
 namespace app\core\database;
 
-#[\AllowDynamicProperties]
-
 class Connection {
 
     private bool $transactionStarted = false;
@@ -36,30 +34,16 @@ class Connection {
             $stmt->execute($args);
             $result = $stmt->{$fetchType}();
             $stmt = null;
-            $this->resetQuery();
             return $result;
         } catch (\PDOException $e) {
-            $errorQuery = $this->query;
+            $errorQuery = $query;
             $errorQuery .= $e;
-            $this->resetQuery();
             throw new \PDOException("ERROR WITH THE FOLLOWING QUERY: $errorQuery");
         }
     }
 
     public function getLastID() {
         return $this->pdo->lastInsertId();
-    }
-
-    public function resetQuery() {
-        $this->type = '';
-        $this->selector = '';
-        $this->where = '';
-        $this->implodedFields = '';
-        $this->implodedArgs = '';
-        $this->query = '';
-        $this->fields = '';
-        $this->args = [];
-        $this->placeholders = '';
     }
 
     public function prepare(string $sql): \PDOStatement {

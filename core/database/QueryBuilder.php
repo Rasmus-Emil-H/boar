@@ -165,4 +165,12 @@ class QueryBuilder implements Builder {
         app()->connection->execute($this->query, $this->args, $fetchMode);
     }
 
+    public function resetQuery() {
+        $this->where = '';
+        $this->query = '';
+        $this->fields = '';
+        $this->args = [];
+        $this->placeholders = '';
+    }
+
 }

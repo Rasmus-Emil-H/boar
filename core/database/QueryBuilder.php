@@ -143,11 +143,11 @@ class QueryBuilder implements Builder {
         $this->run();
     }
 
-    public function createTable(string $tableName, array $fields): self {
+    public function createTable(string $tableName, array $fields): void {
         exit('Table logic should be done via a migration.');
     }
 
-    public function alterTable(string $oldColumn, string $newColumn): self {
+    public function alterTable(string $oldColumn, string $newColumn): void {
         exit('Table logic should be done via a migration.');
     }
 

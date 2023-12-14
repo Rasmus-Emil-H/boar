@@ -36,7 +36,7 @@ class QueryBuilder implements Builder {
     }
 
     /**
-     * Init method
+     * Initialize new entity
      * @return void
     */
 
@@ -143,13 +143,16 @@ class QueryBuilder implements Builder {
         $this->run();
     }
 
-    public function createTable(string $tableName, array $fields) {
-        $tableFields = implode(', ', $fields);
-        $this->query = "CREATE TABLE {$tableName} ({$tableFields})";
+    public function createTable(string $tableName, array $fields): self {
+        $this->query = "CREATE TABLE :tableName ()";
+        $this->args['tableName'] = $tableName;
+        foreach ($fields as $fieldKey => $fieldValue) $this->setArgumentPair($fieldKey, $fieldValue);
+        return $this;
     }
 
-    public function alterTable(string $oldColumn, string $newColumn) {
+    public function alterTable(string $oldColumn, string $newColumn): self {
         $this->query = "ALTER TABLE {$this->tableName} CHANGE {$oldColumn} {$newColumn}";
+        return $this;
     }
 
     protected function rawSQL(string $sql): self {

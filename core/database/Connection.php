@@ -69,14 +69,4 @@ class Connection {
         return $this->transactionStarted ? $this->pdo->rollBack() : false;
     }
 
-    /**
-     * Log current execution context
-     * @return void
-     */
-
-    protected function log(string $message, bool $exit = false): void {
-        echo date('Y-m-d H:i:s') . ' ' . $message . PHP_EOL;
-        if ($exit) exit();
-    }
-
 }

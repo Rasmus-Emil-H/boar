@@ -35,7 +35,7 @@ class Migration {
             $actualMigration = str_replace('.php', '', $migration);
             if (!is_file($migrationFile) || in_array($actualMigration, $mappedMigrations)) continue;
             $date = preg_replace('/\_/', '-', substr(substr($migration, -19), 0, 10));
-            if (!strtotime($date)) app()->connection->log("Invalid migration name ($migration), must be formatted: migration_yyyy_mm_dd_xxxx", true);
+            if (!strtotime($date)) app()->log("Invalid migration name ($migration), must be formatted: migration_yyyy_mm_dd_xxxx", true);
             isset($missingMigrations[strtotime($date)]) ? $missingMigrations[strtotime($date)+1] = $migration : $missingMigrations[strtotime($date)] = $migration;
         }
         ksort($missingMigrations);
@@ -46,21 +46,17 @@ class Migration {
         foreach ($toBeAppliedMigrations as $migration) {
             require_once app()::$ROOT_DIR . self::MIGRATION_DIR . $migration;
             $className = pathinfo($migration, PATHINFO_FILENAME);
-            if (strlen($className) > self::MAX_LENGTH) app()->connection->log("Classname ($className) is too long!", exit: true);
+            if (strlen($className) > self::MAX_LENGTH) app()->log("Classname ($className) is too long!", exit: true);
             app()->classCheck($className);
             $currentMigration = new $className();
             $currentMigration->up();
             (new MigrationModel())
                 ->set(['Migration' => $className])
                 ->save();
-            app()
-                ->connection
-                ->log('Successfully applied new migration: ' . $className);
+            app()->log('Successfully applied new migration: ' . $className);
         }
 
-        app()
-            ->connection
-            ->log("Done");
+        app()->log("Done");
     }
 
     public function initialApplicationSeed() {

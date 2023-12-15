@@ -93,7 +93,8 @@ class QueryBuilder implements Builder {
 
     public function patch(array $fields, string $primaryKey, string $primaryKeyValue): self {
         $this->preparePlaceholdersAndBoundValues($fields, 'patch');
-        $this->query .= "UPDATE {$this->table} SET {$this->placeholders} WHERE {$primaryKey} = $primaryKeyValue";
+        $this->query .= "UPDATE {$this->table} SET {$this->placeholders} WHERE $primaryKey = :keyValue";
+        $this->args['keyValue'] = $this->key();
         return $this;
     }
 

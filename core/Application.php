@@ -113,6 +113,11 @@ class Application {
         (new SystemEventModel())->set(['Data' => json_encode($data)])->save();
     }
 
+    public function log(string $message, bool $exit = false): void {
+        echo date('Y-m-d H:i:s') . ' ' . $message . PHP_EOL;
+        if ($exit) exit();
+    }
+
     public function run(): void {
         try {
             $this->router->resolve();

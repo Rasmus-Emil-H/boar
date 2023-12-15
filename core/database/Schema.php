@@ -10,6 +10,7 @@ namespace app\core\database;
 
 use \app\core\database\table\Table;
 use \app\utilities\Utilities;
+use \app\models\MigrationModel;
 
 class Schema {
 
@@ -18,10 +19,7 @@ class Schema {
 
     public function down(string $table) {
         $query = self::DROP_TABLE_SYNTAX . $table;
-        app()
-            ->connection
-            ->rawSQL($query)
-            ->execute();
+        MigrationModel::query()->rawSQL($query)->run();
     }
 
     public function up($table, \Closure $callback): void {
@@ -35,10 +33,7 @@ class Schema {
         foreach ($table->getColumns() as $columnKey => $columnOptions)
             $query .= $columnOptions->queryString() . Utilities::appendToStringIfKeyNotLast($table->getColumns(), $columnKey);
         $query .= ')';
-        app()
-            ->connection
-            ->rawSQL($query)
-            ->execute();
+        MigrationModel::query()->rawSQL($query)->run();
     }
 
     /**
@@ -55,10 +50,7 @@ class Schema {
         $query = 'ALTER TABLE ' . $table->getName() . ' ';
         foreach ($table->getColumns() as $columnKey => $columnOptions)
             $query .= ($columnOptions->queryString(isAlteringTable: true) . Utilities::appendToStringIfKeyNotLast($table->getColumns(), $columnKey));
-        app()
-            ->connection
-            ->rawSQL($query)
-            ->execute();
+        MigrationModel::query()->rawSQL($query)->run();
     }
 
 }

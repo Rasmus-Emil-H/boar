@@ -4,8 +4,6 @@ namespace app\core\database;
 
 use \app\utilities\Builder;
 
-use function PHPSTORM_META\type;
-
 class QueryBuilder implements Builder {
 
     public const WHERE       = ' WHERE ';
@@ -19,18 +17,15 @@ class QueryBuilder implements Builder {
     protected string $where  = '';
     protected string $fields = '';
     protected string $placeholders = '';
-    protected string $table = '';
-
-    protected string $keyID;
-    protected string $class;
 
     protected array $fieldPlaceholders = [];
     protected array $args = [];
 
-    public function __construct(string $class, string $table, string $keyID) {
-        $this->table = $table;
-        $this->keyID = $keyID;
-        $this->class = $class;
+    public function __construct(
+        public string $class, 
+        public string $table, 
+        public string $keyID) {
+
     }
 
     public function select(array $fields = ['*']): self {
@@ -39,12 +34,7 @@ class QueryBuilder implements Builder {
         return $this;
     }
 
-    /**
-     * Initialize new entity
-     * @return void
-    */
-
-    public function init(array $data): void {
+    public function new(array $data): void {
         $this->bindFields($data); 
         $this->bindValues($data);
         $this->create($data);
@@ -148,21 +138,13 @@ class QueryBuilder implements Builder {
         $this->run();
     }
 
-    public function createTable(string $tableName, array $fields): void {
-        exit('Table logic should be done via a migration.');
-    }
-
-    public function alterTable(string $oldColumn, string $newColumn): void {
-        exit('Table logic should be done via a migration.');
-    }
-
-    protected function rawSQL(string $sql): self {
+    public function rawSQL(string $sql): self {
         $this->query = $sql;
         return $this;
     }
 
     public function fetchRow(?array $criteria) {
-        $this->select(['*'])->where($criteria);
+        $this->select()->where($criteria);
         $response = app()->connection->execute($this->query, $this->args, 'fetch');
         $this->resetQuery();
         return $response;

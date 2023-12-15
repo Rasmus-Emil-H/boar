@@ -138,8 +138,7 @@ class QueryBuilder implements Builder {
     }
 
     public function describe() {
-        $this->query = "DESCRIBE :table";
-        $this->args['table'] = $this->table;
+        $this->query = ' DESCRIBE ' . $this->table;
         $this->run();
     }
 

@@ -1,10 +1,14 @@
 <?php
 
-/**
- * Bootstrap application
- * AUTHOR: RE_WEB
- * @package app\core
- */
+/*
+|----------------------------------------------------------------------------
+| Bootstrap application
+|----------------------------------------------------------------------------
+|
+| @author RE_WEB
+| @package none
+|
+*/
 
 namespace app\core;
 

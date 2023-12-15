@@ -12,9 +12,12 @@ use app\core\Controller;
 
 class FooterController extends Controller {
 
-  public function index() {
-    $this->setView('partials/', 'footer');
-    $this->setData(['footer' => $this->getView()]);
-  }
+	public function index() {
+		$this->setView('partials/', 'footer');
+		$this->setData([
+			'footer' => $this->getView(), 
+			'js' => app()->clientAssets->get('js')
+		]);
+	}
 
 }

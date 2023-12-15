@@ -10,14 +10,13 @@ namespace app\core;
 
 use \app\core\database\Connection;
 use \app\config\Config;
+use app\controllers\AssetsController;
 use \app\utilities\Logger;
 use \app\models\SystemEventModel;
 use \app\models\SessionModel;
 use \app\models\UserModel;
 
 class Application {
-
-    public const UPLOAD_FOLDER = __DIR__.'/uploads/';
 
     public static string $ROOT_DIR;
     public string $layout = 'main';
@@ -36,6 +35,7 @@ class Application {
     public I18n $i18n;
     public Config $config;
     public Logger $logger;
+    public AssetsController $clientAssets;
 
     public static self $app;
     public static $defaultRoute = ['/auth/login', '/auth/signup'];
@@ -49,15 +49,17 @@ class Application {
 
         if ($applicationIsMigrating) return;
         
-        $this->request   = new Request();
-        $this->response  = new Response();
-        $this->regex     = new Regex($this->request->getPath());
-        $this->router    = new Router();
-        $this->session   = new Session();
-        $this->cookie    = new Cookie();
-        $this->view      = new View();
-        $this->env       = new Env();
-        $this->logger    = new Logger();
+        $this->request      = new Request();
+        $this->response     = new Response();
+        $this->regex        = new Regex($this->request->getPath());
+        $this->router       = new Router();
+        $this->session      = new Session();
+        $this->cookie       = new Cookie();
+        $this->view         = new View();
+        $this->env          = new Env();
+        $this->logger       = new Logger();
+        $this->clientAssets = new AssetsController();
+
         $this->authenticationClass = UserModel::class;
 
         $this->checkSessionLanguage();
@@ -68,20 +70,12 @@ class Application {
 
     protected function setupConnection() {
         $database = $this->config->get('database');
-        $applicationConfig = [
-            'pdo' => [
-                'dsn' => $database->dsn,
-                'user' => $database->user,
-                'password' => $database->password
-            ]
-        ];
-
+        $applicationConfig = ['pdo' => ['dsn' => $database->dsn, 'user' => $database->user, 'password' => $database->password]];
         $this->connection = Connection::getInstance($applicationConfig['pdo']);
     }
 
     public function checkSessionLanguage() {
-        if (!$this->session->get('language'))
-            $this->session->set('language', self::$app->config->get('locale')->default);
+        if (!$this->session->get('language')) $this->session->set('language', self::$app->config->get('locale')->default);
     }
 
     public function getSessionUser() {
@@ -93,7 +87,10 @@ class Application {
     }
 
     public function classCheck(string $class): void {
-        if (!class_exists($class)) $this->addSystemEvent(['Invalid class was called: ' . $class]);
+        if (!class_exists($class)) {
+            $this->addSystemEvent(['Invalid class was called: ' . $class]);
+            throw new \app\core\exceptions\NotFoundException('Class was not found: ' . $class);
+        }
     }
 
     public function getController(): Controller {

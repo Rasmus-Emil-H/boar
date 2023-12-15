@@ -3,13 +3,12 @@
 /**
  * Translation
  * AUTHOR: RE_WEB
- * @package app\core\i18n
+ * @package app\core
  */
 
 namespace app\core;
 
 use app\core\exceptions\NotFoundException;
-
 use \app\models\LanguageModel;
 use \app\models\TranslationModel;
 use \app\core\miscellaneous\Hash;
@@ -21,7 +20,7 @@ class I18n {
     public function __construct() {
         $language = LanguageModel::query()->select()->where(['code' => strtolower(app()->session->get('language'))])->run();
         if (!$language) throw new NotFoundException("Language was not found");
-        $this->languageID = $language[array_key_first((array)$language)]->key();
+        $this->languageID = first($language)->key();
     }
 
     public function translate(string $toTranslate): string {

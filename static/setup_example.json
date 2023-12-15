@@ -35,5 +35,17 @@
     },
     "locale": {
         "default": "en"
+    },
+    "clientAssets": {
+        "css": [
+            "<link rel=\"stylesheet\" href=\"/resources/css/bootstrap.min.css\">",
+            "<link rel=\"stylesheet\" href=\"/resources/css/main.css\">",
+            "<link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.min.css\">"
+        ],
+        "js": [
+            "<script defer src=\"/resources/js/jquery-3.7.0.min.js\"></script>",
+            "<script defer src=\"/resources/js/bootstrap.bundle.min.js\"></script>",
+            "<script defer type=\"module\" src=\"/resources/js/main.js\"></script>"
+        ]
     }
 }

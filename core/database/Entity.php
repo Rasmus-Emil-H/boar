@@ -111,7 +111,7 @@ abstract class Entity extends Relations {
     }
 
     public function __get(string $key) {
-        return $this->data[$key] ?? new \Exception("Invalid key");
+        return $this->data[$key] ?? new \Exception("Invalid entity key");
     }
 
     public static function query(): QueryBuilder {

@@ -1,3 +1,3 @@
 <?php
 
-var_dump(applicationUser()->orders()->select()->where(['Total' => 100])->run());
+var_dump(applicationUser()->orders()->where(['OrderID' => 1])->run());

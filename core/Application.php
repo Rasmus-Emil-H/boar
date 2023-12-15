@@ -20,12 +20,11 @@ class Application {
 
     public static string $ROOT_DIR;
     public string $layout = 'main';
-    public string $authenticationClass;
     
     public Router $router;
     public Request $request;
     public Response $response;
-    public ?Controller $controller = null;
+    public ?Controller $controller;
     public Session $session;
     public Cookie $cookie;
     public Connection $connection;
@@ -60,11 +59,8 @@ class Application {
         $this->logger       = new Logger();
         $this->clientAssets = new AssetsController();
 
-        $this->authenticationClass = UserModel::class;
-
         $this->checkSessionLanguage();
         $this->getSessionUser();
-        
         $this->i18n      = new I18n();
     }
 
@@ -89,7 +85,7 @@ class Application {
     public function classCheck(string $class): void {
         if (!class_exists($class)) {
             $this->addSystemEvent(['Invalid class was called: ' . $class]);
-            throw new \app\core\exceptions\NotFoundException('Class was not found: ' . $class);
+            throw new \app\core\exceptions\NotFoundException('Invalid path');
         }
     }
 
@@ -114,9 +110,7 @@ class Application {
     }
 
     public function addSystemEvent(array $data): void {
-        (new SystemEventModel())
-            ->set(['Data' => json_encode($data)])
-            ->save();
+        (new SystemEventModel())->set(['Data' => json_encode($data)])->save();
     }
 
     public function run(): void {

@@ -23,28 +23,19 @@ class QueryBuilder implements Builder {
     protected array $fieldPlaceholders = [];
     protected array $args = [];
 
-    public function __construct(
-        public string $class, 
-        public string $table, 
-        public string $keyID) {
-
+    public function __construct(public string $class, public string $table, public string $keyID) {
+        
     }
 
     public function select(array $fields = ['*']): self {
-        $this->bindFields($fields);
-        $this->query .= "SELECT {$this->fields} FROM {$this->table}";
+        $this->query .= 'SELECT ' . implode(', ', $fields) . '  FROM ' . $this->table;
         return $this;
     }
 
     public function new(array $data): void {
-        $this->bindFields($data); 
         $this->bindValues($data);
         $this->create($data);
         $this->run();
-    }
-
-    public function bindFields(array $fields): void {
-        $this->fields = implode(', ', $fields);
     }
     
     public function bindValues(array $arguments): void {
@@ -52,6 +43,15 @@ class QueryBuilder implements Builder {
             $this->query .= ( array_key_first($arguments) === $selector ? self::WHERE : self::AND ) . $selector . self::BIND . $selector;
             $this->setArgumentPair($selector, $value);
         }
+    }
+
+    public function valueToPlaceholder(array $fields): string {
+        $innerQuery = '';
+        foreach ($fields as $fieldKey => $fieldValue) {
+            $innerQuery .= ':' . ( array_key_last($fields) === $fieldKey ? $fieldKey : $fieldKey . ',' );
+            $this->args[$fieldKey] = $fieldValue;
+        }
+        return $innerQuery;
     }
 
     public function setArgumentPair(string $key, mixed $value): self {
@@ -97,7 +97,7 @@ class QueryBuilder implements Builder {
     }
 
     public function delete(): self {
-        $this->query .= " DELETE FROM $this->table ";
+        $this->query .= ' DELETE FROM ' . $this->table;
         return $this;
     }
 
@@ -109,8 +109,8 @@ class QueryBuilder implements Builder {
 
     public function where(array $arguments): self {
         foreach($arguments as $selector => $value) {
-            $this->query .= (empty($this->args) ? self::WHERE : self::AND) . $selector . self::INDEXED_BIND;
-            $this->args[] = $value;
+            $this->query .= (strpos($this->query, self::WHERE) === false ? self::WHERE : self::AND) . $selector . ' = :' . $selector;
+            $this->args[$selector] = $value;
         }
         return $this;
     }
@@ -145,7 +145,7 @@ class QueryBuilder implements Builder {
         return $this;
     }
 
-    public function fetchRow(?array $criteria) {
+    public function fetchRow(?array $criteria = null) {
         $this->select()->where($criteria);
         $response = app()->connection->execute($this->query, $this->args, 'fetch');
         $this->resetQuery();

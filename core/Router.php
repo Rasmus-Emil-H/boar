@@ -37,7 +37,7 @@ class Router {
     }
 
     public function getDefaultRoute() {
-        app()->response->redirect(first(app()::$defaultRoute));
+        app()->response->redirect(app()::$defaultRoute[0]);
     }
 
     protected function runMiddlewares() {

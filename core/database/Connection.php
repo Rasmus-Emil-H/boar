@@ -10,7 +10,7 @@ namespace app\core\database;
 
 class Connection {
 
-    private static $instance;
+    private static ?Connection $instance = null;
 
     private bool $transactionStarted = false;
     private array $defaultPdoOptions = [
@@ -44,7 +44,7 @@ class Connection {
             return $result;
         } catch (\PDOException $e) {
             $errorQuery = $query;
-            $errorQuery .= $e;
+            $errorQuery .= ' ' . $e;
             throw new \PDOException("ERROR WITH THE FOLLOWING QUERY: $errorQuery");
         }
     }

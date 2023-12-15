@@ -37,7 +37,7 @@ class Relations {
     
     public function hasMany(string $related): QueryBuilder {
         $instance = $this->getInstanceOf($related);
-        return $instance::query();
+        return $instance::query()->select()->where([$this->getKeyField() => $this->key()]);
     }
 
     /*

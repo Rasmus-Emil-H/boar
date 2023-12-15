@@ -44,7 +44,7 @@ abstract class Entity extends Relations {
         $key = $this->getKeyField();
         if ($data !== null && gettype($data) !== "array") $data = [$key => $data];
         if(isset($data[$key])) {
-            $exists = (new QueryBuilder(get_called_class(), $this->getTableName(), $this->getKeyField()))->fetchRow([$key => $data[$key]]);
+            $exists = $this->getQueryBuilder()->fetchRow([$key => $data[$key]]);
             if(!empty($exists)) {
                 $this->key = $exists->{$this->getKeyField()};
                 $this->data = (array)$exists;
@@ -70,13 +70,11 @@ abstract class Entity extends Relations {
     public function save() {
         try {
             if ($this->exists() === true) {
-                (new QueryBuilder(get_called_class(), $this->getTableName(), $this->getKeyField()))
-                    ->patch($this->data, $this->getKeyField(), $this->key)
-                    ->run('fetch');
+                $this->getQueryBuilder()->patch($this->data, $this->getKeyField(), $this->key)->run('fetch');
                 return $this->data;
             }
             if(empty($this->data)) throw new \Exception("Data variable is empty");
-            (new QueryBuilder(get_called_class(), $this->getTableName(), $this->getKeyField()))->create($this->data)->run();
+            $this->getQueryBuilder()->create($this->data)->run();
             $this->key = app()->connection->getLastID();
             return $this->key;
         } catch(\Exception $e) {
@@ -90,7 +88,7 @@ abstract class Entity extends Relations {
      */
 
     public function init() {
-		return (new QueryBuilder($this->getTableName()))->init($this->data);
+		return $this->getQueryBuilder()->new($this->data);
 	}
 
     /**
@@ -130,9 +128,7 @@ abstract class Entity extends Relations {
     }
 
     public static function all() {
-        return (new QueryBuilder(get_called_class(), static::tableName, static::keyID))
-            ->select()
-            ->run();
+        return (new QueryBuilder(get_called_class(), static::tableName, static::keyID))->select()->run();
     }
 
     public function __call($name, $arguments) {
@@ -160,23 +156,19 @@ abstract class Entity extends Relations {
 	}
 
     public function delete() {
-        return (new QueryBuilder(get_called_class(), $this->getTableName(), $this->getKeyField()))
-            ->delete($this->getTableName())
-            ->where([$this->getKeyField() => $this->key()])
-            ->run();
+        return $this->getQueryBuilder()->delete($this->getTableName())->where([$this->getKeyField() => $this->key()])->run();
     }
 
      public function truncate() {
-        return (new QueryBuilder(get_called_class(), $this->getTableName(), $this->getKeyField()))
-            ->delete()
-            ->run();
+        return $this->getQueryBuilder()->delete()->run();
     }
 
      public function trashed() {
-        return (new QueryBuilder(get_called_class(), $this->getTableName(), $this->getKeyField()))
-            ->select(['*'])
-            ->where(['DeletedAt' => 'IS NOT NULL'])
-            ->run();
+        return $this->getQueryBuilder()->select(['*'])->where(['DeletedAt' => 'IS NOT NULL'])->run();
+    }
+
+    public function getQueryBuilder(): QueryBuilder {
+        return (new QueryBuilder(get_called_class(), $this->getTableName(), $this->getKeyField()));
     }
 
     public function __toString() {

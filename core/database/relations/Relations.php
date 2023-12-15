@@ -47,7 +47,7 @@ class Relations {
     
     public function belongsTo(string $related) {
         $instance = $this->getInstanceOf($related);
-        return $this::query();
+        return $instance::query();
     }
 
 }

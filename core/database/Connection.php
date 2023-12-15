@@ -10,6 +10,8 @@ namespace app\core\database;
 
 class Connection {
 
+    private static $instance;
+
     private bool $transactionStarted = false;
     private array $defaultPdoOptions = [
         \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_OBJ,
@@ -26,6 +28,11 @@ class Connection {
 
     public function __call(string $method, array $params = []) {
         return method_exists($this, $method) ? call_user_func_array([$this, $method], $params) : "PDO::$method does not exists.";
+    }
+
+    public static function getInstance(array $pdoConfigurations) {
+        if (!self::$instance) self::$instance = new self($pdoConfigurations);
+        return self::$instance;
     }
 
     public function execute(string $query, array $args = [], string $fetchType = 'fetchAll') {

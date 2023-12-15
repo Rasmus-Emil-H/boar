@@ -77,7 +77,7 @@ class Application {
         ];
 
         $this->authenticationClass = $applicationConfig['authenticationClass'];
-        $this->connection = new Connection($applicationConfig['pdo']);
+        $this->connection = Connection::getInstance($applicationConfig['pdo']);
     }
 
     public function checkSessionLanguage() {

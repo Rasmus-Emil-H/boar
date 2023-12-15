@@ -37,7 +37,7 @@ class Router {
     }
 
     public function getDefaultRoute() {
-        app()->response->redirect(app()::$defaultRoute['login']);
+        app()->response->redirect(first(app()::$defaultRoute));
     }
 
     protected function runMiddlewares() {

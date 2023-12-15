@@ -38,7 +38,7 @@ class Application {
     public Logger $logger;
 
     public static self $app;
-    public static $defaultRoute = ['login' => '/auth/login', 'register' => '/auth/signup'];
+    public static $defaultRoute = ['/auth/login', '/auth/signup'];
 
     public function __construct(bool $applicationIsMigrating) {
         self::$app = $this;
@@ -91,8 +91,7 @@ class Application {
             ->where(['Value' => $this->session->get('SessionID'), 'UserID' => $this->session->get('user')])
             ->run();
         $validSession = !empty($session) && first($session)->exists();
-        $loginRoute = self::$defaultRoute['login'];
-        if ($loginRoute !== $this->request->getPath() && !$validSession) $this->response->redirect($loginRoute);
+        if ( !in_array($this->request->getPath(), self::$defaultRoute) && !$validSession) $this->response->redirect(self::$defaultRoute[0]);
         $user = new UserModel();
         return $user::query()
             ->select(['*'])

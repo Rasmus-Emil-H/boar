@@ -46,6 +46,16 @@
             "<script defer src=\"/resources/js/jquery-3.7.0.min.js\"></script>",
             "<script defer src=\"/resources/js/bootstrap.bundle.min.js\"></script>",
             "<script defer type=\"module\" src=\"/resources/js/main.js\"></script>"
+        ],
+        "metaTags": [
+            "<meta charset=\"utf-8\">",
+            "<meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">",
+            "<meta http-equiv=\"Content-Language\" content=\"en\">",
+            "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\"/>",
+            "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, user-scalable=1, minimum-scale=1, maximum-scale=5\" />",
+            "<meta name=\"description\" content=\"boar application\">",
+            "<meta name=\"msapplication-tap-highlight\" content=\"no\">",
+            "<meta name=\"theme-color\" content=\"#03045e\"/>"
         ]
     }
 }

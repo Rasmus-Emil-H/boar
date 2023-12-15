@@ -18,7 +18,8 @@ class HeaderController extends Controller {
 		$this->setData([
 			'header' => $this->getView(), 
 			'appName' => app()->config->get('appName'),
-			'stylesheets' => app()->clientAssets->get('css')
+			'stylesheets' => app()->clientAssets->get('css'),
+			'metaTags' => app()->clientAssets->get('metaTags')
 		]);
     }
 

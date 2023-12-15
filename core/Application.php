@@ -93,21 +93,6 @@ class Application {
         return $user::query()->select()->where([$user->getKeyField() => $this->session->get('user')])->run();
     }
 
-    /**
-     * Run the application 
-     * Custom exceptions should be written inside \core\exceptions
-     * @return void
-     */
-
-    public function run(): void {
-        try {
-            $this->router->resolve();
-        } catch (\Throwable $applicationError) {
-            $this->logger->log($applicationError);
-            $this->setController(new \app\controllers\ErrorController($applicationError));
-        }
-    }
-
     public function classCheck(string $class): void {
         if (!class_exists($class)) $this->addSystemEvent(['Invalid class was called: ' . $class]);
     }
@@ -136,6 +121,15 @@ class Application {
         (new SystemEventModel())
             ->set(['Data' => json_encode($data)])
             ->save();
+    }
+
+    public function run(): void {
+        try {
+            $this->router->resolve();
+        } catch (\Throwable $applicationError) {
+            $this->logger->log($applicationError);
+            $this->setController(new \app\controllers\ErrorController($applicationError));
+        }
     }
     
 }

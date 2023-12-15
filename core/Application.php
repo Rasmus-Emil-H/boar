@@ -112,15 +112,6 @@ class Application {
         if (!class_exists($class)) $this->addSystemEvent(['Invalid class was called: ' . $class]);
     }
 
-    public function globalThrower(string $message): \Exception {
-        throw new \Exception($message);
-    }
-
-    protected function exceptionCodeHandler($code) {
-        if (!is_int($code))
-            throw new \Exception('Invalid status code. Must be int, however ' . gettype($code) . ' is provided.');
-    }
-
     public function getController(): Controller {
         return $this->controller;
     }

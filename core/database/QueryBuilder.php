@@ -11,6 +11,8 @@ class QueryBuilder implements Builder {
     public const BIND        = ' = :';
     public const INNERJOIN   = ' INNER JOIN ';
     public const DEFAULT_LIMIT = 100;
+    public const INDEXED_BIND = '=? ';
+
     protected const MAX_LENGTH = 255;
     
     protected string $query  = '';
@@ -52,7 +54,7 @@ class QueryBuilder implements Builder {
         }
     }
 
-    public function setArgumentPair(string $key, string $value): self {
+    public function setArgumentPair(string $key, mixed $value): self {
         $this->args[$key] = $value;
         return $this;
     }
@@ -107,7 +109,7 @@ class QueryBuilder implements Builder {
 
     public function where(array $arguments): self {
         foreach($arguments as $selector => $value) {
-            $this->query .= ( array_key_first($arguments) === $selector ? self::WHERE : self::AND ) . $selector . '=? ';
+            $this->query .= (empty($this->args) ? self::WHERE : self::AND) . $selector . self::INDEXED_BIND;
             $this->args[] = $value;
         }
         return $this;

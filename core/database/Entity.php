@@ -78,7 +78,7 @@ abstract class Entity extends Relations {
             $this->key = app()->connection->getLastID();
             return $this->key;
         } catch(\Exception $e) {
-            app()->globalThrower($e->getMessage());
+            throw new \app\core\exceptions\NotFoundException($e->getMessage());
         }
     }
 
@@ -132,11 +132,11 @@ abstract class Entity extends Relations {
     }
 
     public function __call($name, $arguments) {
-        app()->globalThrower("Invalid method [{$name}]");
+    throw new \app\core\exceptions\NotFoundException("Invalid non static method method [{$name}]");
     }
 
     public static function __callStatic($name, $arguments) {
-        app()->globalThrower("Invalid static method [{$name}]");
+        throw new \app\core\exceptions\NotFoundException("Invalid static method [{$name}]");
     }
 
     public function getData(): array {

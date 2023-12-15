@@ -58,6 +58,7 @@ class Application {
         $this->view      = new View();
         $this->env       = new Env();
         $this->logger    = new Logger();
+        $this->authenticationClass = UserModel::class;
 
         $this->checkSessionLanguage();
         $this->getSessionUser();
@@ -68,7 +69,6 @@ class Application {
     protected function setupConnection() {
         $database = $this->config->get('database');
         $applicationConfig = [
-            'authenticationClass' => UserModel::class,
             'pdo' => [
                 'dsn' => $database->dsn,
                 'user' => $database->user,
@@ -76,7 +76,6 @@ class Application {
             ]
         ];
 
-        $this->authenticationClass = $applicationConfig['authenticationClass'];
         $this->connection = Connection::getInstance($applicationConfig['pdo']);
     }
 

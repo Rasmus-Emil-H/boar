@@ -10,7 +10,7 @@ namespace app\core;
 
 use \app\core\database\Connection;
 use \app\config\Config;
-use app\controllers\AssetsController;
+use \app\controllers\AssetsController;
 use \app\utilities\Logger;
 use \app\models\SystemEventModel;
 use \app\models\SessionModel;

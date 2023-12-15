@@ -10,10 +10,11 @@ class QueryBuilder implements Builder {
     public const AND         = ' AND ';
     public const BIND        = ' = :';
     public const INNERJOIN   = ' INNER JOIN ';
-    public const DEFAULT_LIMIT = 100;
     public const INDEXED_BIND = '=? ';
 
     protected const MAX_LENGTH = 255;
+    protected const DEFAULT_LIMIT = 100;
+    protected const DEFAULT_OFFSET = 0;
     
     protected string $query  = '';
     protected string $where  = '';
@@ -101,9 +102,10 @@ class QueryBuilder implements Builder {
         return $this;
     }
 
-    public function limit(int $limit = self::DEFAULT_LIMIT): self {
-        $this->query .= " LIMIT :limit ";
-        $this->args['limit'] = $limit;
+    public function limit(int $limit = self::DEFAULT_LIMIT, int $offset = self::DEFAULT_OFFSET): self {
+        $this->query .= " LIMIT :limit OFFSET :offset ";
+        $this->args['limit']  = $limit;
+        $this->args['offset'] = $offset;
         return $this;
     }
 

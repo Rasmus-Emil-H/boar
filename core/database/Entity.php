@@ -18,12 +18,6 @@ abstract class Entity extends Relations {
 
     abstract protected function getKeyField()  : string;
     abstract protected function getTableName() : string;
-
-    /**
-     * Loads a given entity, instantiates a new if none given.
-     * @param mixed $data Can be either an array of existing data or an entity ID to load.
-     * @return void
-     */
     
     public function __construct($data = null, ?array $allowedFields = null) {
         $this->set($data, $allowedFields);
@@ -82,46 +76,19 @@ abstract class Entity extends Relations {
         }
     }
 
-    /**
-     * Initialize new 
-     * @return $this
-     */
-
     public function init() {
 		return $this->getQueryBuilder()->new($this->data);
 	}
 
-    /**
-     * Soft delete
-     * Don't actually delete the record, but update the delatedAt colmun 
-     * @return $this
-     */
-
     public function softDelete(): self {
-		$this
-            ->set(['DeletedAt' => new \DateTime('Y-m-d H:i:s')])
-            ->save();
+		$this->set(['DeletedAt' => new \DateTime('Y-m-d H:i:s')])->save();
         return $this;
 	}
-
-    /**
-     * Restore
-     * Restore object where delatedAt !== null
-     * @return $this
-     */
 
     public function restore(): self {
-	    $this
-            ->set(['DeletedAt' => null])
-            ->save();
+	    $this->set(['DeletedAt' => null])->save();
         return $this;
 	}
-
-    /**
-     * Gets value based on key
-     * @param string key
-     * @return \Iteratable
-     */
 
     public function get(string $key) {
         return $this->data[$key] ?? "Invalid key: $key"; 
@@ -156,7 +123,7 @@ abstract class Entity extends Relations {
 	}
 
     public function delete() {
-        return $this->getQueryBuilder()->delete($this->getTableName())->where([$this->getKeyField() => $this->key()])->run();
+        return $this->getQueryBuilder()->delete()->where([$this->getKeyField() => $this->key()])->run();
     }
 
      public function truncate() {
@@ -164,7 +131,7 @@ abstract class Entity extends Relations {
     }
 
      public function trashed() {
-        return $this->getQueryBuilder()->select(['*'])->where(['DeletedAt' => 'IS NOT NULL'])->run();
+        return $this->getQueryBuilder()->select()->where(['DeletedAt' => 'IS NOT NULL'])->run();
     }
 
     public function getQueryBuilder(): QueryBuilder {

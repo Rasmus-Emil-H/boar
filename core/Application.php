@@ -140,7 +140,7 @@ class Application {
     }
 
     public static function isGuest(): bool {
-        return is_null(self::$app->session->get('user')) || self::$app->session->get('user') === '';
+        return empty(self::$app->getSessionUser());
     }
 
     public static function isDevSite(): bool {

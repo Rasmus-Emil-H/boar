@@ -91,7 +91,7 @@ class Application {
             ->where(['Value' => $this->session->get('SessionID'), 'UserID' => $this->session->get('user')])
             ->run();
         $validSession = !empty($session) && first($session)->exists();
-        if ( !in_array($this->request->getPath(), self::$defaultRoute) && !$validSession) $this->response->redirect(self::$defaultRoute[0]);
+        if (!in_array($this->request->getPath(), self::$defaultRoute) && !$validSession) $this->response->redirect(self::$defaultRoute[0]);
         $user = new UserModel();
         return $user::query()
             ->select(['*'])

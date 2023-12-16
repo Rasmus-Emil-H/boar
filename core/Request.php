@@ -30,7 +30,7 @@ class Request {
     }
     
     public function getReplacedHost(): string {
-        return preg_replace('/'.$this->getHost().'/', '', $this->getRefere());
+        return str_replace($this->getHost(), '', $this->getRefere());
     }
     
     public function getAdditionalParams(array $indexes): array {

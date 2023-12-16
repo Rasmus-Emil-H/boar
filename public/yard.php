@@ -2,7 +2,7 @@
 
 /*
 |----------------------------------------------------------------------------
-| Convenience for those methods that's used frequently throughout the system
+| Convenience for those getters that are used frequently throughout the system
 |----------------------------------------------------------------------------
 |
 | @author RE_WEB

@@ -38,7 +38,7 @@ class Authenticator {
 
     public function authenticateUser(UserModel $user): void {
         app()->session->set('user', $user->key());
-        $sessionID = sha1(uniqid());
+        $sessionID = hash('sha256', uniqid());
         app()->session->set('SessionID', $sessionID);
         (new SessionModel())
             ->set(['Value' => $sessionID, 'UserID' => $user->key()])

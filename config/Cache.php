@@ -90,7 +90,7 @@ class Cache {
     */
 
     protected function getDirectory(string $id) {
-        $hash = sha1($id, false);
+        $hash = hash('sha256', $id, false);
         $dirs = [$this->getCacheDirectory(), substr($hash, 0, 2), substr($hash, 2, 2)];
         return join(DIRECTORY_SEPARATOR, $dirs);
     }
@@ -112,7 +112,7 @@ class Cache {
 
     protected function getFileName(string $id) {
         $directory  = $this->getDirectory($id);
-        $hash       = sha1($id, false);
+        $hash       = hash('sha256', $id, false);
         $file       = $directory . DIRECTORY_SEPARATOR . $hash . '.cache';
         return $file;
     }

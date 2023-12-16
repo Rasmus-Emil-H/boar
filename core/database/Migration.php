@@ -50,9 +50,7 @@ class Migration {
             app()->classCheck($className);
             $currentMigration = new $className();
             $currentMigration->up();
-            (new MigrationModel())
-                ->set(['Migration' => $className])
-                ->save();
+            (new MigrationModel())->set(['Migration' => $className])->save();
             app()->log('Successfully applied new migration: ' . $className);
         }
 

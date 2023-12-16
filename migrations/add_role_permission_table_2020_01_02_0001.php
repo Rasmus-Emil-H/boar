@@ -3,7 +3,7 @@
 use \app\core\database\table\Table;
 use \app\core\database\Schema;
 
-class add_permissions_table_2020_01_02_0001 {
+class add_role_permission_table_2020_01_02_0001 {
 
     public function up() {
         (new Schema())->up('role_permission', function(Table $table) {

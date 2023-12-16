@@ -89,7 +89,7 @@ class Application {
     public function classCheck(string $class): void {
         if (!class_exists($class)) {
             $this->addSystemEvent(['Invalid class was called: ' . $class]);
-            throw new \app\core\exceptions\NotFoundException('Invalid path');
+            throw new \app\core\exceptions\NotFoundException('Invalid class: ' . $class);
         }
     }
 

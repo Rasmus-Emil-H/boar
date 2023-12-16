@@ -59,7 +59,7 @@ class Migration {
         app()->log("Done");
     }
 
-    public function initialApplicationSeed() {
+    public function seedLanguage() {
        (new DatabaseSeeder())->up('Language', ['Name' => 'English', 'Code' => 'en'], 1); 
     }
 

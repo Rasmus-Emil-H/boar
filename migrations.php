@@ -14,4 +14,4 @@ $app = new Application(applicationIsMigrating: true);
 
 $migration = new Migration();
 $migration->applyMigrations();
-$migration->initialApplicationSeed();
+$migration->seedLanguage();

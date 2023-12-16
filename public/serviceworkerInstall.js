@@ -121,6 +121,7 @@ async function sendCachedFileRequests(fileKey) {
 }
 
 self.addEventListener('message', (event) => {
+  if (!event.origin === 'https://example.com') return;
   if (event.data.action === actions.message.CACHE_PAGE) {
       const { url } = event.data;
       if (!url) return;

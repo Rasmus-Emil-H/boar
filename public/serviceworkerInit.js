@@ -14,10 +14,8 @@ export default {
         if(typeof worker.postMessage === 'function') console.log(worker.postMessage({action, resource}));
     },
     unset: function() {
-        console.log("Unsetting SW");
         navigator.serviceWorker.getRegistrations().then(function(registrations) {
             for (let registration of registrations) registration.unregister();
         });
-        console.log("Done unsetting SW");
     }
 }

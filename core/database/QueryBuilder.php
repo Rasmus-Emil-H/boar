@@ -83,15 +83,15 @@ class QueryBuilder implements Builder {
     }
 
     public function preparePlaceholdersAndBoundValues(array $fields, string $fieldSetter): self {
-        foreach ( $fields as $key => $field ) {
+        foreach ($fields as $key => $field) {
             $this->fields .= $key.(array_key_last($fields) === $key ? '' : ',');
-            $this->placeholders .= ($fieldSetter === 'insert' ? '' : $key.'=')."?".(array_key_last($fields) === $key ? '' : ',');
+            $this->placeholders .= ($fieldSetter === 'insert' ? '' : $key.'=') . "?" . (array_key_last($fields) === $key ? '' : ',');
             $this->args[] = $field;
         }
         return $this;
     }
 
-    public function patch(array $fields, string $primaryKey, string $primaryKeyValue): self {
+    public function patch(array $fields, string $primaryKey): self {
         $this->preparePlaceholdersAndBoundValues($fields, 'patch');
         $this->query .= "UPDATE {$this->table} SET {$this->placeholders} WHERE $primaryKey = :keyValue";
         $this->args['keyValue'] = $this->key();
@@ -111,7 +111,7 @@ class QueryBuilder implements Builder {
     }
 
     public function where(array $arguments): self {
-        foreach($arguments as $selector => $value) {
+        foreach ($arguments as $selector => $value) {
             $this->query .= (strpos($this->query, self::WHERE) === false ? self::WHERE : self::AND) . $selector . ' = :' . $selector;
             $this->args[$selector] = $value;
         }

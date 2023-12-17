@@ -23,7 +23,7 @@ class QueryBuilder implements Builder {
     protected array $fieldPlaceholders = [];
     protected array $args = [];
 
-    private array $comparisonOperators = ['=', '<>', '!=', '>', '<', '>=', '<=', 'IS NULL', 'IS NOT NULL'];
+    private array $comparisonOperators = ['=', '<>', '!=', '>', '<', '>=', '<='];
     
 
     public function __construct(public string $class, public string $table, public string $keyID) {

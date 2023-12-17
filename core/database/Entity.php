@@ -64,7 +64,7 @@ abstract class Entity extends Relations {
     public function save() {
         try {
             if ($this->exists() === true) {
-                $this->getQueryBuilder()->patch($this->data, $this->getKeyField(), $this->key)->run('fetch');
+                $this->getQueryBuilder()->patch($this->data, $this->getKeyField(), $this->key())->run('fetch');
                 return $this->data;
             }
             if(empty($this->data)) throw new \Exception("Data variable is empty");

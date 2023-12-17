@@ -7,7 +7,6 @@ use \app\core\database\seeders\DatabaseSeeder;
 
 class Migration {
     
-    protected const MAX_LENGTH = 255;
     protected const MIGRATION_DIR = '/migrations/';
 
     public function getAppliedMigrations(): array {
@@ -17,7 +16,7 @@ class Migration {
     public function createMigrationsTable() {
         (new Schema())->up('Migrations', function(table\Table $table) {
             $table->increments('MigrationID');
-            $table->varchar('Migration', self::MAX_LENGTH);
+            $table->varchar('Migration', Connection::MAX_COLUMN_LENGTH);
             $table->timestamp();
             $table->primaryKey('MigrationID');
         });
@@ -46,7 +45,7 @@ class Migration {
         foreach ($toBeAppliedMigrations as $migration) {
             require_once app()::$ROOT_DIR . self::MIGRATION_DIR . $migration;
             $className = pathinfo($migration, PATHINFO_FILENAME);
-            if (strlen($className) > self::MAX_LENGTH) app()->log("Classname ($className) is too long!", exit: true);
+            if (strlen($className) > Connection::MAX_COLUMN_LENGTH) app()->log("Classname ($className) is too long!", exit: true);
             app()->classCheck($className);
             $currentMigration = new $className();
             $currentMigration->up();

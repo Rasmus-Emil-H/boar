@@ -12,7 +12,6 @@ class QueryBuilder implements Builder {
     public const BIND        = ' = :';
     public const INNERJOIN   = ' INNER JOIN ';
 
-    protected const MAX_LENGTH = 255;
     protected const DEFAULT_LIMIT = 100;
     protected const DEFAULT_OFFSET = 0;
     
@@ -28,7 +27,7 @@ class QueryBuilder implements Builder {
     
 
     public function __construct(public string $class, public string $table, public string $keyID) {
-        
+        $this->resetQuery();
     }
 
     public function select(array $fields = ['*']): self {
@@ -94,10 +93,10 @@ class QueryBuilder implements Builder {
         return $this;
     }
 
-    public function patch(array $fields, string $primaryKey): self {
+    public function patch(array $fields, string $primaryKeyField, string $primaryKey): self {
         $this->preparePlaceholdersAndBoundValues($fields, 'patch');
-        $this->query .= "UPDATE {$this->table} SET {$this->placeholders} WHERE $primaryKey = :keyValue";
-        $this->args['keyValue'] = $this->key();
+        $this->query .= "UPDATE {$this->table} SET {$this->placeholders} WHERE $primaryKeyField = :keyValue";
+        $this->args['keyValue'] = $primaryKey;
         return $this;
     }
 
@@ -114,9 +113,9 @@ class QueryBuilder implements Builder {
     }
 
     public function where(array $arguments): self {
-        foreach ($arguments as $selector => $value) {
-            list($comparison, $value) = Parser::sqlComparsion($value, $this->comparisonOperators);
-            $this->args[$selector] = $value;
+        foreach ($arguments as $selector => $sqlValue) {
+            list($comparison, $sqlValue) = Parser::sqlComparsion($sqlValue, $this->comparisonOperators);
+            $this->args[$selector] = $sqlValue;
             $this->query .= (strpos($this->query, self::WHERE) === false ? self::WHERE : self::AND) . "{$selector} {$comparison} :{$selector}";
         }
     
@@ -142,7 +141,7 @@ class QueryBuilder implements Builder {
         return $this;
     }
 
-    public function describe() {
+    public function describeTable() {
         $this->query = ' DESCRIBE ' . $this->table;
         $this->run();
     }

@@ -10,6 +10,8 @@ namespace app\core\database;
 
 class Connection {
 
+    public const MAX_COLUMN_LENGTH = 255;
+
     private static ?Connection $instance = null;
 
     private bool $transactionStarted = false;
@@ -45,7 +47,8 @@ class Connection {
         } catch (\PDOException $e) {
             $errorQuery = $query;
             $errorQuery .= ' ' . $e;
-            throw new \PDOException("ERROR WITH THE FOLLOWING QUERY: $errorQuery");
+            app()->addSystemEvent(['Query failed: ' . $query . ' With the following arguments: ' . $args]);
+            throw new \PDOException('ERROR WITH THE FOLLOWING QUERY: ' . $errorQuery);
         }
     }
 

@@ -3,6 +3,7 @@
 namespace app\core\database;
 
 use \app\utilities\Builder;
+use \app\utilities\Parser;
 
 class QueryBuilder implements Builder {
 
@@ -114,20 +115,13 @@ class QueryBuilder implements Builder {
 
     public function where(array $arguments): self {
         foreach ($arguments as $selector => $value) {
-            list($comparison, $value) = $this->parseComparison($value);
+            list($comparison, $value) = Parser::sqlComparsion($value, $this->comparisonOperators);
             $this->args[$selector] = $value;
             $this->query .= (strpos($this->query, self::WHERE) === false ? self::WHERE : self::AND) . "{$selector} {$comparison} :{$selector}";
         }
     
         return $this;
     }
-    
-    private function parseComparison(string $value): array {
-        $valueParts = explode(' ', $value);
-        if (count($valueParts) > 1 && in_array((first($valueParts)->scalar), $this->comparisonOperators)) return [first($valueParts)->scalar, getIndex($valueParts, 1)->scalar];
-        return ['=', $value];
-    }
-    
 
     public function between(string $from, string $to, int $interval, $dateFormat = '%Y-%m-%d'): self {
         $this->query .= " AND STR_TO_DATE(:dateFormat) BETWEEN DATE(:from) - INTERVAL :interval DAY AND DATE(:from) + INTERVAL :interval DAY ";

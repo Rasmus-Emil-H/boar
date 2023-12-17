@@ -1,3 +1,3 @@
 <?php
 
-var_dump(applicationUser()->orders()->where(['OrderID' => '> 0'])->run());
+var_dump(applicationUser()->orders()->where(['OrderID' => '< 2'])->run());

@@ -18,6 +18,8 @@ class DOMNodeController extends Controller {
         'navbar' => $this->getView(), 
         'navigationItems' => [
           '<a class="dropdown-item" href="/user/profile">Profile</a>',
+          '<a class="dropdown-item" href="/order">Orders</a>',
+          '<a class="dropdown-item" href="/product">Products</a>',
           '<a class="dropdown-item" href="/auth/logout">Logout</a>'
         ]
       ]);

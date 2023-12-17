@@ -1,20 +1,21 @@
 <?php
 
 /**
- * Product Controller 
+ * Order Controller 
  * AUTHOR: RE_WEB
  * @package app\controllers
  */
 
 namespace app\controllers;
 
+use app\core\Application;
 use app\core\Controller;
 use app\core\middlewares\AuthMiddleware;
 
 
-class ProductController extends Controller {
+class OrderController extends Controller {
 
-    protected const DEFAULT_VIEW = 'product';
+    protected const DEFAULT_VIEW = 'order';
 
     public string $defaultRoute = 'index';
 
@@ -23,11 +24,14 @@ class ProductController extends Controller {
     }
 
     public function index() {
-        $this->setView('', 'product');
+        $this->setView('', 'order');
+        $this->setData([
+            'orders' => applicationUser()->orders()->run()
+        ]);
     }
 
     public function edit(): self {
-        $this->data['product'] = $this->getTemplatePath('/', 'product');
+        $this->data['order'] = $this->getTemplatePath('/', 'order');
         return $this;
     }
 

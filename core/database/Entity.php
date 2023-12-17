@@ -10,6 +10,7 @@ namespace app\core\database;
 
 use \app\core\database\relations\Relations;
 use \app\core\database\QueryBuilder;
+use \app\core\database\table\Table;
 
 abstract class Entity extends Relations {
 
@@ -81,12 +82,12 @@ abstract class Entity extends Relations {
 	}
 
     public function softDelete(): self {
-		$this->set(['DeletedAt' => new \DateTime('Y-m-d H:i:s')])->save();
+		$this->set([Table::DELETED_AT_COLUMN => new \DateTime('Y-m-d H:i:s')])->save();
         return $this;
 	}
 
     public function restore(): self {
-	    $this->set(['DeletedAt' => null])->save();
+	    $this->set([Table::DELETED_AT_COLUMN => null])->save();
         return $this;
 	}
 
@@ -131,7 +132,7 @@ abstract class Entity extends Relations {
     }
 
      public function trashed() {
-        return $this->getQueryBuilder()->select()->where(['DeletedAt' => 'IS NOT NULL'])->run();
+        return $this->getQueryBuilder()->select()->where([Table::DELETED_AT_COLUMN => 'IS NOT NULL'])->run();
     }
 
     public function getQueryBuilder(): QueryBuilder {
@@ -152,9 +153,7 @@ abstract class Entity extends Relations {
     }
 
     public function setStatus(int $status): self {
-        $this
-            ->set(['Status' => $status])
-            ->save();
+        $this->set([Table::STATUS_COLUMN => $status])->save();
         return $this;
     }
 

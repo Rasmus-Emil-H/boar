@@ -11,6 +11,9 @@ class Table {
     protected $name;
     protected $columns = [];
 
+    public const DELETED_AT_COLUMN = 'DeletedAt';
+    public const STATUS_COLUMN = 'Status';
+
     private const INT_COLUMN_TYPE = 'INT';
     private const VARCHAR_COLUMN_TYPE = 'VARCHAR';
     private const TEXT_COLUMN_TYPE = 'TEXT';

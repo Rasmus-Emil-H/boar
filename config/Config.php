@@ -1,6 +1,6 @@
 <?php
 
-/*******************************
+/**
  * Bootstrap Config 
  * AUTHOR: RE_WEB
  * @package app\core\Config

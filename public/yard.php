@@ -12,7 +12,7 @@
 
 function displayDD($input, $title = 'Debugging'): void {
   echo '<pre style="padding: 2rem; background-color: #3a6b39; color: white; border-radius: 4px;margin-top: 10px;" class="debug"><h2 class="text-center">' . $title . '</h2><hr>';
-  echo '<p>' . $input . '</p><hr>';
+  print_r($input);
   echo '<h2 style="margin:0;padding:0;" class="text-center">End of ' . $title . '</h2></pre>';
 }
 

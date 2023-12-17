@@ -10,17 +10,7 @@ namespace app\config;
 
 class Cache {
     
-    /**
-     * The root cache directory.
-     * @var string
-    */
-
     private string $cache_dir = '/tmp/cache';
-
-    /**
-     * Creates a FileCache object
-     * @param array $options
-    */
 
     public function __construct(array $options = []) {
         $available_options = array('cache_dir');
@@ -28,11 +18,6 @@ class Cache {
             if (isset($options[$name]))
                 $this->$name = $options[$name];
     }
-
-    /**
-     * Fetches an entry from the cache.
-     * @param string $id
-    */
 
     public function get(string $id) {
         $file_name = $this->getFileName($id);
@@ -52,25 +37,10 @@ class Cache {
         return $data;
     }
 
-    /**
-     * Deletes a cache entry.
-     * @param string $id
-     * @return bool
-    */
-
     public function delete(string $id) {
         $file_name = $this->getFileName($id);
         return unlink($file_name);
     }
-
-    /**
-     * Puts data into the cache.
-     * @param string $id
-     * @param mixed  $data
-     * @param int    $lifetime
-     *
-     * @return bool
-    */
 
     public function save(string $id, $data, int $lifetime = 3600) {
         $dir = $this->getDirectory($id);
@@ -83,32 +53,15 @@ class Cache {
         return true;
     }
 
-    /**
-     * Fetches a directory to store the cache data
-     * @param string $id
-     * @return string
-    */
-
     protected function getDirectory(string $id) {
         $hash = hash('sha256', $id, false);
         $dirs = [$this->getCacheDirectory(), substr($hash, 0, 2), substr($hash, 2, 2)];
         return join(DIRECTORY_SEPARATOR, $dirs);
     }
 
-    /**
-     * Fetches a base directory to store the cache data
-     * @return string
-    */
-
     protected function getCacheDirectory() {
         return $this->cache_dir;
     }
-
-    /**
-     * Fetches a file path of the cache data
-     * @param string $id
-     * @return string
-    */
 
     protected function getFileName(string $id) {
         $directory  = $this->getDirectory($id);

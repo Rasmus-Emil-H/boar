@@ -154,6 +154,11 @@ class QueryBuilder implements Builder {
         return $response;
     }
 
+    public function debugQuery() {
+        d($this->query);
+        dd($this->args);
+    }
+
     public function run(string $fetchMode = 'fetchAll'): array {
         $response = app()->connection->execute($this->query, $this->args, $fetchMode);
         $this->resetQuery();

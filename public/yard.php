@@ -47,6 +47,11 @@ function first(array|object $iterable): object {
   return (object)$iterable[array_key_first($iterable)];
 }
 
+function getIndex(array|object $iterable, int $expectedIndex): object {
+    if (!isset($iterable[$expectedIndex])) return (object)['scalar' => 'Invalid'];
+    return (object)$iterable[$expectedIndex];
+}
+
 function last(array|object $iterable): object {
   return (object)$iterable[array_key_last($iterable)];
 }

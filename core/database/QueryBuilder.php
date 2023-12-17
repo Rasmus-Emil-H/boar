@@ -114,7 +114,7 @@ class QueryBuilder implements Builder {
 
     public function where(array $arguments): self {
         foreach ($arguments as $selector => $value) {
-            list($comparison, $value) = $this->parseValue($value);
+            list($comparison, $value) = $this->parseComparison($value);
             $this->args[$selector] = $value;
             $this->query .= (strpos($this->query, self::WHERE) === false ? self::WHERE : self::AND) . "{$selector} {$comparison} :{$selector}";
         }
@@ -122,9 +122,9 @@ class QueryBuilder implements Builder {
         return $this;
     }
     
-    private function parseValue(string $value): array {
+    private function parseComparison(string $value): array {
         $valueParts = explode(' ', $value);
-        if (count($valueParts) > 1 && in_array((first($valueParts)->scalar), $this->comparisonOperators)) return [first($valueParts)->scalar, $valueParts[1]];
+        if (count($valueParts) > 1 && in_array((first($valueParts)->scalar), $this->comparisonOperators)) return [first($valueParts)->scalar, getIndex($valueParts, 1)->scalar];
         return ['=', $value];
     }
     

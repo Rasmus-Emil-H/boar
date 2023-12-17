@@ -155,7 +155,7 @@ class QueryBuilder implements Builder {
     }
 
     public function debugQuery() {
-        d($this->query);
+        d("Currently debugging query: " . $this->query);
         dd($this->args);
     }
 

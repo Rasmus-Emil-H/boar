@@ -26,9 +26,8 @@ class ProductController extends Controller {
         $this->setView('', 'product');
     }
 
-    public function edit(): self {
-        $this->data['product'] = $this->getTemplatePath('/', 'product');
-        return $this;
+    public function edit() {
+        $this->setView('', 'productEdit');
     }
 
 }

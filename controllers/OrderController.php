@@ -30,9 +30,8 @@ class OrderController extends Controller {
         ]);
     }
 
-    public function edit(): self {
-        $this->data['order'] = $this->getTemplatePath('/', 'order');
-        return $this;
+    public function edit() {
+        $this->setView('', 'editOrder');
     }
 
 }

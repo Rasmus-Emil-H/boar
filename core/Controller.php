@@ -36,7 +36,7 @@ class Controller {
     
     /**
      * Array of middleware classes
-     * @var app\core\middlewares\Middleware[]
+     * @var [app\core\middlewares\Middleware]
     */
 
     protected array $middlewares = [];
@@ -115,6 +115,13 @@ class Controller {
 
     public function getMiddlewares(): array {
         return $this->middlewares;
+    }
+
+    protected function isViewingValidEntity(string $entity) {
+        $request = app()->request->getArguments();
+        $entityID = getIndex($request, 2)->scalar;
+        $entity = new $entity($entityID);
+        return $entity->exists();
     }
 
 }

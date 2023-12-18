@@ -10,21 +10,17 @@ namespace app\models;
 
 use \app\core\database\Entity;
 
-class MigrationModel extends Entity {
+class PermissionModel extends Entity {
 
-	const keyID     = 'MigrationID';
-	const tableName = 'Migrations';
-
-	public function getAttributes(): array {
-		return [];
-	}
+	const keyID     = 'PermissionID';
+	const tableName = 'Permission';
 	
 	public function getTableName(): string {
-		return 'Migrations';
+		return 'Permission';
 	}
 	
 	public function getKeyField(): string {
-		return 'MigrationID';
+		return 'PermissionID';
 	}
 
 	public function getForeignKeys(): array {
@@ -32,10 +28,6 @@ class MigrationModel extends Entity {
 	}
 	
 	public function rules(): array {
-		return [];
-	}
-
-	public function getRelationObjects() {
 		return [];
 	}
 

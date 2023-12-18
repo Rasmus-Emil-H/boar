@@ -15,10 +15,6 @@ use app\core\middlewares\AuthMiddleware;
 
 class OrderController extends Controller {
 
-    protected const DEFAULT_VIEW = 'order';
-
-    public string $defaultRoute = 'index';
-
     public function __construct() { 
        $this->registerMiddleware(new AuthMiddleware()); 
     }

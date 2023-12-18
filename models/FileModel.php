@@ -1,6 +1,6 @@
 <?php
 
-/*******************************
+/**
  * File model 
  * AUTHOR: RE_WEB
  * @package app\core\File

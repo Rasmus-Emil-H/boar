@@ -49,9 +49,12 @@ abstract class Entity extends Relations {
         }
         
         if($data === null) $data = [];
-
         $this->data = array_merge($this->data, $data);
         return $this;
+    }
+
+    protected function setKey(string $key): void {
+        $this->key = $key;
     }
 
     public function key() {
@@ -64,13 +67,13 @@ abstract class Entity extends Relations {
 
     public function save() {
         try {
-            if ($this->exists() === true) {
+            if ($this->exists()) {
                 $this->getQueryBuilder()->patch($this->data, $this->getKeyField(), $this->key())->run('fetch');
                 return $this->data;
             }
-            if(empty($this->data)) throw new \Exception("Data variable is empty");
+            if(empty($this->data)) throw new \app\core\exceptions\EmptyException();
             $this->getQueryBuilder()->create($this->data)->run();
-            $this->key = app()->connection->getLastID();
+            $this->setKey(app()->connection->getLastID());
             return $this->key;
         } catch(\Exception $e) {
             throw new \app\core\exceptions\NotFoundException($e->getMessage());
@@ -100,7 +103,7 @@ abstract class Entity extends Relations {
     }
 
     public function __call($name, $arguments) {
-    throw new \app\core\exceptions\NotFoundException("Invalid non static method method [{$name}]");
+        throw new \app\core\exceptions\NotFoundException("Invalid non static method method [{$name}]");
     }
 
     public static function __callStatic($name, $arguments) {

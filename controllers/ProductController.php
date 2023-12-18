@@ -10,14 +10,11 @@ namespace app\controllers;
 
 use app\core\Controller;
 use app\core\middlewares\AuthMiddleware;
+use app\models\UserModel;
 
 
 class ProductController extends Controller {
-
-    protected const DEFAULT_VIEW = 'product';
-
-    public string $defaultRoute = 'index';
-
+    
     public function __construct() { 
        $this->registerMiddleware(new AuthMiddleware()); 
     }
@@ -27,6 +24,8 @@ class ProductController extends Controller {
     }
 
     public function edit() {
+        if (app()->request->isPost()) dd(132);
+        if (!$this->isViewingValidEntity(UserModel::class)) throw new \app\core\exceptions\NotFoundException('Invalid entity');
         $this->setView('', 'editProduct');
     }
 

@@ -8,8 +8,6 @@ use \app\models\Authenticator;
 
 class AuthController extends Controller {
 
-    public string $defaultRoute = 'login';
-
     public function login() {
         if (app()->session->get('user')) app()->response->redirect('/home');
         if (app()->request->isPost()) new Authenticator(app()->request->getBody(), 'applicationLogin');

@@ -1,10 +1,10 @@
 <?php
 
-/*******************************
- * Bootstrap Query 
+/**
+ * Bootstrap language model
  * AUTHOR: RE_WEB
  * @package app\models\Query
-*******************************/
+ */
 
 namespace app\models;
 
@@ -14,10 +14,6 @@ class LanguageModel extends Entity {
 
 	const keyID     = 'LanguageID';
 	const tableName = 'Languages';
-
-	public function getAttributes(): array {
-		return ['language'];
-	}
 	
 	public function getTableName(): string {
 		return 'Languages';
@@ -33,10 +29,6 @@ class LanguageModel extends Entity {
 	
 	public function rules(): array {
 		return [];
-	}
-
-	public function getRelationObjects() {
-		return ['Translation'];
 	}
 
 }

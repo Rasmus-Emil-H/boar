@@ -23,16 +23,16 @@ class Request {
         return substr($path, 0, $position);
     }
 
-    public function setArguments() {
-        $this->args = explode('/', ltrim($this->getPath(), '/'));
+    public function setArguments(): void {
+        $this->args = explode('/', trim($this->getPath(), '/'));
     }
 
-    public function getArguments() {
+    public function getArguments(): array {
         return $this->args;
     }
     
-    public function getArgument(int $index) {
-        return $this->args[$index] ?? throw new \app\core\exceptions\NotFoundException('Index was not found');
+    public function getArgument(int $index): mixed {
+        return $this->getArguments()[$index] ?? throw new \app\core\exceptions\NotFoundException('Index was not found');
     }
     
     public function getReferer(): string {

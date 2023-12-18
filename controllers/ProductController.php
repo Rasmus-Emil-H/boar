@@ -27,7 +27,7 @@ class ProductController extends Controller {
     }
 
     public function edit() {
-        $this->setView('', 'productEdit');
+        $this->setView('', 'editProduct');
     }
 
 }

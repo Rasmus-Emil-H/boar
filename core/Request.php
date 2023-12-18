@@ -10,11 +10,25 @@ namespace app\core;
 
 class Request {
 
+    private array $args = [];
+
+    public function __construct() {
+        $this->setArguments();
+    }
+
     public function getPath(): string {
-        $path = $this->getCompleteRequestBody()->server['REQUEST_URI'] ?? '/';
+        $path = $_SERVER['REQUEST_URI'] ?? '/';
         $position = strpos($path, '?');
         if(!$position) return $path;
         return substr($path, 0, $position);
+    }
+
+    public function setArguments() {
+        $this->args = explode('/', ltrim($this->getPath(), '/'));
+    }
+
+    public function getArguments() {
+        return $this->args;
     }
     
     public function getRefere(): string {
@@ -51,8 +65,8 @@ class Request {
     }
 
     public function getCompleteRequestBody() {
-        $obj = ["files" => $_FILES, "server" => $_SERVER, "cookie" => $_COOKIE];
-        $obj[($this->isGet() ? 'get' : 'post')] = $this->getBody();
+        $obj = ["files" => $_FILES, "server" => $_SERVER, "cookie" => $_COOKIE, 'path' => $this->getPath()];
+        $obj['body'] = $this->getBody();
         return (object)$obj;
     }
 

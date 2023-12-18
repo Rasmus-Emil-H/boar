@@ -11,7 +11,7 @@ class add_meta_table_2019_01_03_0001 {
             $table->varchar('EntityType', 20);
             $table->integer('EntityID', 10);
             $table->text('Data');
-            $table->timestamp();
+            $table->varchar('IP', 40);
             $table->primaryKey('MetaID');
         });
     }

@@ -45,9 +45,8 @@ class Connection {
             $stmt = null;
             return $result;
         } catch (\PDOException $e) {
-            $errorQuery = $query;
-            $errorQuery .= ' ' . $e;
-            app()->addSystemEvent(['Query failed: ' . $query . ' With the following arguments: ' . $args]);
+            $errorQuery = $query . $e;
+            app()->addSystemEvent(['Query failed: ' . $query . ' With the following arguments: ' . implode(',', $args)]);
             throw new \PDOException('ERROR WITH THE FOLLOWING QUERY: ' . $errorQuery);
         }
     }

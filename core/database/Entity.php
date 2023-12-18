@@ -65,7 +65,8 @@ abstract class Entity extends Relations {
         return $this->key !== null;
     }
 
-    public function save() {
+    public function save(bool $addMetaData = true): string {
+        if ($addMetaData) $this->addMetaData([$this->data]);
         try {
             if ($this->exists()) {
                 $this->getQueryBuilder()->patch($this->data, $this->getKeyField(), $this->key())->run('fetch');
@@ -76,6 +77,7 @@ abstract class Entity extends Relations {
             $this->setKey(app()->connection->getLastID());
             return $this->key;
         } catch(\Exception $e) {
+            app()->addSystemEvent([$e->getMessage()]);
             throw new \app\core\exceptions\NotFoundException($e->getMessage());
         }
     }
@@ -122,10 +124,6 @@ abstract class Entity extends Relations {
         return (new QueryBuilder(get_called_class(), static::tableName, static::keyID));
     }
 
-    public function getRelatedObject(string $key): string {
-		return $this->relatedObjects[$key] ?? throw new \app\core\exceptions\NotFoundException("$key was not found on this entity.");
-	}
-
     public function delete() {
         return $this->getQueryBuilder()->delete()->where([$this->getKeyField() => $this->key()])->run();
     }
@@ -150,8 +148,13 @@ abstract class Entity extends Relations {
 
     public function addMetaData(array $data): self {
         (new EntityMetaData())
-            ->set(['EntityType' => $this->getTableName(), 'EntityID' => $this->key(), 'Data' => json_encode($data)])
-            ->save();
+            ->set([
+                'EntityType' => $this->getTableName(), 
+                'EntityID' => $this->key(), 
+                'Data' => json_encode($data), 
+                'IP' => app()->request->getCompleteRequestBody()->server['REMOTE_ADDR']
+            ])
+            ->save(addMetaData: false);
         return $this;
     }
 

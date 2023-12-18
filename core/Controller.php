@@ -25,21 +25,10 @@ class Controller {
     public string $layout = 'main';
     public string $action = '';
 
-    /**
-     * Set data in current controller
-     * @var array|object [\Controller]
-     * @return void
-    */
-
     public function setData($data): void {
       $merged = array_merge($this->getData(), $data);
       $this->data = $merged;
     }
-
-    /**
-     * get data in current controller
-     * @return array
-    */
 
     public function getData(): array {
         return $this->data;
@@ -53,20 +42,12 @@ class Controller {
     protected array $middlewares = [];
 
     public function setChildren(array $children): void {
-      foreach ( $children as $child ) $this->children[] = $child; 
+      foreach ($children as $child) $this->children[] = $child; 
     }
-
-    /**
-     * @param object $request
-     */
 
     public function setRequest(object $request) {
       $this->request = $request;
     }
-
-    /**
-     * return object $request 
-     */
 
     protected function getRequest() {
       return $this->request;

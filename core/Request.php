@@ -1,10 +1,10 @@
 <?php
 
-/*******************************
+/**
  * Bootstrap Request 
  * AUTHOR: RE_WEB
  * @package app\core\Request
-*/
+ */
 
 namespace app\core;
 
@@ -31,7 +31,11 @@ class Request {
         return $this->args;
     }
     
-    public function getRefere(): string {
+    public function getArgument(int $index) {
+        return $this->args[$index] ?? throw new \app\core\exceptions\NotFoundException('Index was not found');
+    }
+    
+    public function getReferer(): string {
         return htmlspecialchars($_SERVER['HTTP_REFERER']);
     }
     
@@ -44,7 +48,7 @@ class Request {
     }
     
     public function getReplacedHost(): string {
-        return str_replace($this->getHost(), '', $this->getRefere());
+        return str_replace($this->getHost(), '', $this->getReferer());
     }
     
     public function getAdditionalParams(array $indexes): array {

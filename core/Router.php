@@ -61,13 +61,13 @@ class Router {
         require_once app()->controller->getData()['footer'];
     }
 
-    public function setRequest() {
+    public function setRequestBody() {
         app()->controller->setRequest(app()->request->getCompleteRequestBody());
     }
 
     public function resolve() {
         $this->checkController();
-        $this->setRequest();
+        $this->setRequestBody();
         $this->runMiddlewares();
         $this->setTemplateControllers();
         $this->runController();

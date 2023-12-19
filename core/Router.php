@@ -41,7 +41,7 @@ class Router {
     }
 
     protected function runMiddlewares() {
-        foreach (app()->controller->getMiddlewares() as $middleware) $middleware->execute();
+        foreach (app()->getController()->getMiddlewares() as $middleware) $middleware->execute();
     }
 
     protected function setTemplateControllers() {

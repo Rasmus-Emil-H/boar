@@ -91,7 +91,7 @@ class Request {
     }
 
     public function getIP() {
-        return $this->clientRequest->server['REMOTE_ADDR'];
+        return $this->clientRequest->server['REMOTE_ADDR'] ?? php_sapi_name();
     }
     
     public function getPHPInput() {

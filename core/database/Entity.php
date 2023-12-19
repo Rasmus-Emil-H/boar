@@ -152,7 +152,7 @@ abstract class Entity extends Relations {
                 'EntityType' => $this->getTableName(), 
                 'EntityID' => $this->key(), 
                 'Data' => json_encode($data), 
-                'IP' => app()::isCLI() ? php_sapi_name() : app()->request->getIP()
+                'IP' => app()->request->getIP()
             ])
             ->save(addMetaData: false);
         return $this;

@@ -9,6 +9,7 @@
 namespace app\core;
 
 use \app\core\middlewares\Middleware;
+use app\core\factories\ControllerFactory;
 
 class Controller {
 
@@ -60,12 +61,10 @@ class Controller {
     public function setChildData(array $childControllers): void {
       foreach ( $childControllers as $childController ) {
         [$controller, $method] = preg_match('/:/', $childController) ? explode(':', $childController) : [$childController, self::DEFAULT_METHOD];
-        $cController = '\\app\controllers\\'.$controller.'Controller';
-        app()->classCheck($cController);
-        $static = new $cController();
-        $static->{$method}();
-        app()->getParentController()->setData($static->getData());
-        $static->execChildData();
+        $cController = (new ControllerFactory(['handler' => $controller]))->create();
+        $cController->{$method}();
+        app()->getParentController()->setData($cController->getData());
+        $cController->execChildData();
       }
     }
 

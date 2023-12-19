@@ -24,9 +24,27 @@ abstract class Entity extends Relations {
         $this->set($data, $allowedFields);
     }
 
+    public function __call($name, $arguments) {
+        throw new \app\core\exceptions\NotFoundException("Invalid non static method method [{$name}]");
+    }
+
+    public static function __callStatic($name, $arguments) {
+        throw new \app\core\exceptions\NotFoundException("Invalid static method [{$name}]");
+    }
+
+    public function __get(string $key) {
+        return $this->data[$key] ?? new \Exception("Invalid entity key");
+    }
+
+    public function __toString() {
+        $result = get_class($this)."($this->key):\n";
+        foreach ($this->data as $key => $value) $result .= "[$key]:$value\n";
+        return $result;
+    }
+
     /**
      * @param array $values key:value pairs of values to set
-     * @param array $allowedFields keys of fields allowed to be altered
+     * @param array|null $allowedFields keys of fields allowed to be altered
      * @return object The current entity instance
      */
 
@@ -104,20 +122,8 @@ abstract class Entity extends Relations {
         return (new QueryBuilder(get_called_class(), static::tableName, static::keyID))->select()->run();
     }
 
-    public function __call($name, $arguments) {
-        throw new \app\core\exceptions\NotFoundException("Invalid non static method method [{$name}]");
-    }
-
-    public static function __callStatic($name, $arguments) {
-        throw new \app\core\exceptions\NotFoundException("Invalid static method [{$name}]");
-    }
-
     public function getData(): array {
         return $this->data;
-    }
-
-    public function __get(string $key) {
-        return $this->data[$key] ?? new \Exception("Invalid entity key");
     }
 
     public static function query(): QueryBuilder {
@@ -140,19 +146,13 @@ abstract class Entity extends Relations {
         return (new QueryBuilder(get_called_class(), $this->getTableName(), $this->getKeyField()));
     }
 
-    public function __toString() {
-        $result = get_class($this)."($this->key):\n";
-        foreach ($this->data as $key => $value) $result .= "[$key]:$value\n";
-        return $result;
-    }
-
     public function addMetaData(array $data): self {
         (new EntityMetaData())
             ->set([
                 'EntityType' => $this->getTableName(), 
                 'EntityID' => $this->key(), 
                 'Data' => json_encode($data), 
-                'IP' => app()::isCLI() ? php_sapi_name() : app()->request->getCompleteRequestBody()->server['REMOTE_ADDR']
+                'IP' => app()::isCLI() ? php_sapi_name() : app()->request->getIP()
             ])
             ->save(addMetaData: false);
         return $this;

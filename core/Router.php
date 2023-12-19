@@ -62,7 +62,7 @@ class Router {
     }
 
     public function setRequestBody() {
-        app()->controller->setRequest(app()->request->getCompleteRequestBody());
+        app()->controller->setRequest(app()->request->clientRequest);
     }
 
     public function resolve() {

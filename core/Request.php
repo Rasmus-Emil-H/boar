@@ -11,9 +11,11 @@ namespace app\core;
 class Request {
 
     private array $args = [];
+    public  object $clientRequest;
 
     public function __construct() {
         $this->setArguments();
+        $this->clientRequest = $this->getCompleteRequestBody();
     }
 
     public function getPath(): string {
@@ -86,6 +88,10 @@ class Request {
                 $body[$key] = filter_input(INPUT_POST, $key, FILTER_SANITIZE_SPECIAL_CHARS);
 
         return (object)$body;
+    }
+
+    public function getIP() {
+        return $this->clientRequest->server['REMOTE_ADDR'];
     }
     
     public function getPHPInput() {

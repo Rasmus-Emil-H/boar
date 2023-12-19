@@ -29,7 +29,7 @@ class File extends FileModel {
     }
     
     public function getCurrentlyUploadedFiles() {
-        return app()->request->getCompleteRequestBody()->files;
+        return app()->request->clientRequest->files;
     }
 
     public function moveFile(): bool {

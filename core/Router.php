@@ -23,31 +23,31 @@ class Router {
         $this->queryPattern = app()->regex->validateRoute();
     }
 
-    protected function createController() {
+    protected function createController(): void {
         if (empty($this->queryPattern)) app()->response->redirect(first(app()::$defaultRoute)->scalar);
         $handler = ucfirst($this->queryPattern[0] ?? '');
         $controller = (new ControllerFactory(['handler' => $handler]))->create();
-        app()->setController($controller);
+        app()->setParentController($controller);
         $this->method = $this->queryPattern[1] ?? self::INDEX_METHOD;
         if (!method_exists($this->getApplicationParentController(), $this->method)) throw new NotFoundException();
     }
 
-    protected function runMiddlewares() {
+    protected function runMiddlewares(): void {
         foreach ($this->getApplicationParentController()->getMiddlewares() as $middleware) $middleware->execute();
     }
 
-    protected function setTemplateControllers() {
+    protected function setTemplateControllers(): void {
         if (app()::isCLI()) return;
         $this->getApplicationParentController()->setChildren(['Header', 'Footer']);
     }
 
-    protected function runController() {
+    protected function runController(): void {
         $controller = $this->getApplicationParentController();
         $controller->execChildData();
         $controller->{$this->method}();
     }
 
-    protected function hydrateDOM() {
+    protected function hydrateDOM(): void {
         $controller = $this->getApplicationParentController();
         extract($controller->getData(), EXTR_SKIP);
         require_once $controller->getData()['header'];
@@ -59,7 +59,7 @@ class Router {
         return app()->getParentController();
     }
 
-    public function resolve() {
+    public function resolve(): void {
         $this->createController();
         $this->runMiddlewares();
         $this->setTemplateControllers();

@@ -39,7 +39,7 @@ class Application {
     public Logger $logger;
     public AssetsController $clientAssets;
 
-    protected ?Controller $controller;
+    protected ?Controller $parentController;
 
     public static self $app;
     public static $defaultRoute = ['/auth/login', '/auth/signup'];
@@ -95,11 +95,11 @@ class Application {
     }
 
     public function getParentController(): Controller {
-        return $this->controller;
+        return $this->parentController;
     }
 
-    public function setController(Controller $controller): void {
-        $this->controller = $controller;
+    public function setParentController(Controller $controller): void {
+        $this->parentController = $controller;
     }
 
     public static function isCLI(): bool {

@@ -14,7 +14,6 @@ use app\core\factories\ControllerFactory;
 class Router {
 
     protected const INDEX_METHOD = 'index';
-    protected Controller $controller;
 
     protected array $routes = [];
     protected array $queryPattern;
@@ -24,47 +23,44 @@ class Router {
         $this->queryPattern = app()->regex->validateRoute();
     }
 
-    protected function checkController() {
-        if (empty($this->queryPattern)) $this->getDefaultRoute();
+    protected function createController() {
+        if (empty($this->queryPattern)) app()->response->redirect(first(app()::$defaultRoute)->scalar);
         $handler = ucfirst($this->queryPattern[0] ?? '');
-        $this->controller = (new ControllerFactory(['handler' => $handler]))->create();
-        app()->setController($this->controller);
+        $controller = (new ControllerFactory(['handler' => $handler]))->create();
+        app()->setController($controller);
         $this->method = $this->queryPattern[1] ?? self::INDEX_METHOD;
-        if (!method_exists($this->controller, $this->method)) throw new NotFoundException();
-    }
-
-    public function getDefaultRoute() {
-        app()->response->redirect(app()::$defaultRoute[0]);
+        if (!method_exists($this->getApplicationParentController(), $this->method)) throw new NotFoundException();
     }
 
     protected function runMiddlewares() {
-        foreach ($this->controller->getMiddlewares() as $middleware) $middleware->execute();
+        foreach ($this->getApplicationParentController()->getMiddlewares() as $middleware) $middleware->execute();
     }
 
     protected function setTemplateControllers() {
         if (app()::isCLI()) return;
-        $this->controller->setChildren(['Header', 'Footer']);
+        $this->getApplicationParentController()->setChildren(['Header', 'Footer']);
     }
 
     protected function runController() {
-        $this->controller->execChildData();
-        $this->controller->{$this->method}();
+        $controller = $this->getApplicationParentController();
+        $controller->execChildData();
+        $controller->{$this->method}();
     }
 
     protected function hydrateDOM() {
-        extract($this->controller->getData(), EXTR_SKIP);
-        require_once $this->controller->getData()['header'];
-        require_once $this->controller->getView();    
-        require_once $this->controller->getData()['footer'];
+        $controller = $this->getApplicationParentController();
+        extract($controller->getData(), EXTR_SKIP);
+        require_once $controller->getData()['header'];
+        require_once $controller->getView();    
+        require_once $controller->getData()['footer'];
     }
 
-    public function setRequestBody() {
-        $this->controller->setRequest(app()->request->clientRequest);
+    private function getApplicationParentController(): Controller {
+        return app()->getParentController();
     }
 
     public function resolve() {
-        $this->checkController();
-        $this->setRequestBody();
+        $this->createController();
         $this->runMiddlewares();
         $this->setTemplateControllers();
         $this->runController();

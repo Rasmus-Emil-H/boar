@@ -28,8 +28,8 @@ class Regex {
 
     public function validateRoute(): array {
         $includes = [];
-        foreach ( explode('/', $this->string) as $param )
-            if ( !in_array($param, $this->excludes) ) $includes[] = $param;
+        foreach (explode('/', $this->string) as $param)
+            if (!in_array($param, $this->excludes)) $includes[] = $param;
         return $includes;
     }
 

@@ -64,7 +64,7 @@ class Controller {
         app()->classCheck($cController);
         $static = new $cController();
         $static->{$method}();
-        app()->getController()->setData($static->getData());
+        app()->getParentController()->setData($static->getData());
         $static->execChildData();
       }
     }

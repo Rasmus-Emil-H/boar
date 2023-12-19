@@ -28,7 +28,6 @@ class Application {
     public Router $router;
     public Request $request;
     public Response $response;
-    public ?Controller $controller;
     public Session $session;
     public Cookie $cookie;
     public Connection $connection;
@@ -39,6 +38,8 @@ class Application {
     public Config $config;
     public Logger $logger;
     public AssetsController $clientAssets;
+
+    protected ?Controller $controller;
 
     public static self $app;
     public static $defaultRoute = ['/auth/login', '/auth/signup'];

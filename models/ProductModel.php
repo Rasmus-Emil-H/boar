@@ -28,7 +28,7 @@ class ProductModel extends Entity {
 	}
 
     public function user() {
-        return $this->belongsTo(UserModel::class);
+        return $this->belongsTo(OrderModel::class);
     }
 	
 }

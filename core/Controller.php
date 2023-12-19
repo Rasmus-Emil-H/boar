@@ -121,7 +121,7 @@ class Controller {
         $request = app()->request->getArguments();
         $entityID = getIndex($request, 2)->scalar;
         $entity = new $entity($entityID);
-        return $entity->exists();
+        if ($entityID === 'Invalid' || !$entity->exists) throw new \app\core\exceptions\NotFoundException('Invalid entity');
     }
 
 }

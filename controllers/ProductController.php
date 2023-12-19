@@ -10,7 +10,7 @@ namespace app\controllers;
 
 use app\core\Controller;
 use app\core\middlewares\AuthMiddleware;
-use app\models\UserModel;
+use app\models\ProductModel;
 
 
 class ProductController extends Controller {
@@ -25,7 +25,7 @@ class ProductController extends Controller {
 
     public function edit() {
         if (app()->request->isPost()) dd(132);
-        if (!$this->isViewingValidEntity(UserModel::class)) throw new \app\core\exceptions\NotFoundException('Invalid entity');
+        $this->isViewingValidEntity(ProductModel::class);
         $this->setView('', 'editProduct');
     }
 

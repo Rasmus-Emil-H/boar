@@ -128,7 +128,7 @@ class Application {
             $this->router->resolve();
         } catch (\Throwable $applicationError) {
             $this->logger->log($applicationError);
-            $this->setController(new \app\controllers\ErrorController($applicationError));
+            $this->setParentController(new \app\controllers\ErrorController($applicationError));
         }
     }
     

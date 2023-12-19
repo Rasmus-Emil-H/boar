@@ -16,7 +16,7 @@ class File extends FileModel {
     public const INVALID_EXTENSION = 'Invalid file extension';
     public const INVALID_FILE_NAME = 'Invalid file name';
 
-    protected const TPL_FILE_EXTENSION = '.tpl.php';
+    public const TPL_FILE_EXTENSION    = '.tpl.php';
     protected const FILE_NOT_FOUND     = 'File not found';
     protected const UPLOAD_FOLDER      = __DIR__.'/uploads/';
 

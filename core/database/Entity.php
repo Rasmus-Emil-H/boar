@@ -4,7 +4,7 @@
  * Entity base for models
  * @package app\core\database
  * @author RE_WEB
-*/
+ */
 
 namespace app\core\database;
 
@@ -152,7 +152,7 @@ abstract class Entity extends Relations {
                 'EntityType' => $this->getTableName(), 
                 'EntityID' => $this->key(), 
                 'Data' => json_encode($data), 
-                'IP' => app()::isCLI() ? 'terminal' : app()->request->getCompleteRequestBody()->server['REMOTE_ADDR']
+                'IP' => app()::isCLI() ? php_sapi_name() : app()->request->getCompleteRequestBody()->server['REMOTE_ADDR']
             ])
             ->save(addMetaData: false);
         return $this;

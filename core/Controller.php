@@ -14,6 +14,7 @@ class Controller {
 
     private const DEFAULT_METHOD = 'index';
     private const INVALID_VIEW = 'Invalid view';
+    private const INVALID = 'Invalid';
 
     protected object $request;
 
@@ -33,11 +34,6 @@ class Controller {
     public function getData(): array {
         return $this->data;
     }
-    
-    /**
-     * Array of middleware classes
-     * @var [app\core\middlewares\Middleware]
-    */
 
     protected array $middlewares = [];
 
@@ -59,7 +55,7 @@ class Controller {
      * @param array [strings of to be \app\core\Controller]
      * @param \app\core\controller Parent controller
      * @return void
-    */
+     */
 
     public function setChildData(array $childControllers): void {
       foreach ( $childControllers as $childController ) {
@@ -98,7 +94,7 @@ class Controller {
     }
 
     public function getTemplatePath(string $folder, string $template): string {
-        return app()::$ROOT_DIR .  '/views/' . $folder . $template . '.tpl.php';
+        return app()::$ROOT_DIR .  '/views/' . $folder . $template . \app\core\File::TPL_FILE_EXTENSION;
     }
 
     public function render(): void {
@@ -121,7 +117,7 @@ class Controller {
         $request = app()->request->getArguments();
         $entityID = getIndex($request, 2)->scalar;
         $entity = new $entity($entityID);
-        if ($entityID === 'Invalid' || !$entity->exists) throw new \app\core\exceptions\NotFoundException('Invalid entity');
+        if ($entityID === self::INVALID || !$entity->exists) throw new \app\core\exceptions\NotFoundException(self::INVALID);
     }
 
 }

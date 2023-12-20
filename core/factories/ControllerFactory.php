@@ -6,7 +6,7 @@ use app\core\Controller;
 
 class ControllerFactory implements FactoryInterface {
 
-    protected const CONTROLLER   = 'Controller';
+    protected const CONTROLLER = 'Controller';
 
     private array $arguments;
 

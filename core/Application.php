@@ -94,7 +94,7 @@ class Application {
         }
     }
 
-    public function getParentController(): Controller {
+    public function getParentController(): ?Controller {
         return $this->parentController;
     }
 

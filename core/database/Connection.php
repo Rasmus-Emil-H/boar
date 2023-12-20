@@ -4,7 +4,7 @@
  * Connection relier
  * Author: RE_WEB
  * @package app\core\database
-*/
+ */
 
 namespace app\core\database;
 
@@ -23,9 +23,17 @@ class Connection {
 
     private ?\Pdo $pdo;
     
-    public function __construct(array $pdoConfigurations) {
+    protected function __construct(array $pdoConfigurations) {
         $this->pdo = new \PDO($pdoConfigurations['dsn'], $pdoConfigurations['user'], $pdoConfigurations['password'], $this->defaultPdoOptions);
         $this->pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+    }
+
+    protected function __clone() {
+
+    }
+
+    public function __wakeup() {
+        throw new \Exception('Cannot unserialize');
     }
 
     public function __call(string $method, array $params = []) {
@@ -64,7 +72,7 @@ class Connection {
     }
 
     public function commit(): bool|\PDOException {
-        return $this->transactionStarted ? $this->pdo->commit() : throw new \PDOException("Attempted to commit when not in transaction, or transaction failed to start.");
+        return $this->transactionStarted ? $this->pdo->commit() : throw new \PDOException('Attempted to commit when not in transaction, or transaction failed to start.');
     }
 
     public function rollback(): bool {

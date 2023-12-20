@@ -8,9 +8,8 @@
 
 namespace app\controllers;
 
-use app\core\Application;
-use app\core\Controller;
-use app\core\middlewares\AuthMiddleware;
+use \app\core\Controller;
+use \app\core\middlewares\AuthMiddleware;
 
 
 class OrderController extends Controller {

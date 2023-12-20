@@ -8,9 +8,9 @@
 
 namespace app\controllers;
 
-use app\core\Controller;
-use app\core\middlewares\AuthMiddleware;
-use app\models\ProductModel;
+use \app\core\Controller;
+use \app\core\middlewares\AuthMiddleware;
+use \app\models\ProductModel;
 
 
 class ProductController extends Controller {

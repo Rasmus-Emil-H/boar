@@ -15,5 +15,5 @@ try {
     $app = new Application(applicationIsMigrating: false);
     $app->run();
 } catch (\Throwable $e) {
-    dd($e, 'error');
+    dd($e->getMessage());
 }

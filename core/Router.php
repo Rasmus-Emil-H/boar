@@ -25,11 +25,11 @@ class Router {
 
     protected function createController(): void {
         if (empty($this->path)) app()->getResponse()->redirect(first(app()::$defaultRoute)->scalar);
-        $handler = ucfirst($this->path[0] ?? '');
+        $handler = ucfirst(first($this->path)->scalar ?? '');
         $controller = (new ControllerFactory(['handler' => $handler]))->create();
         app()->setParentController($controller);
         $this->method = $this->path[1] ?? self::INDEX_METHOD;
-        if (!method_exists($this->getApplicationParentController(), $this->method)) throw new NotFoundException();
+        if (!method_exists($controller, $this->method)) throw new NotFoundException();
     }
 
     protected function runMiddlewares(): void {

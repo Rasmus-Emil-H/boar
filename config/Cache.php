@@ -3,8 +3,8 @@
 /**
  * Bootstrap Cache 
  * AUTHOR: RE_WEB
- * @package app\core\Cache
-*/
+ * @package app\config
+ */
 
 namespace app\config;
 

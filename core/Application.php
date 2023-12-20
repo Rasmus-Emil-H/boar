@@ -66,7 +66,7 @@ class Application {
 
         $this->getLanguage();
         $this->getUser();
-        $this->i18n      = new I18n();
+        $this->i18n         = new I18n();
     }
 
     protected function setConnection() {

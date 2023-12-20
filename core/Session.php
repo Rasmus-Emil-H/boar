@@ -45,8 +45,9 @@ class Session {
         return $_SESSION[$key] ?? '';
     }
 
-    public function unset(string $key): void {
-        unset($_SESSION[$key]);
+    public function unset(string|array $key): void {
+        if (is_string($key)) (array)$key;
+        foreach ($key as $unsetKey) unset($_SESSION[$unsetKey]);
     }
 
     public function getAll(): array {

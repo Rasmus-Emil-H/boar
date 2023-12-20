@@ -8,8 +8,6 @@
 
 namespace app\core;
 
-use \app\core\encryption\Encryption;
-
 class Session {
 
     protected const FLASH_ARRAY = 'FLASH_MESSAGES';
@@ -49,6 +47,14 @@ class Session {
 
     public function unset(string $key): void {
         unset($_SESSION[$key]);
+    }
+
+    public function getAll(): array {
+        return $_SESSION;
+    }
+
+    public function nullAll(): void {
+        foreach ($this->getAll() as &$value) $value = null;
     }
 
     public function __destruct() {

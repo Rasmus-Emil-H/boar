@@ -16,7 +16,7 @@ class AssetsController extends Controller {
     private string $objectID = 'clientAssets';
 
     public function __construct() {
-        $this->assets = app()->config->get($this->objectID);
+        $this->assets = app()->getConfig()->get($this->objectID);
     }
 
     public function get(string $section): array {

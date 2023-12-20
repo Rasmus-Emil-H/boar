@@ -9,15 +9,12 @@
 namespace app\core;
 
 use \app\core\middlewares\Middleware;
-use app\core\factories\ControllerFactory;
+use \app\core\factories\ControllerFactory;
 
 class Controller {
 
     private const DEFAULT_METHOD = 'index';
-    private const INVALID_VIEW = 'Invalid view';
     private const INVALID = 'Invalid';
-
-    protected object $request;
 
     protected array $data = [];
     protected array $children = [];
@@ -28,8 +25,8 @@ class Controller {
     public string $action = '';
 
     public function setData($data): void {
-      $merged = array_merge($this->getData(), $data);
-      $this->data = $merged;
+        $merged = array_merge($this->getData(), $data);
+        $this->data = $merged;
     }
 
     public function getData(): array {
@@ -39,15 +36,7 @@ class Controller {
     protected array $middlewares = [];
 
     public function setChildren(array $children): void {
-      foreach ($children as $child) $this->children[] = $child; 
-    }
-
-    public function setRequest(object $request) {
-      $this->request = $request;
-    }
-
-    protected function getRequest() {
-      return $this->request;
+        foreach ($children as $child) $this->children[] = $child; 
     }
 
     /**
@@ -58,22 +47,22 @@ class Controller {
      * @return void
      */
 
-    public function setChildData(array $childControllers): void {
-      foreach ( $childControllers as $childController ) {
-        [$controller, $method] = preg_match('/:/', $childController) ? explode(':', $childController) : [$childController, self::DEFAULT_METHOD];
-        $cController = (new ControllerFactory(['handler' => $controller]))->create();
-        $cController->{$method}();
-        app()->getParentController()->setData($cController->getData());
-        $cController->execChildData();
-      }
+    public function setChildData(): void {
+        foreach ( $this->getChildren() as $childController ) {
+            [$controller, $method] = preg_match('/:/', $childController) ? explode(':', $childController) : [$childController, self::DEFAULT_METHOD];
+            $cController = (new ControllerFactory(['handler' => $controller]))->create();
+            $cController->{$method}();
+            app()->getParentController()->setData($cController->getData());
+            $cController->execChildData();
+        }
     }
 
     public function getView(): string {
-        return $this->view ?? self::INVALID_VIEW;
+        return $this->view ?? View::INVALID_VIEW;
     }
 
     protected function setView(string $dir, string $view) {
-      $this->view = $this->getTemplatePath($dir, $view);
+        $this->view = $this->getTemplatePath($dir, $view);
     }
 
     public function getChildren(): array {
@@ -81,23 +70,23 @@ class Controller {
     }
 
     public function execChildData() {
-      $this->setChildData($this->getChildren());
+        $this->setChildData();
     }
 
     public function getPartialTemplate(string $partial): string {
-      return $this->getTemplatePath('partials/', $partial);
+        return $this->getTemplatePath('partials/', $partial);
     }
 
     public function getTemplate(string $partial): string {
-      return $this->getTemplatePath('', $partial);
+        return $this->getTemplatePath('', $partial);
     }
 
     public function getTemplatePath(string $folder, string $template): string {
-        return app()::$ROOT_DIR .  '/views/' . $folder . $template . \app\core\File::TPL_FILE_EXTENSION;
+        return app()::$ROOT_DIR .  File::VIEWS_FOLDER . $folder . $template . File::TPL_FILE_EXTENSION;
     }
 
     public function render(): void {
-        app()->view->renderView();
+        app()->getView()->renderView();
     }
 
     public function setLayout(string $layout): void {
@@ -112,8 +101,8 @@ class Controller {
         return $this->middlewares;
     }
 
-    protected function isViewingValidEntity(string $entity) {
-        $request = app()->request->getArguments();
+    protected function isViewingValidEntity(string $entity): void {
+        $request = app()->getRequest()->getArguments();
         $entityID = getIndex($request, 2)->scalar;
         $entity = new $entity($entityID);
         if ($entityID === self::INVALID || !$entity->exists()) throw new \app\core\exceptions\NotFoundException(self::INVALID);

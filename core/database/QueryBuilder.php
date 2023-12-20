@@ -153,7 +153,7 @@ class QueryBuilder implements Builder {
 
     public function fetchRow(?array $criteria = null) {
         $this->select()->where($criteria);
-        $response = app()->connection->execute($this->query, $this->args, 'fetch');
+        $response = app()->getConnection()->execute($this->query, $this->args, 'fetch');
         $this->resetQuery();
         return $response;
     }
@@ -164,7 +164,7 @@ class QueryBuilder implements Builder {
     }
 
     public function run(string $fetchMode = 'fetchAll'): array {
-        $response = app()->connection->execute($this->query, $this->args, $fetchMode);
+        $response = app()->getConnection()->execute($this->query, $this->args, $fetchMode);
         $this->resetQuery();
         $objects = [];
         foreach ($response as $obj) $objects[] = new $this->class((array)$obj);

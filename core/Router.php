@@ -16,19 +16,19 @@ class Router {
     protected const INDEX_METHOD = 'index';
 
     protected array $routes = [];
-    protected array $queryPattern;
+    protected array $path;
     protected string $method;
 
     public function __construct() {
-        $this->queryPattern = app()->regex->validateRoute();
+        $this->path = app()->getRequest()->getArguments();
     }
 
     protected function createController(): void {
-        if (empty($this->queryPattern)) app()->response->redirect(first(app()::$defaultRoute)->scalar);
-        $handler = ucfirst($this->queryPattern[0] ?? '');
+        if (empty($this->path)) app()->getResponse()->redirect(first(app()::$defaultRoute)->scalar);
+        $handler = ucfirst($this->path[0] ?? '');
         $controller = (new ControllerFactory(['handler' => $handler]))->create();
         app()->setParentController($controller);
-        $this->method = $this->queryPattern[1] ?? self::INDEX_METHOD;
+        $this->method = $this->path[1] ?? self::INDEX_METHOD;
         if (!method_exists($this->getApplicationParentController(), $this->method)) throw new NotFoundException();
     }
 

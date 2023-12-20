@@ -1,12 +1,12 @@
 <?php
 
-/*
+/**
 |----------------------------------------------------------------------------
 | Bootstrap application
 |----------------------------------------------------------------------------
 |
 | @author RE_WEB
-| @package none
+| @package core
 |
 */
 
@@ -25,19 +25,19 @@ class Application {
     public static string $ROOT_DIR;
     public string $layout = 'main';
     
-    public Router $router;
-    public Request $request;
-    public Response $response;
-    public Session $session;
-    public Cookie $cookie;
-    public Connection $connection;
-    public View $view;
-    public Env $env;
-    public Regex $regex;
-    public I18n $i18n;
-    public Config $config;
-    public Logger $logger;
-    public AssetsController $clientAssets;
+    protected Router $router;
+    protected Request $request;
+    protected Response $response;
+    protected Session $session;
+    protected Cookie $cookie;
+    protected Connection $connection;
+    protected View $view;
+    protected Env $env;
+    protected Regex $regex;
+    protected I18n $i18n;
+    protected Config $config;
+    protected Logger $logger;
+    protected AssetsController $clientAssets;
 
     protected ?Controller $parentController;
 
@@ -49,7 +49,7 @@ class Application {
         self::$ROOT_DIR = dirname(__DIR__);
 
         $this->config      = new Config();
-        $this->setupConnection();
+        $this->setConnection();
 
         if ($applicationIsMigrating) return;
         
@@ -64,22 +64,22 @@ class Application {
         $this->logger       = new Logger();
         $this->clientAssets = new AssetsController();
 
-        $this->checkSessionLanguage();
-        $this->getSessionUser();
+        $this->getLanguage();
+        $this->getUser();
         $this->i18n      = new I18n();
     }
 
-    protected function setupConnection() {
+    protected function setConnection() {
         $database = $this->config->get('database');
         $applicationConfig = ['pdo' => ['dsn' => $database->dsn, 'user' => $database->user, 'password' => $database->password]];
         $this->connection = Connection::getInstance($applicationConfig['pdo']);
     }
 
-    public function checkSessionLanguage() {
+    public function getLanguage() {
         if (!$this->session->get('language')) $this->session->set('language', self::$app->config->get('locale')->default);
     }
 
-    public function getSessionUser() {
+    public function getUser() {
         $session = (new SessionModel())::query()->select()->where(['Value' => $this->session->get('SessionID'), 'UserID' => $this->session->get('user')])->run();
         $validSession = !empty($session) && first($session)->exists();
         if (!in_array($this->request->getPath(), self::$defaultRoute) && !$validSession) $this->response->redirect(first(self::$defaultRoute)->scalar);
@@ -88,10 +88,9 @@ class Application {
     }
 
     public function classCheck(string $class): void {
-        if (!class_exists($class)) {
-            $this->addSystemEvent(['Invalid class was called: ' . $class]);
-            throw new \app\core\exceptions\NotFoundException('Invalid class: ' . $class);
-        }
+        if (class_exists($class)) return;
+        $this->addSystemEvent(['Invalid class was called: ' . $class]);
+        throw new \app\core\exceptions\NotFoundException('Invalid class: ' . $class);
     }
 
     public function getParentController(): ?Controller {
@@ -100,18 +99,6 @@ class Application {
 
     public function setParentController(Controller $controller): void {
         $this->parentController = $controller;
-    }
-
-    public static function isCLI(): bool {
-        return php_sapi_name() === 'cli';     
-    }
-
-    public static function isGuest(): bool {
-        return empty(self::$app->getSessionUser());
-    }
-
-    public static function isDevSite(): bool {
-        return self::$app->config->get('inDevelopment') === true;
     }
 
     public function addSystemEvent(array $data): void {
@@ -130,6 +117,68 @@ class Application {
             $this->logger->log($applicationError);
             $this->setParentController(new \app\controllers\ErrorController($applicationError));
         }
+    }
+
+    /**
+    |----------------------------------------------------------------------------
+    | Static methods
+    |----------------------------------------------------------------------------
+    |
+    */
+
+    public static function isCLI(): bool {
+        return php_sapi_name() === 'cli';     
+    }
+
+    public static function isGuest(): bool {
+        return empty(self::$app->getUser());
+    }
+
+    public static function isDevSite(): bool {
+        return self::$app->config->get('inDevelopment') === true;
+    }
+
+    /**
+    |----------------------------------------------------------------------------
+    | PPG
+    |----------------------------------------------------------------------------
+    |
+    */
+
+    public function getRegex(): Regex {
+        return $this->regex;
+    }
+
+    public function getClientAssets(): AssetsController {
+        return $this->clientAssets;
+    }
+
+    public function getConfig(): Config {
+        return $this->config;
+    }
+
+    public function getConnection(): Connection {
+        return $this->connection;
+    }
+
+    public function getSession(): Session {
+        return $this->session;
+    }
+
+    public function getResponse(): Response {
+        return $this->response;
+    }
+
+    public function getRequest(): Request {
+        return $this->request;
+    }
+
+    public function getI18n(): I18n {
+        return $this->i18n;
+    }
+
+    public function getView(): View {
+        return $this->view;
     }
     
 }

@@ -40,7 +40,7 @@ function validateCSRF(): bool {
 }
 
 function ths(string $input): string {
-  return hs(app()->i18n->translate($input));
+  return hs(app()->getI18n()->translate($input));
 }
 
 function first(array|object $iterable): object {
@@ -61,6 +61,6 @@ function loopAndEcho(array|object $iterable, bool $echoKey = false): void {
 }
 
 function applicationUser(): ?\app\models\UserModel {
-  $tryUser = app()->getSessionUser();
+  $tryUser = app()->getUser();
   return empty($tryUser) ? null : first($tryUser);
 }

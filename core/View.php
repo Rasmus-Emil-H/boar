@@ -8,15 +8,17 @@
 
 namespace app\core;
 
-use app\core\exceptions\NotFoundException;
+use \app\core\exceptions\NotFoundException;
 
 class View {
 
   protected string $partialsDir      = '/views/partials/';
   protected const TPL_FILE_EXTENSION = '.tpl.php';
 
+  public const INVALID_VIEW = 'Invalid view';
+
   public function renderView() {
-    require_once app()->controller->getView(); 
+    require_once app()->getParentController()->getView(); 
   }
 
   public function getTemplate(string $template): string {

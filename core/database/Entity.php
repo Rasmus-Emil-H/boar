@@ -92,7 +92,7 @@ abstract class Entity extends Relations {
             }
             if(empty($this->data)) throw new \app\core\exceptions\EmptyException();
             $this->getQueryBuilder()->create($this->data)->run();
-            $this->setKey(app()->connection->getLastID());
+            $this->setKey(app()->getConnection()->getLastID());
             return $this->key;
         } catch(\Exception $e) {
             app()->addSystemEvent([$e->getMessage()]);
@@ -152,7 +152,7 @@ abstract class Entity extends Relations {
                 'EntityType' => $this->getTableName(), 
                 'EntityID' => $this->key(), 
                 'Data' => json_encode($data), 
-                'IP' => app()->request->getIP()
+                'IP' => app()->getRequest()->getIP()
             ])
             ->save(addMetaData: false);
         return $this;

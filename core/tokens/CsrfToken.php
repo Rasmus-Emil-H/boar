@@ -9,8 +9,6 @@
 
 namespace app\core\tokens;
 
-use app\core\Application;
-
 class CsrfToken {
 
     private $formTokenLabel = 'eg-csrf-token-label';
@@ -24,9 +22,9 @@ class CsrfToken {
 
     public function __construct($excludeUrl = null) {
         if (!is_null($excludeUrl)) $this->excludeUrl = $excludeUrl;
-        $this->post = app()->request->getBody();
-        $this->server = &$_SERVER;
-        $this->session = app()->session;
+        $this->post = app()->getRequest()->getBody();
+        $this->server = app()->getRequest()->getCompleteRequestBody()->server;
+        $this->session = app()->getSession();
     }
 
     public function setToken(): void {
@@ -52,13 +50,11 @@ class CsrfToken {
     }
 
     private function hMacWithIp(string $token): string {
-        $hashHmac = hash_hmac($this->hashAlgo, app()->config->get('tokens')->csrf->hMacData, $token);
-        return $hashHmac;
+        return hash_hmac($this->hashAlgo, app()->getConfig()->get('tokens')->csrf->hMacData, $token);
     }
 
     private function getCurrentRequestUrl(): string {
-        $currentUrl = 'https://' . $this->server['HTTP_HOST'] . $this->server['REQUEST_URI'];
-        return $currentUrl;
+        return 'https://' . $this->server['HTTP_HOST'] . $this->server['REQUEST_URI'];
     }
 
     public function validate(): bool {

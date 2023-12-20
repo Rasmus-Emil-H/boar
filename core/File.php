@@ -8,14 +8,15 @@
 
 namespace app\core;
 
-use app\models\FileModel;
-use app\core\exceptions\NotFoundException;
+use \app\models\FileModel;
+use \app\core\exceptions\NotFoundException;
 
 class File extends FileModel {
 
-    public const INVALID_EXTENSION = 'Invalid file extension';
-    public const INVALID_FILE_NAME = 'Invalid file name';
-    public const TPL_FILE_EXTENSION    = '.tpl.php';
+    public const INVALID_EXTENSION  = 'Invalid file extension';
+    public const INVALID_FILE_NAME  = 'Invalid file name';
+    public const TPL_FILE_EXTENSION = '.tpl.php';
+    public const VIEWS_FOLDER       = '/views/';
 
     protected const FILE_NOT_FOUND     = 'File not found';
     protected const UPLOAD_FOLDER      = __DIR__.'/uploads/';
@@ -29,7 +30,7 @@ class File extends FileModel {
     }
     
     public function getCurrentlyUploadedFiles() {
-        return app()->request->clientRequest->files;
+        return app()->getRequest()->clientRequest->files;
     }
 
     public function moveFile(): bool {
@@ -43,7 +44,7 @@ class File extends FileModel {
     }
 
     public function validateFileName(): bool {
-        return app()->regex->match('/a-zA-Z0-9/', $this->fileName);
+        return app()->getRegex()->match('/a-zA-Z0-9/', $this->fileName);
     }
 
     public function unlinkFile(): bool {

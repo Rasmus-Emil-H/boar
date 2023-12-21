@@ -4,7 +4,7 @@
  * Header Controller
  * AUTHOR: RE_WEB
  * @package app\controllers
-*/  
+ */  
 
 namespace app\controllers;
 
@@ -13,13 +13,14 @@ use \app\core\Controller;
 class HeaderController extends Controller {
 
     public function index() {
-		$this->setView('partials/', 'header');
+		$this->setView('header', 'partials/');
 		$this->setChildren(['navbar' => 'DOMNode:navbar']);
+		$assets = app()->getClientAssets();
 		$this->setData([
 			'header' => $this->getView(), 
 			'appName' => app()->getConfig()->get('appName'),
-			'stylesheets' => app()->getClientAssets()->get('css'),
-			'metaTags' => app()->getClientAssets()->get('metaTags')
+			'stylesheets' => $assets->get('css'),
+			'metaTags' => $assets->get('metaTags')
 		]);
     }
 

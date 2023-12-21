@@ -61,8 +61,8 @@ class Controller {
         return $this->view ?? View::INVALID_VIEW;
     }
 
-    protected function setView(string $dir, string $view) {
-        $this->view = $this->getTemplatePath($dir, $view);
+    protected function setView(string $view, string $dir = '') {
+        $this->view = $this->getTemplatePath($view, $dir);
     }
 
     public function getChildren(): array {
@@ -74,15 +74,15 @@ class Controller {
     }
 
     public function getPartialTemplate(string $partial): string {
-        return $this->getTemplatePath('partials/', $partial);
+        return $this->getTemplatePath($partial, 'partials/');
     }
 
     public function getTemplate(string $partial): string {
-        return $this->getTemplatePath('', $partial);
+        return $this->getTemplatePath($partial, '');
     }
 
-    public function getTemplatePath(string $folder, string $template): string {
-        return app()::$ROOT_DIR .  File::VIEWS_FOLDER . $folder . $template . File::TPL_FILE_EXTENSION;
+    public function getTemplatePath(string $template, string $dir): string {
+        return app()::$ROOT_DIR .  File::VIEWS_FOLDER . $dir . $template . File::TPL_FILE_EXTENSION;
     }
 
     public function render(): void {

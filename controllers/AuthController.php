@@ -13,7 +13,7 @@ class AuthController extends Controller {
         if (app()->getRequest()->isPost()) new Authenticator(app()->getRequest()->getBody(), 'applicationLogin');
         
         $this->setLayout('auth');
-        $this->setView('', 'login');
+        $this->setView('login');
     }
 
     public function logout() {
@@ -23,7 +23,7 @@ class AuthController extends Controller {
     }
 
     public function signup() {
-        if (app()->getRequest()->isGet()) return $this->setView('', 'signup');
+        if (app()->getRequest()->isGet()) return $this->setView('signup');
         if (!validateCSRF()) app()->getResponse()->badToken();
         
         $body = app()->getRequest()->getBody();

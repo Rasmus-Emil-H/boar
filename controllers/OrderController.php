@@ -19,14 +19,14 @@ class OrderController extends Controller {
     }
 
     public function index() {
-        $this->setView('', 'order');
+        $this->setView('order');
         $this->setData([
             'orders' => applicationUser()->orders()->run()
         ]);
     }
 
     public function edit() {
-        $this->setView('', 'editOrder');
+        $this->setView('editOrder');
     }
 
 }

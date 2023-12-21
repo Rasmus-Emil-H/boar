@@ -13,11 +13,11 @@ class UserController extends Controller {
     }
 
     public function index() {
-        $this->setView('', 'users');
+        $this->setView('users');
     }
 
     public function profile() {
-        $this->setView('', 'profile');
+        $this->setView('profile');
     }
 
 }

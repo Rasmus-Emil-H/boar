@@ -13,7 +13,7 @@ use \app\core\Controller;
 class DOMNodeController extends Controller {
 
     public function navbar() {
-      $this->setView('partials/', 'navbar');
+      $this->setView('navbar', 'partials/');
       $this->setData([
         'navbar' => $this->getView(), 
         'navigationItems' => [

@@ -12,34 +12,35 @@
 
 namespace app\core;
 
-use \app\core\database\Connection;
+use \app\core\src\database\Connection;
 use \app\config\Config;
 use \app\controllers\AssetsController;
 use \app\utilities\Logger;
 use \app\models\SystemEventModel;
 use \app\models\SessionModel;
 use \app\models\UserModel;
+use \app\core\src;
 
 class Application {
 
     public static string $ROOT_DIR;
     public string $layout = 'main';
     
-    protected Router $router;
-    protected Request $request;
-    protected Response $response;
-    protected Session $session;
-    protected Cookie $cookie;
+    protected src\Router $router;
+    protected src\Request $request;
+    protected src\Response $response;
+    protected src\Session $session;
+    protected src\Cookie $cookie;
     protected Connection $connection;
-    protected View $view;
-    protected Env $env;
-    protected Regex $regex;
-    protected I18n $i18n;
+    protected src\View $view;
+    protected src\Env $env;
+    protected src\Regex $regex;
+    protected src\I18n $i18n;
     protected Config $config;
     protected Logger $logger;
     protected AssetsController $clientAssets;
 
-    protected ?Controller $parentController;
+    protected ?src\Controller $parentController;
 
     public static self $app;
     public static $defaultRoute = ['/auth/login', '/auth/signup'];
@@ -53,20 +54,20 @@ class Application {
 
         if ($applicationIsMigrating) return;
         
-        $this->request      = new Request();
-        $this->response     = new Response();
-        $this->regex        = new Regex($this->request->getPath());
-        $this->router       = new Router();
-        $this->session      = new Session();
-        $this->cookie       = new Cookie();
-        $this->view         = new View();
-        $this->env          = new Env();
+        $this->request      = new src\Request();
+        $this->response     = new src\Response();
+        $this->regex        = new src\Regex($this->request->getPath());
+        $this->router       = new src\Router();
+        $this->session      = new src\Session();
+        $this->cookie       = new src\Cookie();
+        $this->view         = new src\View();
+        $this->env          = new src\Env();
         $this->logger       = new Logger();
         $this->clientAssets = new AssetsController();
 
         $this->getLanguage();
         $this->getUser();
-        $this->i18n         = new I18n();
+        $this->i18n         = new src\I18n();
     }
 
     protected function setConnection() {
@@ -90,14 +91,14 @@ class Application {
     public function classCheck(string $class): void {
         if (class_exists($class)) return;
         $this->addSystemEvent(['Invalid class was called: ' . $class]);
-        throw new \app\core\exceptions\NotFoundException('Invalid class: ' . $class);
+        throw new \app\core\src\exceptions\NotFoundException('Invalid class: ' . $class);
     }
 
-    public function getParentController(): ?Controller {
+    public function getParentController(): ?src\Controller {
         return $this->parentController;
     }
 
-    public function setParentController(Controller $controller): void {
+    public function setParentController(src\Controller $controller): void {
         $this->parentController = $controller;
     }
 
@@ -145,7 +146,7 @@ class Application {
     |
     */
 
-    public function getRegex(): Regex {
+    public function getRegex(): src\Regex {
         return $this->regex;
     }
 
@@ -161,23 +162,23 @@ class Application {
         return $this->connection;
     }
 
-    public function getSession(): Session {
+    public function getSession(): src\Session {
         return $this->session;
     }
 
-    public function getResponse(): Response {
+    public function getResponse(): src\Response {
         return $this->response;
     }
 
-    public function getRequest(): Request {
+    public function getRequest(): src\Request {
         return $this->request;
     }
 
-    public function getI18n(): I18n {
+    public function getI18n(): src\I18n {
         return $this->i18n;
     }
 
-    public function getView(): View {
+    public function getView(): src\View {
         return $this->view;
     }
     

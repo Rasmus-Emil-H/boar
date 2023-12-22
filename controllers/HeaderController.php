@@ -17,7 +17,6 @@ class HeaderController extends Controller {
 		$this->setChildren(['navbar' => 'DOMNode:navbar']);
 		$assets = app()->getClientAssets();
 		$this->setData([
-			'header' => $this->getView(), 
 			'appName' => app()->getConfig()->get('appName'),
 			'stylesheets' => $assets->get('css'),
 			'metaTags' => $assets->get('metaTags')

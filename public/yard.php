@@ -17,13 +17,13 @@ function displayDD($input, $title = 'Debugging'): void {
   echo '<h2 class="text-center">End of ' . $title . '</h2></pre>';
 }
 
-function dd(mixed $input): void {
-  displayDD($input);
+function dd(mixed $input, $title = ''): void {
+  displayDD($input, $title);
   exit;
 }
 
-function d(mixed $input): void {
-  displayDD($input);
+function d(mixed $input, $title = ''): void {
+  displayDD($input, $title);
   echo '<hr />';
 }
 

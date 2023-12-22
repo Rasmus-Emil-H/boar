@@ -88,7 +88,7 @@ class Application {
     public function classCheck(string $class): void {
         if (class_exists($class)) return;
         $this->addSystemEvent(['Invalid class was called: ' . $class]);
-        throw new \app\core\src\exceptions\NotFoundException('Invalid class: ' . $class);
+        $this->response->redirect(first(app()::$defaultRoute)->scalar);
     }
 
     public function getParentController(): ?src\Controller {

@@ -8,7 +8,7 @@
 
 namespace app\models;
 
-use \app\core\database\Entity;
+use \app\core\src\database\Entity;
 
 class SessionModel extends Entity {
 

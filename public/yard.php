@@ -28,7 +28,7 @@ function d(mixed $input): void {
 }
 
 function hs($input): string {
-  return \app\core\miscellaneous\Html::escape($input);
+  return \app\core\src\miscellaneous\Html::escape($input);
 }
 
 function app(): object {
@@ -36,7 +36,7 @@ function app(): object {
 }
 
 function validateCSRF(): bool {
-  return (new \app\core\tokens\CsrfToken())->validate();
+  return (new \app\core\src\tokens\CsrfToken())->validate();
 }
 
 function ths(string $input): string {

@@ -17,7 +17,7 @@ class Authenticator {
 
     public function __construct(Object $data, string $method) {
         $this->data = $data;
-        if (!method_exists($this, $method)) throw new \app\core\exceptions\NotFoundException();
+        if (!method_exists($this, $method)) throw new \app\core\src\exceptions\NotFoundException();
         $this->$method();
     }
 

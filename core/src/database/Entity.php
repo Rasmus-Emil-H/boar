@@ -8,9 +8,9 @@
 
 namespace app\core\src\database;
 
-use \app\core\database\relations\Relations;
-use \app\core\database\QueryBuilder;
-use \app\core\database\table\Table;
+use \app\core\src\database\relations\Relations;
+use \app\core\src\database\QueryBuilder;
+use \app\core\src\database\table\Table;
 
 abstract class Entity extends Relations {
 
@@ -25,11 +25,11 @@ abstract class Entity extends Relations {
     }
 
     public function __call($name, $arguments) {
-        throw new \app\core\exceptions\NotFoundException("Invalid non static method method [{$name}]");
+        throw new \app\core\src\exceptions\NotFoundException("Invalid non static method method [{$name}]");
     }
 
     public static function __callStatic($name, $arguments) {
-        throw new \app\core\exceptions\NotFoundException("Invalid static method [{$name}]");
+        throw new \app\core\src\exceptions\NotFoundException("Invalid static method [{$name}]");
     }
 
     public function __get(string $key) {
@@ -90,13 +90,13 @@ abstract class Entity extends Relations {
                 $this->getQueryBuilder()->patch($this->data, $this->getKeyField(), $this->key())->run('fetch');
                 return $this->data;
             }
-            if(empty($this->data)) throw new \app\core\exceptions\EmptyException();
+            if(empty($this->data)) throw new \app\core\src\exceptions\EmptyException();
             $this->getQueryBuilder()->create($this->data)->run();
             $this->setKey(app()->getConnection()->getLastID());
             return $this->key;
         } catch(\Exception $e) {
             app()->addSystemEvent([$e->getMessage()]);
-            throw new \app\core\exceptions\NotFoundException($e->getMessage());
+            throw new \app\core\src\exceptions\NotFoundException($e->getMessage());
         }
     }
 

@@ -64,8 +64,8 @@ class Request {
 
     public function getBody(): object {
         $body = [];        
-        $src = $this->method() === 'get' ? INPUT_GET : INPUT_POST;
-        foreach ($_REQUEST as $key => $value) $body[$key] = filter_input($src, $key, FILTER_SANITIZE_SPECIAL_CHARS);
+        $type = $this->method() === 'get' ? INPUT_GET : INPUT_POST;
+        foreach ($_REQUEST as $key => $value) $body[$key] = filter_input($type, $key, FILTER_SANITIZE_SPECIAL_CHARS);
         return (object)$body;
     }
 

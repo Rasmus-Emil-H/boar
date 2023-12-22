@@ -7,7 +7,7 @@ use \app\core\src\Controller;
 class ErrorController extends Controller {
 
     public function __construct(\Throwable $e) {
-        app()->getResponse()->setStatusCode($e->getCode());
+        $this->response->setStatusCode($e->getCode());
         $this->setView('error');
         $this->setData(['exception' => $e]);
         extract($this->getData());

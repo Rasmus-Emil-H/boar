@@ -39,6 +39,10 @@ function validateCSRF(): bool {
   return (new \app\core\src\tokens\CsrfToken())->validate();
 }
 
+function nukeSession() {
+  foreach ($_SESSION as $key => &$value) $value = null;
+}
+
 function ths(string $input): string {
   return hs(app()->getI18n()->translate($input));
 }

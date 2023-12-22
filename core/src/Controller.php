@@ -20,9 +20,16 @@ class Controller {
     protected array $children = [];
 
     protected string $view = '';
-
     public string $layout = 'main';
     public string $action = '';
+    
+    public function __construct(
+        protected Request $request, 
+        protected Response $response, 
+        protected Session $session
+    ) {
+
+    }
 
     public function setData($data): void {
         $merged = array_merge($this->getData(), $data);

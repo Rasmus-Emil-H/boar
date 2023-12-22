@@ -24,7 +24,7 @@ class ProductController extends Controller {
     }
 
     public function edit() {
-        if (app()->getRequest()->isPost()) dd(132);
+        if ($this->request->isPost()) dd(132);
         $this->isViewingValidEntity(ProductModel::class);
         $this->setView('editProduct');
     }

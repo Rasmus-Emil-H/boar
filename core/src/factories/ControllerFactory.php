@@ -10,7 +10,7 @@ class ControllerFactory extends AbstractFactory {
         $controllerName = (getIndex($this->arguments, 'handler')->scalar);
         $controller = '\\app\controllers\\' . $controllerName . self::CONTROLLER;
         app()->classCheck($controller);
-        return new $controller();
+        return new $controller(app()->getRequest(), app()->getResponse(), app()->getSession());
     }
 
 }

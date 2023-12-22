@@ -9,25 +9,25 @@ use \app\models\Authenticator;
 class AuthController extends Controller {
 
     public function login() {
-        if (app()->getSession()->get('user')) app()->getResponse()->redirect('/home');
-        if (app()->getRequest()->isPost()) new Authenticator(app()->getRequest()->getBody(), 'applicationLogin');
+        if ($this->session->get('user')) $this->response->redirect('/home');
+        if ($this->request->isPost()) new Authenticator($this->request->getBody(), 'applicationLogin');
         $this->setLayout('auth');
         $this->setView('login');
     }
 
     public function logout() {
         (new UserModel())->logout();
-        app()->getSession()->unset(['user', 'SessionID']);
-		app()->getResponse()->redirect('/');
+        $this->session->unset(['user', 'SessionID']);
+		$this->response->redirect('/');
     }
 
     public function signup() {
-        if (app()->getRequest()->isGet()) return $this->setView('signup');
-        if (!validateCSRF()) app()->getResponse()->badToken();
+        if ($this->request->isGet()) return $this->setView('signup');
+        if (!validateCSRF()) $this->response->badToken();
         
-        $body = app()->getRequest()->getBody();
+        $body = $this->request->getBody();
         $emailExists = UserModel::query()->select()->where(['Email' => $body->email])->run();
-        if ($emailExists) app()->getResponse()->dataConflict();
+        if ($emailExists) $this->response->dataConflict();
 
         $userID = (new UserModel())
             ->set(['Email' => $body->email, 'Name' => $body->name, 'Password' => password_hash($body->password, PASSWORD_DEFAULT)])
@@ -36,8 +36,8 @@ class AuthController extends Controller {
         $user = new UserModel($userID);
         $user->addMetaData(['event' => 'user signed up'])->setRole('User');
 
-        app()->getSession()->set('userID', $userID);
-        app()->getResponse()->redirect('/home');
+        $this->session->set('userID', $userID);
+        $this->response->redirect('/home');
     }
 
 }

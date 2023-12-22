@@ -8,8 +8,8 @@
 
 namespace app\controllers;
 
-use \app\core\Controller;
-use \app\core\middlewares\AuthMiddleware;
+use \app\core\src\Controller;
+use \app\core\src\middlewares\AuthMiddleware;
 
 
 class HomeController extends Controller {

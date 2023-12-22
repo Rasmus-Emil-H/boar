@@ -1,2 +1,1 @@
-#  B0AR MVC 🐗
-### Mvc like PHP application
+# B0AR MVC 🐗

@@ -2,7 +2,7 @@
 
 namespace app\controllers;
 
-use \app\core\Controller;
+use \app\core\src\Controller;
 use \app\models\UserModel;
 use \app\models\Authenticator;
 
@@ -11,7 +11,6 @@ class AuthController extends Controller {
     public function login() {
         if (app()->getSession()->get('user')) app()->getResponse()->redirect('/home');
         if (app()->getRequest()->isPost()) new Authenticator(app()->getRequest()->getBody(), 'applicationLogin');
-        
         $this->setLayout('auth');
         $this->setView('login');
     }
@@ -35,9 +34,7 @@ class AuthController extends Controller {
             ->save();
 
         $user = new UserModel($userID);
-        $user
-            ->addMetaData(['event' => 'user signed up'])
-            ->setRole('User');
+        $user->addMetaData(['event' => 'user signed up'])->setRole('User');
 
         app()->getSession()->set('userID', $userID);
         app()->getResponse()->redirect('/home');

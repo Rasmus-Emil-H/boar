@@ -13,9 +13,7 @@
 namespace app\core;
 
 use \app\core\src\database\Connection;
-use \app\config\Config;
 use \app\controllers\AssetsController;
-use \app\utilities\Logger;
 use \app\models\SystemEventModel;
 use \app\models\SessionModel;
 use \app\models\UserModel;
@@ -25,7 +23,7 @@ class Application {
 
     public static string $ROOT_DIR;
     public string $layout = 'main';
-    
+
     protected src\Router $router;
     protected src\Request $request;
     protected src\Response $response;
@@ -36,10 +34,9 @@ class Application {
     protected src\Env $env;
     protected src\Regex $regex;
     protected src\I18n $i18n;
-    protected Config $config;
-    protected Logger $logger;
+    protected src\config\Config $config;
+    protected src\utilities\Logger $logger;
     protected AssetsController $clientAssets;
-
     protected ?src\Controller $parentController;
 
     public static self $app;
@@ -49,7 +46,7 @@ class Application {
         self::$app = $this;
         self::$ROOT_DIR = dirname(__DIR__);
 
-        $this->config      = new Config();
+        $this->config      = new src\config\Config();
         $this->setConnection();
 
         if ($applicationIsMigrating) return;
@@ -62,7 +59,7 @@ class Application {
         $this->cookie       = new src\Cookie();
         $this->view         = new src\View();
         $this->env          = new src\Env();
-        $this->logger       = new Logger();
+        $this->logger       = new src\utilities\Logger();
         $this->clientAssets = new AssetsController();
 
         $this->getLanguage();
@@ -111,7 +108,7 @@ class Application {
         if ($exit) exit();
     }
 
-    public function run(): void {
+    public function bootstrap(): void {
         try {
             $this->router->resolve();
         } catch (\Throwable $applicationError) {
@@ -154,7 +151,7 @@ class Application {
         return $this->clientAssets;
     }
 
-    public function getConfig(): Config {
+    public function getConfig(): src\config\Config {
         return $this->config;
     }
 

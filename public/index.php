@@ -13,7 +13,7 @@ require_once 'yard.php';
 
 try {
     $app = new Application(applicationIsMigrating: false);
-    $app->run();
+    $app->bootstrap();
 } catch (\Throwable $e) {
     dd($e->getMessage());
 }

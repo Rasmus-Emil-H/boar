@@ -11,11 +11,11 @@ namespace app\core\src;
 class Request {
 
     private array $args = [];
-    public  object $clientRequest;
+    public object $clientRequest;
 
     public function __construct() {
-        $this->setArguments();
         $this->clientRequest = $this->getCompleteRequestBody();
+        $this->setArguments();
     }
 
     public function getPath(): string {
@@ -33,8 +33,8 @@ class Request {
         return $this->args;
     }
     
-    public function getArgument(int $index): mixed {
-        return $this->getArguments()[$index] ?? throw new \app\core\exceptions\NotFoundException('Index was not found');
+    public function getArgument(int|string $index): mixed {
+        return getIndex($this->args, $index);
     }
     
     public function getReferer(): string {
@@ -44,22 +44,9 @@ class Request {
     public function getHost(): string {
         return $this->clientRequest->server['HTTP_HOST'];
     }
-    
-    public function getQueryParams(): array {
-        return $_GET;
-    }
-    
-    public function getReplacedHost(): string {
-        return str_replace($this->getHost(), '', $this->getReferer());
-    }
-    
-    public function getAdditionalParams(array $indexes): array {
-        $indexes = [];
-        return $indexes;
-    }
 
-    public function method(): string { 
-        return $this->clientRequest->server['REQUEST_METHOD'] ?? 'get';
+    public function method(): string {
+        return strtolower($this->clientRequest->server['REQUEST_METHOD'] ?? 'get');
     }
 
     public function isGet(): bool {
@@ -71,8 +58,7 @@ class Request {
     }
 
     public function getCompleteRequestBody() {
-        $obj = ["files" => $_FILES, "server" => $_SERVER, "cookie" => $_COOKIE, 'path' => $this->getPath()];
-        $obj['body'] = $this->getBody();
+        $obj = ["files" => $_FILES, "server" => $_SERVER, "cookie" => $_COOKIE, 'body' => $this->getBody()];
         return (object)$obj;
     }
 

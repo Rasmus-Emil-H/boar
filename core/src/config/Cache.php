@@ -3,10 +3,10 @@
 /**
  * Bootstrap Cache 
  * AUTHOR: RE_WEB
- * @package app\config
+ * @package app\core\src\config
  */
 
-namespace app\config;
+namespace app\core\src\config;
 
 class Cache {
     

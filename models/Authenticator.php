@@ -4,12 +4,13 @@
  * Authentication mechanism for whatever you need
  * Use this object to authenticate with the application, external api, ect
  * AUTHOR: RE_WEB
- * @package app\models\Authenticator
+ * @package app\models
  */
 
 namespace app\models;
 
-use \app\core\Curl;
+use \app\models\UserModel;
+use \app\core\src\Curl;
 
 class Authenticator {
 
@@ -26,13 +27,13 @@ class Authenticator {
      * @return void
      */
 
-    public function applicationLogin() {
+    public function applicationLogin(): ?bool {
         if (!validateCSRF()) return false;
         $user = UserModel::query()->select()->where(['email' => $this->data->email])->run();
         if (empty($user)) return false;
         $user = first($user);
         $passwordVerify = password_verify($this->data->password, $user->get('Password'));
-        if (!$passwordVerify) return;
+        if (!$passwordVerify) return null;
         $this->authenticateUser($user);
     }
 

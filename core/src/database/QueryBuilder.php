@@ -2,8 +2,8 @@
 
 namespace app\core\src\database;
 
-use \app\utilities\Builder;
-use \app\utilities\Parser;
+use \app\core\src\utilities\Builder;
+use \app\core\src\utilities\Parser;
 
 class QueryBuilder implements Builder {
 

@@ -3,12 +3,12 @@
 /**
  * Bootstrap relations between entities 
  * AUTHOR: RE_WEB
- * @package app\core\relations
+ * @package app\core\src\database\relations
  */
 
 namespace app\core\src\database\relations;
 
-use app\core\database\QueryBuilder;
+use \app\core\src\database\QueryBuilder;
 
 class Relations {
 
@@ -17,33 +17,14 @@ class Relations {
         return new $class();
     }
 
-    /**
-     * Define a one-to-one relationship.
-     * @param  string  $related
-     * @param  string  $foreignKey
-     * @return \core\database\relations\hasOne
-     */
-
     public function hasOne(string $related, string $foreignKey) {
         $instance = $this->getInstanceOf($related);
     }
-
-    /**
-     * Define a has-many relationship.
-     * @param  string  $related
-     * @param  string  $foreignKey
-     * @return \core\database\relations\hasMany
-     */
     
     public function hasMany(string $related): QueryBuilder {
         $instance = $this->getInstanceOf($related);
         return $instance::query()->select()->where([$this->getKeyField() => $this->key()]);
     }
-
-    /*
-     * Define a belongs-to relationship.
-     * return \[Entity]
-     */
     
     public function belongsTo(string $related) {
         $instance = $this->getInstanceOf($related);

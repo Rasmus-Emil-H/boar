@@ -1,6 +1,6 @@
 <?php
 
-namespace app\utilities;
+namespace app\core\src\utilities;
 
 interface Builder {
     

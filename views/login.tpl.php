@@ -11,7 +11,7 @@
     <div class="form-group w-100 mb-3">
       <input type="password" required name="password" class="form-control" placeholder="Password" aria-label="Username" aria-describedby="basic-addon1">
     </div>
-    <?= (new \app\core\tokens\CsrfToken())->insertHiddenToken(); ?>
+    <?= (new \app\core\src\tokens\CsrfToken())->insertHiddenToken(); ?>
     <button type="submit" class="btn btn-primary btn-lg mt-2 w-100"><?= ths('Log in'); ?></button>
     <a href="signup" class="btn btn-primary btn-lg mt-2 w-100"><?= ths('Create account'); ?></a>
   </form>

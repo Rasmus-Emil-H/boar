@@ -8,8 +8,8 @@
 
 namespace app\core\src;
 
-use src\middlewares\Middleware;
-use src\factories\ControllerFactory;
+use \app\core\src\middlewares\Middleware;
+use \app\core\src\factories\ControllerFactory;
 
 class Controller {
 
@@ -97,7 +97,7 @@ class Controller {
         $request = app()->getRequest()->getArguments();
         $entityID = getIndex($request, 2)->scalar;
         $entity = new $entity($entityID);
-        if ($entityID === self::INVALID || !$entity->exists()) throw new \app\core\exceptions\NotFoundException(self::INVALID);
+        if ($entityID === self::INVALID || !$entity->exists()) throw new \app\core\src\exceptions\NotFoundException(self::INVALID);
     }
 
 }

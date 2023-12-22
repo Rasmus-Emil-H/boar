@@ -9,7 +9,7 @@
 namespace app\core\src;
 
 use \app\models\FileModel;
-use \app\core\exceptions\NotFoundException;
+use \app\core\src\exceptions\NotFoundException;
 
 class File extends FileModel {
 

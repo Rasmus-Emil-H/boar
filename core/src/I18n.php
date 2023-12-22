@@ -11,7 +11,7 @@ namespace app\core\src;
 use \app\core\src\exceptions\NotFoundException;
 use \app\models\LanguageModel;
 use \app\models\TranslationModel;
-use \app\core\miscellaneous\Hash;
+use \app\core\src\miscellaneous\Hash;
 
 class I18n {
 

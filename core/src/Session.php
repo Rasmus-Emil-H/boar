@@ -55,7 +55,7 @@ class Session {
     }
 
     public function nullAll(): void {
-        foreach ($this->getAll() as &$value) $value = null;
+        foreach ($this->getAll() as $key => &$value) $value = null;
     }
 
     public function __destruct() {

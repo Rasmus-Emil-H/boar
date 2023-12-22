@@ -43,7 +43,7 @@ class Router {
 
     protected function runController(): void {
         $controller = $this->getApplicationParentController();
-        $controller->execChildData();
+        $controller->setChildData();
         $controller->{$this->method}();
     }
 

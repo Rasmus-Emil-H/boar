@@ -53,7 +53,7 @@ class Controller {
             $cController = (new ControllerFactory(['handler' => $controller]))->create();
             $cController->{$method}();
             app()->getParentController()->setData($cController->getData());
-            $cController->execChildData();
+            $cController->setChildData();
         }
     }
 
@@ -63,14 +63,6 @@ class Controller {
 
     protected function setView(string $view, string $dir = '') {
         $this->view = $this->getTemplatePath($view, $dir);
-    }
-
-    public function getChildren(): array {
-        return $this->children;
-    }
-
-    public function execChildData() {
-        $this->setChildData();
     }
 
     public function getPartialTemplate(string $partial): string {
@@ -91,6 +83,10 @@ class Controller {
 
     public function setLayout(string $layout): void {
         $this->layout = $layout;
+    }
+
+    public function getChildren(): array {
+        return $this->children;
     }
 
     public function registerMiddleware(Middleware $middleware): void {

@@ -14,8 +14,7 @@ use app\core\src\factories\ControllerFactory;
 class Router {
 
     protected const INDEX_METHOD = 'index';
-
-    protected array $routes = [];
+    
     protected array $path;
     protected string $method;
     protected bool $rootURL;

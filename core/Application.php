@@ -44,12 +44,12 @@ class Application {
         self::$app = $this;
         self::$ROOT_DIR = dirname(__DIR__);
 
-        $this->config      = new src\config\Config();
+        $this->request      = new src\Request();
+        $this->config       = new src\config\Config();
         $this->setConnection();
 
         if ($applicationIsMigrating) return;
         
-        $this->request      = new src\Request();
         $this->response     = new src\Response();
         $this->router       = new src\Router();
         $this->session      = new src\Session();
@@ -96,7 +96,7 @@ class Application {
     }
 
     public function addSystemEvent(array $data): void {
-        (new SystemEventModel())->set(['Data' => json_encode($data)])->save();
+        (new SystemEventModel(['Data' => json_encode($data)]))->save(addMetaData: false);
     }
 
     public function log(string $message, bool $exit = false): void {

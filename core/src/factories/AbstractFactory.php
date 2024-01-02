@@ -11,9 +11,7 @@ abstract class AbstractFactory {
     ) {
         
     }
-    public function create() {
-        
-    }
+    abstract public function create();
 
     public function getHandler(): string {
         return CoreFunctions::getIndex($this->arguments, 'handler')->scalar;

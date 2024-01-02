@@ -10,6 +10,8 @@ use \app\core\src\miscellaneous\CoreFunctions;
 class Migration {
     
     protected const MIGRATION_DIR = '/migrations/';
+    protected const MIGRATION_DATE_LENGTH = 10;
+    protected const MIGRATION_DATE_OFFSET = -19;
 
     public function getAppliedMigrations(): array {
         return MigrationModel::all();
@@ -35,8 +37,8 @@ class Migration {
             $migrationFile = $migrationsFolder . $migration;
             $actualMigration = str_replace('.php', '', $migration);
             if (!is_file($migrationFile) || in_array($actualMigration, $mappedMigrations)) continue;
-            $date = preg_replace('/\_/', '-', substr(substr($migration, -19), 0, 10));
-            if (!strtotime($date)) CoreFunctions::app()->log("Invalid migration name ($migration), must be formatted: migration_yyyy_mm_dd_xxxx", true);
+            $date = preg_replace('/\_/', '-', substr(substr($migration, self::MIGRATION_DATE_OFFSET), 0, self::MIGRATION_DATE_LENGTH));
+            if (!strtotime($date)) CoreFunctions::app()->log('Invalid migration name ' . ($migration) . ', must be formatted: migration_yyyy_mm_dd_xxxx', exit: true);
             isset($missingMigrations[strtotime($date)]) ? $missingMigrations[strtotime($date)+1] = $migration : $missingMigrations[strtotime($date)] = $migration;
         }
         ksort($missingMigrations);
@@ -49,9 +51,9 @@ class Migration {
             require_once $app::$ROOT_DIR . self::MIGRATION_DIR . $migration;
             $handler = pathinfo($migration, PATHINFO_FILENAME);
             if (strlen($handler) > Connection::MAX_COLUMN_LENGTH) $app->log("Classname ($handler) is too long!", exit: true);
-            $app->classCheck($className);
+            $app->classCheck($handler);
             (new MigrationFactory(['handler' => $handler]))->create()->up();
-            (new MigrationModel())->set(['Migration' => $handler])->save();
+            (new MigrationModel())->set(['Migration' => $handler])->save(addMetaData: false);
             $app->log('Successfully applied new migration: ' . $handler);
         }
 

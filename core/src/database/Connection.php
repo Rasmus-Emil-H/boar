@@ -56,8 +56,7 @@ class Connection {
             return $result;
         } catch (\PDOException $e) {
             $errorQuery = $query . $e;
-            CoreFunctions::app()->addSystemEvent(['Query failed: ' . $query . ' With the following arguments: ' . implode(',', $args)]);
-            throw new \PDOException('ERROR WITH THE FOLLOWING QUERY: ' . $errorQuery);
+            exit($errorQuery);
         }
     }
 

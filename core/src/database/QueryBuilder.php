@@ -4,6 +4,7 @@ namespace app\core\src\database;
 
 use \app\core\src\utilities\Builder;
 use \app\core\src\utilities\Parser;
+use \app\core\src\miscellaneous\CoreFunctions;
 
 class QueryBuilder implements Builder {
 
@@ -26,7 +27,10 @@ class QueryBuilder implements Builder {
     private array $comparisonOperators = ['=', '<>', '!=', '>', '<', '>=', '<='];
     
 
-    public function __construct(public string $class, public string $table, public string $keyID) {
+    public function __construct(
+        public string $class, 
+        public string $table, 
+        public string $keyID) {
         $this->resetQuery();
     }
 
@@ -153,18 +157,18 @@ class QueryBuilder implements Builder {
 
     public function fetchRow(?array $criteria = null) {
         $this->select()->where($criteria);
-        $response = app()->getConnection()->execute($this->query, $this->args, 'fetch');
+        $response = CoreFunctions::app()->getConnection()->execute($this->query, $this->args, 'fetch');
         $this->resetQuery();
         return $response;
     }
 
     public function debugQuery() {
-        d("Currently debugging query: " . $this->query);
-        dd($this->args);
+        CoreFunctions::d("Currently debugging query: " . $this->query);
+        CoreFunctions::dd($this->args);
     }
 
     public function run(string $fetchMode = 'fetchAll'): array {
-        $response = app()->getConnection()->execute($this->query, $this->args, $fetchMode);
+        $response = CoreFunctions::app()->getConnection()->execute($this->query, $this->args, $fetchMode);
         $this->resetQuery();
         $objects = [];
         foreach ($response as $obj) $objects[] = new $this->class((array)$obj);

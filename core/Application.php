@@ -18,10 +18,9 @@ use \app\models\SystemEventModel;
 use \app\models\SessionModel;
 use \app\models\UserModel;
 use \app\core\src;
+use \app\core\src\miscellaneous\CoreFunctions;
 
 class Application {
-
-    public static string $ROOT_DIR;
     public string $layout = 'main';
 
     protected src\Router $router;
@@ -31,14 +30,13 @@ class Application {
     protected src\Cookie $cookie;
     protected Connection $connection;
     protected src\View $view;
-    protected src\Env $env;
-    protected src\Regex $regex;
     protected src\I18n $i18n;
     protected src\config\Config $config;
     protected src\utilities\Logger $logger;
     protected AssetsController $clientAssets;
     protected ?src\Controller $parentController;
 
+    public static string $ROOT_DIR;
     public static self $app;
     public static $defaultRoute = ['/auth/login', '/auth/signup'];
 
@@ -53,12 +51,10 @@ class Application {
         
         $this->request      = new src\Request();
         $this->response     = new src\Response();
-        $this->regex        = new src\Regex($this->request->getPath());
         $this->router       = new src\Router();
         $this->session      = new src\Session();
         $this->cookie       = new src\Cookie();
         $this->view         = new src\View();
-        $this->env          = new src\Env();
         $this->logger       = new src\utilities\Logger();
         $this->clientAssets = new AssetsController();
 
@@ -79,8 +75,8 @@ class Application {
 
     public function getUser() {
         $session = (new SessionModel())::query()->select()->where(['Value' => $this->session->get('SessionID'), 'UserID' => $this->session->get('user')])->run();
-        $validSession = !empty($session) && first($session)->exists();
-        if (!in_array($this->request->getPath(), self::$defaultRoute) && !$validSession) $this->response->redirect(first(self::$defaultRoute)->scalar);
+        $validSession = !empty($session) && src\miscellaneous\CoreFunctions::first($session)->exists();
+        if (!in_array($this->request->getPath(), self::$defaultRoute) && !$validSession) $this->response->redirect(src\miscellaneous\CoreFunctions::first(self::$defaultRoute)->scalar);
         $user = new UserModel();
         return $user::query()->select()->where([$user->getKeyField() => $this->session->get('user')])->run();
     }
@@ -88,7 +84,7 @@ class Application {
     public function classCheck(string $class): void {
         if (class_exists($class)) return;
         $this->addSystemEvent(['Invalid class was called: ' . $class]);
-        $this->response->redirect(first(app()::$defaultRoute)->scalar);
+        CoreFunctions::dd('Invalid class: ' . $class);
     }
 
     public function getParentController(): ?src\Controller {
@@ -138,14 +134,10 @@ class Application {
 
     /**
     |----------------------------------------------------------------------------
-    | PPG
+    | Protected property getters
     |----------------------------------------------------------------------------
     |
     */
-
-    public function getRegex(): src\Regex {
-        return $this->regex;
-    }
 
     public function getClientAssets(): AssetsController {
         return $this->clientAssets;

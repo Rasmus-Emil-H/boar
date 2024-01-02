@@ -10,6 +10,7 @@ namespace app\core\src;
 
 use \app\models\FileModel;
 use \app\core\src\exceptions\NotFoundException;
+use \app\core\src\miscellaneous\CoreFunctions;
 
 class File extends FileModel {
 
@@ -30,7 +31,7 @@ class File extends FileModel {
     }
     
     public function getCurrentlyUploadedFiles() {
-        return app()->getRequest()->clientRequest->files;
+        return CoreFunctions::app()->getRequest()->clientRequest->files;
     }
 
     public function moveFile(): bool {
@@ -44,7 +45,7 @@ class File extends FileModel {
     }
 
     public function validateFileName(): bool {
-        return app()->getRegex()->match('/a-zA-Z0-9/', $this->fileName);
+        return preg_match('/a-zA-Z0-9/', $this->fileName);
     }
 
     public function unlinkFile(): bool {
@@ -60,7 +61,7 @@ class File extends FileModel {
     }
 
     public function requireApplicationFile(string $folder, string $file, array $params = []): void {
-      $file = app()::$ROOT_DIR . $folder . $file . self::TPL_FILE_EXTENSION;
+      $file = CoreFunctions::app()::$ROOT_DIR . $folder . $file . self::TPL_FILE_EXTENSION;
       $this->exists();
       require_once $file;
     }

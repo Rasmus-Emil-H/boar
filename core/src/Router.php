@@ -10,6 +10,7 @@ namespace app\core\src;
 
 use app\core\src\exceptions\NotFoundException;
 use app\core\src\factories\ControllerFactory;
+use \app\core\src\miscellaneous\CoreFunctions;
 
 class Router {
 
@@ -20,16 +21,17 @@ class Router {
     protected bool $rootURL;
 
     public function __construct() {
-        $request = app()->getRequest();
+        $request = CoreFunctions::app()->getRequest();
         $this->path = $request->getArguments();
         $this->rootURL = $request->getPath() === '/';
     }
 
     protected function createController(): void {
-        if (empty($this->path) || $this->rootURL) app()->getResponse()->redirect(first(app()::$defaultRoute)->scalar);
-        $handler = ucfirst(first($this->path)->scalar);
+        $app = CoreFunctions::app();
+        if (empty($this->path) || $this->rootURL) $app->getResponse()->redirect(CoreFunctions::first($app::$defaultRoute)->scalar);
+        $handler = ucfirst(CoreFunctions::first($this->path)->scalar);
         $controller = (new ControllerFactory(['handler' => $handler]))->create();
-        app()->setParentController($controller);
+        $app->setParentController($controller);
         $this->method = $this->path[1] ?? self::INDEX_METHOD;
         if (!method_exists($controller, $this->method)) throw new NotFoundException();
     }
@@ -39,7 +41,7 @@ class Router {
     }
 
     protected function setTemplateControllers(): void {
-        if (app()::isCLI()) return;
+        if (CoreFunctions::app()::isCLI()) return;
         $this->getApplicationParentController()->setChildren(['Header', 'Footer']);
     }
 
@@ -58,7 +60,7 @@ class Router {
     }
 
     private function getApplicationParentController(): Controller {
-        return app()->getParentController();
+        return CoreFunctions::app()->getParentController();
     }
 
     public function resolve(): void {

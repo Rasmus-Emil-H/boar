@@ -9,11 +9,12 @@
 namespace app\core\src\database\relations;
 
 use \app\core\src\database\QueryBuilder;
+use \app\core\src\miscellaneous\CoreFunctions;
 
 class Relations {
 
     protected function getInstanceOf(string $class) {
-        app()->classCheck($class);
+        CoreFunctions::app()->classCheck($class);
         return new $class();
     }
 

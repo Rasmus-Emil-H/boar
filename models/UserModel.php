@@ -9,6 +9,7 @@
 namespace app\models;
 
 use \app\core\src\database\Entity;
+use app\core\src\miscellaneous\CoreFunctions;
 
 class UserModel extends Entity {
 
@@ -38,7 +39,7 @@ class UserModel extends Entity {
 	public function logout() {
 		$sessions = (new SessionModel())::query()
 			->select()
-			->where([$this->getKeyField() => applicationUser()->key()])
+			->where([$this->getKeyField() => CoreFunctions::applicationUser()->key()])
 			->run();
 		foreach ($sessions as $session) $session->delete();
 	}

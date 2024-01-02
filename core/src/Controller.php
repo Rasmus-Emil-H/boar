@@ -10,6 +10,7 @@ namespace app\core\src;
 
 use \app\core\src\middlewares\Middleware;
 use \app\core\src\factories\ControllerFactory;
+use \app\core\src\miscellaneous\CoreFunctions;
 
 class Controller {
 
@@ -24,9 +25,9 @@ class Controller {
     public string $action = '';
     
     public function __construct(
-        protected Request $request, 
+        protected Request  $request, 
         protected Response $response, 
-        protected Session $session
+        protected Session  $session
     ) {
 
     }
@@ -55,11 +56,11 @@ class Controller {
      */
 
     public function setChildData(): void {
-        foreach ( $this->getChildren() as $childController ) {
+        foreach ($this->getChildren() as $childController) {
             [$controller, $method] = preg_match('/:/', $childController) ? explode(':', $childController) : [$childController, self::DEFAULT_METHOD];
             $cController = (new ControllerFactory(['handler' => $controller]))->create();
             $cController->{$method}();
-            app()->getParentController()->setData($cController->getData());
+            CoreFunctions::app()->getParentController()->setData($cController->getData());
             $cController->setChildData();
         }
     }
@@ -81,7 +82,7 @@ class Controller {
     }
 
     public function getTemplatePath(string $template, string $dir): string {
-        return app()::$ROOT_DIR .  File::VIEWS_FOLDER . $dir . $template . File::TPL_FILE_EXTENSION;
+        return CoreFunctions::app()::$ROOT_DIR .  File::VIEWS_FOLDER . $dir . $template . File::TPL_FILE_EXTENSION;
     }
 
     public function setLayout(string $layout): void {
@@ -101,8 +102,8 @@ class Controller {
     }
 
     protected function isViewingValidEntity(string $entity): void {
-        $request = app()->getRequest()->getArguments();
-        $entityID = getIndex($request, 2)->scalar;
+        $request = $this->request->getArguments();
+        $entityID = CoreFunctions::getIndex($request, 2)->scalar;
         $entity = new $entity($entityID);
         if ($entityID === self::INVALID || !$entity->exists()) throw new \app\core\src\exceptions\NotFoundException(self::INVALID);
     }

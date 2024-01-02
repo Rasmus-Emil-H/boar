@@ -1,8 +1,8 @@
 <?php
 
-use \app\core\database\table\Table;
-use \app\core\database\Schema;
-use \app\core\database\seeders\DatabaseSeeder;
+use \app\core\src\database\table\Table;
+use \app\core\src\database\Schema;
+use \app\core\src\database\seeders\DatabaseSeeder;
 
 class add_roles_table_2018_12_15_0001 {
 

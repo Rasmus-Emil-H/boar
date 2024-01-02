@@ -1,7 +1,7 @@
 <?php
 
-use \app\core\database\table\Table;
-use \app\core\database\Schema;
+use \app\core\src\database\table\Table;
+use \app\core\src\database\Schema;
 
 class edit_user_table_add_password_2018_12_14_0001 {
 

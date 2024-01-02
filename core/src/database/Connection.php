@@ -8,6 +8,8 @@
 
 namespace app\core\src\database;
 
+use \app\core\src\miscellaneous\CoreFunctions;
+
 class Connection {
 
     public const MAX_COLUMN_LENGTH = 255;
@@ -54,7 +56,7 @@ class Connection {
             return $result;
         } catch (\PDOException $e) {
             $errorQuery = $query . $e;
-            app()->addSystemEvent(['Query failed: ' . $query . ' With the following arguments: ' . implode(',', $args)]);
+            CoreFunctions::app()->addSystemEvent(['Query failed: ' . $query . ' With the following arguments: ' . implode(',', $args)]);
             throw new \PDOException('ERROR WITH THE FOLLOWING QUERY: ' . $errorQuery);
         }
     }

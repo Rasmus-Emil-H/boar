@@ -1,7 +1,7 @@
 <?php
 
-use \app\core\database\table\Table;
-use \app\core\database\Schema;
+use \app\core\src\database\table\Table;
+use \app\core\src\database\Schema;
 
 class add_translations_table_2018_12_16_0001 {
 

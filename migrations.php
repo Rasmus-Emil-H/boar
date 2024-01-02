@@ -8,7 +8,6 @@ use app\core\Application;
 use app\core\src\database\Migration;
 
 require_once __DIR__ . '/vendor/autoload.php';
-require_once __DIR__ . '/public/yard.php';
 
 $app = new Application(applicationIsMigrating: true);
 

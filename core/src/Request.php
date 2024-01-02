@@ -8,6 +8,8 @@
 
 namespace app\core\src;
 
+use app\core\src\miscellaneous\CoreFunctions;
+
 class Request {
 
     private array $args = [];
@@ -21,7 +23,7 @@ class Request {
     public function getPath(): string {
         $path = $this->clientRequest->server['REQUEST_URI'] ?? '/';
         $position = strpos($path, '?');
-        if(!$position) return $path;
+        if (!$position) return $path;
         return substr($path, 0, $position);
     }
 
@@ -34,7 +36,7 @@ class Request {
     }
     
     public function getArgument(int|string $index): mixed {
-        return getIndex($this->args, $index);
+        return CoreFunctions::getIndex($this->args, $index);
     }
     
     public function getReferer(): string {

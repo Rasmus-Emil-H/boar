@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use \app\core\src\Controller;
+use \app\core\src\miscellaneous\CoreFunctions;
 use \app\models\UserModel;
 use \app\models\Authenticator;
 
@@ -23,7 +24,7 @@ class AuthController extends Controller {
 
     public function signup() {
         if ($this->request->isGet()) return $this->setView('signup');
-        if (!validateCSRF()) $this->response->badToken();
+        if (!CoreFunctions::validateCSRF()) $this->response->badToken();
         
         $body = $this->request->getBody();
         $emailExists = UserModel::query()->select()->where(['Email' => $body->email])->run();

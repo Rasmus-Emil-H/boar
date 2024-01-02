@@ -9,6 +9,7 @@
 namespace app\controllers;
 
 use \app\core\src\Controller;
+use \app\core\src\miscellaneous\CoreFunctions;
 
 class AssetsController extends Controller {
 
@@ -16,7 +17,7 @@ class AssetsController extends Controller {
     private string $objectID = 'clientAssets';
 
     public function __construct() {
-        $this->assets = app()->getConfig()->get($this->objectID);
+        $this->assets = CoreFunctions::app()->getConfig()->get($this->objectID);
     }
 
     public function get(string $section): array {

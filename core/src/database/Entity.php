@@ -11,6 +11,7 @@ namespace app\core\src\database;
 use \app\core\src\database\relations\Relations;
 use \app\core\src\database\QueryBuilder;
 use \app\core\src\database\table\Table;
+use \app\core\src\miscellaneous\CoreFunctions;
 
 abstract class Entity extends Relations {
 
@@ -83,7 +84,7 @@ abstract class Entity extends Relations {
         return $this->key !== null;
     }
 
-    public function save(bool $addMetaData = true): string {
+    public function save(bool $addMetaData = true): mixed {
         if ($addMetaData) $this->addMetaData([$this->data]);
         try {
             if ($this->exists()) {
@@ -92,10 +93,10 @@ abstract class Entity extends Relations {
             }
             if(empty($this->data)) throw new \app\core\src\exceptions\EmptyException();
             $this->getQueryBuilder()->create($this->data)->run();
-            $this->setKey(app()->getConnection()->getLastID());
+            $this->setKey(CoreFunctions::app()->getConnection()->getLastID());
             return $this->key;
         } catch(\Exception $e) {
-            app()->addSystemEvent([$e->getMessage()]);
+            CoreFunctions::app()->addSystemEvent([$e->getMessage()]);
             throw new \app\core\src\exceptions\NotFoundException($e->getMessage());
         }
     }
@@ -147,18 +148,20 @@ abstract class Entity extends Relations {
     }
 
     public function addMetaData(array $data): self {
+        if (empty($data)) throw new \InvalidArgumentException('Data must not be empty');
         (new EntityMetaData())
             ->set([
                 'EntityType' => $this->getTableName(), 
                 'EntityID' => $this->key(), 
                 'Data' => json_encode($data), 
-                'IP' => app()->getRequest()->getIP()
+                'IP' => CoreFunctions::app()->getRequest()->getIP()
             ])
             ->save(addMetaData: false);
         return $this;
     }
 
     public function setStatus(int $status): self {
+        if (!$this->get(Table::STATUS_COLUMN)) throw new \app\core\src\exceptions\ForbiddenException('This entity does not have a status');
         $this->set([Table::STATUS_COLUMN => $status])->save();
         return $this;
     }

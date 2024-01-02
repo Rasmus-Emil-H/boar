@@ -11,6 +11,7 @@ namespace app\models;
 
 use \app\models\UserModel;
 use \app\core\src\Curl;
+use \app\core\src\miscellaneous\CoreFunctions;
 
 class Authenticator {
 
@@ -28,23 +29,24 @@ class Authenticator {
      */
 
     public function applicationLogin(): ?bool {
-        if (!validateCSRF()) return false;
+        if (!CoreFunctions::validateCSRF()) return false;
         $user = UserModel::query()->select()->where(['email' => $this->data->email])->run();
         if (empty($user)) return false;
-        $user = first($user);
+        $user = CoreFunctions::first($user);
         $passwordVerify = password_verify($this->data->password, $user->get('Password'));
         if (!$passwordVerify) return null;
         $this->authenticateUser($user);
     }
 
     public function authenticateUser(UserModel $user): void {
-        app()->getSession()->set('user', $user->key());
+        $app = CoreFunctions::app();
+        $app->getSession()->set('user', $user->key());
         $sessionID = hash('sha256', uniqid());
-        app()->getSession()->set('SessionID', $sessionID);
+        $app->getSession()->set('SessionID', $sessionID);
         (new SessionModel())
             ->set(['Value' => $sessionID, 'UserID' => $user->key()])
             ->save();
-        app()->getResponse()->redirect('/home');
+        $app->getResponse()->redirect('/home');
     }
 
     /**
@@ -52,7 +54,7 @@ class Authenticator {
      * @return array $content
      */
 
-    public function apiLogin(): array {
+    public function apiLogin(): string {
         $curl = new Curl();
         foreach ($this->data as $key => $values) $curl->{"set".ucfirst($key)($values)};
         $curl->send();

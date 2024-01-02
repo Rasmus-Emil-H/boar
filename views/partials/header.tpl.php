@@ -2,12 +2,12 @@
 <html lang="en">
   <head>
     <title><?= $appName; ?></title>
-    <?php loopAndEcho($metaTags); ?> 
-    <?php loopAndEcho($stylesheets); ?>
+    <?php \app\core\src\miscellaneous\CoreFunctions::loopAndEcho($metaTags); ?> 
+    <?php \app\core\src\miscellaneous\CoreFunctions::loopAndEcho($stylesheets); ?>
     <link rel="icon" type="image/x-icon" href="/favicon.ico">
   </head>
 <body>
   
-<?php if(!app()::isGuest()): ?>
+<?php if(!app\core\src\miscellaneous\CoreFunctions::app()::isGuest()): ?>
   <?php require_once $navbar; ?>
 <?php endif; ?>

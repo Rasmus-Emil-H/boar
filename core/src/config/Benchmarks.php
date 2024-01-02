@@ -8,6 +8,8 @@
 
 namespace app\core\src\config;
 
+use app\core\src\miscellaneous\CoreFunctions;
+
 class Benchmarks {
 
     public static function determineServerHashCost(float $timeTarget): void {
@@ -19,7 +21,7 @@ class Benchmarks {
             $end = microtime(true);
         } while (($end - $start) < $timeTarget);
 
-        exit("Appropriate Cost Found: $cost");
+        CoreFunctions::dd(__FUNCTION__ . ' RAN with result: [ Appropriate Cost Found: ' . $cost . ' ]');
     }
 
 }

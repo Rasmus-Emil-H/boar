@@ -6,6 +6,8 @@
 
 namespace app\core\src\database\table;
 
+use app\core\src\miscellaneous\CoreFunctions;
+
 class Table {
 
     protected $name;
@@ -64,11 +66,11 @@ class Table {
     }
 
     public function add() {
-        last($this->getColumns())->setType('ADD_COLUMN');
+        CoreFunctions::last($this->getColumns())->setType('ADD_COLUMN');
     }
 
     public function drop() {
-        last($this->getColumns())->setType('DROP_COLUMN');
+        CoreFunctions::last($this->getColumns())->setType('DROP_COLUMN');
     }
 
     public function dropColumns(array|string $columns) {

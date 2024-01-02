@@ -58,6 +58,11 @@ class Session {
         foreach ($this->getAll() as $key => &$value) $value = null;
     }
 
+    public function restart(): void {
+        session_destroy();
+        session_start();
+    }
+
     public function __destruct() {
         $flashMessages = $this->getAllFlashMessages();
         foreach ($flashMessages as $key => &$flashMessage) if ($flashMessage['remove']) $this->unset($flashMessages[$key]);

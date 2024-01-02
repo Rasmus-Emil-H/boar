@@ -9,6 +9,7 @@
 namespace app\controllers;
 
 use \app\core\src\Controller;
+use \app\core\src\miscellaneous\CoreFunctions;
 
 class FooterController extends Controller {
 
@@ -16,7 +17,7 @@ class FooterController extends Controller {
 		$this->setView('footer', 'partials/');
 		$this->setData([
 			'footer' => $this->getView(), 
-			'js' => app()->getClientAssets()->get('js')
+			'js' => CoreFunctions::app()->getClientAssets()->get('js')
 		]);
 	}
 

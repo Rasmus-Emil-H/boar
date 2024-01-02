@@ -7,14 +7,14 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="/home"><?= hs('Home'); ?></a>
+          <a class="nav-link active" aria-current="page" href="/home"><?= \app\core\src\miscellaneous\CoreFunctions::hs('Home'); ?></a>
         </li>
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            <?= hs('Options'); ?>
+            <?= \app\core\src\miscellaneous\CoreFunctions::hs('Options'); ?>
           </a>
           <ul class="dropdown-menu">
-            <?php loopAndEcho($navigationItems); ?>
+            <?php \app\core\src\miscellaneous\CoreFunctions::loopAndEcho($navigationItems); ?>
           </ul>
         </li>
       </ul>

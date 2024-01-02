@@ -8,8 +8,8 @@
 
 namespace app\core\src\database;
 
-use \app\core\database\table\Table;
-use \app\utilities\Utilities;
+use \app\core\src\database\table\Table;
+use \app\core\src\utilities\Utilities;
 use \app\models\MigrationModel;
 
 class Schema {

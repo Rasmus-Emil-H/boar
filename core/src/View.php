@@ -9,6 +9,7 @@
 namespace app\core\src;
 
 use \app\core\src\exceptions\NotFoundException;
+use \app\core\src\miscellaneous\CoreFunctions;
 
 class View {
 
@@ -18,11 +19,11 @@ class View {
     public const INVALID_VIEW = 'Invalid view';
 
     public function renderView() {
-        require_once app()->getParentController()->getView(); 
+        require_once CoreFunctions::app()->getParentController()->getView(); 
     }
 
     public function getTemplate(string $template): string {
-        $templateFile = app()::$ROOT_DIR . $this->partialsDir . $template . self::TPL_FILE_EXTENSION;
+        $templateFile = CoreFunctions::app()::$ROOT_DIR . $this->partialsDir . $template . self::TPL_FILE_EXTENSION;
         if (!file_exists($templateFile)) throw new NotFoundException();
         return $templateFile;
     }

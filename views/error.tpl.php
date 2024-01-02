@@ -1,1 +1,1 @@
-<?= dd($exception->getMessage()); ?>
+<?= \app\core\src\miscellaneous\CoreFunctions::dd($exception->getMessage()); ?>

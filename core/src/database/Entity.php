@@ -94,7 +94,7 @@ abstract class Entity extends Relations {
             if(empty($this->data)) throw new \app\core\src\exceptions\EmptyException();
             $this->getQueryBuilder()->create($this->data)->run();
             $this->setKey(CoreFunctions::app()->getConnection()->getLastID());
-            return $this->key;
+            return $this;
         } catch(\Exception $e) {
             CoreFunctions::app()->addSystemEvent([$e->getMessage()]);
             throw new \app\core\src\exceptions\NotFoundException($e->getMessage());

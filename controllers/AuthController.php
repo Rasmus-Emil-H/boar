@@ -32,10 +32,9 @@ class AuthController extends Controller {
 
         $userID = (new UserModel())
             ->set(['Email' => $body->email, 'Name' => $body->name, 'Password' => password_hash($body->password, PASSWORD_DEFAULT)])
-            ->save();
-
-        $user = new UserModel($userID);
-        $user->addMetaData(['event' => 'user signed up'])->setRole('User');
+            ->save()
+            ->setRole('User')
+            ->addMetaData(['event' => 'user signed up']);
 
         $this->session->set('userID', $userID);
         $this->response->redirect('/home');

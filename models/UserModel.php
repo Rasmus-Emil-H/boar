@@ -28,8 +28,10 @@ class UserModel extends Entity {
 		return [];
 	}
 
-	public function setRole(string $role): void {
-
+	public function setRole(string $role): self {
+		if (!$this->exists()) 
+			throw new \app\core\src\exceptions\EmptyException('Entity has not yet been properly stored, did you call this method before ->save() ?');
+		return $this;
 	}
 
 	public function orders() {
@@ -37,10 +39,7 @@ class UserModel extends Entity {
 	}
 
 	public function logout() {
-		$sessions = (new SessionModel())::query()
-			->select()
-			->where([$this->getKeyField() => CoreFunctions::applicationUser()->key()])
-			->run();
+		$sessions = (new SessionModel())::query()->select()->where([$this->getKeyField() => CoreFunctions::applicationUser()->key()])->run();
 		foreach ($sessions as $session) $session->delete();
 	}
 

@@ -22,6 +22,9 @@ class Table {
     private const PRIMARY_KEY = 'PRIMARY_KEY';
     private const TIMESTAMP = 'TIMESTAMP DEFAULT CURRENT_TIMESTAMP';
 
+    private const DEFAULT_VARCHAR_LIMIT = 75;
+    private const DEFAULT_INTEGER_LIMIT = 10;
+
     public function __construct($name) {
         $this->name = $name;
     }
@@ -35,7 +38,7 @@ class Table {
         return $this;
     }
 
-    public function varchar(string $columnName, int $length = 75) {
+    public function varchar(string $columnName, int $length = self::DEFAULT_VARCHAR_LIMIT) {
         $this->createColumn($columnName, self::VARCHAR_COLUMN_TYPE, ['LENGTH' => '('.$length.')']);
         return $this;
     }
@@ -45,8 +48,8 @@ class Table {
         return $this;
     }
 
-    public function integer(string $columnName) {
-        $this->createColumn($columnName, self::INT_COLUMN_TYPE);
+    public function integer(string $columnName, int $length = self::DEFAULT_INTEGER_LIMIT) {
+        $this->createColumn($columnName, self::INT_COLUMN_TYPE, ['LENGTH' => '('.$length.')']);
         return $this;
     }
 

@@ -43,9 +43,7 @@ class Authenticator {
         $app->getSession()->set('user', $user->key());
         $sessionID = hash('sha256', uniqid());
         $app->getSession()->set('SessionID', $sessionID);
-        (new SessionModel())
-            ->set(['Value' => $sessionID, 'UserID' => $user->key()])
-            ->save();
+        (new SessionModel())->set(['Value' => $sessionID, 'UserID' => $user->key()])->save();
         $app->getResponse()->redirect('/home');
     }
 

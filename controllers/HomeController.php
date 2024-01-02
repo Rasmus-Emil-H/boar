@@ -14,10 +14,6 @@ use \app\core\src\middlewares\AuthMiddleware;
 
 class HomeController extends Controller {
 
-  public function __construct() {
-    $this->registerMiddleware(new AuthMiddleware());
-  }
-
   public function index() {
     $this->setView('home');
   }

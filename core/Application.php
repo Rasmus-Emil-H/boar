@@ -33,7 +33,6 @@ class Application {
     protected src\I18n $i18n;
     protected src\config\Config $config;
     protected src\utilities\Logger $logger;
-    protected AssetsController $clientAssets;
     protected ?src\Controller $parentController;
 
     public static string $ROOT_DIR;
@@ -56,7 +55,6 @@ class Application {
         $this->cookie       = new src\Cookie();
         $this->view         = new src\View();
         $this->logger       = new src\utilities\Logger();
-        $this->clientAssets = new AssetsController();
 
         $this->getLanguage();
         $this->getUser();
@@ -138,10 +136,6 @@ class Application {
     |----------------------------------------------------------------------------
     |
     */
-
-    public function getClientAssets(): AssetsController {
-        return $this->clientAssets;
-    }
 
     public function getConfig(): src\config\Config {
         return $this->config;

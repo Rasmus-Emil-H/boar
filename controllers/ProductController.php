@@ -15,10 +15,6 @@ use \app\models\ProductModel;
 
 
 class ProductController extends Controller {
-    
-    public function __construct() { 
-       $this->registerMiddleware(new AuthMiddleware()); 
-    }
 
     public function index() {
         $this->setView('product');

@@ -16,7 +16,7 @@ class HeaderController extends Controller {
     public function index() {
 		$this->setView('header', 'partials/');
 		$this->setChildren(['navbar' => 'DOMNode:navbar']);
-		$assets = CoreFunctions::app()->getClientAssets();
+		$assets = CoreFunctions::app()->getParentController()->getClientAssets();
 		$this->setData([
 			'header' => $this->getView(),
 			'appName' => CoreFunctions::app()->getConfig()->get('appName'),

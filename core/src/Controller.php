@@ -11,6 +11,7 @@ namespace app\core\src;
 use \app\core\src\middlewares\Middleware;
 use \app\core\src\factories\ControllerFactory;
 use \app\core\src\miscellaneous\CoreFunctions;
+use \app\controllers\AssetsController;
 
 class Controller {
 
@@ -23,13 +24,15 @@ class Controller {
     protected string $view = '';
     public string $layout = 'main';
     public string $action = '';
+
+    protected AssetsController $clientAssets;
     
     public function __construct(
         protected Request  $request, 
         protected Response $response, 
         protected Session  $session
     ) {
-
+        $this->clientAssets = new AssetsController();
     }
 
     public function setData($data): void {
@@ -106,6 +109,10 @@ class Controller {
         $entityID = CoreFunctions::getIndex($request, 2)->scalar;
         $entity = new $entity($entityID);
         if ($entityID === self::INVALID || !$entity->exists()) throw new \app\core\src\exceptions\NotFoundException(self::INVALID);
+    }
+
+    protected function getClientAssets() {
+        return $this->clientAssets;
     }
 
 }

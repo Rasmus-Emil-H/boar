@@ -14,10 +14,6 @@ use \app\core\src\miscellaneous\CoreFunctions;
 
 class OrderController extends Controller {
 
-    public function __construct() { 
-       $this->registerMiddleware(new AuthMiddleware()); 
-    }
-
     public function index() {
         $this->setView('order');
         $this->setData([

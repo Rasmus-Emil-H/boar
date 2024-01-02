@@ -8,10 +8,6 @@ use app\models\UserModel;
 
 class UserController extends Controller {
 
-    public function __construct() {
-        $this->registerMiddleware(new AuthMiddleware());
-    }
-
     public function index() {
         $this->setView('users');
     }

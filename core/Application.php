@@ -170,5 +170,9 @@ class Application {
     public function getView(): src\View {
         return $this->view;
     }
+
+    public function getLogger(): src\utilities\Logger {
+        return $this->logger;
+    }
     
 }

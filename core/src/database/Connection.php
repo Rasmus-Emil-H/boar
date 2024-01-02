@@ -55,8 +55,9 @@ class Connection {
             $stmt = null;
             return $result;
         } catch (\PDOException $e) {
+            if (!CoreFunctions::app()::isDevSite()) return;
             $errorQuery = $query . $e;
-            exit($errorQuery);
+            CoreFunctions::dd($errorQuery);
         }
     }
 

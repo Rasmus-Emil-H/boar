@@ -30,13 +30,13 @@ class AuthController extends Controller {
         $emailExists = UserModel::query()->select()->where(['Email' => $body->email])->run();
         if ($emailExists) $this->response->dataConflict();
 
-        $userID = (new UserModel())
+        $user = (new UserModel())
             ->set(['Email' => $body->email, 'Name' => $body->name, 'Password' => password_hash($body->password, PASSWORD_DEFAULT)])
             ->save()
             ->setRole('User')
             ->addMetaData(['event' => 'user signed up']);
 
-        $this->session->set('userID', $userID);
+        $this->session->set('userID', $user->key());
         $this->response->redirect('/home');
     }
 

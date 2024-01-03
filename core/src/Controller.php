@@ -108,7 +108,7 @@ class Controller {
         $request = $this->request->getArguments();
         $entityID = CoreFunctions::getIndex($request, 2)->scalar;
         $entity = new $entity($entityID);
-        if ($entityID === self::INVALID || !$entity->exists()) throw new \app\core\src\exceptions\NotFoundException(self::INVALID);
+        if (!$entity->exists()) $this->response->redirect('/home');
     }
 
     protected function getClientAssets() {

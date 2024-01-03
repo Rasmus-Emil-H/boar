@@ -16,7 +16,6 @@ use \app\controllers\AssetsController;
 class Controller {
 
     private const DEFAULT_METHOD = 'index';
-    private const INVALID = 'Invalid';
 
     protected array $data = [];
     protected array $children = [];

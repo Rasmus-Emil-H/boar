@@ -1,12 +1,28 @@
-AuthType Basic
-AuthName "DMS"
-AuthUserFile /usr/home/appkat/sync/.htpasswd
-# Require valid-user
+RewriteEngine On
+
+RewriteCond %{HTTPS} off
+RewriteRule .* https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+RewriteCond %{HTTP_HOST} ^www [NC]
+RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+
+Options -Indexes
+
+<LimitExcept GET POST>
+    Require all denied
+</LimitExcept>
+
+<FilesMatch "\.(engine|inc|info|install|make|module|profile|test|po|sh|.*sql|theme|tpl(\.php)?|xtmpl)(~|\.sw[op]|\.bak|\.orig|\.save)?$|^(\.(?!well-known).*|Entries.*|Repository|Root|Tag|Template|composer\.(json|lock))$|^#.*#$|\.php(~|\.sw[op]|\.bak|\.orig\.save)$">
+  	<IfModule mod_authz_core.c>
+   		Require all denied
+  	</IfModule>
+  	<IfModule !mod_authz_core.c>
+   		Order allow,deny
+	</IfModule>
+</FilesMatch>
 
 Header add x-skip-access-control-check "true"
-
 Options +FollowSymlinks
-RewriteEngine On
 
 # RewriteCond %{HTTPS} off
 # RewriteRule .* https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
@@ -26,52 +42,22 @@ RewriteEngine On
     RewriteRule ^ index.php [L]
 </IfModule>
 
-# BEGIN Expire headers  
-<IfModule mod_expires.c>  
-  # Turn on the module.
-  ExpiresActive on
+<IfModule mod_expires.c>
+	ExpiresActive On
+	ExpiresDefault A1209600
+	<FilesMatch \.php$>
+		ExpiresActive Off
+	</FilesMatch>
+</IfModule>
 
-  # Set the default expiry times.
-  ExpiresDefault "access plus 2 days"
-  ExpiresByType image/jpg "access plus 2 days"
-  ExpiresByType image/svg+xml "access 2 days"
-  ExpiresByType image/gif "access plus 2 days"
-  ExpiresByType image/jpeg "access plus 2 days"
-  ExpiresByType image/png "access plus 2 days"
-  ExpiresByType text/css "access plus 2 days"
-  ExpiresByType text/javascript "access plus 2 days"
-  ExpiresByType application/javascript "access plus 2 days"
-  ExpiresByType application/x-shockwave-flash "access plus 2 days"
-  ExpiresByType image/ico "access plus 2 days"
-  ExpiresByType image/x-icon "access plus 2 days"
-</IfModule>  
-# END Expire headers  
+<IfModule mod_deflate.c>
+	<FilesMatch "\.(xml|html|txt|css|js|php|json|ico|eot|otf|ttf|md)$">
+		SetOutputFilter DEFLATE
+	</FilesMatch>
+</IfModule>
 
-<ifmodule mod_deflate.c>
-	# Compress HTML, CSS, JavaScript, Text, XML and fonts
-	AddOutputFilterByType DEFLATE image/svg+xml
-	AddOutputFilterByType DEFLATE application/javascript
-	AddOutputFilterByType DEFLATE application/rss+xml
-	AddOutputFilterByType DEFLATE application/vnd.ms-fontobject
-	AddOutputFilterByType DEFLATE application/x-font
-	AddOutputFilterByType DEFLATE application/x-font-opentype
-	AddOutputFilterByType DEFLATE application/x-font-otf
-	AddOutputFilterByType DEFLATE application/x-font-truetype
-	AddOutputFilterByType DEFLATE application/x-font-ttf
-	AddOutputFilterByType DEFLATE application/x-javascript
-	AddOutputFilterByType DEFLATE application/xhtml+xml
-	AddOutputFilterByType DEFLATE application/xml
-	AddOutputFilterByType DEFLATE font/opentype
-	AddOutputFilterByType DEFLATE font/otf
-	AddOutputFilterByType DEFLATE font/ttf
-	AddOutputFilterByType DEFLATE image/x-icon
-	AddOutputFilterByType DEFLATE text/css
-	AddOutputFilterByType DEFLATE text/html
-	AddOutputFilterByType DEFLATE text/javascript
-	AddOutputFilterByType DEFLATE text/plain
-	AddOutputFilterByType DEFLATE text/xml
-	# Remove browser bugs (only needed for really old browsers)
-	Header append Vary User-Agent
-</ifmodule>
-
-FcgidWrapper "/home/httpd/cgi-bin/php81-fcgi-starter.fcgi" .php
+<IfModule mod_headers.c>
+  	Header always set X-Content-Type-Options nosniff
+  	Header set X-Frame-Options SAMEORIGIN
+	Header set X-XSS-Protection "1; mode=block"
+</IfModule>

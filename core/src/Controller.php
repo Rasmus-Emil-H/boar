@@ -103,11 +103,20 @@ class Controller {
         return $this->middlewares;
     }
 
-    protected function isViewingValidEntity(string $entity): void {
+    private function returnEntity(): ?\app\core\src\database\Entity {
         $request = $this->request->getArguments();
         $entityID = CoreFunctions::getIndex($request, 2)->scalar;
-        $entity = new $entity($entityID);
+        $entity = new $this->entity($entityID);
+        return $entity;
+    }
+
+    protected function isViewingValidEntity(): void {
+        $entity = $this->returnEntity();
         if (!$entity->exists()) $this->response->redirect('/home');
+    }
+
+    protected function crudEntity() {
+        return $this->returnEntity()->save();
     }
 
     protected function getClientAssets() {

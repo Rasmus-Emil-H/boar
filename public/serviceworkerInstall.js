@@ -3,6 +3,7 @@ const postCache = 'post-requests-cache';
 const fileCache = 'file-cache';
 const tempOfflineCache = 'offline-cache';
 const login = '/auth/login';
+const origin = 'https://replaceme.example';
 
 const actions = {
   message: {
@@ -121,7 +122,7 @@ async function sendCachedFileRequests(fileKey) {
 }
 
 self.addEventListener('message', (event) => {
-  if (!event.origin === 'INSERT_SAFE_ORIGIN.COM') return;
+  if (!event.origin === origin) return;
   if (event.data.action === actions.message.CACHE_PAGE) {
       const { url } = event.data;
       if (!url) return;

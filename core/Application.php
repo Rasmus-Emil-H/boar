@@ -13,7 +13,6 @@
 namespace app\core;
 
 use \app\core\src\database\Connection;
-use \app\controllers\AssetsController;
 use \app\models\SystemEventModel;
 use \app\models\SessionModel;
 use \app\models\UserModel;

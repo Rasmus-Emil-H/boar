@@ -21,7 +21,6 @@ class QueryBuilder implements Builder {
     protected string $fields = '';
     protected string $placeholders = '';
 
-    protected array $fieldPlaceholders = [];
     protected array $args = [];
 
     private array $comparisonOperators = ['=', '<>', '!=', '>', '<', '>=', '<='];

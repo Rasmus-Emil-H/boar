@@ -1,11 +1,5 @@
 <?php
 
-/**
- * Order Controller 
- * AUTHOR: RE_WEB
- * @package app\controllers
- */
-
 namespace app\controllers;
 
 use \app\core\src\Controller;

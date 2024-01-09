@@ -6,22 +6,22 @@ const login = '/auth/login';
 const origin = 'https://replaceme.example';
 
 const actions = {
-  message: {
-      CACHE_FILE: 'cache-file',
-      CACHE_PAGE: 'cache-page',
-      CHECK_STATUS: 'check-status'
-  }
+    message: {
+        CACHE_FILE: 'cache-file',
+        CACHE_PAGE: 'cache-page',
+        CHECK_STATUS: 'check-status'
+    }
 };
 
 const messages = {
-  offline: 'Application is offline. Cannot send cached POST requests... Once your application is online again, it will send these cached requests automatically.',
-  errors: {
-      postRequest: 'Error sending cached POST request. Status:'
-  }
+    offline: 'Application is offline. Cannot send cached POST requests... Once your application is online again, it will send these cached requests automatically.',
+    errors: {
+        postRequest: 'Error sending cached POST request. Status:'
+    }
 }
 
 self.addEventListener('install', e => {
-  e.waitUntil(self.skipWaiting());
+    e.waitUntil(self.skipWaiting());
 });
 
 self.addEventListener('activate', e => {
@@ -56,20 +56,18 @@ self.addEventListener('fetch', e => {
 });
 
 async function cachePostRequest(request) {
-  const requestClone = request.clone();
-  const formData = await requestClone.formData();
-  const cacheKey = `${requestClone.url}/${Date.now()}`;
-  const cacheData = { request: request.clone(), formData: Object.fromEntries(formData.entries()), request: requestClone, url: request.url };
-  const cache = await caches.open(postCache);
-  await cache.put(cacheKey, new Response(JSON.stringify(cacheData)));
-  await sendCachedPostRequests();
-  return new Response('OK', {status: 302, headers: { 'Location': request.url }});
+    const requestClone = request.clone();
+    const formData = await requestClone.formData();
+    const cacheKey = `${requestClone.url}/${Date.now()}`;
+    const cacheData = { request: request.clone(), formData: Object.fromEntries(formData.entries()), request: requestClone, url: request.url };
+    const cache = await caches.open(postCache);
+    await cache.put(cacheKey, new Response(JSON.stringify(cacheData)));
+    await sendCachedPostRequests();
+    return new Response('OK', {status: 302, headers: { 'Location': request.url }});
 }
 
 function checkConnection() {
-  if (navigator.onLine) return 0;
-  console.log(messages.offline);
-  return 1;
+    return Number(navigator.onLine);
 }
 
 async function synchroniseCaches() {
@@ -78,85 +76,85 @@ async function synchroniseCaches() {
 }
 
 async function sendCachedPostRequests() {
-  const cache = await caches.open(postCache);
-  const cacheKeys = await cache.keys(); 
-  for (const cacheKey of cacheKeys) {
-      const cachedResponse = await cache.match(cacheKey);
-      if (!cachedResponse) return;
-      try {
-          const cachedData = await cachedResponse.json();
-          const body = new FormData();
-          for (const [key, value] of Object.entries(cachedData.formData)) body.append(key, value);
-          const response = await fetch(cachedData.url, { method: 'POST', body });
-          response.ok ? cache.delete(cacheKey) : console.log(messages.errors.postRequest, response.status);
-      } catch (error) {
-          console.log(messages.errors.postRequest, error);
-      }
-  }
+    const cache = await caches.open(postCache);
+    const cacheKeys = await cache.keys(); 
+    for (const cacheKey of cacheKeys) {
+        const cachedResponse = await cache.match(cacheKey);
+        if (!cachedResponse) return;
+        try {
+            const cachedData = await cachedResponse.json();
+            const body = new FormData();
+            for (const [key, value] of Object.entries(cachedData.formData)) body.append(key, value);
+            const response = await fetch(cachedData.url, { method: 'POST', body });
+            response.ok ? cache.delete(cacheKey) : console.log(messages.errors.postRequest, response.status);
+        } catch (error) {
+            console.log(messages.errors.postRequest, error);
+        }
+    }
 }
 
 function respondToClient(msg) {
-  self.clients.matchAll().then(clients => {
-      clients.forEach(client => {
-          client.postMessage(msg);
-      });
-  });
+    self.clients.matchAll().then(clients => {
+        clients.forEach(client => {
+            client.postMessage(msg);
+        });
+    });
 }
 
 async function sendCachedFileRequests(fileKey) {
-  const cache = await caches.open(fileCache);
-  const cacheKeys = await cache.keys();
-  for (const cacheKey of cacheKeys) {
-      const cacheResponse = await cache.match(cacheKey);
-      try {
-          const body = await cacheResponse.formData();
-          const date = new Date().toLocaleString().replaceAll('/', '-').replaceAll(',', '');
-          if(fileKey) respondToClient({meta: body.get('meta'), data: {cachedPath: fileKey, 'Path': body.get('fileName'), id: body.get('EntityID'), UploadID: null, EntityID: body.get('EntityID'), Created: date, targetProp: 'uploads'}});
-          const response = await fetch(body.get('url'), { method: 'POST', body });
-          response.ok ? await cache.delete(cacheKey) : console.error(messages.errors.postRequest, response.status);
-          return new Response('OK', {status: 302, headers: { 'Location': body.get('url') }});
-      } catch (error) {
-          console.log("file sync err", error);
-      }
-  }
+    const cache = await caches.open(fileCache);
+    const cacheKeys = await cache.keys();
+    for (const cacheKey of cacheKeys) {
+        const cacheResponse = await cache.match(cacheKey);
+        try {
+            const body = await cacheResponse.formData();
+            const date = new Date().toLocaleString().replaceAll('/', '-').replaceAll(',', '');
+            if(fileKey) respondToClient({meta: body.get('meta'), data: {cachedPath: fileKey, 'Path': body.get('fileName'), id: body.get('EntityID'), UploadID: null, EntityID: body.get('EntityID'), Created: date, targetProp: 'uploads'}});
+            const response = await fetch(body.get('url'), { method: 'POST', body });
+            response.ok ? await cache.delete(cacheKey) : console.error(messages.errors.postRequest, response.status);
+            return new Response('OK', {status: 302, headers: { 'Location': body.get('url') }});
+        } catch (error) {
+            console.log("file sync err", error);
+        }
+    }
 }
 
 self.addEventListener('message', (event) => {
-  if (!event.origin === origin) return;
-  if (event.data.action === actions.message.CACHE_PAGE) {
-      const { url } = event.data;
-      if (!url) return;
-      event.waitUntil(
-          caches.open(cacheName).then((cache) => {
-              return fetch(url)
-                  .then((response) => {
-                      const resClone = response.clone();
-                      cache.put(url, resClone);
-                  })
-                  .catch((e) => {
-                      console.log(e);
-                  });
-          })
-      );
-  } else if (event.data.action === actions.message.CACHE_FILE) {
-      const formData = new FormData();
-      for(let obj in event.data) formData.append(obj, event.data[obj]);
-      return caches.open(fileCache)
-          .then(async (cache) => {
-              const key = `file-${Date.now()}`;
-              await cache.put(key, new Response(formData));
-              await sendCachedFileRequests(key);
-          })
-          .catch((e) => {
-              console.error('Error storing file in cache:', e);
-          });
-  } else if(event.data.action === actions.message.CHECK_STATUS) synchroniseCaches();
+    if (!event.origin === origin) return;
+    if (event.data.action === actions.message.CACHE_PAGE) {
+        const { url } = event.data;
+        if (!url) return;
+        event.waitUntil(
+            caches.open(cacheName).then((cache) => {
+                return fetch(url)
+                    .then((response) => {
+                        const resClone = response.clone();
+                        cache.put(url, resClone);
+                    })
+                    .catch((e) => {
+                        console.log(e);
+                    });
+            })
+        );
+    } else if (event.data.action === actions.message.CACHE_FILE) {
+        const formData = new FormData();
+        for(let obj in event.data) formData.append(obj, event.data[obj]);
+        return caches.open(fileCache)
+            .then(async (cache) => {
+                const key = `file-${Date.now()}`;
+                await cache.put(key, new Response(formData));
+                await sendCachedFileRequests(key);
+            })
+            .catch((e) => {
+                console.error('Error storing file in cache:', e);
+            });
+    } else if(event.data.action === actions.message.CHECK_STATUS) synchroniseCaches();
 });
 
 self.addEventListener('online', event => {
-  synchroniseCaches();
+    synchroniseCaches();
 });
 
 self.addEventListener('offline', event => {
-  console.log(event);
+    
 });

@@ -84,12 +84,12 @@ abstract class Entity extends Relations {
         return $this->key !== null;
     }
 
-    public function save(bool $addMetaData = true): mixed {
+    public function save(bool $addMetaData = true): self {
         if ($addMetaData) $this->addMetaData([$this->data]);
         try {
             if ($this->exists()) {
                 $this->getQueryBuilder()->patch($this->data, $this->getKeyField(), $this->key())->run('fetch');
-                return $this->data;
+                return $this;
             }
             if(empty($this->data)) throw new \app\core\src\exceptions\EmptyException();
             $this->getQueryBuilder()->create($this->data)->run();
@@ -119,7 +119,7 @@ abstract class Entity extends Relations {
         return $this->data[$key] ?? "Invalid key: $key"; 
     }
 
-    public static function all() {
+    public static function all(): array {
         return (new QueryBuilder(get_called_class(), static::tableName, static::keyID))->select()->run();
     }
 

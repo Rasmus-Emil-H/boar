@@ -9,7 +9,7 @@
 namespace app\models;
 
 use \app\core\src\database\Entity;
-use app\core\src\miscellaneous\CoreFunctions;
+use \app\core\src\miscellaneous\CoreFunctions;
 
 class UserModel extends Entity {
 

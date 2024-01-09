@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Connection relier
+ * Bootstrap connection
  * Author: RE_WEB
  * @package app\core\database
  */
@@ -12,11 +12,8 @@ use \app\core\src\miscellaneous\CoreFunctions;
 
 class Connection {
 
-    public const MAX_COLUMN_LENGTH = 255;
-
     private static ?Connection $instance = null;
 
-    private bool $transactionStarted = false;
     private array $defaultPdoOptions = [
         \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_OBJ,
         \PDO::ATTR_EMULATE_PREPARES => false,
@@ -31,11 +28,11 @@ class Connection {
     }
 
     protected function __clone() {
-
+        throw new \app\core\src\exceptions\ForbiddenException('Can not clone.');
     }
 
     public function __wakeup() {
-        throw new \Exception('Cannot unserialize');
+        throw new \Exception('Can not unserialize');
     }
 
     public function __call(string $method, array $params = []) {
@@ -63,22 +60,6 @@ class Connection {
 
     public function getLastID() {
         return $this->pdo->lastInsertId();
-    }
-
-    public function beginTransaction(): bool {
-        return $this->transactionStarted = $this->pdo->beginTransaction();
-    }
-
-    public function transaction(): bool {
-        return $this->beginTransaction();
-    }
-
-    public function commit(): bool|\PDOException {
-        return $this->transactionStarted ? $this->pdo->commit() : throw new \PDOException('Attempted to commit when not in transaction, or transaction failed to start.');
-    }
-
-    public function rollback(): bool {
-        return $this->transactionStarted ? $this->pdo->rollBack() : false;
     }
 
 }

@@ -148,7 +148,7 @@ abstract class Entity extends Relations {
     }
 
     public function addMetaData(array $data): self {
-        if (empty($data)) throw new \InvalidArgumentException('Data must not be empty');
+        if (empty($data)) throw new \InvalidArgumentException('Data can not be empty');
         (new EntityMetaData())
             ->set([
                 'EntityType' => $this->getTableName(), 

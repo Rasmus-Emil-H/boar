@@ -1,11 +1,5 @@
 <?php
 
-/**
- * File model 
- * AUTHOR: RE_WEB
- * @package app\core\File
-*/
-
 namespace app\models;
 
 class FileModel {

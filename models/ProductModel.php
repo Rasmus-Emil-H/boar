@@ -1,11 +1,5 @@
 <?php
 
-/**
- * Bootstrap Product model 
- * AUTHOR: RE_WEB
- * @package app\core\UserModel
- */
-
 namespace app\models;
 
 use \app\core\src\database\Entity;

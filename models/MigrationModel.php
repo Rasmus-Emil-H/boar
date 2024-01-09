@@ -1,11 +1,5 @@
 <?php
 
-/**
- * Bootstrap Query 
- * AUTHOR: RE_WEB
- * @package app\models\Query
- */
-
 namespace app\models;
 
 use \app\core\src\database\Entity;

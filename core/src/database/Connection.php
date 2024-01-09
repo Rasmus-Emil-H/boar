@@ -23,7 +23,7 @@ class Connection {
         \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION,
     ];
 
-    private ?\Pdo $pdo;
+    private \Pdo $pdo;
     
     protected function __construct(array $pdoConfigurations) {
         $this->pdo = new \PDO($pdoConfigurations['dsn'], $pdoConfigurations['user'], $pdoConfigurations['password'], $this->defaultPdoOptions);
@@ -31,11 +31,11 @@ class Connection {
     }
 
     protected function __clone() {
-        throw new \app\core\src\exceptions\ForbiddenException('Can not clone.');
+        throw new \app\core\src\exceptions\ForbiddenException('Can not clone ' . get_called_class());
     }
 
     public function __wakeup() {
-        throw new \Exception('Can not unserialize');
+        throw new \Exception('Can not unserialize ' . get_called_class());
     }
 
     public function __call(string $method, array $params = []) {

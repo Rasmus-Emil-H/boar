@@ -8,10 +8,10 @@ use \app\core\src\miscellaneous\CoreFunctions;
 
 class ControllerFactory extends AbstractFactory {
 
-    protected const CONTROLLER = 'Controller';
+    protected const CONTROLLER_AFFIX = 'Controller';
 
     public function create(): Controller {
-        $controller = ('\\app\controllers\\' . $this->getHandler() . self::CONTROLLER);
+        $controller = ('\\app\controllers\\' . $this->getHandler() . self::CONTROLLER_AFFIX);
         $this->validateObject($controller);
         $app = CoreFunctions::app();
         return new $controller($app->getRequest(), $app->getResponse(), $app->getSession(), new AssetsController());

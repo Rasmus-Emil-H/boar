@@ -23,15 +23,14 @@ class Controller {
     protected string $view = '';
     public string $layout = 'main';
     public string $action = '';
-
-    protected AssetsController $clientAssets;
     
     public function __construct(
         protected Request  $request, 
         protected Response $response, 
-        protected Session  $session
+        protected Session  $session,
+        protected AssetsController $clientAssets
     ) {
-        $this->clientAssets = new AssetsController();
+
     }
 
     public function setData($data): void {

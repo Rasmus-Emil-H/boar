@@ -2,6 +2,7 @@
 
 namespace app\core\src\factories;
 
+use app\controllers\AssetsController;
 use \app\core\src\Controller;
 use \app\core\src\miscellaneous\CoreFunctions;
 
@@ -13,7 +14,7 @@ class ControllerFactory extends AbstractFactory {
         $controller = ('\\app\controllers\\' . $this->getHandler() . self::CONTROLLER);
         $this->validateObject($controller);
         $app = CoreFunctions::app();
-        return new $controller($app->getRequest(), $app->getResponse(), $app->getSession());
+        return new $controller($app->getRequest(), $app->getResponse(), $app->getSession(), new AssetsController());
     }
 
 }

@@ -1,11 +1,5 @@
 <?php
 
-/**
- * Bootstrap NotFoundException 
- * AUTHOR: RE_WEB
- * @package app\core\NotFoundException
- */
-
 namespace app\core\src\exceptions;
 
 class InvalidTypeException extends \Exception {

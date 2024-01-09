@@ -1,5 +1,15 @@
 <?php
 
+/**
+|----------------------------------------------------------------------------
+| Migration handler
+|----------------------------------------------------------------------------
+| 
+| @author RE_WEB
+| @package core
+|
+*/
+
 namespace app\core\src\database;
 
 use \app\models\MigrationModel;

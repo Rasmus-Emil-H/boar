@@ -1,10 +1,15 @@
 <?php
 
 /**
- * Entity base for models
- * @package app\core\database
- * @author RE_WEB
- */
+|----------------------------------------------------------------------------
+| Application entities
+|---------------------------------------------------------------------------
+| Model extender - This is where models interact with the database
+| 
+| @author RE_WEB
+| @package core\src
+|
+*/
 
 namespace app\core\src\database;
 

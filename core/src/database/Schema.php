@@ -1,10 +1,14 @@
 <?php
 
 /**
- * Schema modifier
- * @package app\core\src\database
- * @author RE_WEB
- */
+|----------------------------------------------------------------------------
+| Schema
+|----------------------------------------------------------------------------
+|
+| @author RE_WEB
+| @package core\src\database
+|
+*/
 
 namespace app\core\src\database;
 

@@ -1,17 +1,20 @@
 <?php
 
 /**
- * Bootstrap connection
- * Author: RE_WEB
- * @package app\core\database
- */
+|----------------------------------------------------------------------------
+| Application connection
+|----------------------------------------------------------------------------
+| 
+| @author RE_WEB
+| @package core
+|
+*/
 
 namespace app\core\src\database;
 
 use \app\core\src\miscellaneous\CoreFunctions;
 
 class Connection {
-
     private static ?Connection $instance = null;
 
     private array $defaultPdoOptions = [
@@ -61,5 +64,4 @@ class Connection {
     public function getLastID() {
         return $this->pdo->lastInsertId();
     }
-
 }

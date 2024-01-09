@@ -1,10 +1,15 @@
 <?php
 
 /**
- * Bootstrap relations between entities 
- * AUTHOR: RE_WEB
- * @package app\core\src\database\relations
- */
+|----------------------------------------------------------------------------
+| Entity relations
+|----------------------------------------------------------------------------
+| Describe x-x relations
+| 
+| @author RE_WEB
+| @package core
+|
+*/
 
 namespace app\core\src\database\relations;
 

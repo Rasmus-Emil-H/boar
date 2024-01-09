@@ -1,11 +1,5 @@
 <?php
 
-/**
- * Bootstrap Cache 
- * AUTHOR: RE_WEB
- * @package app\core\src\config
- */
-
 namespace app\core\src\config;
 
 class Cache {

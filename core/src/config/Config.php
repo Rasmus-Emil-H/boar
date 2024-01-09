@@ -1,12 +1,7 @@
 <?php
 
-/**
- * Bootstrap Config 
- * AUTHOR: RE_WEB
- * @package app\core\src\config
- */
-
 namespace app\core\src\config;
+
 use \app\core\src\miscellaneous\CoreFunctions;
 
 class Config {

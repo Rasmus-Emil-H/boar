@@ -1,5 +1,15 @@
 <?php
 
+/**
+|----------------------------------------------------------------------------
+| Query builder
+|----------------------------------------------------------------------------
+|
+| @author RE_WEB
+| @package core
+|
+*/
+
 namespace app\core\src\database;
 
 use \app\core\src\utilities\Builder;

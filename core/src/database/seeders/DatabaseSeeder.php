@@ -1,9 +1,14 @@
 <?php
 
 /**
- * Default seeder
- * @package app\core\database
- * @author RE_WEB
+|----------------------------------------------------------------------------
+| Database seeder
+|----------------------------------------------------------------------------
+| Object used to create entities instead of manual labor
+| 
+| @author RE_WEB
+| @package core
+|
 */
 
 namespace app\core\src\database\seeders;

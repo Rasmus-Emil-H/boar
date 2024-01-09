@@ -1,11 +1,5 @@
 <?php
 
-/**
- * Meta data for entities
- * @package app\core\database
- * @author RE_WEB
- */
-
 namespace app\core\src\database;
 
 class EntityMetaData extends Entity {

@@ -42,15 +42,16 @@ class Application {
         self::$app = $this;
         self::$ROOT_DIR = dirname(__DIR__);
 
+        $this->session      = new src\Session();
         $this->request      = new src\Request();
         $this->config       = new src\config\Config();
+        
         $this->setConnection();
 
         if ($applicationIsMigrating) return;
         
         $this->response     = new src\Response();
         $this->router       = new src\Router();
-        $this->session      = new src\Session();
         $this->cookie       = new src\Cookie();
         $this->view         = new src\View();
         $this->logger       = new src\utilities\Logger();

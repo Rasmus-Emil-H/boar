@@ -18,6 +18,7 @@ class Request {
     public function __construct() {
         $this->clientRequest = $this->getCompleteRequestBody();
         $this->setArguments();
+        $this->checkAmountOfRequest();
     }
 
     public function getPath(): string {
@@ -77,6 +78,15 @@ class Request {
     
     public function getPHPInput() {
         return json_decode(file_get_contents('php://input'));
+    }
+
+    private function checkAmountOfRequest() {
+        $app = CoreFunctions::app();
+        $session = $app->getSession();
+        $attempts = strtotime('+5 minutes').'-1';
+        if ($session->get('requestsMade') === '') $session->set('requestsMade', $attempts);
+        list($time, $amount) = explode('-', $attempts);
+        // var_dump($time, $amount);
     }
 
 }

@@ -3,7 +3,7 @@
 /**
  * Bootstrap Response 
  * AUTHOR: RE_WEB
- * @package app\core\Response
+ * @package app\core\src\Response
  */
 
 namespace app\core\src;
@@ -33,7 +33,11 @@ class Response {
     }
 
     public function dataConflict() {
-        $this->setResponse(409, ['The requested resource already exists and can\'t coexist.']);
+        $this->setResponse(409, ['The requested resource already exists and can\'t coexist']);
+    }
+
+    public function requestLimitReached() {
+        $this->setResponse(429, ['Too many requests']); 
     }
 
 }

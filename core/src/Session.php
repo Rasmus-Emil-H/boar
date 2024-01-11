@@ -37,12 +37,12 @@ class Session {
         return $_SESSION[self::FLASH_ARRAY] ?? [];
     }
 
-    public function set(string $key, string $value) {
+    public function set(string $key, mixed $value): void {
         $_SESSION[$key] = $value;
     }
 
-    public function get(string $key): mixed {
-        return $_SESSION[$key] ?? '';
+    public function get(string $key): string|bool {
+        return $_SESSION[$key] ?? false;
     }
 
     public function unset(string|array $key): void {

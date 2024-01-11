@@ -92,7 +92,7 @@ class Request {
         list($time, $attempsCounter) = explode('-', $requestAttemps);
         $subtractedSeconds = (strtotime('now') - (int)$time);
         $session->set('requestsMade', str_replace(('-'.$attempsCounter), ('-'.($attempsCounter+1)), $requestAttemps));
-        if ($requestAttemps > $allowedRequestAmount) $app->getRequest()->requestLimitReached();
+        if ($requestAttemps > $allowedRequestAmount) $app->getResponse()->requestLimitReached();
         if ($subtractedSeconds > $allowedSecondsForRequestInterval) $session->set('requestsMade', $attempts);
     }
 

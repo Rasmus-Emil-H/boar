@@ -46,7 +46,7 @@ class Session {
     }
 
     public function unset(string|array $key): void {
-        if (is_string($key)) (array)$key;
+        if (is_string($key)) $key = [$key];
         foreach ($key as $unsetKey) unset($_SESSION[$unsetKey]);
     }
 

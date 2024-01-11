@@ -83,10 +83,17 @@ class Request {
     private function checkAmountOfRequest() {
         $app = CoreFunctions::app();
         $session = $app->getSession();
-        $attempts = strtotime('+5 minutes').'-1';
-        if ($session->get('requestsMade') === '') $session->set('requestsMade', $attempts);
-        list($time, $amount) = explode('-', $attempts);
-        // var_dump($time, $amount);
+        $allowedRequestMinutes = $app->getConfig()->get('request')->{429}->minutes;
+        $allowedRequestAmount = $app->getConfig()->get('request')->{429}->amount;
+        $attempts = ((string)strtotime('+'.$allowedRequestMinutes.' minutes').'-0');
+        $requestAttemps = $session->get('requestsMade');
+        $allowedSecondsForRequestInterval = ($allowedRequestMinutes*60);
+        if (!$requestAttemps) $session->set('requestsMade', $attempts);
+        list($time, $attempsCounter) = explode('-', $requestAttemps);
+        $subtractedSeconds = (strtotime('now') - (int)$time);
+        $session->set('requestsMade', str_replace(('-'.$attempsCounter), ('-'.($attempsCounter+1)), $requestAttemps));
+        if ($requestAttemps > $allowedRequestAmount) $app->requestLimitReached();
+        if ($subtractedSeconds > $allowedSecondsForRequestInterval) $session->set('requestsMade', $attempts);
     }
 
 }

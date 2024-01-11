@@ -57,5 +57,11 @@
             "<meta name=\"msapplication-tap-highlight\" content=\"no\">",
             "<meta name=\"theme-color\" content=\"#03045e\"/>"
         ]
+    },
+    "request": {
+        "429": {
+            "minutes": 5,
+            "amount": 200
+        }
     }
 }

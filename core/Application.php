@@ -42,9 +42,9 @@ class Application {
         self::$app = $this;
         self::$ROOT_DIR = dirname(__DIR__);
 
+        $this->config       = new src\config\Config();
         $this->session      = new src\Session();
         $this->request      = new src\Request();
-        $this->config       = new src\config\Config();
         
         $this->setConnection();
 
@@ -85,7 +85,7 @@ class Application {
         CoreFunctions::dd('Invalid class: ' . $class);
     }
 
-    public function getParentController(): ?src\Controller {
+    public function getParentController(): src\Controller {
         return $this->parentController;
     }
 

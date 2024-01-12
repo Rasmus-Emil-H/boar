@@ -61,13 +61,12 @@ class QueryBuilder implements Builder {
         }
     }
 
-    public function valueToPlaceholder(array $fields): string {
-        $innerQuery = '';
+    public function valueToPlaceholder(array $fields): self {
         foreach ($fields as $fieldKey => $fieldValue) {
-            $innerQuery .= ':' . ( array_key_last($fields) === $fieldKey ? $fieldKey : $fieldKey . ',' );
+            $this->query .= ':' . ( array_key_last($fields) === $fieldKey ? $fieldKey : $fieldKey . ',' );
             $this->args[$fieldKey] = $fieldValue;
         }
-        return $innerQuery;
+        return $this;
     }
 
     public function setArgumentPair(string $key, mixed $value): self {

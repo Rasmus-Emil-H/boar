@@ -24,6 +24,8 @@ class UserModel extends Entity {
 
 	public function setRole(string $role): self {
 		$this->allowSave();
+		$roleID = (new RoleModel())::query()->select(['RoleID'])->where(['Name' => 'User'])->run();
+		(new RoleModel())->pivot(['UserID' => $this->key(), 'RoleID' => CoreFunctions::first($roleID)->key()]);
 		return $this;
 	}
 
@@ -32,12 +34,11 @@ class UserModel extends Entity {
 	}
 
 	public function authenticate(UserModel $user): void {
-        $app = CoreFunctions::app();
-        $app->getSession()->set('user', $user->key());
+        $this->app->getSession()->set('user', $user->key());
         $sessionID = hash('sha256', uniqid());
-        $app->getSession()->set('SessionID', $sessionID);
+        $this->app->getSession()->set('SessionID', $sessionID);
         (new SessionModel())->set(['Value' => $sessionID, 'UserID' => $user->key()])->save();
-        $app->getResponse()->redirect('/home');
+        $this->app->getResponse()->redirect('/home');
     }
 
 	public function logout() {

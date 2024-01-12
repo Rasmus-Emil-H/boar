@@ -56,7 +56,7 @@ class Connection {
             return $result;
         } catch (\PDOException $e) {
             if (!CoreFunctions::app()::isDevSite()) return;
-            $errorQuery = $query . $e;
+            $errorQuery = 'QUERY FAIL: ' . $query . ' ------ EXCEPTION: ' . $e;
             CoreFunctions::dd($errorQuery);
         }
     }

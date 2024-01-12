@@ -20,5 +20,9 @@ class RoleModel extends Entity {
 	public function getForeignKeys(): array {
 		return [];
 	}
+
+	public function getPivot(): string {
+		return 'role_user';
+	}
 	
 }

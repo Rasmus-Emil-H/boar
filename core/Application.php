@@ -59,6 +59,7 @@ class Application {
         $this->getLanguage();
         $this->getUser();
         $this->i18n         = new src\I18n();
+        CoreFunctions::applicationUser()->meh();
     }
 
     protected function setConnection() {

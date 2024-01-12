@@ -37,4 +37,9 @@ class Relations {
         return $instance::query();
     }
 
+    public function pivot(...$keys) {
+        $queryBuilder = new QueryBuilder(get_called_class(), $this->getPivot(), '');
+        $queryBuilder->create((array)CoreFunctions::first($keys))->run();
+    }
+
 }

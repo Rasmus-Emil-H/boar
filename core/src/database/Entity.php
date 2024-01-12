@@ -13,6 +13,7 @@
 
 namespace app\core\src\database;
 
+use app\core\Application;
 use \app\core\src\database\relations\Relations;
 use \app\core\src\database\QueryBuilder;
 use \app\core\src\database\table\Table;
@@ -22,12 +23,14 @@ abstract class Entity extends Relations {
 
     private   $key;
     protected $data = [];
+    protected Application $app;
 
     abstract protected function getKeyField()  : string;
     abstract protected function getTableName() : string;
     
     public function __construct($data = null, ?array $allowedFields = null) {
         $this->set($data, $allowedFields);
+        $this->app = CoreFunctions::app();
     }
 
     public function __call($name, $arguments) {
@@ -98,10 +101,10 @@ abstract class Entity extends Relations {
             }
             if(empty($this->data)) throw new \app\core\src\exceptions\EmptyException();
             $this->getQueryBuilder()->create($this->data)->run();
-            $this->setKey(CoreFunctions::app()->getConnection()->getLastID());
+            $this->setKey($this->app->getConnection()->getLastID());
             return $this;
         } catch(\Exception $e) {
-            CoreFunctions::app()->addSystemEvent([$e->getMessage()]);
+            $this->app->addSystemEvent([$e->getMessage()]);
             throw new \app\core\src\exceptions\NotFoundException($e->getMessage());
         }
     }
@@ -159,7 +162,7 @@ abstract class Entity extends Relations {
                 'EntityType' => $this->getTableName(), 
                 'EntityID' => $this->key(), 
                 'Data' => json_encode($data), 
-                'IP' => CoreFunctions::app()->getRequest()->getIP()
+                'IP' => $this->app->getRequest()->getIP()
             ])
             ->save(addMetaData: false);
         return $this;

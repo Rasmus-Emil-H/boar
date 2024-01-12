@@ -90,8 +90,8 @@ class QueryBuilder implements Builder {
         return $this;
     }
 
-    public function create(array $fields): self {
-        $this->preparePlaceholdersAndBoundValues($fields, 'insert');
+    public function create(array|object $fields): self {
+        $this->preparePlaceholdersAndBoundValues((array)$fields, 'insert');
         $this->query .= "INSERT INTO {$this->table} ({$this->fields}) VALUES ({$this->placeholders})";
         return $this;
     }

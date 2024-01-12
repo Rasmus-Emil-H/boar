@@ -39,7 +39,7 @@ class Relations {
 
     public function pivot(...$keys) {
         $queryBuilder = new QueryBuilder(get_called_class(), $this->getPivot(), '');
-        $queryBuilder->create((array)CoreFunctions::first($keys))->run();
+        $queryBuilder->create(CoreFunctions::first($keys))->run();
     }
 
 }

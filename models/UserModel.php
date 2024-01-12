@@ -32,6 +32,15 @@ class UserModel extends Entity {
 		return $this->hasMany(OrderModel::class);
 	}
 
+	public function authenticate(UserModel $user): void {
+        $app = CoreFunctions::app();
+        $app->getSession()->set('user', $user->key());
+        $sessionID = hash('sha256', uniqid());
+        $app->getSession()->set('SessionID', $sessionID);
+        (new SessionModel())->set(['Value' => $sessionID, 'UserID' => $user->key()])->save();
+        $app->getResponse()->redirect('/home');
+    }
+
 	public function logout() {
 		$sessions = (new SessionModel())::query()->select()->where([$this->getKeyField() => CoreFunctions::applicationUser()->key()])->run();
 		foreach ($sessions as $session) $session->delete();

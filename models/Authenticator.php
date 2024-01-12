@@ -35,16 +35,7 @@ class Authenticator {
         $user = CoreFunctions::first($user);
         $passwordVerify = password_verify($this->data->password, $user->get('Password'));
         if (!$passwordVerify) return null;
-        $this->authenticateUser($user);
-    }
-
-    public function authenticateUser(UserModel $user): void {
-        $app = CoreFunctions::app();
-        $app->getSession()->set('user', $user->key());
-        $sessionID = hash('sha256', uniqid());
-        $app->getSession()->set('SessionID', $sessionID);
-        (new SessionModel())->set(['Value' => $sessionID, 'UserID' => $user->key()])->save();
-        $app->getResponse()->redirect('/home');
+        $user->authenticate($user);
     }
 
     /**

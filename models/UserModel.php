@@ -23,8 +23,7 @@ class UserModel extends Entity {
 	}
 
 	public function setRole(string $role): self {
-		if (!$this->exists()) 
-			throw new \app\core\src\exceptions\EmptyException('Entity has not yet been properly stored, did you call this method before ->save() ?');
+		$this->allowSave();
 		return $this;
 	}
 

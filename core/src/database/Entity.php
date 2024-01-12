@@ -165,6 +165,11 @@ abstract class Entity extends Relations {
         return $this;
     }
 
+    protected function allowSave() {
+        if (!$this->exists()) 
+			throw new \app\core\src\exceptions\EmptyException('Entity has not yet been properly stored, did you call this method before ->save() ?');
+    }
+
     public function setStatus(int $status): self {
         if (!$this->get(Table::STATUS_COLUMN)) throw new \app\core\src\exceptions\ForbiddenException('This entity does not have a status');
         $this->set([Table::STATUS_COLUMN => $status])->save();

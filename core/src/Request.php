@@ -12,12 +12,14 @@ use app\core\src\miscellaneous\CoreFunctions;
 
 class Request {
 
+    private object $requestConfig;
     private array $args = [];
     public object $clientRequest;
 
     public function __construct() {
         $this->clientRequest = $this->getCompleteRequestBody();
         $this->setArguments();
+        $this->requestConfig = CoreFunctions::app()->getConfig()->get('request')->{429};
         $this->checkAmountOfRequest();
     }
 
@@ -83,8 +85,8 @@ class Request {
     private function checkAmountOfRequest() {
         $app = CoreFunctions::app();
         $session = $app->getSession();
-        $allowedRequestMinutes = $app->getConfig()->get('request')->{429}->minutes;
-        $allowedRequestAmount = $app->getConfig()->get('request')->{429}->amount;
+        $allowedRequestMinutes = $this->requestConfig->minutes;
+        $allowedRequestAmount  = $this->requestConfig->amount;
         $attempts = ((string)strtotime('+'.$allowedRequestMinutes.' minutes').'-0');
         $requestAttemps = $session->get('requestsMade');
         $allowedSecondsForRequestInterval = ($allowedRequestMinutes*60);

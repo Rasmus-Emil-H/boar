@@ -5,13 +5,13 @@ namespace app\controllers;
 use \app\core\src\Controller;
 use \app\core\src\miscellaneous\CoreFunctions;
 use \app\models\UserModel;
-use \app\models\Authenticator;
+use \app\models\AuthenticationModel;
 
 class AuthController extends Controller {
 
     public function login() {
         if ($this->session->get('user')) $this->response->redirect('/home');
-        if ($this->request->isPost()) new Authenticator($this->request->getBody(), 'applicationLogin');
+        if ($this->request->isPost()) new AuthenticationModel($this->request->getBody(), 'applicationLogin');
         $this->setLayout('auth');
         $this->setView('login');
     }

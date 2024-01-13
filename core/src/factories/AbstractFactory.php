@@ -6,7 +6,7 @@
 |----------------------------------------------------------------------------
 |
 | @author RE_WEB
-| @package core\src\factories
+| @package app\core\src\factories
 |
 */
 

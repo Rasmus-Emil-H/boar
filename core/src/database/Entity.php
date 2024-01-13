@@ -168,9 +168,9 @@ abstract class Entity extends Relations {
         return $this;
     }
 
-    protected function allowSave() {
-        if (!$this->exists()) 
-			throw new \app\core\src\exceptions\EmptyException('Entity has not yet been properly stored, did you call this method before ->save() ?');
+    protected function allowSave(): void {
+        if ($this->exists()) return;
+        throw new \app\core\src\exceptions\EmptyException('Entity has not yet been properly stored, did you call this method before ->save() ?');
     }
 
     public function setStatus(int $status): self {

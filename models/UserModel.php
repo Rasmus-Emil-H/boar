@@ -46,7 +46,7 @@ class UserModel extends Entity {
 		foreach ($sessions as $session) $session->delete();
 	}
 
-	public function hasPermissions() {
+	public function hasPermissions(string $action) {
 		
 	}
 	

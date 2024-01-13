@@ -22,8 +22,14 @@ class File extends FileModel {
     protected const FILE_NOT_FOUND     = 'File not found';
     protected const UPLOAD_FOLDER      = __DIR__.'/uploads/';
 
-    public function __construct(public string $fileName) {
+    public function __construct(
+        public string $fileName
+    ) {
         
+    }
+
+    public function get(): bool|string {
+        return file_get_contents($this->fileName);
     }
 
     public function getUploadedFile(): string {

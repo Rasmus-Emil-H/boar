@@ -19,7 +19,7 @@ class Request {
     public function __construct() {
         $this->clientRequest = $this->getCompleteRequestBody();
         $this->setArguments();
-        $this->requestConfig = CoreFunctions::app()->getConfig()->get('request')->{429};
+        $this->requestConfig = CoreFunctions::app()->getConfig()->get('request')->limit;
         $this->checkAmountOfRequest();
     }
 

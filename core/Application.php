@@ -73,11 +73,11 @@ final class Application {
     }
 
     public function getUser() {
-        $session = (new SessionModel())::query()->select()->where(['Value' => $this->session->get('SessionID'), 'UserID' => $this->session->get('user')])->run();
+        $session = (new SessionModel())->query()->select()->where(['Value' => $this->session->get('SessionID'), 'UserID' => $this->session->get('user')])->run();
         $validSession = !empty($session) && src\miscellaneous\CoreFunctions::first($session)->exists();
         if (!in_array($this->request->getPath(), self::$defaultRoute) && !$validSession) $this->response->redirect(src\miscellaneous\CoreFunctions::first(self::$defaultRoute)->scalar);
         $user = new UserModel();
-        return $user::query()->select()->where([$user->getKeyField() => $this->session->get('user')])->run();
+        return $user->query()->select()->where([$user->getKeyField() => $this->session->get('user')])->run();
     }
 
     public function classCheck(string $class): void {

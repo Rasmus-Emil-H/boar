@@ -30,7 +30,7 @@ class AuthenticationModel {
 
     public function applicationLogin(): ?bool {
         if (!CoreFunctions::validateCSRF()) return false;
-        $user = UserModel::query()->select()->where(['email' => $this->data->email])->run();
+        $user = (new UserModel)->query()->select()->where(['email' => $this->data->email])->run();
         if (empty($user)) return false;
         $user = CoreFunctions::first($user);
         $passwordVerify = password_verify($this->data->password, $user->get('Password'));

@@ -24,7 +24,7 @@ class Migration {
     protected const MIGRATION_DATE_OFFSET = -19;
 
     public function getAppliedMigrations(): array {
-        return MigrationModel::all();
+        return (new MigrationModel())->all();
     }
 
     public function createMigrationsTable() {

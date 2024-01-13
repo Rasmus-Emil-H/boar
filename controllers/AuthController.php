@@ -27,7 +27,7 @@ class AuthController extends Controller {
         if (!CoreFunctions::validateCSRF()) $this->response->badToken();
         
         $body = $this->request->getBody();
-        $emailExists = UserModel::query()->select()->where(['Email' => $body->email])->run();
+        $emailExists = (new UserModel())->query()->select()->where(['Email' => $body->email])->run();
         if ($emailExists) $this->response->dataConflict();
 
         $user = (new UserModel())

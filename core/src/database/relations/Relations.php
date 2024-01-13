@@ -29,12 +29,12 @@ class Relations {
     
     public function hasMany(string $related): QueryBuilder {
         $instance = $this->getInstanceOf($related);
-        return $instance::query()->select()->where([$this->getKeyField() => $this->key()]);
+        return (new $instance())->query()->select()->where([$this->getKeyField() => $this->key()]);
     }
     
     public function belongsTo(string $related) {
         $instance = $this->getInstanceOf($related);
-        return $instance::query();
+        return (new $instance())->query();
     }
 
     public function pivot(...$keys) {

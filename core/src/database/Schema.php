@@ -23,7 +23,7 @@ class Schema {
 
     public function down(string $table) {
         $query = self::DROP_TABLE_SYNTAX . $table;
-        MigrationModel::query()->rawSQL($query)->run();
+        (new MigrationModel())->query()->rawSQL($query)->run();
     }
 
     public function up($table, \Closure $callback): void {
@@ -37,7 +37,7 @@ class Schema {
         foreach ($table->getColumns() as $columnKey => $columnOptions)
             $query .= $columnOptions->queryString() . Utilities::appendToStringIfKeyNotLast($table->getColumns(), $columnKey);
         $query .= ')';
-        MigrationModel::query()->rawSQL($query)->run();
+        (new MigrationModel())->query()->rawSQL($query)->run();
     }
 
     /**
@@ -54,7 +54,7 @@ class Schema {
         $query = 'ALTER TABLE ' . $table->getName() . ' ';
         foreach ($table->getColumns() as $columnKey => $columnOptions)
             $query .= ($columnOptions->queryString(isAlteringTable: true) . Utilities::appendToStringIfKeyNotLast($table->getColumns(), $columnKey));
-        MigrationModel::query()->rawSQL($query)->run();
+        (new MigrationModel())->query()->rawSQL($query)->run();
     }
 
 }

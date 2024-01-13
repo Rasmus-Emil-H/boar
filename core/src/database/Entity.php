@@ -127,16 +127,16 @@ abstract class Entity extends Relations {
         return $this->data[$key] ?? "Invalid key: $key"; 
     }
 
-    public static function all(): array {
-        return (new QueryBuilder(get_called_class(), static::tableName, static::keyID))->select()->run();
+    public function all(): array {
+        return (new QueryBuilder(get_called_class(), $this->getTableName(), $this->getKeyField()))->select()->run();
     }
 
     public function getData(): array {
         return $this->data;
     }
 
-    public static function query(): QueryBuilder {
-        return (new QueryBuilder(get_called_class(), static::tableName, static::keyID));
+    public function query(): QueryBuilder {
+        return (new QueryBuilder(get_called_class(), $this->getTableName(), $this->getKeyField()));
     }
 
     public function delete() {

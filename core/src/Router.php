@@ -53,10 +53,11 @@ class Router {
 
     protected function hydrateDOM(): void {
         $controller = $this->getApplicationParentController();
-        extract($controller->getData(), EXTR_SKIP);
-        require_once $controller->getData()['header'];
+        $data = $controller->getData();
+        extract($data, EXTR_SKIP);
+        require_once $data['header'];
         require_once $controller->getView();    
-        require_once $controller->getData()['footer'];
+        require_once $data['footer'];
     }
 
     private function getApplicationParentController(): Controller {

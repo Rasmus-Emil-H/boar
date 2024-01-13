@@ -102,7 +102,7 @@ class Controller {
         return $this->middlewares;
     }
 
-    private function returnEntity(): ?\app\core\src\database\Entity {
+    private function returnEntity(): \app\core\src\database\Entity {
         $request = $this->request->getArguments();
         $entityID = CoreFunctions::getIndex($request, 2)->scalar;
         $entity = new $this->entity($entityID);

@@ -19,7 +19,8 @@ use \app\models\UserModel;
 use \app\core\src;
 use \app\core\src\miscellaneous\CoreFunctions;
 
-class Application {
+final class Application {
+
     public string $layout = 'main';
 
     protected src\Router $router;

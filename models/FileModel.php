@@ -2,8 +2,19 @@
 
 namespace app\models;
 
-class FileModel {
+use app\core\src\database\Entity;
 
-    protected array $allowedFileExtensions = ['jpg', 'jpeg', 'webp', 'png'];
+class FileModel extends Entity {
+
+    const keyID     = 'FileID';
+	const tableName = 'Files';
+	
+	public function getTableName(): string {
+		return 'Files';
+	}
+	
+	public function getKeyField(): string {
+		return 'FileID';
+	}
 
 }

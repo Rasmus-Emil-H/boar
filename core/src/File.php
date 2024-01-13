@@ -8,11 +8,12 @@
 
 namespace app\core\src;
 
-use \app\models\FileModel;
 use \app\core\src\exceptions\NotFoundException;
 use \app\core\src\miscellaneous\CoreFunctions;
 
-class File extends FileModel {
+class File {
+
+    protected array $allowedFileExtensions = ['jpg', 'jpeg', 'webp', 'png'];
 
     public const INVALID_EXTENSION  = 'Invalid file extension';
     public const INVALID_FILE_NAME  = 'Invalid file name';

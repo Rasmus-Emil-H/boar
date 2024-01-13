@@ -25,6 +25,8 @@ class Table {
     private const DEFAULT_VARCHAR_LIMIT = 75;
     private const DEFAULT_INTEGER_LIMIT = 10;
 
+    public const MAX_COLUMN_LENGTH = 255;
+
     public function __construct($name) {
         $this->name = $name;
     }

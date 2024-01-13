@@ -30,7 +30,7 @@ class Migration {
     public function createMigrationsTable() {
         (new Schema())->up('Migrations', function(table\Table $table) {
             $table->increments('MigrationID');
-            $table->varchar('Migration', Connection::MAX_COLUMN_LENGTH);
+            $table->varchar('Migration', table\Table::MAX_COLUMN_LENGTH);
             $table->timestamp();
             $table->primaryKey('MigrationID');
         });
@@ -60,7 +60,7 @@ class Migration {
         foreach ($toBeAppliedMigrations as $migration) {
             require_once $app::$ROOT_DIR . self::MIGRATION_DIR . $migration;
             $handler = pathinfo($migration, PATHINFO_FILENAME);
-            if (strlen($handler) > Connection::MAX_COLUMN_LENGTH) $app->log("Classname ($handler) is too long!", exit: true);
+            if (strlen($handler) > table\Table::MAX_COLUMN_LENGTH) $app->log("Classname ($handler) is too long!", exit: true);
             $app->classCheck($handler);
             (new MigrationFactory(['handler' => $handler]))->create()->up();
             (new MigrationModel())->set(['Migration' => $handler])->save(addMetaData: false);

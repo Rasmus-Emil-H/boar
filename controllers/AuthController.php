@@ -9,14 +9,14 @@ use \app\models\AuthenticationModel;
 
 class AuthController extends Controller {
 
-    public function login() {
+    public function login(): void {
         if ($this->session->get('user')) $this->response->redirect('/home');
         if ($this->request->isPost()) new AuthenticationModel($this->request->getBody(), 'applicationLogin');
         $this->setLayout('auth');
         $this->setView('login');
     }
 
-    public function logout() {
+    public function logout(): void {
         (new UserModel())->logout();
         $this->session->unset(['user', 'SessionID']);
 		$this->response->redirect('/');

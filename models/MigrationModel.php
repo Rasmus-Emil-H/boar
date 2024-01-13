@@ -20,17 +20,5 @@ class MigrationModel extends Entity {
 	public function getKeyField(): string {
 		return 'MigrationID';
 	}
-
-	public function getForeignKeys(): array {
-		return [];
-	}
 	
-	public function rules(): array {
-		return [];
-	}
-
-	public function getRelationObjects() {
-		return [];
-	}
-
 }

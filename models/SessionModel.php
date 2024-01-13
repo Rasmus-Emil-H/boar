@@ -16,9 +16,5 @@ class SessionModel extends Entity {
 	public function getKeyField(): string {
 		return 'SessionID';
 	}
-
-	public function getForeignKeys(): array {
-		return [];
-	}
 	
 }

@@ -21,16 +21,4 @@ class SystemEventModel extends Entity {
 		return 'SystemEventID';
 	}
 
-	public function getForeignKeys(): array {
-		return [];
-	}
-	
-	public function rules(): array {
-		return [];
-	}
-
-	public function getRelationObjects() {
-		return [];
-	}
-
 }

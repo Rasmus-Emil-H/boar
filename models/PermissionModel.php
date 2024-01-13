@@ -17,12 +17,4 @@ class PermissionModel extends Entity {
 		return 'PermissionID';
 	}
 
-	public function getForeignKeys(): array {
-		return [];
-	}
-	
-	public function rules(): array {
-		return [];
-	}
-
 }

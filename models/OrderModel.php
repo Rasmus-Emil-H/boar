@@ -17,10 +17,6 @@ class OrderModel extends Entity {
 		return 'OrderID';
 	}
 
-	public function getForeignKeys(): array {
-		return [];
-	}
-
     public function user() {
         return $this->belongsTo(UserModel::class);
     }

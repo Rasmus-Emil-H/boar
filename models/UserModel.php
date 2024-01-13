@@ -45,9 +45,5 @@ class UserModel extends Entity {
 		$sessions = (new SessionModel())::query()->select()->where([$this->getKeyField() => CoreFunctions::applicationUser()->key()])->run();
 		foreach ($sessions as $session) $session->delete();
 	}
-
-	public function hasPermissions(string $action) {
-		
-	}
 	
 }

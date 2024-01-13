@@ -179,4 +179,8 @@ abstract class Entity extends Relations {
         return $this;
     }
 
+    public function hasPermissions(string $action) {
+		
+	}
+
 }

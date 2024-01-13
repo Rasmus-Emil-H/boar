@@ -17,12 +17,4 @@ class LanguageModel extends Entity {
 		return 'LanguageID';
 	}
 
-	public function getForeignKeys(): array {
-		return [];
-	}
-	
-	public function rules(): array {
-		return [];
-	}
-
 }

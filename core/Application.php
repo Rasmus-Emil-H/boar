@@ -88,7 +88,7 @@ final class Application {
     public function classCheck(string $class): void {
         if (class_exists($class)) return;
         $this->addSystemEvent(['Invalid class was called: ' . $class]);
-        if (!self::isDevSite()) CoreFunctions::dd('404');
+        if (self::isDevSite()) $this->getResponse()->setResponse(404, ['Not found']);
         CoreFunctions::dd('Invalid class: ' . $class);
     }
 

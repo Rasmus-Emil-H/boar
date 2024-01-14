@@ -14,7 +14,7 @@ class OrderController extends Controller {
     public function index() {
         $this->setView('order');
         $this->setData([
-            'orders' => CoreFunctions::applicationUser()->orders()->run()
+            'orders' => CoreFunctions::applicationUser()->orders()
         ]);
     }
 

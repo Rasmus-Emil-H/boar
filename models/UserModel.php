@@ -27,7 +27,7 @@ class UserModel extends Entity {
 	}
 
 	public function orders() {
-		return $this->hasMany(OrderModel::class);
+		return $this->hasMany(OrderModel::class)->run();
 	}
 
 	public function authenticate(UserModel $user): void {

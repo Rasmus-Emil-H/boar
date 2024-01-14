@@ -20,8 +20,7 @@ class Router {
     protected string $method;
     protected bool $rootURL;
 
-    public function __construct() {
-        $request = CoreFunctions::app()->getRequest();
+    public function __construct(Request $request) {
         $this->path = $request->getArguments();
         $this->rootURL = $request->getPath() === '/';
     }

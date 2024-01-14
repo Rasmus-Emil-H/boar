@@ -52,7 +52,7 @@ final class Application {
         if ($applicationIsMigrating) return;
         
         $this->response     = new src\Response();
-        $this->router       = new src\Router();
+        $this->router       = new src\Router($this->getRequest());
         $this->cookie       = new src\Cookie();
         $this->view         = new src\View();
         $this->logger       = new src\utilities\Logger();

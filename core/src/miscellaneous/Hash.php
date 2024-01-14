@@ -11,4 +11,8 @@ class Hash {
         return $uniqueString;
     }
 
+    public static function uuid(): string {
+        return hash('sha256', uniqid());
+    }
+
 }

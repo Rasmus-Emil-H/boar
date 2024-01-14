@@ -4,6 +4,7 @@ namespace app\models;
 
 use \app\core\src\database\Entity;
 use \app\core\src\miscellaneous\CoreFunctions;
+use \app\core\src\miscellaneous\Hash;;
 
 class UserModel extends Entity {
 	
@@ -32,7 +33,7 @@ class UserModel extends Entity {
 
 	public function authenticate(UserModel $user): void {
         $this->app->getSession()->set('user', $user->key());
-        $sessionID = hash('sha256', uniqid());
+		$sessionID = Hash::uuid();
         $this->app->getSession()->set('SessionID', $sessionID);
         (new SessionModel())->set(['Value' => $sessionID, 'UserID' => $user->key()])->save();
         $this->app->getResponse()->redirect('/home');

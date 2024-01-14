@@ -13,7 +13,7 @@
 
 namespace app\core\src\database;
 
-use app\core\Application;
+use \app\core\Application;
 use \app\core\src\database\relations\Relations;
 use \app\core\src\database\QueryBuilder;
 use \app\core\src\database\table\Table;

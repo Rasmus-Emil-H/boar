@@ -58,11 +58,12 @@ abstract class Entity extends Relations {
      */
 
     public function set($data = null, array $allowedFields = null): Entity {
-        if(is_object($data) === true) $data = (array) $data;
-        if(is_array($data) === true) foreach($data as $key => $value) $data[$key] = is_string($value) && trim($value) === '' ? null : $value;
 
+        if(is_object($data) === true) $data = (array)$data;
+        if(is_array($data) === true) foreach($data as $key => $value) $data[$key] = is_string($value) && trim($value) === '' ? null : $value;
         if(is_string($data) && trim($data) === '') $data = null;
         if ($allowedFields != null) $data = array_intersect_key($data, array_flip($allowedFields));
+        
         $key = $this->getKeyField();
         if ($data !== null && gettype($data) !== "array") $data = [$key => $data];
         if(isset($data[$key])) {
@@ -123,8 +124,8 @@ abstract class Entity extends Relations {
         return $this;
 	}
 
-    public function get(string $key) {
-        return $this->data[$key] ?? "Invalid key: $key"; 
+    public function get(string $key): string|bool {
+        return $this->data[$key] ?? false; 
     }
 
     public function all(): array {

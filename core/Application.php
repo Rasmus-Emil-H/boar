@@ -74,8 +74,9 @@ final class Application {
 
     private function validateUserSession() {
         $session = (new SessionModel())->query()->select()->where(['Value' => $this->session->get('SessionID'), 'UserID' => $this->session->get('user')])->run();
-        $validSession = !empty($session) && src\miscellaneous\CoreFunctions::first($session)->exists();
-        if (!in_array($this->request->getPath(), self::$defaultRoute) && !$validSession) $this->response->redirect(src\miscellaneous\CoreFunctions::first(self::$defaultRoute)->scalar);
+        $validSession = !empty($session) && CoreFunctions::first($session)->exists();
+        if (!in_array($this->request->getPath(), self::$defaultRoute) && !$validSession) 
+            $this->response->redirect(CoreFunctions::first(self::$defaultRoute)->scalar);
     }
 
     public function getUser() {

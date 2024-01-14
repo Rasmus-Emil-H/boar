@@ -6,9 +6,6 @@ use \app\core\src\database\Entity;
 
 class SystemEventModel extends Entity {
 
-	const keyID     = 'SystemEventID';
-	const tableName = 'SystemEvents';
-
 	public function getAttributes(): array {
 		return [''];
 	}

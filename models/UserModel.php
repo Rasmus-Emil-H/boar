@@ -6,9 +6,6 @@ use \app\core\src\database\Entity;
 use \app\core\src\miscellaneous\CoreFunctions;
 
 class UserModel extends Entity {
-
-    const keyID     = 'UserID';
-	const tableName = 'Users';
 	
 	public function getTableName(): string {
 		return 'Users';

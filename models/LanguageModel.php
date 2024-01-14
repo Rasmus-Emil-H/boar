@@ -6,9 +6,6 @@ use \app\core\src\database\Entity;
 
 class LanguageModel extends Entity {
 
-	const keyID     = 'LanguageID';
-	const tableName = 'Languages';
-	
 	public function getTableName(): string {
 		return 'Languages';
 	}

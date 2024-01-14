@@ -5,10 +5,7 @@ namespace app\models;
 use \app\core\src\database\Entity;
 
 class OrderModel extends Entity {
-
-    const keyID     = 'OrderID';
-	const tableName = 'Orders';
-
+	
 	public function getTableName(): string {
 		return 'Orders';
 	}

@@ -33,7 +33,7 @@ final class Application {
     protected src\I18n $i18n;
     protected src\config\Config $config;
     protected src\utilities\Logger $logger;
-    protected ?src\Controller $parentController;
+    protected src\Controller $parentController;
 
     public static string $ROOT_DIR;
     public static self $app;

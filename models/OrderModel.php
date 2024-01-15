@@ -4,7 +4,7 @@ namespace app\models;
 
 use \app\core\src\database\Entity;
 
-class OrderModel extends Entity {
+final class OrderModel extends Entity {
 	
 	public function getTableName(): string {
 		return 'Orders';

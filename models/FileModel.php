@@ -4,7 +4,7 @@ namespace app\models;
 
 use app\core\src\database\Entity;
 
-class FileModel extends Entity {
+final class FileModel extends Entity {
 	
 	public function getTableName(): string {
 		return 'Files';

@@ -4,7 +4,7 @@ namespace app\models;
 
 use \app\core\src\database\Entity;
 
-class PermissionModel extends Entity {
+final class PermissionModel extends Entity {
 	
 	public function getTableName(): string {
 		return 'Permission';

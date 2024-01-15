@@ -4,7 +4,7 @@ namespace app\models;
 
 use \app\core\src\database\Entity;
 
-class LanguageModel extends Entity {
+final class LanguageModel extends Entity {
 
 	public function getTableName(): string {
 		return 'Languages';

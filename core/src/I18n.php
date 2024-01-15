@@ -14,7 +14,7 @@ use \app\models\TranslationModel;
 use \app\core\src\miscellaneous\Hash;
 use \app\core\src\miscellaneous\CoreFunctions;
 
-class I18n {
+final class I18n {
 
     protected int $languageID;
 

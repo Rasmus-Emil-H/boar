@@ -11,7 +11,7 @@ namespace app\core\src;
 use \app\core\src\exceptions\NotFoundException;
 use \app\core\src\miscellaneous\CoreFunctions;
 
-class File {
+final class File {
 
     protected array $allowedFileExtensions = ['jpg', 'jpeg', 'webp', 'png'];
 

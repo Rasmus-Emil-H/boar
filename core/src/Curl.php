@@ -8,7 +8,7 @@
 
 namespace app\core\src;
 
-class curl {
+final class curl {
 
 	protected $handler = null;
 	protected $url = '';

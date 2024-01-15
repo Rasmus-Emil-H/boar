@@ -4,7 +4,7 @@ namespace app\models;
 
 use \app\core\src\database\Entity;
 
-class SessionModel extends Entity {
+final class SessionModel extends Entity {
 
 	public function getTableName(): string {
 		return 'Sessions';

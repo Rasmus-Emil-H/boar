@@ -12,7 +12,7 @@ use \app\core\src\exceptions\NotFoundException;
 use \app\core\src\factories\ControllerFactory;
 use \app\core\src\miscellaneous\CoreFunctions;
 
-class Router {
+final class Router {
 
     protected const INDEX_METHOD = 'index';
     

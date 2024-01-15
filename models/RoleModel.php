@@ -4,7 +4,7 @@ namespace app\models;
 
 use \app\core\src\database\Entity;
 
-class RoleModel extends Entity {
+final class RoleModel extends Entity {
 		
 	public function getTableName(): string {
 		return 'Roles';

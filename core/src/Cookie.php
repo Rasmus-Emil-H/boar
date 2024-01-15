@@ -10,7 +10,7 @@ namespace app\core\src;
 
 use \app\core\src\miscellaneous\CoreFunctions;
 
-class Cookie {
+final class Cookie {
 
     public function set(string $key, string $value): void {
         $_COOKIE[$key] = password_hash($value, PASSWORD_DEFAULT);

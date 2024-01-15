@@ -13,7 +13,7 @@ use \app\models\UserModel;
 use \app\core\src\Curl;
 use \app\core\src\miscellaneous\CoreFunctions;
 
-class AuthenticationModel {
+final class AuthenticationModel {
 
     protected Object $data;
 

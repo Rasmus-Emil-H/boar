@@ -6,7 +6,7 @@ use \app\core\src\database\Entity;
 use \app\core\src\miscellaneous\CoreFunctions;
 use \app\core\src\miscellaneous\Hash;;
 
-class UserModel extends Entity {
+final class UserModel extends Entity {
 	
 	public function getTableName(): string {
 		return 'Users';

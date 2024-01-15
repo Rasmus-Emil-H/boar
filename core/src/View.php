@@ -11,7 +11,7 @@ namespace app\core\src;
 use \app\core\src\exceptions\NotFoundException;
 use \app\core\src\miscellaneous\CoreFunctions;
 
-class View {
+final class View {
 
     protected string $partialsDir      = '/views/partials/';
     protected const TPL_FILE_EXTENSION = '.tpl.php';

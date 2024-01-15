@@ -8,7 +8,7 @@
 
 namespace app\core\src;
 
-class Session {
+final class Session {
 
     protected const FLASH_ARRAY = 'FLASH_MESSAGES';
 

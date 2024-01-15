@@ -4,7 +4,7 @@ namespace app\models;
 
 use \app\core\src\database\Entity;
 use \app\core\src\miscellaneous\CoreFunctions;
-use \app\core\src\miscellaneous\Hash;;
+use \app\core\src\miscellaneous\Hash;
 
 final class UserModel extends Entity {
 	

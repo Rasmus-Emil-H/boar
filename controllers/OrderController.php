@@ -3,7 +3,6 @@
 namespace app\controllers;
 
 use \app\core\src\Controller;
-use \app\core\src\middlewares\AuthMiddleware;
 use \app\core\src\miscellaneous\CoreFunctions;
 use app\models\OrderModel;
 

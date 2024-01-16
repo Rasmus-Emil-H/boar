@@ -63,7 +63,7 @@ class Request {
     }
 
     public function getCompleteRequestBody() {
-        $obj = ["files" => $_FILES, "server" => $_SERVER, "cookie" => $_COOKIE, 'body' => $this->getBody()];
+        $obj = ['files' => $_FILES, 'server' => $_SERVER, 'body' => $this->getBody()];
         return (object)$obj;
     }
 
@@ -84,11 +84,13 @@ class Request {
 
     private function checkAmountOfRequest() {
         $app = CoreFunctions::app();
+        if ($app::isCLI()) return;
         $session = $app->getSession();
         $allowedRequestMinutes = $this->requestConfig->minutes;
         $allowedRequestAmount  = $this->requestConfig->amount;
         $attempts = ((string)strtotime('+'.$allowedRequestMinutes.' minutes').'-0');
         $requestAttemps = $session->get('requestsMade');
+        if (!$requestAttemps) return;
         $allowedSecondsForRequestInterval = ($allowedRequestMinutes*60);
         if (!$requestAttemps) $session->set('requestsMade', $attempts);
         list($time, $attempsCounter) = explode('-', $requestAttemps);

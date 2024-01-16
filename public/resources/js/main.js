@@ -1,7 +1,11 @@
 /**
- * JS
- * Split properly
- */
+|----------------------------------------------------------------------------
+| Javascript bootstrap
+|----------------------------------------------------------------------------
+|
+| @author RE_WEB
+|
+*/
 
 const modulesToImport = [
   "../../serviceworkerInit.js",
@@ -15,17 +19,17 @@ document.addEventListener("DOMContentLoaded", async function() {
 
   window.boar = {};
   
-  for (const modulePath of modulesToImport) {
-    try {
-      const module = await import(modulePath);
-      const moduleName = modulePath.split('/').pop().replace('.js', '');
-      window.boar[moduleName] = module.default;
-    } catch (error) {
-      console.log(error);
+    for (const modulePath of modulesToImport) {
+        try {
+            const module = await import(modulePath);
+            const moduleName = modulePath.split('/').pop().replace('.js', '');
+            window.boar[moduleName] = module.default;
+        } catch (error) {
+            
+        }
     }
-  }
 
-  // await window.boar.serviceworkerInit.init();
-  await window.boar.behaviour.init();
+    // await window.boar.serviceworkerInit.init();
+    await window.boar.behaviour.init();
 
 });

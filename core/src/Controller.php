@@ -20,9 +20,11 @@ class Controller {
     protected array $data = [];
     protected array $children = [];
 
+    protected object $requestBody;
+
     protected string $view = '';
-    public string $layout = 'main';
-    public string $action = '';
+    public    string $layout = 'main';
+    public    string $action = '';
     
     public function __construct(
         protected Request  $request, 
@@ -30,7 +32,7 @@ class Controller {
         protected Session  $session,
         protected AssetsController $clientAssets
     ) {
-
+        $this->requestBody = $this->request->getCompleteRequestBody();
     }
 
     public function setData($data): void {

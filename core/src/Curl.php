@@ -18,28 +18,28 @@ final class curl {
 	protected $method = 'get';
 	public $content;
 	
-	public function setUrl(string $url = '') {
+	public function setUrl(string $url = ''): self {
 		$this->url = $url;
 		return $this;
 	}
 	
-	public function setData(array $data = [], bool $jsonEncode = false) {
+	public function setData(array $data = [], bool $jsonEncode = false): self {
 		$this->data = ( $jsonEncode ? json_encode($data) : $data );
 		return $this;
 	}
 	
-	public function setMethod(string $method = 'get') {
+	public function setMethod(string $method = 'get'): self {
 		$this->method = $method;
 		return $this;
 	}
 	
-	public function setHeaders(array $headers) {
+	public function setHeaders(array $headers): self {
 		foreach ( $headers as $header) 
 			$this->headers[] = $header;
 		return $this;
 	}
 
-	public function send(bool $specificDataEntry = false) {
+	public function send(bool $specificDataEntry = false): void {
 		try {
 			if ($this->handler == null) $this->handler = curl_init();
 			switch (strtolower($this->method)) {
@@ -67,7 +67,7 @@ final class curl {
 		}
 	}		
 
-	public function close() {
+	public function close(): void {
 	   curl_close($this->handler);
 	   $this->handler = null;
 	   $this->headers = [];

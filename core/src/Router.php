@@ -27,7 +27,7 @@ final class Router {
 
     protected function createController(): void {
         $app = CoreFunctions::app();
-        if (empty($this->path) || $this->rootURL) $app->getResponse()->redirect(CoreFunctions::first($app::$defaultRoute)->scalar);
+        if (empty($this->path) || $this->rootURL) $app->getResponse()->redirect(CoreFunctions::first($app::$anonymousRoutes)->scalar);
         $handler = ucfirst(CoreFunctions::first($this->path)->scalar);
         $controller = (new ControllerFactory(['handler' => $handler]))->create();
         $app->setParentController($controller);
@@ -52,11 +52,11 @@ final class Router {
 
     protected function hydrateDOM(): void {
         $controller = $this->getApplicationParentController();
-        $data = $controller->getData();
-        extract($data, EXTR_SKIP);
-        require_once $data['header'];
+        $controllerData = $controller->getData();
+        extract($controllerData, EXTR_SKIP);
+        require_once $controllerData['header'];
         require_once $controller->getView();    
-        require_once $data['footer'];
+        require_once $controllerData['footer'];
     }
 
     private function getApplicationParentController(): Controller {

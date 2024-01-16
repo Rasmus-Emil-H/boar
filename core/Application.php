@@ -37,7 +37,7 @@ final class Application {
 
     public static string $ROOT_DIR;
     public static self $app;
-    public static $defaultRoute = ['/auth/login', '/auth/signup'];
+    public static $anonymousRoutes = ['/auth/login', '/auth/signup'];
 
     public function __construct(bool $applicationIsMigrating) {
         self::$app = $this;
@@ -75,8 +75,8 @@ final class Application {
     private function validateUserSession() {
         $session = (new SessionModel())->query()->select()->where(['Value' => $this->session->get('SessionID'), 'UserID' => $this->session->get('user')])->run();
         $validSession = !empty($session) && CoreFunctions::first($session)->exists();
-        if (!in_array($this->request->getPath(), self::$defaultRoute) && !$validSession) 
-            $this->response->redirect(CoreFunctions::first(self::$defaultRoute)->scalar);
+        if (!in_array($this->request->getPath(), self::$anonymousRoutes) && !$validSession) 
+            $this->response->redirect(CoreFunctions::first(self::$anonymousRoutes)->scalar);
     }
 
     public function getUser() {

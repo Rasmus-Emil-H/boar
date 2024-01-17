@@ -16,7 +16,6 @@ final class Response {
 
     public function redirect(string $location) {
         header('Location: ' . $location);
-        exit;
     }
     
     public function setContentType(string $type) {
@@ -26,7 +25,11 @@ final class Response {
     public function setResponse(int $code, array $message) {
         $this->setStatusCode($code);
         $this->setContentType('application/json');
-        exit(json_encode($message));
+        echo json_encode($message);
+    }
+
+    public function notFound(string $message) {
+        $this->setResponse(404, [$message]);
     }
 
     public function badToken() {

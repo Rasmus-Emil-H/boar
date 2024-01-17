@@ -37,7 +37,7 @@ final class Application {
 
     public static string $ROOT_DIR;
     public static self $app;
-    public static $anonymousRoutes = ['/auth/login', '/auth/signup'];
+    public static $anonymousRoutes = ['/auth/login', '/auth/signup', '/auth/resetPassword', '/auth/twofactor'];
 
     public function __construct(bool $applicationIsMigrating) {
         self::$app = $this;
@@ -58,7 +58,7 @@ final class Application {
         $this->logger       = new src\utilities\Logger();
 
         $this->getLanguage();
-        $this->getUser();
+        $this->validateUserSession();
         $this->i18n         = new src\I18n();
     }
 
@@ -73,16 +73,9 @@ final class Application {
     }
 
     private function validateUserSession() {
-        $session = (new SessionModel())->query()->select()->where(['Value' => $this->session->get('SessionID'), 'UserID' => $this->session->get('user')])->run();
-        $validSession = !empty($session) && CoreFunctions::first($session)->exists();
+        $validSession = (new UserModel())->hasActiveSession();
         if (!in_array($this->request->getPath(), self::$anonymousRoutes) && !$validSession) 
             $this->response->redirect(CoreFunctions::first(self::$anonymousRoutes)->scalar);
-    }
-
-    public function getUser() {
-        $this->validateUserSession();
-        $user = new UserModel();
-        return $user->query()->select()->where([$user->getKeyField() => $this->session->get('user')])->run();
     }
 
     public function classCheck(string $class): void {
@@ -130,7 +123,12 @@ final class Application {
     }
 
     public static function isGuest(): bool {
-        return empty(self::$app->getUser());
+        return !(new UserModel())->hasActiveSession();
+    }
+
+    public function getUser(): ?\app\models\UserModel {
+        if (!$this->session->get('user')) return null;
+        return new UserModel($this->session->get('user'));
     }
 
     public static function isDevSite(): bool {

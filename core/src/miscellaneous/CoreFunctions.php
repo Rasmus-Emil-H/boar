@@ -76,7 +76,6 @@ final class CoreFunctions {
     }
       
     public static function applicationUser(): ?\app\models\UserModel {
-        $user = self::app()->getUser();
-        return empty($user) ? null : self::first($user);
+        return self::app()->getUser();
     } 
 }

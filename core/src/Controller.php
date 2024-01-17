@@ -68,18 +68,6 @@ class Controller {
         }
     }
 
-    public function getView(): string {
-        return $this->view ?? View::INVALID_VIEW;
-    }
-
-    protected function setView(string $view, string $dir = ''): void {
-        $this->view = CoreFunctions::app()->getView()->getTemplatePath($view, $dir);
-    }
-
-    public function setLayout(string $layout): void {
-        $this->layout = $layout;
-    }
-
     public function getChildren(): array {
         return $this->children;
     }
@@ -110,6 +98,18 @@ class Controller {
 
     protected function getClientAssets() {
         return $this->clientAssets;
+    }
+
+    public function getView(): string {
+        return $this->view ?? View::INVALID_VIEW;
+    }
+
+    protected function setView(string $view, string $dir = ''): void {
+        $this->view = CoreFunctions::app()->getView()->getTemplatePath($view, $dir);
+    }
+
+    public function setLayout(string $layout): void {
+        $this->layout = $layout;
     }
 
 }

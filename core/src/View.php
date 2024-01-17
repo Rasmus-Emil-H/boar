@@ -15,25 +15,10 @@ final class View {
 
     protected string $partialsDir      = '/views/partials/';
     protected const TPL_FILE_EXTENSION = '.tpl.php';
-
     public const INVALID_VIEW = 'Invalid view';
-
-    public function renderView() {
-        require_once CoreFunctions::app()->getParentController()->getView(); 
-    }
-
-    public function getTemplate(string $template): string {
-        $templateFile = CoreFunctions::app()::$ROOT_DIR . $this->partialsDir . $template . self::TPL_FILE_EXTENSION;
-        if (!file_exists($templateFile)) throw new NotFoundException();
-        return $templateFile;
-    }
 
     public function getTemplatePath(string $template, string $dir): string {
         return CoreFunctions::app()::$ROOT_DIR .  File::VIEWS_FOLDER . $dir . $template . File::TPL_FILE_EXTENSION;
-    }
-
-    public function render(): void {
-        $this->renderView();
     }
 
 }

@@ -126,7 +126,7 @@ final class Application {
         return !(new UserModel())->hasActiveSession();
     }
 
-    public function getUser(): ?\app\models\UserModel {
+    public function getUser(): ?UserModel {
         if (!$this->session->get('user')) return null;
         return new UserModel($this->session->get('user'));
     }

@@ -41,11 +41,7 @@ class Schema {
     }
 
     /**
-     * Used for CRUDing existing tables
-     * 
-     * @param string $table
-     * @param \Closure $callback
-     * @return void
+     * Table CRUD
      */
     
     public function table($table, \Closure $callback): void {

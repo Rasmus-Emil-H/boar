@@ -14,7 +14,6 @@ namespace app\core;
 
 use \app\core\src\database\Connection;
 use \app\models\SystemEventModel;
-use \app\models\SessionModel;
 use \app\models\UserModel;
 use \app\core\src;
 use \app\core\src\miscellaneous\CoreFunctions;
@@ -27,7 +26,6 @@ final class Application {
     protected src\Request $request;
     protected src\Response $response;
     protected src\Session $session;
-    protected src\Cookie $cookie;
     protected Connection $connection;
     protected src\View $view;
     protected src\I18n $i18n;
@@ -53,7 +51,6 @@ final class Application {
         
         $this->response     = new src\Response();
         $this->router       = new src\Router($this->getRequest());
-        $this->cookie       = new src\Cookie();
         $this->view         = new src\View();
         $this->logger       = new src\utilities\Logger();
 

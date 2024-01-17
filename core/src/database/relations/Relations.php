@@ -15,7 +15,6 @@ namespace app\core\src\database\relations;
 
 use \app\core\src\database\QueryBuilder;
 use \app\core\src\miscellaneous\CoreFunctions;
-use \app\core\src\database\Entity;
 
 class Relations {
 
@@ -35,7 +34,7 @@ class Relations {
     
     public function belongsTo(string $related) {
         $instance = $this->getInstanceOf($related);
-        return $instance->query()->select()->where([$instance->getKeyField() => $this->key()]);
+        return $instance->query()->select()->where([$instance->getKeyField() => $this->key()])->run();
     }
 
     public function pivot(...$keys) {

@@ -17,6 +17,7 @@ final class CoreFunctions {
     private function __construct() {}
 
     public static function displayDD($input, $title = 'Debugging'): void {
+        if (self::app()::isCli()) exit($input);
         echo '<pre style="padding: 2rem; background-color: #3a6b39; color: white; border-radius: 4px;margin-top: 10px;" class="debug">';
         if ($title) echo '<h2 class="text-center">' . $title . '</h2><hr>';
         var_dump($input);

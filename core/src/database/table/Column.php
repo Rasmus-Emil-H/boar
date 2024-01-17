@@ -56,7 +56,7 @@ class Column {
             }
             return $query;
         } catch (\Exception $e) {
-            throw new \app\core\exceptions\NotFoundException("Column generation failed: " . $e->getMessage());
+            throw new \app\core\src\exceptions\NotFoundException("Column generation failed: " . $e->getMessage());
         }
     }
 

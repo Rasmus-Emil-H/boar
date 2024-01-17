@@ -4,8 +4,8 @@ namespace app\core\src\database\table;
 
 class ForeignKey extends Column {
 
-    protected $foreignTable;
-    protected $foreignColumn;
+    protected string $foreignTable;
+    protected string $foreignColumn;
     
     private const DEFAULT_FOREIGN_KEY_COLUMN_TYPE = 'FOREIGN_KEY';
     

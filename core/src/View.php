@@ -28,6 +28,10 @@ final class View {
         return $templateFile;
     }
 
+    public function getTemplatePath(string $template, string $dir): string {
+        return CoreFunctions::app()::$ROOT_DIR .  File::VIEWS_FOLDER . $dir . $template . File::TPL_FILE_EXTENSION;
+    }
+
     public function render(): void {
         $this->renderView();
     }

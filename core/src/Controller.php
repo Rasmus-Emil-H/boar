@@ -73,19 +73,7 @@ class Controller {
     }
 
     protected function setView(string $view, string $dir = ''): void {
-        $this->view = $this->getTemplatePath($view, $dir);
-    }
-
-    public function getPartialTemplate(string $partial): string {
-        return $this->getTemplatePath($partial, 'partials/');
-    }
-
-    public function getTemplate(string $partial): string {
-        return $this->getTemplatePath($partial, '');
-    }
-
-    public function getTemplatePath(string $template, string $dir): string {
-        return CoreFunctions::app()::$ROOT_DIR .  File::VIEWS_FOLDER . $dir . $template . File::TPL_FILE_EXTENSION;
+        $this->view = CoreFunctions::app()->getView()->getTemplatePath($view, $dir);
     }
 
     public function setLayout(string $layout): void {

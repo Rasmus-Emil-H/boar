@@ -16,13 +16,14 @@ class Table {
     public const DELETED_AT_COLUMN = 'DeletedAt';
     public const STATUS_COLUMN     = 'Status';
 
-    private const INT_COLUMN_TYPE     = 'INT';
-    private const VARCHAR_COLUMN_TYPE = 'VARCHAR';
-    private const TEXT_COLUMN_TYPE    = 'TEXT';
-    private const UUID_COLUMN_NAME    = 'UUID';
-    private const BOOLEAN_COLUMN_TYPE = 'BOOLEAN';
-    private const PRIMARY_KEY         = 'PRIMARY_KEY';
-    private const TIMESTAMP           = 'TIMESTAMP DEFAULT CURRENT_TIMESTAMP';
+    private const INT_COLUMN_TYPE       = 'INT';
+    private const FLOAT_COLUMN_TYPE     = 'FLOAT';
+    private const VARCHAR_COLUMN_TYPE   = 'VARCHAR';
+    private const TEXT_COLUMN_TYPE      = 'TEXT';
+    private const UUID_COLUMN_NAME      = 'UUID';
+    private const BOOLEAN_COLUMN_TYPE   = 'BOOLEAN';
+    private const PRIMARY_KEY           = 'PRIMARY_KEY';
+    private const TIMESTAMP             = 'TIMESTAMP DEFAULT CURRENT_TIMESTAMP';
 
     public const MAX_COLUMN_LENGTH      = 255;
     private const DEFAULT_UUID_LENGTH   = 128;
@@ -54,6 +55,11 @@ class Table {
 
     public function integer(string $columnName, int $length = self::DEFAULT_INTEGER_LIMIT): self {
         $this->createColumn($columnName, self::INT_COLUMN_TYPE, ['LENGTH' => '('.$length.')']);
+        return $this;
+    }
+
+    public function float(string $columnName, int $length = self::DEFAULT_INTEGER_LIMIT): self {
+        $this->createColumn($columnName, self::FLOAT_COLUMN_TYPE, ['LENGTH' => '('.$length.')']);
         return $this;
     }
 

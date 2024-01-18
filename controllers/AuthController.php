@@ -10,8 +10,8 @@ use \app\models\AuthenticationModel;
 class AuthController extends Controller {
 
     public function login(): void {
-        if ($this->session->get('user')) $this->response->redirect('/home');
-        if ($this->request->isPost()) new AuthenticationModel($this->request->getBody(), 'applicationLogin');
+        if ((new UserModel())->hasActiveSession()) $this->response->redirect('/home');
+        if ($this->request->isPost()) new AuthenticationModel($this->requestBody, 'applicationLogin');
         $this->setLayout('auth');
         $this->setView('login');
     }
@@ -22,16 +22,21 @@ class AuthController extends Controller {
 		$this->response->redirect('/');
     }
 
+    public function resetPassword() {
+        if ($this->request->isGet()) return $this->setView('resetPassword');
+        // (new UserModel())->resetPassword($this->requestBody->email);
+    }
+
     public function signup() {
         if ($this->request->isGet()) return $this->setView('signup');
         if (!CoreFunctions::validateCSRF()) $this->response->badToken();
         
-        $body = $this->request->getBody();
-        $emailExists = (new UserModel())->query()->select()->where(['Email' => $body->email])->run();
+        $request = $this->requestBody;
+        $emailExists = (new UserModel())->query()->select()->where(['Email' => $request->body->email])->run();
         if ($emailExists) $this->response->dataConflict();
 
         $user = (new UserModel())
-            ->set(['Email' => $body->email, 'Name' => $body->name, 'Password' => password_hash($body->password, PASSWORD_DEFAULT)])
+            ->set(['Email' => $request->body->email, 'Name' => $request->body->name, 'Password' => password_hash($request->body->password, PASSWORD_DEFAULT)])
             ->save()
             ->setRole('User')
             ->addMetaData(['event' => 'user signed up']);
@@ -39,5 +44,5 @@ class AuthController extends Controller {
         $this->session->set('userID', $user->key());
         $this->response->redirect('/home');
     }
-
+    
 }

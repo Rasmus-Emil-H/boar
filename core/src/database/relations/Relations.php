@@ -22,10 +22,6 @@ class Relations {
         CoreFunctions::app()->classCheck($class);
         return new $class();
     }
-
-    public function hasOne(string $related, string $foreignKey) {
-        $instance = $this->getInstanceOf($related);
-    }
     
     public function hasMany(string $related): QueryBuilder {
         $instance = $this->getInstanceOf($related);

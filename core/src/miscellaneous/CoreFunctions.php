@@ -18,7 +18,7 @@ final class CoreFunctions {
 
     public static function displayDD($input, $title = 'Debugging'): void {
         if (self::app()::isCli()) exit($input);
-        echo '<pre style="padding: 2rem; background-color: #3a6b39; color: white; border-radius: 4px;margin-top: 10px;" class="debug">';
+        echo '<pre style="padding: 2rem; background-color: #3a6b39; color: white; border-radius: 4px;margin-top: 10px;text-wrap:wrap;" class="debug">';
         if ($title) echo '<h2 class="text-center">' . $title . '</h2><hr>';
         var_dump($input);
         self::app()->log('Incident report has been submitted.');
@@ -79,4 +79,9 @@ final class CoreFunctions {
     public static function applicationUser(): ?\app\models\UserModel {
         return self::app()->getUser();
     } 
+
+    public static function getRemainingApplicationMemory(): int {
+        return ini_get('memory_limit') - memory_get_usage(true);
+    }
+
 }

@@ -48,7 +48,7 @@ class QueryBuilder implements Builder {
         return $this;
     }
 
-    public function new(array $data): void {
+    public function initializeNewEntity(array $data): void {
         $this->bindValues($data);
         $this->create($data);
         $this->run();

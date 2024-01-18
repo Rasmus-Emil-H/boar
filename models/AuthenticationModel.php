@@ -18,7 +18,7 @@ final class AuthenticationModel {
     protected Object $data;
 
     public function __construct(Object $data, string $method) {
-        $this->data = $data;
+        $this->data = $data->body;
         if (!method_exists($this, $method)) throw new \app\core\src\exceptions\NotFoundException();
         $this->$method();
     }
@@ -36,6 +36,7 @@ final class AuthenticationModel {
         $passwordVerify = password_verify($this->data->password, $user->get('Password'));
         if (!$passwordVerify) return null;
         $user->authenticate($user);
+        return null;
     }
 
     /**

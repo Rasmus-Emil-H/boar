@@ -21,8 +21,9 @@ use \app\core\src\miscellaneous\CoreFunctions;
 
 abstract class Entity extends Relations {
 
-    private   $key;
-    protected $data = [];
+    private $key;
+    protected array $data = [];
+    protected array $additionalConstructorMethods = [];
     protected Application $app;
 
     abstract protected function getKeyField()  : string;
@@ -31,6 +32,12 @@ abstract class Entity extends Relations {
     public function __construct($data = null, ?array $allowedFields = null) {
         $this->set($data, $allowedFields);
         $this->app = CoreFunctions::app();
+        if ($this->exists()) $this->checkAdditionalConstructorMethods();
+    }
+
+    public function checkAdditionalConstructorMethods() {
+        if (empty($this->additionalConstructorMethods)) return;
+        foreach ($this->additionalConstructorMethods as $method) $this->data[$method] = $this->{$method}();
     }
 
     public function __call($name, $arguments) {
@@ -57,25 +64,28 @@ abstract class Entity extends Relations {
      * @return object The current entity instance
      */
 
-    public function set($data = null, array $allowedFields = null): Entity {
-
-        if(is_object($data) === true) $data = (array)$data;
-        if(is_array($data) === true) foreach($data as $key => $value) $data[$key] = is_string($value) && trim($value) === '' ? null : $value;
-        if(is_string($data) && trim($data) === '') $data = null;
+    protected function convertData($data = null, array $allowedFields = null) {
+        if (is_object($data) === true) $data = (array)$data;
+        if (is_array($data) === true) foreach($data as $key => $value) $data[$key] = is_string($value) && trim($value) === '' ? null : $value;
+        if (is_string($data) && trim($data) === '') $data = null;
         if ($allowedFields != null) $data = array_intersect_key($data, array_flip($allowedFields));
-        
+        return $data;
+    }
+
+    public function set($data = null, array $allowedFields = null): Entity {
+        $data = $this->convertData($data, $allowedFields);
         $key = $this->getKeyField();
         if ($data !== null && gettype($data) !== "array") $data = [$key => $data];
         if(isset($data[$key])) {
             $exists = $this->getQueryBuilder()->fetchRow([$key => $data[$key]]);
             if(!empty($exists)) {
-                $this->key = $exists->{$this->getKeyField()};
-                $this->data = (array)$exists;
+                $this->setKey($exists->{$this->getKeyField()});
+                $this->setData((array)$exists);
                 unset($this->data[$this->getKeyField()]);
                 unset($data[$this->getKeyField()]);
             }
         }
-        
+
         if($data === null) $data = [];
         $this->data = array_merge($this->data, $data);
         return $this;
@@ -91,6 +101,10 @@ abstract class Entity extends Relations {
 
     public function exists(): bool {
         return $this->key !== null;
+    }
+
+    public function setData(array $data) {
+        $this->data = $data;
     }
 
     public function save(bool $addMetaData = true): self {
@@ -111,7 +125,7 @@ abstract class Entity extends Relations {
     }
 
     public function init() {
-		return $this->getQueryBuilder()->new($this->data);
+		return $this->getQueryBuilder()->initializeNewEntity($this->data);
 	}
 
     public function softDelete(): self {
@@ -161,7 +175,7 @@ abstract class Entity extends Relations {
         (new EntityMetaData())
             ->set([
                 'EntityType' => $this->getTableName(), 
-                'EntityID' => $this->key(), 
+                'EntityID' => $this->key() ?? 0,
                 'Data' => json_encode($data), 
                 'IP' => $this->app->getRequest()->getIP()
             ])

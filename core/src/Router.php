@@ -31,8 +31,7 @@ final class Router {
         $handler = ucfirst(CoreFunctions::first($this->path)->scalar);
         $controller = (new ControllerFactory(['handler' => $handler]))->create();
         $app->setParentController($controller);
-        $this->method = $this->path[1] ?? self::INDEX_METHOD;
-        if (!method_exists($controller, $this->method)) throw new NotFoundException();
+        $this->method = !isset($this->path[1]) || !method_exists($controller, $this->path[1]) ? self::INDEX_METHOD : $this->path[1];
     }
 
     protected function runMiddlewares(): void {

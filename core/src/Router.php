@@ -29,8 +29,8 @@ final class Router {
         $app = CoreFunctions::app();
         if (empty($this->path) || $this->rootURL) $app->getResponse()->redirect(CoreFunctions::first($app::$anonymousRoutes)->scalar);
         $handler = ucfirst(CoreFunctions::first($this->path)->scalar);
-        $controllerMethod = $this->path[1] ?? '';
         $controller = (new ControllerFactory(['handler' => $handler]))->create();
+        $controllerMethod = $this->path[1] ?? '';
         $app->setParentController($controller);
         $this->method = $controllerMethod === '' || !method_exists($controller, $controllerMethod) ? self::INDEX_METHOD : $controllerMethod;
     }

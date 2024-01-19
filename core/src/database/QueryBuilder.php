@@ -126,7 +126,7 @@ class QueryBuilder implements Builder {
 
     public function where(array $arguments): self {
         foreach ($arguments as $selector => $sqlValue) {
-            list($comparison, $sqlValue) = Parser::sqlComparsion($sqlValue, $this->comparisonOperators);
+            list($comparison, $sqlValue) = Parser::sqlComparsion(($sqlValue ?? ''), $this->comparisonOperators);
             $this->args[$selector] = $sqlValue;
             $this->query .= (strpos($this->query, self::WHERE) === false ? self::WHERE : self::AND) . "{$selector} {$comparison} :{$selector}";
         }

@@ -29,9 +29,10 @@ final class Router {
         $app = CoreFunctions::app();
         if (empty($this->path) || $this->rootURL) $app->getResponse()->redirect(CoreFunctions::first($app::$anonymousRoutes)->scalar);
         $handler = ucfirst(CoreFunctions::first($this->path)->scalar);
+        $handlerMethod = $this->path[1] ?? '';
         $controller = (new ControllerFactory(['handler' => $handler]))->create();
         $app->setParentController($controller);
-        $this->method = !isset($this->path[1]) || !method_exists($controller, $this->path[1]) ? self::INDEX_METHOD : $this->path[1];
+        $this->method = $handlerMethod === '' || !method_exists($controller, $handlerMethod) ? self::INDEX_METHOD : $handlerMethod;
     }
 
     protected function runMiddlewares(): void {

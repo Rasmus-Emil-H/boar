@@ -8,7 +8,6 @@
 
 namespace app\core\src;
 
-use \app\core\src\exceptions\NotFoundException;
 use \app\core\src\factories\ControllerFactory;
 use \app\core\src\miscellaneous\CoreFunctions;
 

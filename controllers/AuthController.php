@@ -44,8 +44,8 @@ class AuthController extends Controller {
             return $this->setView('resetPassword');
         }
 
-        $newPassword = $this->requestBody->body->password;
         if (!CoreFunctions::validateCSRF()) $this->response->badToken();
+        $newPassword = $this->requestBody->body->password;
         if ($newPassword !== $this->requestBody->body->passwordRepeat) $this->response->setResponse(409, ['Passwords do not match']);
 
         $userToResetPasswordOn = (new UserModel())->checkPasswordResetToken($this->requestBody->body->resetToken);
@@ -53,7 +53,7 @@ class AuthController extends Controller {
         $user = new UserModel($userID);
         $user->validatePassword($newPassword);
         $user
-            ->set(['Password' => $newPassword])
+            ->set(['Password' => password_hash($newPassword, PASSWORD_DEFAULT)])
             ->save();
 
     }

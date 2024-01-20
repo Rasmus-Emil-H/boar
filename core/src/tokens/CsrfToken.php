@@ -15,12 +15,12 @@ class CsrfToken {
 
     private string $formTokenLabel = 'eg-csrf-token-label';
     private string $sessionTokenLabel = 'EG_CSRF_TOKEN_SESS_IDX';
+    private string $hashAlgo = 'sha256';
     private object $post;
     private object $session;
-    private array $server;
-    private array $excludeUrl = [];
-    private string $hashAlgo = 'sha256';
-    private bool $hmac_ip = true;
+    private array  $server;
+    private array  $excludeUrl = [];
+    private bool   $hmac_ip = true;
 
     public function __construct($excludeUrl = null) {
         if (!is_null($excludeUrl)) $this->excludeUrl = $excludeUrl;

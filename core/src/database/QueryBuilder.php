@@ -106,9 +106,13 @@ class QueryBuilder implements Builder {
     }
 
     public function patch(array $fields, string $primaryKeyField, string $primaryKey): self {
-        $this->preparePlaceholdersAndBoundValues($fields, 'patch');
-        $this->query .= "UPDATE {$this->table} SET {$this->placeholders} WHERE $primaryKeyField = :keyValue";
-        $this->args['keyValue'] = $primaryKey;
+        $this->query .= "UPDATE {$this->table} SET ";
+        foreach ($fields as $fieldKey => $fieldValue) {
+            $this->args[$fieldKey] = $fieldValue;
+            $this->query .= " $fieldKey = :$fieldKey " . (array_key_last($fields) === $fieldKey ? '' : ',');;
+        }
+        $this->query .= " WHERE $primaryKeyField = :primaryKey ";
+        $this->args['primaryKey'] = $primaryKey;
         return $this;
     }
 

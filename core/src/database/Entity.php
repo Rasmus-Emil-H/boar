@@ -2,201 +2,204 @@
 
 /**
 |----------------------------------------------------------------------------
-| Query builder
-|----------------------------------------------------------------------------
-|
+| Application entities
+|---------------------------------------------------------------------------
+| Model extender - This is where models interact with the database
+| 
 | @author RE_WEB
-| @package core
+| @package core\src
 |
 */
 
 namespace app\core\src\database;
 
-use \app\core\src\utilities\Builder;
-use \app\core\src\utilities\Parser;
+use \app\core\Application;
+use \app\core\src\database\relations\Relations;
+use \app\core\src\database\QueryBuilder;
+use \app\core\src\database\table\Table;
 use \app\core\src\miscellaneous\CoreFunctions;
 
-class QueryBuilder implements Builder {
+abstract class Entity extends Relations {
 
-    public const WHERE       = ' WHERE ';
-    public const AND         = ' AND ';
-    public const BIND        = ' = :';
-    public const INNERJOIN   = ' INNER JOIN ';
+    private $key;
+    protected array $data = [];
+    protected array $additionalConstructorMethods = [];
+    protected Application $app;
 
-    protected const DEFAULT_LIMIT = 100;
-    protected const DEFAULT_OFFSET = 0;
+    abstract protected function getKeyField()  : string;
+    abstract protected function getTableName() : string;
     
-    protected string $query  = '';
-    protected string $where  = '';
-    protected string $fields = '';
-    protected string $placeholders = '';
-
-    protected array $args = [];
-
-    private array $comparisonOperators = ['=', '<>', '!=', '>', '<', '>=', '<='];
-    
-
-    public function __construct(
-        public string $class, 
-        public string $table, 
-        public string $keyID) {
-        $this->resetQuery();
+    public function __construct($data = null, ?array $allowedFields = null) {
+        $this->set($data, $allowedFields);
+        $this->app = CoreFunctions::app();
+        if ($this->exists()) $this->checkAdditionalConstructorMethods();
     }
 
-    public function select(array $fields = ['*']): self {
-        $this->query .= 'SELECT ' . implode(', ', $fields) . '  FROM ' . $this->table;
+    public function checkAdditionalConstructorMethods() {
+        if (empty($this->additionalConstructorMethods)) return;
+        foreach ($this->additionalConstructorMethods as $method) $this->data[$method] = $this->{$method}();
+    }
+
+    public function __call($name, $arguments) {
+        throw new \app\core\src\exceptions\NotFoundException("Invalid non static method method [{$name}]");
+    }
+
+    public static function __callStatic($name, $arguments) {
+        throw new \app\core\src\exceptions\NotFoundException("Invalid static method [{$name}]");
+    }
+
+    public function __get(string $key) {
+        return $this->data[$key] ?? new \Exception("Invalid entity key");
+    }
+
+    public function __toString() {
+        $result = get_class($this)."($this->key):\n";
+        foreach ($this->data as $key => $value) $result .= "[$key]:$value\n";
+        return $result;
+    }
+
+    /**
+     * @param array $values key:value pairs of values to set
+     * @param array|null $allowedFields keys of fields allowed to be altered
+     * @return object The current entity instance
+     */
+
+    protected function convertData($data = null, array $allowedFields = null) {
+        if (is_object($data) === true) $data = (array)$data;
+        if (is_array($data) === true) foreach($data as $key => $value) $data[$key] = is_string($value) && trim($value) === '' ? null : $value;
+        if (is_string($data) && trim($data) === '') $data = null;
+        if ($allowedFields != null) $data = array_intersect_key($data, array_flip($allowedFields));
+        return $data;
+    }
+
+    public function set($data = null, array $allowedFields = null): Entity {
+        $data = $this->convertData($data, $allowedFields);
+        $key = $this->getKeyField();
+        if ($data !== null && gettype($data) !== "array") $data = [$key => $data];
+        if(isset($data[$key])) {
+            $exists = $this->getQueryBuilder()->fetchRow([$key => $data[$key]]);
+            if(!empty($exists)) {
+                $this->setKey($exists->{$this->getKeyField()});
+                $this->setData((array)$exists);
+                unset($this->data[$this->getKeyField()]);
+                unset($data[$this->getKeyField()]);
+            }
+        }
+
+        if($data === null) $data = [];
+        $this->data = array_merge($this->data, $data);
         return $this;
     }
 
-    public function initializeNewEntity(array $data): void {
-        $this->bindValues($data);
-        $this->create($data);
-        $this->run();
+    protected function setKey(string $key): void {
+        $this->key = $key;
     }
-    
-    public function bindValues(array $arguments): void {
-        foreach($arguments as $selector => $value) {
-            $this->query .= ( array_key_first($arguments) === $selector ? self::WHERE : self::AND ) . $selector . self::BIND . $selector;
-            $this->setArgumentPair($selector, $value);
+
+    public function key() {
+        return $this->key;
+    }
+
+    public function exists(): bool {
+        return $this->key !== null;
+    }
+
+    public function setData(array $data) {
+        $this->data = $data;
+    }
+
+    public function save(bool $addMetaData = true): self {
+        if ($addMetaData) $this->addMetaData([$this->data]);
+        try {
+            if ($this->exists()) {
+                $this->getQueryBuilder()->patch($this->data, $this->getKeyField(), $this->key())->run('fetch');
+                return $this;
+            }
+            if(empty($this->data)) throw new \app\core\src\exceptions\EmptyException();
+            $this->getQueryBuilder()->create($this->data)->run();
+            $this->setKey($this->app->getConnection()->getLastID());
+            return $this;
+        } catch(\Exception $e) {
+            $this->app->addSystemEvent([$e->getMessage()]);
+            throw new \app\core\src\exceptions\NotFoundException($e->getMessage());
         }
     }
 
-    public function valueToPlaceholder(array $fields): self {
-        foreach ($fields as $fieldKey => $fieldValue) {
-            $this->query .= ':' . ( array_key_last($fields) === $fieldKey ? $fieldKey : $fieldKey . ',' );
-            $this->args[$fieldKey] = $fieldValue;
-        }
+    public function init() {
+		return $this->getQueryBuilder()->initializeNewEntity($this->data);
+	}
+
+    public function softDelete(): self {
+		$this->set([Table::DELETED_AT_COLUMN => new \DateTime('Y-m-d H:i:s')])->save();
+        return $this;
+	}
+
+    public function restore(): self {
+	    $this->set([Table::DELETED_AT_COLUMN => null])->save();
+        return $this;
+	}
+
+    public function get(string $key): string|bool {
+        return $this->data[$key] ?? false; 
+    }
+
+    public function all(): array {
+        return (new QueryBuilder(get_called_class(), $this->getTableName(), $this->getKeyField()))->select()->run();
+    }
+
+    public function getData(): array {
+        return $this->data;
+    }
+
+    public function query(): QueryBuilder {
+        return (new QueryBuilder(get_called_class(), $this->getTableName(), $this->getKeyField()));
+    }
+
+    public function delete() {
+        return $this->getQueryBuilder()->delete()->where([$this->getKeyField() => $this->key()])->run();
+    }
+
+     public function truncate() {
+        return $this->getQueryBuilder()->delete()->run();
+    }
+
+     public function trashed() {
+        return $this->getQueryBuilder()->select()->where([Table::DELETED_AT_COLUMN => 'IS NOT NULL'])->run();
+    }
+
+    public function getQueryBuilder(): QueryBuilder {
+        return (new QueryBuilder(get_called_class(), $this->getTableName(), $this->getKeyField()));
+    }
+
+    public function addMetaData(array $data): self {
+        if (empty($data)) throw new \InvalidArgumentException('Data can not be empty');
+        (new EntityMetaData())
+            ->set([
+                'EntityType' => $this->getTableName(), 
+                'EntityID' => $this->key() ?? 0,
+                'Data' => json_encode($data), 
+                'IP' => $this->app->getRequest()->getIP()
+            ])
+            ->save(addMetaData: false);
         return $this;
     }
 
-    public function setArgumentPair(string $key, mixed $value): self {
-        $this->args[$key] = $value;
+    public function getMetaData(): QueryBuilder {
+        return (new EntityMetaData())->getQueryBuilder();
+    }
+
+    protected function allowSave(): void {
+        if ($this->exists()) return;
+        throw new \app\core\src\exceptions\EmptyException('Entity has not yet been properly stored, did you call this method before ->save() ?');
+    }
+
+    public function setStatus(int $status): self {
+        if (!$this->get(Table::STATUS_COLUMN)) throw new \app\core\src\exceptions\ForbiddenException('This entity does not have a status');
+        $this->set([Table::STATUS_COLUMN => $status])->save();
         return $this;
     }
 
-    public function innerJoin(string $table, string $using): self {
-        $this->query .= self::INNERJOIN . " {$table} USING({$using}) ";
-        return $this;
-    }
-    
-    public function leftJoin(string $table, string $on, array $and = []): self {
-        $implodedAnd = (count($and) > 0 ? ' AND ' : '') . implode(' AND ', $and);
-        $this->query .= " LEFT JOIN {$table} {$on} {$implodedAnd} ";
-        return $this;
-    }
-
-    public function in(array $inValues): self {
-        $this->query .= " IN ( " . implode(', ', $inValues) . " ) ";
-        return $this;
-    }
-
-    public function create(array|object $fields): self {
-        $this->preparePlaceholdersAndBoundValues((array)$fields, 'insert');
-        $this->query .= "INSERT INTO {$this->table} ({$this->fields}) VALUES ({$this->placeholders})";
-        return $this;
-    }
-
-    public function preparePlaceholdersAndBoundValues(array $fields, string $fieldSetter): self {
-        foreach ($fields as $key => $field) {
-            $this->fields .= $key.(array_key_last($fields) === $key ? '' : ',');
-            $this->placeholders .= ($fieldSetter === 'insert' ? '' : $key.'=') . "?" . (array_key_last($fields) === $key ? '' : ',');
-            $this->args[] = $field;
-        }
-        return $this;
-    }
-
-    public function patch(array $fields, string $primaryKeyField, string $primaryKey): self {
-        $this->preparePlaceholdersAndBoundValues($fields, 'patch');
-        $this->query .= "UPDATE {$this->table} SET {$this->placeholders} WHERE $primaryKeyField = :keyValue";
-        $this->args['keyValue'] = $primaryKey;
-        return $this;
-    }
-
-    public function delete(): self {
-        $this->query .= ' DELETE FROM ' . $this->table;
-        return $this;
-    }
-
-    public function limit(int $limit = self::DEFAULT_LIMIT, int $offset = self::DEFAULT_OFFSET): self {
-        $this->query .= " LIMIT :limit OFFSET :offset ";
-        $this->args['limit']  = $limit;
-        $this->args['offset'] = $offset;
-        return $this;
-    }
-
-    public function where(array $arguments): self {
-        foreach ($arguments as $selector => $sqlValue) {
-            list($comparison, $sqlValue) = Parser::sqlComparsion(($sqlValue ?? ''), $this->comparisonOperators);
-            $this->args[$selector] = $sqlValue;
-            $this->query .= (strpos($this->query, self::WHERE) === false ? self::WHERE : self::AND) . "{$selector} {$comparison} :{$selector}";
-        }
-        return $this;
-    }
-
-    public function between(string $from, string $to, int $interval, $dateFormat = '%Y-%m-%d'): self {
-        $this->query .= " AND STR_TO_DATE(:dateFormat) BETWEEN DATE(:from) - INTERVAL :interval DAY AND DATE(:from) + INTERVAL :interval DAY ";
-        $this->args['dateFormat'] = $dateFormat;
-        $this->args['from'] = $from;
-        $this->args['to'] = $to;
-        $this->args['interval'] = $interval;
-        return $this;
-    }
-
-    public function groupBy(string $group): self {
-        $this->query .= ' GROUP BY ' . $group;
-        return $this;
-    }
-
-    public function orderBy(string $order): self {
-        $this->query .= ' ORDER BY ' . $order;
-        return $this;
-    }
-
-    public function like(array $arguments): self {
-        foreach ($arguments as $selector => $sqlValue) {
-            list($comparison, $sqlValue) = Parser::sqlComparsion(($sqlValue ?? ''), $this->comparisonOperators);
-            $this->args[$selector] = $sqlValue;
-            $this->query .= (strpos($this->query, self::WHERE) === false ? self::WHERE : self::AND) . "{$selector} LIKE CONCAT('%', :{$selector}, '%') ";
-        }
-        return $this;
-    }
-
-    public function describeTable() {
-        $this->query = ' DESCRIBE ' . $this->table;
-        $this->run();
-    }
-
-    public function rawSQL(string $sql): self {
-        $this->query = $sql;
-        return $this;
-    }
-
-    public function fetchRow(?array $criteria = null) {
-        $this->select()->where($criteria);
-        $response = CoreFunctions::app()->getConnection()->execute($this->query, $this->args, 'fetch');
-        $this->resetQuery();
-        return $response;
-    }
-
-    public function debugQuery() {
-        CoreFunctions::d("Currently debugging query: " . $this->query);
-        CoreFunctions::dd($this->args);
-    }
-
-    public function run(string $fetchMode = 'fetchAll'): array {
-        $response = CoreFunctions::app()->getConnection()->execute($this->query, $this->args, $fetchMode);
-        $this->resetQuery();
-        $objects = [];
-        foreach ($response as $obj) $objects[] = new $this->class((array)$obj);
-        return $objects;
-    }
-
-    public function resetQuery() {
-        $this->where = '';
-        $this->query = '';
-        $this->fields = '';
-        $this->args = [];
-        $this->placeholders = '';
-    }
+    public function hasPermissions(string $action) {
+		
+	}
 
 }

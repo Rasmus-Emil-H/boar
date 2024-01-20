@@ -130,7 +130,6 @@ class QueryBuilder implements Builder {
             $this->args[$selector] = $sqlValue;
             $this->query .= (strpos($this->query, self::WHERE) === false ? self::WHERE : self::AND) . "{$selector} {$comparison} :{$selector}";
         }
-    
         return $this;
     }
 
@@ -150,6 +149,15 @@ class QueryBuilder implements Builder {
 
     public function orderBy(string $order): self {
         $this->query .= ' ORDER BY ' . $order;
+        return $this;
+    }
+
+    public function like(array $arguments): self {
+        foreach ($arguments as $selector => $sqlValue) {
+            list($comparison, $sqlValue) = Parser::sqlComparsion(($sqlValue ?? ''), $this->comparisonOperators);
+            $this->args[$selector] = $sqlValue;
+            $this->query .= (strpos($this->query, self::WHERE) === false ? self::WHERE : self::AND) . "{$selector} LIKE CONCAT('%', :{$selector}, '%') ";
+        }
         return $this;
     }
 

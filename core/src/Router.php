@@ -19,6 +19,8 @@ final class Router {
     protected string $method;
     protected bool $rootURL;
 
+    public static $anonymousRoutes = ['/auth/login', '/auth/signup', '/auth/resetPassword', '/auth/twofactor', '/auth/requestNewPassword'];
+
     public function __construct(Request $request) {
         $this->path = $request->getArguments();
         $this->rootURL = $request->getPath() === '/';
@@ -26,7 +28,7 @@ final class Router {
 
     protected function createController(): void {
         $app = CoreFunctions::app();
-        if (empty($this->path) || $this->rootURL) $app->getResponse()->redirect(CoreFunctions::first($app::$anonymousRoutes)->scalar);
+        if (empty($this->path) || $this->rootURL) $app->getResponse()->redirect(CoreFunctions::first(self::$anonymousRoutes)->scalar);
         $handler = ucfirst(CoreFunctions::first($this->path)->scalar);
         $controller = (new ControllerFactory(['handler' => $handler]))->create();
         $controllerMethod = $this->path[1] ?? '';

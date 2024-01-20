@@ -35,7 +35,6 @@ final class Application {
 
     public static string $ROOT_DIR;
     public static self $app;
-    public static $anonymousRoutes = ['/auth/login', '/auth/signup', '/auth/resetPassword', '/auth/twofactor'];
 
     public function __construct(bool $applicationIsMigrating) {
         self::$app = $this;
@@ -71,8 +70,8 @@ final class Application {
 
     private function validateUserSession() {
         $validSession = (new UserModel())->hasActiveSession();
-        if (!in_array($this->request->getPath(), self::$anonymousRoutes) && !$validSession) 
-            $this->response->redirect(CoreFunctions::first(self::$anonymousRoutes)->scalar);
+        if (!in_array($this->request->getPath(), $this->router::$anonymousRoutes) && !$validSession) 
+            $this->response->redirect(CoreFunctions::first($this->router::$anonymousRoutes)->scalar);
     }
 
     public function classCheck(string $class): void {

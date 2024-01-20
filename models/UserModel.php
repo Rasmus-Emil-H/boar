@@ -32,7 +32,7 @@ final class UserModel extends Entity {
 		$sessionID = Hash::uuid();
         $this->app->getSession()->set('SessionID', $sessionID);
         (new SessionModel())->set(['Value' => $sessionID, 'UserID' => $user->key()])->save();
-        $this->app->getResponse()->redirect('/home');
+        $this->app->getResponse()->setResponse(200, ['redirect' => '/home']);
     }
 
 	public function logout() {
@@ -42,9 +42,11 @@ final class UserModel extends Entity {
 
 	public function resetPassword(string $email) {
 		$user = self::query()->select()->where(['Email' => $email])->run();
-		if (!CoreFunctions::first($user)) $this->app->getResponse()->notFound('User not found');
-		$url = $this->app->getRequest()->clientRequest->server['HTTP_HOST'] . '/auth/resetPassword';
-		var_dump($url);
+		if (empty($user) || !CoreFunctions::first($user)) $this->app->getResponse()->notFound('User not found');
+		$resetLink = $this->app->getRequest()->clientRequest->server['HTTP_HOST'] . '/auth/resetPassword?resetPassword='.Hash::create(50);
+		CoreFunctions::first($user)->addMetaData([$resetLink]);
+		mail($email, 'Reset password link', $resetLink);
+		$this->app->getResponse()->setResponse(200, ['redirect' => '/auth/login']);
 	}
 
 	public function hasActiveSession() {

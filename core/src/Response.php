@@ -25,7 +25,7 @@ final class Response {
     public function setResponse(int $code, array $message) {
         $this->setStatusCode($code);
         $this->setContentType('application/json');
-        echo json_encode($message);
+        exit(json_encode($message));
     }
 
     public function notFound(string $message) {

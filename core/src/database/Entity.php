@@ -170,6 +170,10 @@ abstract class Entity extends Relations {
         return (new QueryBuilder(get_called_class(), $this->getTableName(), $this->getKeyField()));
     }
 
+    public function find(string $field, string $value): array {
+        return $this->query()->select()->where([$field => $value])->run();
+    }
+
     public function addMetaData(array $data): self {
         if (empty($data)) throw new \InvalidArgumentException('Data can not be empty');
         (new EntityMetaData())

@@ -37,7 +37,7 @@ final class Response {
     }
 
     public function dataConflict() {
-        $this->setResponse(409, ['The requested resource already exists and can\'t coexist']);
+        $this->setResponse(409, ['Invalid input. Please try something else']);
     }
 
     public function requestLimitReached() {

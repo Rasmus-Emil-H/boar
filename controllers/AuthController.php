@@ -16,24 +16,25 @@ class AuthController extends Controller {
         $this->setView('login');
     }
 
-    public function twofactor() {
-        if ($this->request->isGet()) return $this->setView('twofactor');
-        $this->response->setResponse(200, ['SMS SEND']);
-    }
-
     public function logout(): void {
         (new UserModel())->logout();
         $this->session->unset(['user', 'SessionID']);
 		$this->response->redirect('/');
     }
 
-    public function requestNewPassword() {
-        if ($this->request->isGet()) return $this->setView('requestNewPassword');
+    public function twofactor() {
+        if ($this->request->isGet()) return $this->setView('twofactor');
+        $this->response->setResponse(200, ['SMS SEND']);
     }
 
-    public function validatePasswordResetToken() {
+    public function requestNewPassword() {
+        if ($this->request->isGet()) return $this->setView('requestNewPassword');
+        (new UserModel())->requestPasswordReset($this->requestBody->body->email);
+    }
+
+    public function validatePasswordResetToken(): void {
         $resetToken = $this->requestBody->body->resetPassword ?? false;
-        $resetTokenExists = (new UserModel())->getMetaData()->select()->like(['Data' => 'resetPassword='.$resetToken])->run();
+        $resetTokenExists = (new UserModel())->checkPasswordResetToken($resetToken);
         if (!$resetToken || empty($resetTokenExists)) $this->response->redirect('/auth/login');
     }
 
@@ -42,7 +43,19 @@ class AuthController extends Controller {
             $this->validatePasswordResetToken();
             return $this->setView('resetPassword');
         }
-        (new UserModel())->resetPassword($this->requestBody->body->email);
+
+        $newPassword = $this->requestBody->body->password;
+        if (!CoreFunctions::validateCSRF()) $this->response->badToken();
+        if ($newPassword !== $this->requestBody->body->passwordRepeat) $this->response->setResponse(409, ['Passwords do not match']);
+
+        $userToResetPasswordOn = (new UserModel())->checkPasswordResetToken($this->requestBody->body->resetToken);
+        $userID = CoreFunctions::first($userToResetPasswordOn)->get('EntityID');
+        $user = new UserModel($userID);
+        $user->validatePassword($newPassword);
+        $user
+            ->set(['Password' => $newPassword])
+            ->save();
+
     }
 
     public function signup() {
@@ -50,7 +63,7 @@ class AuthController extends Controller {
         if (!CoreFunctions::validateCSRF()) $this->response->badToken();
         
         $request = $this->requestBody;
-        $emailExists = (new UserModel())->query()->select()->where(['Email' => $request->body->email])->run();
+        $emailExists = (new UserModel())->find('Email', $request->body->email);
         if ($emailExists) $this->response->dataConflict();
 
         $user = (new UserModel())

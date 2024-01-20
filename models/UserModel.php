@@ -53,5 +53,14 @@ final class UserModel extends Entity {
 		$session = (new SessionModel())->query()->select()->where(['Value' => $this->app->getSession()->get('SessionID'), 'UserID' => $this->app->getSession()->get('user')])->run();
         return !empty($session) && CoreFunctions::first($session)->exists();
 	}
+
+	public function checkPasswordResetToken(string|bool $resetToken): array {
+		return $this->getMetaData()->select()->like(['Data' => 'resetPassword='.$resetToken])->run();
+	}
+
+	public function validatePassword(string $password) {
+		if (!preg_match('/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/', $password)) 
+            CoreFunctions::app()->getResponse()->setResponse(409, ['Passwords must contains atleast: 1 uppercase letter, 1 lowercase letter, 1 digits, one special characters (@$!%*?&) and be atleast 8 characters long']);
+	}
 	
 }

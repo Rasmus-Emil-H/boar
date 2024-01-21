@@ -127,8 +127,7 @@ class QueryBuilder implements Builder {
 
     public function limit(int $limit = self::DEFAULT_LIMIT, int $offset = self::DEFAULT_OFFSET): self {
         $this->query .= " LIMIT :limit OFFSET :offset ";
-        $this->args['limit']  = $limit;
-        $this->args['offset'] = $offset;
+        $this->args += compact('limit', 'offset');
         return $this;
     }
 

@@ -85,8 +85,13 @@ class QueryBuilder implements Builder {
         return $this;
     }
 
-    public function in(array $inValues): self {
-        $this->query .= " IN ( " . implode(', ', $inValues) . " ) ";
+    public function in(string $field, array $ins): self {
+        $finalInString = "";
+        array_map(function($fieldKey, $fieldValue) use($finalInString, $ins) {
+            $finalInString .= " $fieldKey = :$fieldKey " . ($ins === $fieldKey ? '' : ',');
+            $this->args[$fieldKey] = $fieldValue;
+        }, array_keys($ins), array_values($ins));
+        $this->query .= " $field IN ( $finalInString ) ";
         return $this;
     }
 
@@ -109,7 +114,7 @@ class QueryBuilder implements Builder {
         $this->query .= "UPDATE {$this->table} SET ";
         foreach ($fields as $fieldKey => $fieldValue) {
             $this->args[$fieldKey] = $fieldValue;
-            $this->query .= " $fieldKey = :$fieldKey " . (array_key_last($fields) === $fieldKey ? '' : ',');;
+            $this->query .= " $fieldKey = :$fieldKey " . (array_key_last($fields) === $fieldKey ? '' : ',');
         }
         $this->query .= " WHERE $primaryKeyField = :primaryKey ";
         $this->args['primaryKey'] = $primaryKey;

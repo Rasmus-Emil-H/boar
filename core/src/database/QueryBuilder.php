@@ -143,10 +143,7 @@ class QueryBuilder implements Builder {
 
     public function between(string $from, string $to, int $interval, $dateFormat = '%Y-%m-%d'): self {
         $this->query .= " AND STR_TO_DATE(:dateFormat) BETWEEN DATE(:from) - INTERVAL :interval DAY AND DATE(:from) + INTERVAL :interval DAY ";
-        $this->args['dateFormat'] = $dateFormat;
-        $this->args['from'] = $from;
-        $this->args['to'] = $to;
-        $this->args['interval'] = $interval;
+        $this->args = compact('dateFormat', 'from', 'to', 'interval');
         return $this;
     }
 

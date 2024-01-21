@@ -86,12 +86,11 @@ class QueryBuilder implements Builder {
     }
 
     public function in(string $field, array $ins): self {
-        $finalInString = "";
-        array_map(function($fieldKey, $fieldValue) use($finalInString, $ins) {
-            $finalInString .= " $fieldKey = :$fieldKey " . ($ins === $fieldKey ? '' : ',');
-            $this->args[$fieldKey] = $fieldValue;
+         $finalInString = array_map(function($fieldKey, $fieldValue) {
+            $this->args["inCounter$fieldKey"] = $fieldValue;
+            return " :inCounter$fieldKey ";
         }, array_keys($ins), array_values($ins));
-        $this->query .= " $field IN ( $finalInString ) ";
+        $this->query .= " AND $field IN ( " . implode(', ', $finalInString) . " ) ";
         return $this;
     }
 

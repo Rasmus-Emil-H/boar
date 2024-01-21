@@ -21,7 +21,6 @@ final class CoreFunctions {
         echo '<pre style="padding: 2rem; background-color: #3a6b39; color: white; border-radius: 4px;margin-top: 10px;text-wrap:wrap;" class="debug">';
         if ($title) echo '<h2 class="text-center">' . $title . '</h2><hr>';
         var_dump($input);
-        self::app()->log('Incident report has been submitted.');
         if ($title) echo '<hr /><h2 class="text-center">End of ' . $title . '</h2></pre>';
     }
       

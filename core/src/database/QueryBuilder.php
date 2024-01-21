@@ -39,7 +39,8 @@ class QueryBuilder implements Builder {
     public function __construct(
         public string $class, 
         public string $table, 
-        public string $keyID) {
+        public string $keyID
+    ) {
         $this->resetQuery();
     }
 

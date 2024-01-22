@@ -30,12 +30,17 @@ class Relations {
     
     public function belongsTo(string $related) {
         $instance = $this->getInstanceOf($related);
-        return $instance->query()->select()->where([$instance->getKeyField() => $this->key()])->run();
+        return $instance->find($this->getKeyField(), $this->key());
     }
 
     public function pivot(...$keys) {
         $queryBuilder = new QueryBuilder(get_called_class(), $this->getPivot(), '');
         $queryBuilder->create(CoreFunctions::first($keys))->run();
+    }
+
+    public function manyToMany(string $related): array {
+        $queryBuilder = new QueryBuilder($related, $this->getPivot(), '');
+        return $queryBuilder->select()->where([$this->getKeyField() => $this->key()])->run();
     }
 
 }

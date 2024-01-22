@@ -86,6 +86,12 @@ class QueryBuilder implements Builder {
         return $this;
     }
 
+    public function rightJoin(string $table, string $on, array $and = []): self {
+        $implodedAnd = (count($and) > 0 ? ' AND ' : '') . implode(' AND ', $and);
+        $this->query .= " LEFT JOIN {$table} {$on} {$implodedAnd} ";
+        return $this;
+    }
+
     public function in(string $field, array $ins): self {
          $finalInString = array_map(function($fieldKey, $fieldValue) {
             $this->args["inCounter$fieldKey"] = $fieldValue;

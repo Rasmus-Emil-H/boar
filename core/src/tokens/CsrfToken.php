@@ -26,7 +26,7 @@ class CsrfToken {
         if (!is_null($excludeUrl)) $this->excludeUrl = $excludeUrl;
         $app = CoreFunctions::app();
         $this->post = $app->getRequest()->getBody();
-        $this->server = $app->getRequest()->getCompleteRequestBody()->server;
+        $this->server = $app->getRequest()->getServerInformation();
         $this->session = $app->getSession();
     }
 

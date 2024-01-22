@@ -21,6 +21,10 @@ use \app\core\src\miscellaneous\CoreFunctions;
 
 abstract class Entity extends Relations {
 
+    private const INVALID_ENTITY_SAVE   = 'Entity has not yet been properly stored, did you call this method before ->save() ?';
+    private const INVALID_ENTITY_STATUS = 'This entity does not have a status';
+    private const INVALID_ENTITY_DATA   = 'Data can not be empty';
+
     private $key;
     protected array $data = [];
     protected array $additionalConstructorMethods = [];
@@ -175,7 +179,7 @@ abstract class Entity extends Relations {
     }
 
     public function addMetaData(array $data): self {
-        if (empty($data)) throw new \InvalidArgumentException('Data can not be empty');
+        if (empty($data)) throw new \InvalidArgumentException(self::INVALID_ENTITY_DATA);
         (new EntityMetaData())
             ->set([
                 'EntityType' => $this->getTableName(), 
@@ -193,11 +197,11 @@ abstract class Entity extends Relations {
 
     protected function allowSave(): void {
         if ($this->exists()) return;
-        throw new \app\core\src\exceptions\EmptyException('Entity has not yet been properly stored, did you call this method before ->save() ?');
+        throw new \app\core\src\exceptions\EmptyException(self::INVALID_ENTITY_SAVE);
     }
 
     public function setStatus(int $status): self {
-        if (!$this->get(Table::STATUS_COLUMN)) throw new \app\core\src\exceptions\ForbiddenException('This entity does not have a status');
+        if (!$this->get(Table::STATUS_COLUMN)) throw new \app\core\src\exceptions\ForbiddenException(self::INVALID_ENTITY_STATUS);
         $this->set([Table::STATUS_COLUMN => $status])->save();
         return $this;
     }

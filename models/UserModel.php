@@ -40,13 +40,21 @@ final class UserModel extends Entity {
 		foreach ($sessions as $session) $session->delete();
 	}
 
-	public function resetPassword(string $email) {
-		$user = self::query()->select()->where(['Email' => $email])->run();
+	public function requestPasswordReset(string $email) {
+		$user = $this->find('Email', $email);
 		if (empty($user) || !CoreFunctions::first($user)) $this->app->getResponse()->notFound('User not found');
 		$resetLink = $this->app->getRequest()->clientRequest->server['HTTP_HOST'] . '/auth/resetPassword?resetPassword='.Hash::create(50);
 		CoreFunctions::first($user)->addMetaData([$resetLink]);
 		mail($email, 'Reset password link', $resetLink);
 		$this->app->getResponse()->setResponse(200, ['redirect' => '/auth/login']);
+	}
+
+	public function resetPassword(string $newPassword, string $resetToken) {
+		$token = $this->getMetaData()->select()->like(['Data' => 'resetPassword='.$resetToken])->run();
+        $this->validatePassword($newPassword);
+        $this->set(['Password' => password_hash($newPassword, PASSWORD_DEFAULT)])->save();
+        CoreFunctions::first($token)->delete();
+        $this->app->getResponse()->setResponse(201, ['redirect' => '/auth/login']);
 	}
 
 	public function hasActiveSession() {

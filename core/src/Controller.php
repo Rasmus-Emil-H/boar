@@ -33,6 +33,8 @@ class Controller {
         protected AssetsController $clientAssets
     ) {
         $this->requestBody = $this->request->getCompleteRequestBody();
+        if ($this->request->isGet()) return;
+        if (!CoreFunctions::validateCSRF()) $this->response->badToken();
     }
 
     public function setData($data): void {
@@ -49,14 +51,6 @@ class Controller {
     public function setChildren(array $children): void {
         foreach ($children as $child) $this->children[] = $child; 
     }
-
-    /**
-     * Get data from child
-     * Then set data on instantiated controller
-     * @param array [strings of to be \app\core\Controller]
-     * @param \app\core\src\controller Parent controller
-     * @return void
-     */
 
     public function setChildData(): void {
         foreach ($this->getChildren() as $childController) {

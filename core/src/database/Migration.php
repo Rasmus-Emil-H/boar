@@ -18,6 +18,8 @@ use \app\core\src\factories\MigrationFactory;
 use \app\core\src\miscellaneous\CoreFunctions;
 
 class Migration {
+
+    private const SUCCESSFULL_MIGRATION = 'Successfully applied new migration: ';
     
     protected const MIGRATION_DIR = '/migrations/';
     protected const MIGRATION_DATE_LENGTH = 10;
@@ -43,7 +45,7 @@ class Migration {
         $migrations = scandir($migrationsFolder);
         $mappedMigrations = array_map(fn($object) => $object->Migration, $appliedMigrations);
         $missingMigrations = [];
-        foreach ( $migrations as $migration ) {
+        foreach ($migrations as $migration) {
             $migrationFile = $migrationsFolder . $migration;
             $actualMigration = str_replace('.php', '', $migration);
             if (!is_file($migrationFile) || in_array($actualMigration, $mappedMigrations)) continue;
@@ -64,7 +66,7 @@ class Migration {
             $app->classCheck($handler);
             (new MigrationFactory(['handler' => $handler]))->create()->up();
             (new MigrationModel())->set(['Migration' => $handler])->save(addMetaData: false);
-            $app->log('Successfully applied new migration: ' . $handler);
+            $app->log(self::SUCCESSFULL_MIGRATION . $handler);
         }
 
         $app->log("Done");

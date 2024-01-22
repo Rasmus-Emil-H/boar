@@ -28,15 +28,17 @@ final class AuthenticationModel {
      * @return void
      */
 
-    public function applicationLogin(): ?bool {
-        if (!CoreFunctions::validateCSRF()) return false;
-        $user = (new UserModel)->query()->select()->where(['email' => $this->data->email])->run();
-        if (empty($user)) return false;
+    public function applicationLogin() {
+        $user = (new UserModel)->find('Email', $this->data->email);
+        if (empty($user)) $this->invalidLogin();
         $user = CoreFunctions::first($user);
         $passwordVerify = password_verify($this->data->password, $user->get('Password'));
-        if (!$passwordVerify) return null;
-        $user->authenticate($user);
-        return null;
+        if (!$passwordVerify) $this->invalidLogin();
+        return $user->authenticate($user);
+    }
+
+    protected function invalidLogin() {
+        CoreFunctions::app()->getResponse()->setResponse(401, ['Invalid login']);
     }
 
     /**

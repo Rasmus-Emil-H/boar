@@ -43,19 +43,15 @@ class AuthController extends Controller {
             $this->validatePasswordResetToken();
             return $this->setView('resetPassword');
         }
-
-        if (!CoreFunctions::validateCSRF()) $this->response->badToken();
+        
         $newPassword = $this->requestBody->body->password;
+        $resetToken = $this->requestBody->body->resetToken;
         if ($newPassword !== $this->requestBody->body->passwordRepeat) $this->response->setResponse(409, ['Passwords do not match']);
 
-        $userToResetPasswordOn = (new UserModel())->checkPasswordResetToken($this->requestBody->body->resetToken);
+        $userToResetPasswordOn = (new UserModel())->checkPasswordResetToken($resetToken);
         $userID = CoreFunctions::first($userToResetPasswordOn)->get('EntityID');
         $user = new UserModel($userID);
-        $user->validatePassword($newPassword);
-        $user
-            ->set(['Password' => password_hash($newPassword, PASSWORD_DEFAULT)])
-            ->save();
-
+        $user->resetPassword($newPassword, $resetToken);
     }
 
     public function signup() {

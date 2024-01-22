@@ -88,7 +88,7 @@ class QueryBuilder implements Builder {
 
     public function rightJoin(string $table, string $on, array $and = []): self {
         $implodedAnd = (count($and) > 0 ? ' AND ' : '') . implode(' AND ', $and);
-        $this->query .= " LEFT JOIN {$table} {$on} {$implodedAnd} ";
+        $this->query .= " RIGHT JOIN {$table} {$on} {$implodedAnd} ";
         return $this;
     }
 

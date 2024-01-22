@@ -24,7 +24,7 @@ class Request {
     }
 
     public function getPath(): string {
-        $path = $this->clientRequest->server['REQUEST_URI'] ?? '/';
+        $path = $this->getServerInformation()['REQUEST_URI'] ?? '/';
         $position = strpos($path, '?');
         if (!$position) return $path;
         return substr($path, 0, $position);
@@ -43,15 +43,15 @@ class Request {
     }
     
     public function getReferer(): string {
-        return $this->clientRequest->server['HTTP_REFERER'];
+        return $this->getServerInformation()['HTTP_REFERER'];
     }
     
     public function getHost(): string {
-        return $this->clientRequest->server['HTTP_HOST'];
+        return $this->getServerInformation()['HTTP_HOST'];
     }
 
     public function method(): string {
-        return strtolower($this->clientRequest->server['REQUEST_METHOD'] ?? 'get');
+        return strtolower($this->getServerInformation()['REQUEST_METHOD'] ?? 'get');
     }
 
     public function isGet(): bool {
@@ -63,8 +63,12 @@ class Request {
     }
 
     public function getCompleteRequestBody() {
-        $obj = ['files' => $_FILES, 'server' => $_SERVER, 'body' => $this->getBody()];
+        $obj = ['files' => $_FILES, 'body' => $this->getBody()];
         return (object)$obj;
+    }
+
+    public function getServerInformation() {
+        return $_SERVER;
     }
 
     public function getBody(): object {
@@ -75,7 +79,7 @@ class Request {
     }
 
     public function getIP() {
-        return $this->clientRequest->server['REMOTE_ADDR'] ?? php_sapi_name();
+        return $this->getServerInformation()['REMOTE_ADDR'] ?? php_sapi_name();
     }
     
     public function getPHPInput() {

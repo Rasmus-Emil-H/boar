@@ -43,7 +43,7 @@ final class UserModel extends Entity {
 	public function requestPasswordReset(string $email) {
 		$user = $this->find('Email', $email);
 		if (empty($user) || !CoreFunctions::first($user)) $this->app->getResponse()->notFound('User not found');
-		$resetLink = $this->app->getRequest()->clientRequest->server['HTTP_HOST'] . '/auth/resetPassword?resetPassword='.Hash::create(50);
+		$resetLink = $this->app->getRequest()->getServerInformation()['HTTP_HOST'] . '/auth/resetPassword?resetPassword='.Hash::create(50);
 		CoreFunctions::first($user)->addMetaData([$resetLink]);
 		mail($email, 'Reset password link', $resetLink);
 		$this->app->getResponse()->setResponse(200, ['redirect' => '/auth/login']);

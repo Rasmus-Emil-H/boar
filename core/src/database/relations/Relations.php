@@ -38,8 +38,8 @@ class Relations {
         $queryBuilder->create(CoreFunctions::first($keys))->run();
     }
 
-    public function manyToMany(string $related): array {
-        $queryBuilder = new QueryBuilder($related, $this->getPivot(), '');
+    public function manyToMany(string $relatedEntity): array {
+        $queryBuilder = new QueryBuilder($relatedEntity, $this->getPivot(), '');
         return $queryBuilder->select()->where([$this->getKeyField() => $this->key()])->run();
     }
 

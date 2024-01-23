@@ -4,10 +4,10 @@
 |----------------------------------------------------------------------------
 | Entity relations
 |----------------------------------------------------------------------------
-| Describe x-x relations
+| Describes the relationships betwen entities
 | 
 | @author RE_WEB
-| @package core
+| @package \app\core\src\database
 |
 */
 
@@ -27,6 +27,11 @@ class Relations {
         $instance = $this->getInstanceOf($related);
         return $instance->query()->select()->where([$this->getKeyField() => $this->key()]);
     }
+
+    public function connectedWith(string $relatedEntity, string $table) {
+        $queryBuilder = new QueryBuilder($relatedEntity, $table, '');
+        return $queryBuilder->select()->where([$this->getKeyField() => $this->key()])->run();
+    }
     
     public function belongsTo(string $related) {
         $instance = $this->getInstanceOf($related);
@@ -41,6 +46,11 @@ class Relations {
     public function manyToMany(string $relatedEntity): array {
         $queryBuilder = new QueryBuilder($relatedEntity, $this->getPivot(), '');
         return $queryBuilder->select()->where([$this->getKeyField() => $this->key()])->run();
+    }
+
+    public function oneHasMany(string $class, string $table, string $column, string $value): array {
+        $queryBuilder = new QueryBuilder($class, $table, $this->key());
+        return $queryBuilder->select()->where([$column => $value])->run();
     }
 
 }

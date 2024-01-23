@@ -32,5 +32,23 @@ export default {
                 submitButton.html(_text);
             });
         });
+
+        $('input[type="file"]').on('change', function(e) {
+            this.uploadFile(e.target);
+        });
+    },
+    uploadFile: async function(target) {
+        const csrf = $('[name="eg-csrf-token-label"]').val();
+        if (!csrf) {
+            alert('Token is missing!'); 
+            return;
+        }
+        let formData = new FormData();
+        formData.append("file", target.files[0]);
+        formData.append('eg-csrf-token-label', csrf);
+        await fetch('/file', {
+            method: "POST", 
+            body: formData
+        });
     }
 }

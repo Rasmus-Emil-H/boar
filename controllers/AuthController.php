@@ -56,7 +56,6 @@ class AuthController extends Controller {
 
     public function signup() {
         if ($this->request->isGet()) return $this->setView('signup');
-        if (!CoreFunctions::validateCSRF()) $this->response->badToken();
         
         $request = $this->requestBody;
         $emailExists = (new UserModel())->find('Email', $request->body->email);
@@ -68,8 +67,7 @@ class AuthController extends Controller {
             ->setRole('User')
             ->addMetaData(['event' => 'user signed up']);
 
-        $this->session->set('userID', $user->key());
-        $this->response->redirect('/home');
+        $this->response->setResponse(201, ['redirect' => '/auth/login']);
     }
     
 }

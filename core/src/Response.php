@@ -44,4 +44,8 @@ final class Response {
         $this->setResponse(429, ['Too many requests']); 
     }
 
+    public function methodNotAllowed() {
+        $this->setResponse(405, ['Method not allowed']);
+    }
+
 }

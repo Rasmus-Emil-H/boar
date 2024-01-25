@@ -25,7 +25,7 @@ class Connection {
 
     private \Pdo $pdo;
     
-    protected function __construct(array $pdoConfigurations) {
+    protected function __construct(#[\SensitiveParameter] array $pdoConfigurations) {
         $this->pdo = new \PDO($pdoConfigurations['dsn'], $pdoConfigurations['user'], $pdoConfigurations['password'], $this->defaultPdoOptions);
         $this->pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
     }
@@ -47,7 +47,7 @@ class Connection {
         return self::$instance;
     }
 
-    public function execute(string $query, array $args = [], string $fetchType = 'fetchAll') {
+    public function execute(string $query, #[\SensitiveParameter] array $args = [], string $fetchType = 'fetchAll') {
         try {
             $stmt = $this->pdo->prepare($query);
             $stmt->execute($args);

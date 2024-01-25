@@ -8,4 +8,8 @@ class Utilities {
         return array_key_last($arrayKey) === $iterationKey ? null : $appender;
     }
 
+    public static function stdFilterSpecialChars(int $type, string $input): mixed {
+        return filter_input($type, $input, FILTER_SANITIZE_SPECIAL_CHARS);
+    }
+
 }

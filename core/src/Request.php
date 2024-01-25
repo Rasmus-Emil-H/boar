@@ -8,7 +8,8 @@
 
 namespace app\core\src;
 
-use app\core\src\miscellaneous\CoreFunctions;
+use \app\core\src\miscellaneous\CoreFunctions;
+use \app\core\src\utilities\Utilities;
 
 class Request {
 
@@ -74,7 +75,10 @@ class Request {
     public function getBody(): object {
         $body = [];        
         $type = $this->method() === 'get' ? INPUT_GET : INPUT_POST;
-        foreach ($_REQUEST as $key => $_) $body[$key] = filter_input($type, $key, FILTER_SANITIZE_SPECIAL_CHARS);
+        foreach ($_REQUEST as $key => $_) {
+            if (is_array($_)) foreach ($_ as $k => $v) $body[$key][] = Utilities::stdFilterSpecialChars($type, $k);
+            else $body[$key] = Utilities::stdFilterSpecialChars($type, $key);
+        }
         return (object)$body;
     }
 

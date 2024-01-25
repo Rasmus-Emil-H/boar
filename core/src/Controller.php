@@ -12,6 +12,8 @@ use \app\core\src\middlewares\Middleware;
 use \app\core\src\factories\ControllerFactory;
 use \app\core\src\miscellaneous\CoreFunctions;
 use \app\controllers\AssetsController;
+use \app\core\src\database\Entity;
+use \app\core\src\factories\EntityFactory;
 
 class Controller {
 
@@ -74,11 +76,10 @@ class Controller {
         return $this->middlewares;
     }
 
-    private function returnEntity(): \app\core\src\database\Entity {
+    private function returnEntity(): Entity {
         $request = $this->request->getArguments();
         $entityID = CoreFunctions::getIndex($request, 2)->scalar;
-        $entity = new $this->entity($entityID);
-        return $entity;
+        return (new EntityFactory(['handler' => ucfirst(CoreFunctions::first($request)->scalar), 'key' => $entityID]))->create();
     }
 
     protected function isViewingValidEntity(): void {

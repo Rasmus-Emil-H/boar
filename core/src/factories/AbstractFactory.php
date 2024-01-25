@@ -32,4 +32,8 @@ abstract class AbstractFactory {
         return CoreFunctions::app()->classCheck($class);
     }
 
+    public function getKey(): ?string {
+        return CoreFunctions::getIndex($this->arguments, 'key')->scalar ?? null;
+    }
+
 }

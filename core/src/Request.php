@@ -76,7 +76,7 @@ class Request {
         $body = [];        
         $type = $this->method() === 'get' ? INPUT_GET : INPUT_POST;
         foreach ($_REQUEST as $key => $_) {
-            if (is_array($_)) foreach ($_ as $k => $v) $body[$key][] = Utilities::stdFilterSpecialChars($type, $k);
+            if (is_array($_)) foreach ($_ as $k => $v) $body[$key][] = (string)$v;
             else $body[$key] = Utilities::stdFilterSpecialChars($type, $key);
         }
         return (object)$body;

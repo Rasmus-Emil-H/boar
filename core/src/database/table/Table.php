@@ -1,8 +1,14 @@
 <?php
 
 /**
- * Table builder
- */
+|----------------------------------------------------------------------------
+| Table building
+|----------------------------------------------------------------------------
+| 
+| @author RE_WEB
+| @package \app\core\src\database\table
+|
+*/
 
 namespace app\core\src\database\table;
 
@@ -13,8 +19,11 @@ class Table {
     protected string $name;
     protected array $columns = [];
 
-    public const DELETED_AT_COLUMN = 'DeletedAt';
-    public const STATUS_COLUMN     = 'Status';
+    public const DELETED_AT_COLUMN  = 'DeletedAt';
+    public const STATUS_COLUMN      = 'Status';
+    public const SORT_ORDER_COLUMN  = 'SortOrder';
+    public const ENTITY_TYPE_COLUMN = 'EntityType';
+    public const ENTITY_ID_COLUMN   = 'EntityID';
 
     private const INT_COLUMN_TYPE       = 'INT';
     private const FLOAT_COLUMN_TYPE     = 'FLOAT';

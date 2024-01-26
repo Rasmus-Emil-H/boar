@@ -116,14 +116,16 @@ class QueryBuilder implements Builder {
         return $this;
     }
 
-    public function patch(array $fields, string $primaryKeyField, string $primaryKey): self {
+    public function patch(array $fields, ?string $primaryKeyField = null, ?string $primaryKey = null): self {
         $this->query .= "UPDATE {$this->table} SET ";
         foreach ($fields as $fieldKey => $fieldValue) {
             $this->args[$fieldKey] = $fieldValue;
             $this->query .= " $fieldKey = :$fieldKey " . (array_key_last($fields) === $fieldKey ? '' : ',');
         }
-        $this->query .= " WHERE $primaryKeyField = :primaryKey ";
-        $this->args['primaryKey'] = $primaryKey;
+        if ($primaryKeyField && $primaryKey) {
+            $this->query .= " WHERE $primaryKeyField = :primaryKey ";
+            $this->args['primaryKey'] = $primaryKey;
+        }
         return $this;
     }
 
@@ -198,6 +200,7 @@ class QueryBuilder implements Builder {
         $response = CoreFunctions::app()->getConnection()->execute($this->query, $this->args, $fetchMode);
         $this->resetQuery();
         $objects = [];
+        if (!is_iterable($response)) return [];
         foreach ($response as $obj) $objects[] = new $this->class((array)$obj);
         return $objects;
     }

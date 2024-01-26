@@ -3,11 +3,11 @@
 /**
 |----------------------------------------------------------------------------
 | Application entities
-|---------------------------------------------------------------------------
+|----------------------------------------------------------------------------
 | Model extender - This is where models interact with the database
 | 
 | @author RE_WEB
-| @package core\src
+| @package \app\core\src
 |
 */
 
@@ -53,7 +53,7 @@ abstract class Entity extends Relations {
     }
 
     public function __get(string $key) {
-        return $this->data[$key] ?? new \Exception("Invalid entity key");
+        return $this->data[$key] ??  new \Exception("Invalid entity key");
     }
 
     public function __toString() {
@@ -170,8 +170,9 @@ abstract class Entity extends Relations {
         return $this->getQueryBuilder()->select()->where([Table::DELETED_AT_COLUMN => 'IS NOT NULL'])->run();
     }
 
-    public function getQueryBuilder(): QueryBuilder {
-        return (new QueryBuilder(get_called_class(), $this->getTableName(), $this->getKeyField()));
+    public function getQueryBuilder(?string $table = null): QueryBuilder {
+        $table ??= $this->getTableName();
+        return (new QueryBuilder(get_called_class(), $table, $this->getKeyField()));
     }
 
     public function find(string $field, string $value): array {
@@ -206,8 +207,25 @@ abstract class Entity extends Relations {
         return $this;
     }
 
+    public function coupleEntity(Entity $entity) {
+		$entity->set([$this->getKeyField() => $this->key()]);
+		$entity->init();
+	}
+
     public function hasPermissions(string $action) {
 		
 	}
+
+    public function setSortOrder(int $sortOrder): self {
+        $this->set([Table::SORT_ORDER_COLUMN => $sortOrder]);
+        return $this;
+    }
+
+    public function setRelationelTableSortOrder(string $table, int $sortOrder, $additionalConditions): void {
+        $this->getQueryBuilder($table)
+            ->patch([Table::SORT_ORDER_COLUMN => $sortOrder])
+            ->where([...$additionalConditions])
+            ->run();
+    }
 
 }

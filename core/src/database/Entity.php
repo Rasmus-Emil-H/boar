@@ -212,10 +212,6 @@ abstract class Entity extends Relations {
 		$entity->init();
 	}
 
-    public function hasPermissions(string $action) {
-		
-	}
-
     public function setSortOrder(int $sortOrder): self {
         $this->set([Table::SORT_ORDER_COLUMN => $sortOrder]);
         return $this;

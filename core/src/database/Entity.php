@@ -15,11 +15,12 @@ namespace app\core\src\database;
 
 use \app\core\Application;
 use \app\core\src\database\relations\Relations;
-use \app\core\src\database\QueryBuilder;
-use \app\core\src\database\table\Table;
 use \app\core\src\miscellaneous\CoreFunctions;
+use \app\core\src\traits\EntityQueryTrait;
 
 abstract class Entity extends Relations {
+
+    use EntityQueryTrait;
 
     private const INVALID_ENTITY_SAVE   = 'Entity has not yet been properly stored, did you call this method before ->save() ?';
     private const INVALID_ENTITY_STATUS = 'This entity does not have a status';
@@ -114,113 +115,25 @@ abstract class Entity extends Relations {
     public function save(bool $addMetaData = true): self {
         if ($addMetaData) $this->addMetaData([$this->data]);
         try {
-            if ($this->exists()) {
-                $this->getQueryBuilder()->patch($this->data, $this->getKeyField(), $this->key())->run('fetch');
-                return $this;
-            }
+            if ($this->exists()) return $this->patchEntity();
             if(empty($this->data)) throw new \app\core\src\exceptions\EmptyException();
-            $this->getQueryBuilder()->create($this->data)->run();
-            $this->setKey($this->app->getConnection()->getLastID());
-            return $this;
+            return $this->createEntity();
         } catch(\Exception $e) {
             $this->app->addSystemEvent([$e->getMessage()]);
             throw new \app\core\src\exceptions\NotFoundException($e->getMessage());
         }
     }
 
-    public function init() {
-		return $this->getQueryBuilder()->initializeNewEntity($this->data);
-	}
-
-    public function softDelete(): self {
-		$this->set([Table::DELETED_AT_COLUMN => new \DateTime('Y-m-d H:i:s')])->save();
-        return $this;
-	}
-
-    public function restore(): self {
-	    $this->set([Table::DELETED_AT_COLUMN => null])->save();
-        return $this;
-	}
-
     public function get(string $key): string|bool {
         return $this->data[$key] ?? false; 
-    }
-
-    public function all(): array {
-        return (new QueryBuilder(get_called_class(), $this->getTableName(), $this->getKeyField()))->select()->run();
     }
 
     public function getData(): array {
         return $this->data;
     }
 
-    public function query(): QueryBuilder {
-        return (new QueryBuilder(get_called_class(), $this->getTableName(), $this->getKeyField()));
-    }
-
-    public function delete() {
-        return $this->getQueryBuilder()->delete()->where([$this->getKeyField() => $this->key()])->run();
-    }
-
-     public function truncate() {
-        return $this->getQueryBuilder()->delete()->run();
-    }
-
-     public function trashed() {
-        return $this->getQueryBuilder()->select()->where([Table::DELETED_AT_COLUMN => 'IS NOT NULL'])->run();
-    }
-
-    public function getQueryBuilder(?string $table = null): QueryBuilder {
-        $table ??= $this->getTableName();
-        return (new QueryBuilder(get_called_class(), $table, $this->getKeyField()));
-    }
-
-    public function find(string $field, string $value): array {
-        return $this->query()->select()->where([$field => $value])->run();
-    }
-
-    public function addMetaData(array $data): self {
-        if (empty($data)) throw new \InvalidArgumentException(self::INVALID_ENTITY_DATA);
-        (new EntityMetaData())
-            ->set([
-                'EntityType' => $this->getTableName(), 
-                'EntityID' => $this->key() ?? 0,
-                'Data' => json_encode($data), 
-                'IP' => $this->app->getRequest()->getIP()
-            ])
-            ->save(addMetaData: false);
-        return $this;
-    }
-
-    public function getMetaData(): QueryBuilder {
-        return (new EntityMetaData())->getQueryBuilder();
-    }
-
     protected function allowSave(): void {
         if (!$this->exists()) throw new \app\core\src\exceptions\EmptyException(self::INVALID_ENTITY_SAVE);
-    }
-
-    public function setStatus(int $status): self {
-        if (!$this->get(Table::STATUS_COLUMN)) throw new \app\core\src\exceptions\ForbiddenException(self::INVALID_ENTITY_STATUS);
-        $this->set([Table::STATUS_COLUMN => $status])->save();
-        return $this;
-    }
-
-    public function coupleEntity(Entity $entity) {
-		$entity->set([$this->getKeyField() => $this->key()]);
-		$entity->init();
-	}
-
-    public function setSortOrder(int $sortOrder): self {
-        $this->set([Table::SORT_ORDER_COLUMN => $sortOrder]);
-        return $this;
-    }
-
-    public function setRelationelTableSortOrder(string $table, int $sortOrder, $additionalConditions): void {
-        $this->getQueryBuilder($table)
-            ->patch([Table::SORT_ORDER_COLUMN => $sortOrder])
-            ->where([...$additionalConditions])
-            ->run();
     }
 
 }

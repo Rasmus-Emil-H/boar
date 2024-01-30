@@ -11,8 +11,18 @@
 |
 */
 
-trait Gate {
+class Gate {
 
-    
+    public function __construct(
+        protected object $policies
+    ) {
+        
+    }
+
+    protected function allows(object $action): bool {
+        if (!isset($this->policies->{$action})) return false;
+        $actionName = $action->get('name');
+        return $this->policies->{$actionName}(); 
+    }
 
 }

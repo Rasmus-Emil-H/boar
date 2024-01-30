@@ -197,8 +197,7 @@ abstract class Entity extends Relations {
     }
 
     protected function allowSave(): void {
-        if ($this->exists()) return;
-        throw new \app\core\src\exceptions\EmptyException(self::INVALID_ENTITY_SAVE);
+        if (!$this->exists()) throw new \app\core\src\exceptions\EmptyException(self::INVALID_ENTITY_SAVE);
     }
 
     public function setStatus(int $status): self {

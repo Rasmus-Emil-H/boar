@@ -1,10 +1,17 @@
 <?php
 
 /**
- * Bootstrap Router 
- * AUTHOR: RE_WEB
- * @package app\core\Router
- */
+|----------------------------------------------------------------------------
+| Application router
+|----------------------------------------------------------------------------
+| 
+| The application send the current request to this object, which dispatches
+| the appropriate controller / method
+|
+| @author RE_WEB
+| @package core
+|
+*/
 
 namespace app\core\src;
 
@@ -17,23 +24,24 @@ final class Router {
     
     protected array $path;
     protected string $method;
-    protected bool $rootURL;
 
-    public static $anonymousRoutes = ['/auth/login', '/auth/signup', '/auth/resetPassword', '/auth/twofactor', '/auth/requestNewPassword'];
+    public static $anonymousRoutes = ['/auth/login', '/auth/signup', '/auth/resetPassword', '/auth/twofactor', '/auth/requestNewPassword', '/auth/validateTwofactor'];
 
-    public function __construct(Request $request) {
+    public function __construct(
+       public Request $request
+    ) {
         $this->path = $request->getArguments();
-        $this->rootURL = $request->getPath() === '/';
     }
 
     protected function createController(): void {
         $app = CoreFunctions::app();
-        if (empty($this->path) || $this->rootURL) $app->getResponse()->redirect(CoreFunctions::first(self::$anonymousRoutes)->scalar);
+        if (empty($this->path) || $this->request->getPath() === '/') $app->getResponse()->redirect(CoreFunctions::first(self::$anonymousRoutes)->scalar);
         $handler = ucfirst(CoreFunctions::first($this->path)->scalar);
         $controller = (new ControllerFactory(['handler' => $handler]))->create();
         $controllerMethod = $this->path[1] ?? '';
         $app->setParentController($controller);
         $this->method = $controllerMethod === '' || !method_exists($controller, $controllerMethod) ? self::INDEX_METHOD : $controllerMethod;
+        if (!method_exists($controller, $this->method)) $app->getResponse()->redirect('/home');
     }
 
     protected function runMiddlewares(): void {
@@ -56,7 +64,7 @@ final class Router {
         $controllerData = $controller->getData();
         extract($controllerData, EXTR_SKIP);
         require_once $controllerData['header'];
-        require_once $controller->getView();    
+        require_once $controller->getView();
         require_once $controllerData['footer'];
     }
 

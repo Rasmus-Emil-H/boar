@@ -8,9 +8,9 @@ final class SystemEventModel extends Entity {
 	
 	public function getTableName(): string {
 		return 'SystemEvents';
+	}		
 	
-	
-  public function getKeyField(): string {
+  	public function getKeyField(): string {
 		return 'SystemEventID';
 	}
 

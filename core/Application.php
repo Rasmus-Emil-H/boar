@@ -42,7 +42,9 @@ final class Application {
 
         $this->config       = new src\config\Config();
         $this->session      = new src\Session();
-        $this->request      = new src\Request($this, new src\WebApplicationFirewall());
+        $this->request      = new src\Request($this);
+
+        new src\WebApplicationFirewall($this->request);
         
         $this->setConnection();
 

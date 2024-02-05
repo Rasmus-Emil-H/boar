@@ -32,8 +32,7 @@ class Request {
     protected string $subtractedSeconds;
 
     public function __construct(
-        protected Application $app,
-        protected WebApplicationFirewall $firewall
+        protected Application $app
     ) {
         $this->clientRequest = $this->getCompleteRequestBody();
         $this->setArguments();

@@ -7,7 +7,7 @@ use \app\core\src\miscellaneous\CoreFunctions;
 use \app\core\src\miscellaneous\Hash;
 
 final class UserModel extends Entity {
-	
+
 	public function getTableName(): string {
 		return 'Users';
 	}
@@ -15,7 +15,7 @@ final class UserModel extends Entity {
 	public function getKeyField(): string {
 		return 'UserID';
 	}
-	
+
 	public function setRole(string $role): self {
 		$this->allowSave();
 		$roleID = (new RoleModel())->query()->select(['RoleID'])->where(['Name' => $role])->run();
@@ -23,20 +23,20 @@ final class UserModel extends Entity {
 		return $this;
 	}
 
-	public function orders() {
-		return $this->hasMany(OrderModel::class)->run();
-	}
-
-	public function authenticate(UserModel $user): void {
-        $this->app->getSession()->set('user', $user->key());
-		$sessionID = Hash::uuid();
-        $this->app->getSession()->set('SessionID', $sessionID);
-        (new SessionModel())->set(['Value' => $sessionID, 'UserID' => $user->key()])->save();
-        $this->app->getResponse()->setResponse(200, ['redirect' => '/home']);
+	public function initializeTwofactorProgress(): void {
+		$this->app->getSession()->set('user', $this->key());
+        $this->app->getResponse()->setResponse(200, ['redirect' => '/auth/twofactor']);
     }
 
+	public function login() {
+		$sessionID = Hash::uuid();
+        $this->app->getSession()->set('SessionID', $sessionID);
+        (new SessionModel())->set(['Value' => $sessionID, 'UserID' => $this->key()])->save();
+		$this->app->getResponse()->setResponse(200, ['redirect' => '/home']);
+	}
+
 	public function logout() {
-		$sessions = (new SessionModel())->query()->select()->where([$this->getKeyField() => CoreFunctions::applicationUser()->key()])->run();
+		$sessions = (new SessionModel())->find($this->getKeyField(), CoreFunctions::applicationUser()->key());
 		foreach ($sessions as $session) $session->delete();
 	}
 
@@ -67,8 +67,8 @@ final class UserModel extends Entity {
 	}
 
 	public function validatePassword(string $password) {
-		if (!preg_match('/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/', $password)) 
-            CoreFunctions::app()->getResponse()->setResponse(409, ['Passwords must contains atleast: 1 uppercase letter, 1 lowercase letter, 1 digits, one special characters (@$!%*?&) and be atleast 8 characters long']);
+		if (!preg_match('/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%#*?&])[A-Za-z\d@$!%*?#&]{8,40}$/', $password)) 
+            CoreFunctions::app()->getResponse()->setResponse(409, ['Passwords must contains atleast: 1 uppercase letter, 1 lowercase letter, 1 digits, one special characters (@$!%*?&#) and be atleast 8 characters long']);
 	}
 	
 }

@@ -15,12 +15,9 @@ namespace app\core;
 use \app\core\src\database\Connection;
 use \app\models\SystemEventModel;
 use \app\models\UserModel;
-use \app\core\src;
 use \app\core\src\miscellaneous\CoreFunctions;
 
 final class Application {
-
-    public string $layout = 'main';
 
     protected src\Router $router;
     protected src\Request $request;
@@ -40,7 +37,7 @@ final class Application {
         self::$app = $this;
         self::$ROOT_DIR = dirname(__DIR__);
 
-        $this->config       = new src\config\Config();
+        $this->config        = new src\config\Config();
         $this->session      = new src\Session();
         $this->request      = new src\Request($this);
 
@@ -58,6 +55,8 @@ final class Application {
         $this->getLanguage();
         $this->validateUserSession();
         $this->i18n         = new src\I18n();
+
+        
     }
 
     protected function setConnection() {

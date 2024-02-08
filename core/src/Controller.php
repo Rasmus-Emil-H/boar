@@ -25,8 +25,8 @@ class Controller {
     protected object $requestBody;
 
     protected string $view = '';
-    public    string $layout = 'main';
-    public    string $action = '';
+    public string $layout = 'main';
+    public string $action = '';
     
     public function __construct(
         protected Request  $request, 
@@ -76,15 +76,16 @@ class Controller {
         return $this->middlewares;
     }
 
-    private function returnEntity(): Entity {
+    protected function returnEntity(): Entity {
         $request = $this->request->getArguments();
         $entityID = CoreFunctions::getIndex($request, 2)->scalar;
         return (new EntityFactory(['handler' => ucfirst(CoreFunctions::first($request)->scalar), 'key' => $entityID]))->create();
     }
 
-    protected function isViewingValidEntity(): void {
+    protected function returnValidEntityIfExists(): Entity {
         $entity = $this->returnEntity();
         if (!$entity->exists()) $this->response->redirect('/home');
+        return $entity;
     }
 
     protected function crudEntity() {

@@ -8,7 +8,6 @@ use \app\core\src\miscellaneous\CoreFunctions;
 final class File {
 
     protected array $allowedFileExtensions = ['jpg', 'jpeg', 'webp', 'png'];
-    protected string $uploadFolder;
 
     public const INVALID_EXTENSION  = 'Invalid file extension';
     public const INVALID_FILE_NAME  = 'Invalid file name';
@@ -20,9 +19,10 @@ final class File {
     protected const MAXIMUM_FILE_SIZE  = 10000000;
 
     public function __construct(
-        protected $file
+        protected $file,
+        protected $uploadFolder = null
     ) {
-        $this->uploadFolder = dirname(__DIR__, 2).'/uploads/';
+        $this->uploadFolder ??= dirname(__DIR__, 2).'/uploads/';
     }
 
     public function moveFile(): bool {

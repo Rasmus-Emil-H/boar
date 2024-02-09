@@ -52,7 +52,7 @@ final class File {
 
     public function validateFileName(): bool {
         $fileName = preg_replace('~\..*~', '', $this->file->name);
-        return preg_match('/[a-zA-Z0-9]/', $fileName);  
+        return preg_match('/[a-zA-Z0-9]/', $fileName);
     }
 
     public function unlinkFile(): bool {

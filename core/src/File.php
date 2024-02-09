@@ -7,7 +7,7 @@ use \app\core\src\miscellaneous\CoreFunctions;
 
 final class File {
 
-    protected array $allowedFileExtensions = ['jpg', 'jpeg', 'webp', 'png'];
+    protected array $allowedFileExtensions = ['jpg', 'jpeg', 'webp', 'png', 'xml'];
 
     public const INVALID_EXTENSION  = 'Invalid file extension';
     public const INVALID_FILE_NAME  = 'Invalid file name';
@@ -20,16 +20,16 @@ final class File {
 
     public function __construct(
         protected $file,
-        protected $uploadFolder = null
+        protected $fileDirectory = null
     ) {
-        $this->uploadFolder ??= dirname(__DIR__, 2).'/uploads/';
+        $this->fileDirectory ??= dirname(__DIR__, 2).'/uploads/';
     }
 
     public function moveFile(): bool {
         if (!$this->checkFileType()) throw new \Exception(self::INVALID_EXTENSION);
         if (!$this->validateFileName()) throw new \Exception(self::INVALID_FILE_NAME);
         if (!$this->validateSize()) throw new \Exception(self::INVALID_FILE_SIZE);
-        $destination = $this->uploadFolder.(strtotime('now').'-'.$this->file['name']);
+        $destination = $this->fileDirectory.(strtotime('now').'-'.$this->file['name']);
         return move_uploaded_file($this->file['tmp_name'], $destination);
     }
 
@@ -48,15 +48,15 @@ final class File {
     }
 
     public function unlinkFile(): bool {
-        return unlink($this->uploadFolder . $this->file['name']);
+        return unlink($this->fileDirectory . $this->file['name']);
     }
 
     public function getFile() {
-        if (!file_exists($this->uploadFolder . $this->file['name'])) throw new \Exception(self::FILE_NOT_FOUND);
+        $this->exists();
     }
 
     public function exists() {
-      if (!file_exists($this->file)) throw new NotFoundException();
+        if (!file_exists($this->fileDirectory .'/'. $this->file)) throw new NotFoundException();
     }
 
     public function requireApplicationFile(string $folder, string $file, array $params = []): void {

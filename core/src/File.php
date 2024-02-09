@@ -2,9 +2,6 @@
 
 namespace app\core\src;
 
-use \app\core\src\exceptions\NotFoundException;
-use \app\core\src\miscellaneous\CoreFunctions;
-
 final class File {
 
     protected array $allowedFileExtensions = ['jpg', 'jpeg', 'webp', 'png', 'xml'];
@@ -58,12 +55,6 @@ final class File {
 
     public function exists() {
         if (!file_exists($this->fileDirectory .'/'. $this->file)) return self::INVALID_FILE;
-    }
-
-    public function requireApplicationFile(string $folder, string $file, array $params = []): void {
-      $file = CoreFunctions::app()::$ROOT_DIR . $folder . $file . self::TPL_FILE_EXTENSION;
-      $this->exists();
-      require_once $file;
     }
 
 }

@@ -50,11 +50,11 @@ final class File {
     }
 
     public function getFile() {
-        $this->exists();
+        if (!$this->exists()) return self::INVALID_FILE;
     }
 
     public function exists() {
-        if (!file_exists($this->fileDirectory .'/'. $this->file)) return self::INVALID_FILE;
+        return file_exists($this->fileDirectory .'/'. $this->file);
     }
 
 }

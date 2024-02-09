@@ -63,5 +63,8 @@
             "minutes": 5,
             "amount": 200
         }
+    },
+    "fileHandling": {
+        "allowedFileTypes": ["jpg", "jpeg", "webp", "png", "xml"]
     }
 }

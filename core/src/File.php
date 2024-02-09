@@ -2,14 +2,14 @@
 
 namespace app\core\src;
 
-final class File {
+use app\core\src\miscellaneous\CoreFunctions;
 
-    protected array $allowedFileExtensions = ['jpg', 'jpeg', 'webp', 'png', 'xml'];
+final class File {
 
     public const INVALID_EXTENSION  = 'Invalid file extension';
     public const INVALID_FILE_NAME  = 'Invalid file name';
     public const INVALID_FILE_SIZE  = 'File is to big';
-    public const INVALID_FILE  = 'File not found';
+    public const INVALID_FILE       = 'File not found';
     public const TPL_FILE_EXTENSION = '.tpl.php';
     public const VIEWS_FOLDER       = '/views/';
 
@@ -20,7 +20,16 @@ final class File {
         protected $file,
         protected $fileDirectory = null
     ) {
+        if (is_string($file)) $this->adjustFile(); 
         $this->fileDirectory ??= dirname(__DIR__, 2).'/uploads/';
+    }
+
+    public function adjustFile() {
+        $this->file = [
+            'name' => $this->file, 
+            'tmp_name' => $this->file,
+            'size' => 0
+        ];
     }
 
     public function moveFile(): bool {
@@ -37,7 +46,7 @@ final class File {
 
     protected function checkFileType(): bool {
         $fileType = preg_replace('~.*' . preg_quote('/', '~') . '~', '', $this->file['type']);
-        return in_array($fileType, $this->allowedFileExtensions);
+        return in_array($fileType, CoreFunctions::app()->getConfig()->get('fileHandling')->allowedFileTypes);
     }
 
     public function validateFileName(): bool {
@@ -51,10 +60,15 @@ final class File {
 
     public function getFile() {
         if (!$this->exists()) return self::INVALID_FILE;
+        return file_get_contents($this->getFilePath());
+    }
+
+    public function getFilePath() {
+        return $this->fileDirectory .'/'. $this->file['name'];
     }
 
     public function exists() {
-        return file_exists($this->fileDirectory .'/'. $this->file);
+        return file_exists($this->getFilePath());
     }
 
 }

@@ -9,7 +9,6 @@ final class File {
     public const INVALID_EXTENSION  = 'Invalid file extension';
     public const INVALID_FILE_NAME  = 'Invalid file name';
     public const INVALID_FILE_SIZE  = 'File is to big';
-    public const INVALID_FILE       = 'File not found';
     public const TPL_FILE_EXTENSION = '.tpl.php';
     public const VIEWS_FOLDER       = '/views/';
 
@@ -25,10 +24,12 @@ final class File {
     }
 
     public function adjustFile() {
+        $fileName = $this->file;
         $this->file = [
-            'name' => $this->file, 
-            'tmp_name' => $this->file,
-            'size' => 0
+            'name' => $fileName,
+            'tmp_name' => $fileName,
+            'size' => 0,
+            'type' => CoreFunctions::last(explode('.', $fileName))->scalar
         ];
     }
 
@@ -58,8 +59,8 @@ final class File {
         return unlink($this->fileDirectory . $this->file['name']);
     }
 
-    public function getFile() {
-        if (!$this->exists()) return self::INVALID_FILE;
+    public function getFile(): string|bool {
+        if (!$this->exists()) return self::FILE_NOT_FOUND;
         return file_get_contents($this->getFilePath());
     }
 

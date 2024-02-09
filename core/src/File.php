@@ -12,6 +12,7 @@ final class File {
     public const INVALID_EXTENSION  = 'Invalid file extension';
     public const INVALID_FILE_NAME  = 'Invalid file name';
     public const INVALID_FILE_SIZE  = 'File is to big';
+    public const INVALID_FILE  = 'File not found';
     public const TPL_FILE_EXTENSION = '.tpl.php';
     public const VIEWS_FOLDER       = '/views/';
 
@@ -56,7 +57,7 @@ final class File {
     }
 
     public function exists() {
-        if (!file_exists($this->fileDirectory .'/'. $this->file)) throw new NotFoundException();
+        if (!file_exists($this->fileDirectory .'/'. $this->file)) return self::INVALID_FILE;
     }
 
     public function requireApplicationFile(string $folder, string $file, array $params = []): void {

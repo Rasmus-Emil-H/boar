@@ -2,7 +2,7 @@
 
 namespace app\core\src;
 
-use app\core\src\miscellaneous\CoreFunctions;
+use \app\core\src\miscellaneous\CoreFunctions;
 
 final class File {
 
@@ -34,11 +34,15 @@ final class File {
     }
 
     public function moveFile(): bool {
+        $this->validateFileConditions();
+        $destination = $this->fileDirectory.(strtotime('now').'-'.$this->file->name);
+        return move_uploaded_file($this->file->tmp_name, $destination);
+    }
+
+    public function validateFileConditions() {
         if (!$this->checkFileType()) throw new \Exception(self::INVALID_EXTENSION);
         if (!$this->validateFileName()) throw new \Exception(self::INVALID_FILE_NAME);
         if (!$this->validateSize()) throw new \Exception(self::INVALID_FILE_SIZE);
-        $destination = $this->fileDirectory.(strtotime('now').'-'.$this->file->name);
-        return move_uploaded_file($this->file->tmp_name, $destination);
     }
 
     public function validateSize(): bool {

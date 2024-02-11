@@ -55,8 +55,6 @@ final class Application {
         $this->getLanguage();
         $this->validateUserSession();
         $this->i18n         = new src\I18n();
-
-        
     }
 
     protected function setConnection() {

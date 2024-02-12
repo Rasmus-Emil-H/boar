@@ -47,7 +47,7 @@ class Connection {
         return self::$instance;
     }
 
-    public function execute(string $query, #[\SensitiveParameter] array $args = [], string $fetchType = 'fetchAll') {
+    public function execute(#[\SensitiveParameter] string $query, #[\SensitiveParameter] array $args = [], string $fetchType = 'fetchAll') {
         try {
             $stmt = $this->pdo->prepare($query);
             $stmt->execute($args);

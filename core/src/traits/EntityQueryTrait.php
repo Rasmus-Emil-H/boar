@@ -5,11 +5,13 @@ namespace app\core\src\traits;
 use \app\core\src\database\QueryBuilder;
 use \app\core\src\database\table\Table;
 use \app\core\src\database\EntityMetaData;
+use \app\core\src\miscellaneous\CoreFunctions;
 
 trait EntityQueryTrait {
 
     private const INVALID_ENTITY_DATA   = 'Data can not be empty';
     private const INVALID_ENTITY_STATUS = 'This entity does not have a status';
+    private const FIND_OR_CREATE_NEW_DATA_ENTRY = ' was created due to a data entry';
 
     public function patchEntity() {
         $this->getQueryBuilder()->patch($this->data, $this->getKeyField(), $this->key())->run('fetch');
@@ -74,11 +76,16 @@ trait EntityQueryTrait {
         return $this;
     }
 
+    public function getTableColumns() {
+        return (new QueryBuilder(get_called_class(), $this->getTableName(), $this->getKeyField()))->select()->run(); 
+    }
+
     public function getMetaData(): QueryBuilder {
         return (new EntityMetaData())->getQueryBuilder();
     }
 
     public function setStatus(int $status): self {
+        var_dump($this);
         if (!$this->get(Table::STATUS_COLUMN)) throw new \app\core\src\exceptions\ForbiddenException(self::INVALID_ENTITY_STATUS);
         $this->set([Table::STATUS_COLUMN => $status])->save();
         return $this;
@@ -103,6 +110,16 @@ trait EntityQueryTrait {
 
     public function all(): array {
         return (new QueryBuilder(get_called_class(), $this->getTableName(), $this->getKeyField()))->select()->run();
+    }
+
+    public function findOrCreate(string $whereKey, string $whereValue, array $data) {
+        $lookup = $this->find($whereKey, $whereValue);
+        if (!empty($lookup)) return CoreFunctions::first($lookup);
+        $cEntity = (new $this());
+        $cEntity->setData($data);
+        $cEntity->save();
+        $cEntity->addMetaData([$this->getTableName() . self::FIND_OR_CREATE_NEW_DATA_ENTRY])->save();
+        return $cEntity;
     }
 
 }

@@ -21,8 +21,8 @@ class WebApplicationFirewall {
     protected function sanitizeInput(array $requestData) {
         foreach ($requestData as $key => $value)
             if (is_array($requestData[$key])) {
-                $this->sanitizeInput($requestData[$key]);
                 unset($this->inputData[$key]);
+                $this->sanitizeInput($requestData[$key]);
             } else {
                 $this->inputData[$key] = htmlspecialchars($value, ENT_QUOTES, 'UTF-8');
             }

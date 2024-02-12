@@ -5,8 +5,8 @@ require_once 'resources/scss_compiler/compiler.inc.php';
 require_once dirname(__DIR__, 1) . '/yard.php';
 
 try {
-    $autologikGO = new \app\core\Application();
-    if (!IS_CLI) $autologikGO->bootstrap();
+    $boar = new \app\core\Application();
+    if (!IS_CLI) $boar->bootstrap();
 } catch (\Throwable $e) {
     \app\core\src\miscellaneous\CoreFunctions::dd($e->getMessage());
 }

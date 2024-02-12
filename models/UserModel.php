@@ -19,7 +19,7 @@ final class UserModel extends Entity {
 	public function setRole(string $role): self {
 		$this->allowSave();
 		$roleID = (new RoleModel())->query()->select(['RoleID'])->where(['Name' => $role])->run();
-		(new RoleModel())->pivot(['UserID' => $this->key(), 'RoleID' => CoreFunctions::first($roleID)->key()]);
+		(new RoleModel())->createPivot(['UserID' => $this->key(), 'RoleID' => CoreFunctions::first($roleID)->key()]);
 		return $this;
 	}
 

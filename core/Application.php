@@ -33,7 +33,7 @@ final class Application {
     public static string $ROOT_DIR;
     public static self $app;
 
-    public function __construct(bool $applicationIsMigrating) {
+    public function __construct() {
         self::$app = $this;
         self::$ROOT_DIR = dirname(__DIR__);
 
@@ -45,8 +45,6 @@ final class Application {
         
         $this->setConnection();
 
-        if ($applicationIsMigrating) return;
-        
         $this->response     = new src\Response();
         $this->router       = new src\Router($this->getRequest());
         $this->view         = new src\View();

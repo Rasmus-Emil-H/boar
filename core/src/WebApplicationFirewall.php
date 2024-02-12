@@ -13,14 +13,19 @@ class WebApplicationFirewall {
         protected Request $request
     ) {
         $this->inputData = $_REQUEST;
-        $this->sanitizeInput();
+        $this->sanitizeInput($this->inputData);
         $this->detectSQLInjection();
         $this->detectXSS();
     }
 
-    protected function sanitizeInput() {
-        foreach ($this->inputData as $key => $value)
-            $this->inputData[$key] = htmlspecialchars($value, ENT_QUOTES, 'UTF-8');
+    protected function sanitizeInput(array $requestData) {
+        foreach ($requestData as $key => $value)
+            if (is_array($requestData[$key])) {
+                $this->sanitizeInput($requestData[$key]);
+                unset($this->inputData[$key]);
+            } else {
+                $this->inputData[$key] = htmlspecialchars($value, ENT_QUOTES, 'UTF-8');
+            }
     }
 
     protected function detectSQLInjection() {

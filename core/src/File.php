@@ -59,7 +59,7 @@ final class File {
         return preg_match('/[a-zA-Z0-9]/', $fileName);
     }
 
-    public function unlinkFile(): bool {
+    public function unlink(): bool {
         return unlink($this->getFilePath());
     }
 

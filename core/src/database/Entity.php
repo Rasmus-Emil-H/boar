@@ -15,7 +15,7 @@ namespace app\core\src\database;
 
 use \app\core\Application;
 use \app\core\src\database\relations\Relations;
-use \app\core\src\miscellaneous\CoreFunctions;
+use app\core\src\miscellaneous\CoreFunctions;
 use \app\core\src\traits\EntityQueryTrait;
 
 abstract class Entity extends Relations {
@@ -42,7 +42,9 @@ abstract class Entity extends Relations {
 
     public function checkAdditionalConstructorMethods() {
         if (empty($this->additionalConstructorMethods)) return;
-        foreach ($this->additionalConstructorMethods as $method) $this->data[$method] = $this->{$method}();
+        foreach ($this->additionalConstructorMethods as $method)
+            if (method_exists($this, $method))
+                $this->data[$method] = $this->{$method}();
     }
 
     public function __call($name, $arguments) {

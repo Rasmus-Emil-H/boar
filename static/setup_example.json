@@ -65,6 +65,6 @@
         }
     },
     "fileHandling": {
-        "allowedFileTypes": ["jpg", "jpeg", "webp", "png", "xml"]
+        "allowedFileTypes": ["jpg", "jpeg", "webp", "png", "xml", "pdf"]
     }
 }

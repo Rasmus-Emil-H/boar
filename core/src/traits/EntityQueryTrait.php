@@ -112,6 +112,10 @@ trait EntityQueryTrait {
         return (new QueryBuilder(get_called_class(), $this->getTableName(), $this->getKeyField()))->select()->run();
     }
 
+    public function search(array $arguments): array {
+        return $this->query()->select()->where($arguments)->run();
+    }
+
     public function findOrCreate(string $whereKey, string $whereValue, array $data = []): \app\core\src\database\Entity {
         $lookup = $this->find($whereKey, $whereValue);
         if (!empty($lookup)) return CoreFunctions::first($lookup);

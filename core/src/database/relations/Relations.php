@@ -54,9 +54,9 @@ class Relations {
         return $queryBuilder->select()->where([$column => $value])->run();
     }
 
-    public function hasManyPolymorphic(string $class, string $table) {
-        $queryBuilder = new QueryBuilder($class, $table, $this->key());
-        return $queryBuilder->select()->where([Table::ENTITY_TYPE_COLUMN => $this->getKeyField(), Table::ENTITY_ID_COLUMN => $this->key()])->run(); 
+    public function hasManyPolymorphic(string $class) {
+        $polyMorphicEntity = $this->getInstanceOf($class);
+        return $polyMorphicEntity->search([Table::ENTITY_TYPE_COLUMN => $this->getKeyField(), Table::ENTITY_ID_COLUMN => $this->key()]);
     }
 
 }

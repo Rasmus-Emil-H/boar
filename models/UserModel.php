@@ -8,6 +8,9 @@ use \app\core\src\miscellaneous\Hash;
 
 final class UserModel extends Entity {
 
+	protected const PASSWORD_DEFAULT_RAND_FROM_INT = 10000;
+	protected const PASSWORD_DEFAULT_RAND_TO_INT = 1000000000;
+
 	protected const PASSWORD_ERROR_TEXT = 'Passwords must contains atleast: 1 uppercase letter, 1 lowercase letter, 1 digits, one special characters (@$!%*?&#) and be atleast 8 characters long';
 
 	public function getTableName(): string {
@@ -62,6 +65,13 @@ final class UserModel extends Entity {
 	public function hasActiveSession() {
 		$session = (new SessionModel())->query()->select()->where(['Value' => $this->app->getSession()->get('SessionID'), 'UserID' => $this->app->getSession()->get('user')])->run();
         return !empty($session) && CoreFunctions::first($session)->exists();
+	}
+	
+	public function generateRandomPassword(): string {
+		return password_hash(
+			password: rand(self::PASSWORD_DEFAULT_RAND_FROM_INT, self::PASSWORD_DEFAULT_RAND_TO_INT), 
+			algo: PASSWORD_DEFAULT
+		);
 	}
 
 	public function checkPasswordResetToken(string|bool $resetToken): array {

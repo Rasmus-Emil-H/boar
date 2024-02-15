@@ -13,4 +13,9 @@ class Parser {
         return ['=', $sqlInstruction];
     }
 
+    public static function xml($response) {
+        $xml = simplexml_load_string($response);
+        return $xml;
+    }
+
 }

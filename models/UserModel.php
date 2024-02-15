@@ -8,6 +8,8 @@ use \app\core\src\miscellaneous\Hash;
 
 final class UserModel extends Entity {
 
+	protected const PASSWORD_ERROR_TEXT = 'Passwords must contains atleast: 1 uppercase letter, 1 lowercase letter, 1 digits, one special characters (@$!%*?&#) and be atleast 8 characters long';
+
 	public function getTableName(): string {
 		return 'Users';
 	}
@@ -68,7 +70,7 @@ final class UserModel extends Entity {
 
 	public function validatePassword(string $password) {
 		if (!preg_match('/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%#*?&])[A-Za-z\d@$!%*?#&]{8,40}$/', $password)) 
-            CoreFunctions::app()->getResponse()->setResponse(409, ['Passwords must contains atleast: 1 uppercase letter, 1 lowercase letter, 1 digits, one special characters (@$!%*?&#) and be atleast 8 characters long']);
+            CoreFunctions::app()->getResponse()->setResponse(409, [self::PASSWORD_ERROR_TEXT]);
 	}
 	
 }

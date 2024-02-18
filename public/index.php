@@ -12,7 +12,7 @@ try {
 
 if (isset($argv)) {
     $task = $argv[1] ??= 'none';
-    if ($task === CRONJOB_CLI_CHECK) exit((new \app\core\src\scheduling\Cron())->checkAndIterate());
+    if ($task === CRONJOB_CLI_CHECK) exit((new \app\core\src\scheduling\Cron())->run());
     if ($task === DATABASE_MIGRATION_CLI_CHECK) exit((new \app\core\src\database\Migration())->applyMigrations());
     exit(CLI_TOOL_NOT_FOUND_MESSAGE . PHP_EOL);
 }

@@ -138,4 +138,8 @@ abstract class Entity extends Relations {
         if (!$this->exists()) throw new \app\core\src\exceptions\EmptyException(self::INVALID_ENTITY_SAVE);
     }
 
+    protected function setTempProperties(array $entityProperties): void {
+        $this->set($entityProperties);
+    }
+
 }

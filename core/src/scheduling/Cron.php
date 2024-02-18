@@ -18,7 +18,7 @@ class Cron {
         $this->cronjobs = $cronjobs;
     }
 
-    public function checkAndIterate() {
+    public function run() {
         foreach ((new CronModel())->all() as $cronJob) {
             $cCronjob = (new CronjobFactory(['handler' => $cronJob->get('CronjobEntity')]))->create();
             foreach ($cCronjob->getCronjobs() as $cronjob) {

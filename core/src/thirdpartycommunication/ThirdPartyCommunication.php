@@ -27,8 +27,8 @@ abstract class ThirdPartyCommunication {
     abstract public function send();
     abstract public function receive();
 
-    protected function getArguments(): array {
-        return $this->arguments;
+    protected function getArguments(): object {
+        return (object)$this->arguments;
     }
 
 }

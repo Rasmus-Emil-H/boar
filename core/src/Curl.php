@@ -72,7 +72,9 @@ final class Curl {
 				]);
 			break;
 			default:
-				
+				curl_setopt_array($this->handler, [
+					CURLOPT_POSTFIELDS => (!$appendOnlyFirstDataIndex ? $this->data : $this->data[array_key_first($this->data)])
+				]);
 			break;
 		}
 
@@ -87,10 +89,6 @@ final class Curl {
 		$this->info = curl_getinfo($this->handler);
 	}
 
-	public function getData() {
-		return $this->data;
-	}
-
 	public function send(bool $appendOnlyFirstDataIndex = false): void {
 		try {
 			$this->checkHandler();
@@ -100,10 +98,9 @@ final class Curl {
 			die( $e->getMessage() );
 		}
 	}
-
-	public function debug(): void {
-		echo '<pre>';
-		var_dump($this);
+	
+	public function getData() {
+		return $this->data;
 	}
 
 	public function getInfo(): array {
@@ -122,6 +119,11 @@ final class Curl {
 	   $this->content = null;
 	   $this->auth = [];
 	   $this->info = null;
+	}
+
+	public function debug(): void {
+		echo '<pre>';
+		var_dump($this);
 	}
 	
 }

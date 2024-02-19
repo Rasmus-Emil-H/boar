@@ -56,7 +56,7 @@ abstract class Entity extends Relations {
     }
 
     public function __get(string $key) {
-        return $this->data[$key] ??  new \Exception("Invalid entity key");
+        return $this->data[$key] ?? new \Exception("Invalid entity key");
     }
 
     public function __toString() {

@@ -15,7 +15,6 @@ namespace app\core\src\database;
 
 use \app\core\Application;
 use \app\core\src\database\relations\Relations;
-use \app\core\src\miscellaneous\CoreFunctions;
 use \app\core\src\traits\EntityQueryTrait;
 
 abstract class Entity extends Relations {
@@ -25,6 +24,9 @@ abstract class Entity extends Relations {
     private const INVALID_ENTITY_SAVE   = 'Entity has not yet been properly stored, did you call this method before ->save() ?';
     private const INVALID_ENTITY_STATUS = 'This entity does not have a status';
     private const INVALID_ENTITY_DATA   = 'Data can not be empty';
+    private const INVALID_ENTITY_KEY    = 'Invalid entity key';
+    private const INVALID_ENTITY_STATIC_METHOD = 'Invalid static method';
+    private const INVALID_ENTITY_METHOD = 'Invalid non static method method';
 
     private $key;
     protected array $data = [];
@@ -45,24 +47,6 @@ abstract class Entity extends Relations {
         foreach ($this->additionalConstructorMethods as $method)
             if (method_exists($this, $method))
                 $this->data[$method] = $this->{$method}();
-    }
-
-    public function __call($name, $arguments) {
-        throw new \app\core\src\exceptions\NotFoundException("Invalid non static method method [{$name}]");
-    }
-
-    public static function __callStatic($name, $arguments) {
-        throw new \app\core\src\exceptions\NotFoundException("Invalid static method [{$name}]");
-    }
-
-    public function __get(string $key) {
-        return $this->data[$key] ??  new \Exception("Invalid entity key");
-    }
-
-    public function __toString() {
-        $result = get_class($this)."($this->key):\n";
-        foreach ($this->data as $key => $value) $result .= "[$key]:$value\n";
-        return $result;
     }
 
     /**
@@ -140,6 +124,31 @@ abstract class Entity extends Relations {
 
     protected function setTmpProperties(array $entityProperties): void {
         $this->set($entityProperties);
+    }
+
+    /**
+    |----------------------------------------------------------------------------
+    | Magic methods
+    |----------------------------------------------------------------------------
+    |
+    */
+
+    public function __call($name, $arguments) {
+        throw new \app\core\src\exceptions\NotFoundException(self::INVALID_ENTITY_METHOD . "[{$name}]");
+    }
+
+    public static function __callStatic($name, $arguments) {
+        throw new \app\core\src\exceptions\NotFoundException(self::INVALID_ENTITY_STATIC_METHOD . " [{$name}]");
+    }
+
+    public function __get(string $key) {
+        return $this->getData()[$key] ?? new \Exception(self::INVALID_ENTITY_KEY);
+    }
+
+    public function __toString() {
+        $result = get_class($this)."($this->key):\n";
+        foreach ($this->getData() as $key => $value) $result .= "[$key]:$value\n";
+        return $result;
     }
 
 }

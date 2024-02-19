@@ -21,8 +21,7 @@ abstract class ThirdPartyCommunication {
     public function __construct(
         protected array $arguments = [],
         protected Curl $curl = new Curl()
-    ) {
-    }
+    ) {}
     
     abstract public function send();
     abstract public function receive();

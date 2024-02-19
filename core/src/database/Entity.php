@@ -15,7 +15,7 @@ namespace app\core\src\database;
 
 use \app\core\Application;
 use \app\core\src\database\relations\Relations;
-use app\core\src\miscellaneous\CoreFunctions;
+use \app\core\src\miscellaneous\CoreFunctions;
 use \app\core\src\traits\EntityQueryTrait;
 
 abstract class Entity extends Relations {
@@ -36,7 +36,7 @@ abstract class Entity extends Relations {
     
     public function __construct($data = null, ?array $allowedFields = null) {
         $this->set($data, $allowedFields);
-        $this->app = CoreFunctions::app();
+        $this->app = app();
         if ($this->exists()) $this->checkAdditionalConstructorMethods();
     }
 
@@ -56,7 +56,7 @@ abstract class Entity extends Relations {
     }
 
     public function __get(string $key) {
-        return $this->data[$key] ?? new \Exception("Invalid entity key");
+        return $this->data[$key] ??  new \Exception("Invalid entity key");
     }
 
     public function __toString() {
@@ -138,7 +138,7 @@ abstract class Entity extends Relations {
         if (!$this->exists()) throw new \app\core\src\exceptions\EmptyException(self::INVALID_ENTITY_SAVE);
     }
 
-    protected function setTempProperties(array $entityProperties): void {
+    protected function setTmpProperties(array $entityProperties): void {
         $this->set($entityProperties);
     }
 

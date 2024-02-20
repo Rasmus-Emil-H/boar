@@ -123,12 +123,8 @@ final class Curl {
 
 	public function close(): void {
 	   curl_close($this->handler);
-	   $this->handler = null;
-	   $this->headers = [];
-	   $this->data = [];
-	   $this->content = null;
-	   $this->auth = [];
-	   $this->info = null;
+	   $this->headers = $this->data = $this->auth = $this->info = [];
+	   $this->handler = $this->content = $this->info = null;
 	}
 
 	public function debug(): void {

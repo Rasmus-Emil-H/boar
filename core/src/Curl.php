@@ -78,10 +78,13 @@ final class Curl {
 			break;
 		}
 
-		if (!empty($this->auth)) {
-			curl_setopt($this->handler, CURLOPT_HTTPAUTH, $this->auth['authenticationMethod']);
-			curl_setopt($this->handler, CURLOPT_USERPWD, $this->auth['credentials']);
-		}
+		$this->checkAuthenticationMechanism();
+	}
+
+	protected function checkAuthenticationMechanism() {
+		if (empty($this->auth)) return;
+		curl_setopt($this->handler, CURLOPT_HTTPAUTH, $this->auth['authenticationMethod']);
+		curl_setopt($this->handler, CURLOPT_USERPWD, $this->auth['credentials']);
 	}
 
 	private function sendAndReceiveRequest(): void {

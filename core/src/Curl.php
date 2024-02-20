@@ -11,7 +11,8 @@ namespace app\core\src;
 final class Curl {
 
 	private const POST_METHOD = 'post';
-
+	private const AUTHENTICATION_METHOD_KEY = 'authenticationMethod';
+	private const AUTHENTICATION_CREDENTIALS_KEY = 'credentials';
 	protected $handler = null;
 	protected string $url = '';
 	protected $info = [];
@@ -43,8 +44,8 @@ final class Curl {
 
 	public function setAuthenticationMechanism(string $authenticationMethod, string|array $credentials): self {
 		$this->auth = [
-			'authenticationMethod' => $authenticationMethod,
-			'credentials' => $credentials
+			self::AUTHENTICATION_METHOD_KEY => $authenticationMethod,
+			self::AUTHENTICATION_CREDENTIALS_KEY => $credentials
 		];
 		return $this;
 	}
@@ -83,8 +84,8 @@ final class Curl {
 
 	protected function checkAuthenticationMechanism() {
 		if (empty($this->auth)) return;
-		curl_setopt($this->handler, CURLOPT_HTTPAUTH, $this->auth['authenticationMethod']);
-		curl_setopt($this->handler, CURLOPT_USERPWD, $this->auth['credentials']);
+		curl_setopt($this->handler, CURLOPT_HTTPAUTH, $this->auth[self::AUTHENTICATION_METHOD_KEY]);
+		curl_setopt($this->handler, CURLOPT_USERPWD, $this->auth[self::AUTHENTICATION_CREDENTIALS_KEY]);
 	}
 
 	private function sendAndReceiveRequest(): void {

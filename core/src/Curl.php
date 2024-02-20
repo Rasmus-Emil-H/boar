@@ -16,6 +16,7 @@ namespace app\core\src;
 final class Curl {
 
 	private const POST_METHOD = 'post';
+	private const GET_METHOD = 'get';
 	private const AUTHENTICATION_METHOD_KEY = 'authenticationMethod';
 	private const AUTHENTICATION_CREDENTIALS_KEY = 'credentials';
 	protected $handler = null;
@@ -37,7 +38,7 @@ final class Curl {
 		return $this;
 	}
 	
-	public function setMethod(string $method = 'get'): self {
+	public function setMethod(string $method = self::GET_METHOD): self {
 		$this->method = $method;
 		return $this;
 	}

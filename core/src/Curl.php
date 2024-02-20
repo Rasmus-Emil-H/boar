@@ -1,10 +1,15 @@
 <?php
 
 /**
- * Bootstrap Curl 
- * AUTHOR: RE_WEB
- * @package app\core\Curl
- */
+|----------------------------------------------------------------------------
+| Bootstrap CURL
+|----------------------------------------------------------------------------
+|
+| @author RE_WEB
+| @package app\core\src
+|
+*/
+
 
 namespace app\core\src;
 

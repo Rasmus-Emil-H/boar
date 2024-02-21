@@ -68,6 +68,7 @@ abstract class Entity extends Relations {
         $data = $this->convertData($data, $allowedFields);
         $key = $this->getKeyField();
         if ($data !== null && gettype($data) !== "array") $data = [$key => $data];
+
         if(isset($data[$key])) {
             $exists = $this->getQueryBuilder()->fetchRow([$key => $data[$key]]);
             if(!empty($exists)) {
@@ -80,6 +81,7 @@ abstract class Entity extends Relations {
 
         if($data === null) $data = [];
         $this->data = array_merge($this->data, $data);
+        
         return $this;
     }
 

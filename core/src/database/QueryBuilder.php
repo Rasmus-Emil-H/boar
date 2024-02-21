@@ -81,23 +81,23 @@ class QueryBuilder implements Builder {
     }
     
     public function leftJoin(string $table, string $on, array $and = []): self {
-        $implodedAnd = (count($and) > 0 ? ' AND ' : '') . implode(' AND ', $and);
+        $implodedAnd = (count($and) > 0 ? self::AND : '') . implode(self::AND, $and);
         $this->query .= " LEFT JOIN {$table} {$on} {$implodedAnd} ";
         return $this;
     }
 
     public function rightJoin(string $table, string $on, array $and = []): self {
-        $implodedAnd = (count($and) > 0 ? ' AND ' : '') . implode(' AND ', $and);
+        $implodedAnd = (count($and) > 0 ? self::AND : '') . implode(self::AND, $and);
         $this->query .= " RIGHT JOIN {$table} {$on} {$implodedAnd} ";
         return $this;
     }
 
     public function in(string $field, array $ins): self {
-         $finalInString = array_map(function($fieldKey, $fieldValue) {
+         $queryINString = array_map(function($fieldKey, $fieldValue) {
             $this->args["inCounter$fieldKey"] = $fieldValue;
             return " :inCounter$fieldKey ";
         }, array_keys($ins), array_values($ins));
-        $this->query .= " AND $field IN ( " . implode(', ', $finalInString) . " ) ";
+        $this->query .= " AND $field IN ( " . implode(', ', $queryINString) . " ) ";
         return $this;
     }
 
@@ -118,14 +118,17 @@ class QueryBuilder implements Builder {
 
     public function patch(array $fields, ?string $primaryKeyField = null, ?string $primaryKey = null): self {
         $this->query .= "UPDATE {$this->table} SET ";
+
         foreach ($fields as $fieldKey => $fieldValue) {
             $this->args[$fieldKey] = $fieldValue;
             $this->query .= " $fieldKey = :$fieldKey " . (array_key_last($fields) === $fieldKey ? '' : ',');
         }
+
         if ($primaryKeyField && $primaryKey) {
             $this->query .= " WHERE $primaryKeyField = :primaryKey ";
             $this->args['primaryKey'] = $primaryKey;
         }
+
         return $this;
     }
 

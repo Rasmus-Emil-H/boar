@@ -21,10 +21,10 @@ abstract class ThirdPartyCommunication {
     public function __construct(
         protected array $arguments = [],
         protected Curl $curl = new Curl()
-    ) {}
+    ) {
+    }
     
-    abstract public function send();
-    abstract public function receive();
+    abstract public function sendAndReceive();
 
     protected function getArguments(): object {
         return (object)$this->arguments;

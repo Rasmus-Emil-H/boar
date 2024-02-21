@@ -45,8 +45,7 @@ abstract class Entity extends Relations {
     public function checkAdditionalConstructorMethods() {
         if (empty($this->additionalConstructorMethods)) return;
         foreach ($this->additionalConstructorMethods as $method)
-            if (method_exists($this, $method))
-                $this->data[$method] = $this->{$method}();
+            $this->data[$method] = $this->dispatchMethod($method);
     }
 
     /**
@@ -124,6 +123,11 @@ abstract class Entity extends Relations {
 
     protected function setTmpProperties(array $entityProperties): void {
         $this->set($entityProperties);
+    }
+
+    protected function dispatchMethod(string $method) {
+        if (!method_exists($this, $method)) throw new \app\core\src\exceptions\NotFoundException(self::INVALID_ENTITY_METHOD);
+        return $this->{$method}();
     }
 
     /**

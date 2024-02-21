@@ -1,5 +1,12 @@
 <?php
 
+/**
+|----------------------------------------------------------------------------
+| Magic methods
+|----------------------------------------------------------------------------
+|
+*/
+
 namespace app\core\src\traits;
 
 trait EntityMagicMethodTrait {
@@ -7,13 +14,6 @@ trait EntityMagicMethodTrait {
     private const INVALID_ENTITY_KEY    = 'Invalid entity key';
     private const INVALID_ENTITY_STATIC_METHOD = 'Invalid static method';
     private const INVALID_ENTITY_METHOD = 'Invalid non static method method';
-
-    /**
-    |----------------------------------------------------------------------------
-    | Magic methods
-    |----------------------------------------------------------------------------
-    |
-    */
 
     public function __call($name, $arguments) {
         throw new \app\core\src\exceptions\NotFoundException(self::INVALID_ENTITY_METHOD . "[{$name}]");

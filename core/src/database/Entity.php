@@ -16,10 +16,12 @@ namespace app\core\src\database;
 use \app\core\Application;
 use \app\core\src\database\relations\Relations;
 use \app\core\src\traits\EntityQueryTrait;
+use \app\core\src\traits\EntityMagicMethodTrait;
 
 abstract class Entity extends Relations {
 
     use EntityQueryTrait;
+    use EntityMagicMethodTrait;
 
     private const INVALID_ENTITY_SAVE   = 'Entity has not yet been properly stored, did you call this method before ->save() ?';
     private const INVALID_ENTITY_STATUS = 'This entity does not have a status';
@@ -125,34 +127,9 @@ abstract class Entity extends Relations {
         $this->set($entityProperties);
     }
 
-    protected function dispatchMethod(string $method) {
+    public function dispatchMethod(string $method) {
         if (!method_exists($this, $method)) throw new \app\core\src\exceptions\NotFoundException(self::INVALID_ENTITY_METHOD);
         return $this->{$method}();
-    }
-
-    /**
-    |----------------------------------------------------------------------------
-    | Magic methods
-    |----------------------------------------------------------------------------
-    |
-    */
-
-    public function __call($name, $arguments) {
-        throw new \app\core\src\exceptions\NotFoundException(self::INVALID_ENTITY_METHOD . "[{$name}]");
-    }
-
-    public static function __callStatic($name, $arguments) {
-        throw new \app\core\src\exceptions\NotFoundException(self::INVALID_ENTITY_STATIC_METHOD . " [{$name}]");
-    }
-
-    public function __get(string $key) {
-        return $this->getData()[$key] ?? new \Exception(self::INVALID_ENTITY_KEY);
-    }
-
-    public function __toString() {
-        $result = get_class($this)."($this->key):\n";
-        foreach ($this->getData() as $key => $value) $result .= "[$key]:$value\n";
-        return $result;
     }
 
 }

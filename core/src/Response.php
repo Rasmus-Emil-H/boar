@@ -43,6 +43,10 @@ final class Response {
         $this->setResponse(404, [$message]);
     }
 
+    public function notAllowed() {
+        $this->setResponse(403, $this->returnMessage('Not allowed'));
+    }
+
     public function badToken() {
         $this->setResponse(400, $this->returnMessage('Bad token'));
     }

@@ -12,6 +12,11 @@ final class UserModel extends Entity {
 	protected const PASSWORD_DEFAULT_RAND_FROM_INT = 10000;
 	protected const PASSWORD_DEFAULT_RAND_TO_INT = 1000000000;
 	protected const PASSWORD_ERROR_TEXT = 'Passwords must contains atleast: 1 uppercase letter, 1 lowercase letter, 1 digits, one special characters (@$!%*?&#) and be atleast 8 characters long';
+
+	private const ROLE_USER_RELATION_TABLE = 'role_user';
+
+	private const ROLE_ADMIN  = 'Admin';
+	private const ROLE_USER   = 'User';
 	
 
 	public function getTableName(): string {
@@ -77,6 +82,14 @@ final class UserModel extends Entity {
 			password: rand(self::PASSWORD_DEFAULT_RAND_FROM_INT, self::PASSWORD_DEFAULT_RAND_TO_INT), 
 			algo: PASSWORD_DEFAULT
 		);
+	}
+
+	public function role() {
+		return CoreFunctions::first($this->attachedTo(RoleModel::class, self::ROLE_USER_RELATION_TABLE, $this->getKeyField(), $this->key()));
+	}
+
+	public function isAdmin(): bool {
+		return $this->role()->get('Name') === self::ROLE_ADMIN;
 	}
 	
 }

@@ -101,7 +101,8 @@ final class Application {
             $this->router->resolve();
         } catch (\Throwable $applicationError) {
             $this->logger->log($applicationError);
-            $this->setParentController(new \app\controllers\ErrorController($applicationError));
+            if ($this->isDevSite()) CoreFunctions::d($applicationError);
+            CoreFunctions::dd('Application error');
         }
     }
 

@@ -2,7 +2,7 @@
 
 /**
 |----------------------------------------------------------------------------
-| Application authorization
+| Entity authorization
 |----------------------------------------------------------------------------
 | From here you can control access between entities and actions
 | 
@@ -15,27 +15,14 @@ namespace app\core\src\gate;
 
 use \app\core\src\database\Entity;
 use \app\core\src\miscellaneous\CoreFunctions;
-use \app\models\UserModel;
+use \app\core\src\traits\GateStaticMethodTrait;
 
 class Gate {
 
-    public static function isAuthenticatedUserAllowed(string $method, Entity $entity): bool {
-        if (!method_exists(__CLASS__, $method)) return false;
-        return self::{$method}($entity);
-    }
+    use GateStaticMethodTrait;
 
-    public static function isSpecificUserAllowed(string $method, UserModel $user, Entity $entity): bool {
-        if (!method_exists(__CLASS__, $method)) return false;
-        return self::{$method}();
-    }
-
-    public static function isEntityAllowed(string $method, Entity $entityFrom, Entity $entityTo): bool {
-        if (!method_exists(__CLASS__, $method)) return false;
-        return self::{$method}();
-    }
-
-    protected static function testUpdateEntity(Entity $entity): bool {
-        return $entity->user()->key() === CoreFunctions::applicationUser()->key();
+    protected static function updateCar(Entity $carEntity): bool {
+        return $carEntity->user()->key() === CoreFunctions::applicationUser()->key();
     }
 
 }

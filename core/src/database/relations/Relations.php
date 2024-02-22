@@ -16,18 +16,31 @@ namespace app\core\src\database\relations;
 use \app\core\src\database\QueryBuilder;
 use \app\core\src\database\table\Table;
 use \app\core\src\miscellaneous\CoreFunctions;
+use \app\core\src\factories\ModelFactory;
 
 class Relations {
 
-    protected function getInstanceOf(string $class) {
-        CoreFunctions::app()->classCheck($class);
-        return new $class();
+    /**
+     * Return entity
+     */
+
+    private function getInstanceOf(string $class) {
+        $class = preg_replace('/Model/', '', CoreFunctions::last(explode('\\', $class))->scalar);
+        return (new ModelFactory(['handler' => $class]))->create();
     }
+
+    /**
+     * Find entities on the child table where the parent has a corresponding primary key
+     */
     
     public function hasMany(string $related): QueryBuilder {
         $instance = $this->getInstanceOf($related);
         return $instance->query()->select()->where([$this->getKeyField() => $this->key()]);
     }
+
+    /**
+     * Find entity on the parent where the child has a param primary key
+     */
 
     public function hasOne(string $entity, string $entityKey) {
         $instance = $this->getInstanceOf($entity);
@@ -35,26 +48,45 @@ class Relations {
         return $queryBuilder->select()->where([$instance->getKeyField() => $entityKey])->run();
     }
 
+    /**
+     * Find entities on a param table where the key and value is a match
+     */
+
     public function attachedTo($entity, string $table, string $key, string $value) {
         $queryBuilder = new QueryBuilder($entity, $table, $key);
         return $queryBuilder->select()->where([$key => $value])->run();
     }
 
+    /**
+     * Find entities on a param table where the parent primary key exist
+     */
+
     public function connectedWith(string $relatedEntity, string $table) {
         $queryBuilder = new QueryBuilder($relatedEntity, $table, '');
         return $queryBuilder->select()->where([$this->getKeyField() => $this->key()])->run();
     }
+
+    /**
+     * Find entities on param entity where parent key is a match
+     */
     
     public function belongsTo(string $related) {
         $instance = $this->getInstanceOf($related);
         return $instance->find($this->getKeyField(), $this->key());
     }
 
+    /**
+     * Find entity on parent table where the param key is a match
+     */
+
     public function isBasedOn(string $relatedEntity, string $key) {
-        $instance = $this->getInstanceOf($relatedEntity);
         $queryBuilder = new QueryBuilder($relatedEntity, $this->getTableName(), $this->key());
-        return $queryBuilder->select()->where([$instance->getKeyField() => $key])->run(); 
+        return $queryBuilder->select()->where([$this->getKeyField() => $key])->run();
     }
+
+    /**
+     * Create a pivot relation with N amount of KVPs
+     */
 
     public function createPivot(...$keys) {
         $queryBuilder = new QueryBuilder(get_called_class(), $this->getPivot(), '');
@@ -62,15 +94,27 @@ class Relations {
         return app()->getConnection()->getLastID();
     }
 
+    /**
+     * Find entites on pivot table where parent primary key is a match
+     */
+
     public function manyToMany(string $relatedEntity): array {
         $queryBuilder = new QueryBuilder($relatedEntity, $this->getPivot(), '');
         return $queryBuilder->select()->where([$this->getKeyField() => $this->key()])->run();
     }
 
-    public function oneHasMany(string $class, string $table, string $column, string $value): array {
+    /**
+     * Find entities on a table where the column and value is a match
+     */
+
+    public function oneHasMany(string $class, string $table, string $column, string $value): QueryBuilder {
         $queryBuilder = new QueryBuilder($class, $table, $this->key());
-        return $queryBuilder->select()->where([$column => $value])->run();
+        return $queryBuilder->select()->where([$column => $value]);
     }
+
+    /**
+     * Find entites on a polymorphic table where parent entity and primary key is match
+     */
 
     public function hasManyPolymorphic(string $class) {
         $polyMorphicEntity = $this->getInstanceOf($class);

@@ -18,5 +18,10 @@ export default {
                 rotation: ${rotation} -
             `);
         });
+    },
+    promptLocationPermissions: function() {
+        window.navigator.geolocation.getCurrentPosition(function(res) {
+            return res;
+        });
     }
 }

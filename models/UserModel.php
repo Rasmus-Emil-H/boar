@@ -5,13 +5,14 @@ namespace app\models;
 use \app\core\src\database\Entity;
 use \app\core\src\miscellaneous\CoreFunctions;
 use \app\core\src\miscellaneous\Hash;
+use \app\core\src\notifications\SMS;
 
 final class UserModel extends Entity {
 
 	protected const PASSWORD_DEFAULT_RAND_FROM_INT = 10000;
 	protected const PASSWORD_DEFAULT_RAND_TO_INT = 1000000000;
-
 	protected const PASSWORD_ERROR_TEXT = 'Passwords must contains atleast: 1 uppercase letter, 1 lowercase letter, 1 digits, one special characters (@$!%*?&#) and be atleast 8 characters long';
+	
 
 	public function getTableName(): string {
 		return 'Users';
@@ -22,22 +23,17 @@ final class UserModel extends Entity {
 	}
 
 	public function setRole(string $role): self {
-		$this->allowSave();
+		$this->checkAllowSave();
 		$roleID = (new RoleModel())->query()->select(['RoleID'])->where(['Name' => $role])->run();
-		(new RoleModel())->createPivot(['UserID' => $this->key(), 'RoleID' => CoreFunctions::first($roleID)->key()]);
+		(new RoleModel())->createPivot([$this->getKeyField() => $this->key(), 'RoleID' => CoreFunctions::first($roleID)->key()]);
 		return $this;
 	}
 
-	public function initializeTwofactorProgress(): void {
-		$this->app->getSession()->set('user', $this->key());
-        $this->app->getResponse()->setResponse(200, ['redirect' => '/auth/twofactor']);
-    }
-
 	public function login() {
 		$sessionID = Hash::uuid();
-        $this->app->getSession()->set('SessionID', $sessionID);
-        (new SessionModel())->set(['Value' => $sessionID, 'UserID' => $this->key()])->save();
-		$this->app->getResponse()->setResponse(200, ['redirect' => '/home']);
+        app()->getSession()->set('SessionID', $sessionID);
+        (new SessionModel())->set(['Value' => $sessionID, $this->getKeyField() => $this->key()])->save();
+		app()->getResponse()->setResponse(200, ['redirect' => '/trip']);
 	}
 
 	public function logout() {
@@ -47,11 +43,11 @@ final class UserModel extends Entity {
 
 	public function requestPasswordReset(string $email) {
 		$user = $this->find('Email', $email);
-		if (empty($user) || !CoreFunctions::first($user)) $this->app->getResponse()->notFound('User not found');
-		$resetLink = $this->app->getRequest()->getServerInformation()['HTTP_HOST'] . '/auth/resetPassword?resetPassword='.Hash::create(50);
+		if (empty($user) || !CoreFunctions::first($user)) app()->getResponse()->notFound('User not found');
+		$resetLink = app()->getRequest()->getServerInformation()['HTTP_HOST'] . '/auth/resetPassword?resetPassword='.Hash::create(50);
 		CoreFunctions::first($user)->addMetaData([$resetLink]);
 		mail($email, 'Reset password link', $resetLink);
-		$this->app->getResponse()->setResponse(200, ['redirect' => '/auth/login']);
+		app()->getResponse()->setResponse(200, ['redirect' => '/auth/login']);
 	}
 
 	public function resetPassword(string $newPassword, string $resetToken) {
@@ -59,19 +55,12 @@ final class UserModel extends Entity {
         $this->validatePassword($newPassword);
         $this->set(['Password' => password_hash($newPassword, PASSWORD_DEFAULT)])->save();
         CoreFunctions::first($token)->delete();
-        $this->app->getResponse()->setResponse(201, ['redirect' => '/auth/login']);
+        app()->getResponse()->setResponse(201, ['redirect' => '/auth/login']);
 	}
 
 	public function hasActiveSession() {
-		$session = (new SessionModel())->query()->select()->where(['Value' => $this->app->getSession()->get('SessionID'), 'UserID' => $this->app->getSession()->get('user')])->run();
+		$session = (new SessionModel())->query()->select()->where(['Value' => app()->getSession()->get('SessionID'), $this->getKeyField() => app()->getSession()->get('user')])->run();
         return !empty($session) && CoreFunctions::first($session)->exists();
-	}
-	
-	public function generateRandomPassword(): string {
-		return password_hash(
-			password: rand(self::PASSWORD_DEFAULT_RAND_FROM_INT, self::PASSWORD_DEFAULT_RAND_TO_INT), 
-			algo: PASSWORD_DEFAULT
-		);
 	}
 
 	public function checkPasswordResetToken(string|bool $resetToken): array {
@@ -80,7 +69,14 @@ final class UserModel extends Entity {
 
 	public function validatePassword(string $password) {
 		if (!preg_match('/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%#*?&])[A-Za-z\d@$!%*?#&]{8,40}$/', $password)) 
-            CoreFunctions::app()->getResponse()->setResponse(409, [self::PASSWORD_ERROR_TEXT]);
+            app()->getResponse()->setResponse(409, [self::PASSWORD_ERROR_TEXT]);
+	}
+
+	public function generateRandomPassword(): string {
+		return password_hash(
+			password: rand(self::PASSWORD_DEFAULT_RAND_FROM_INT, self::PASSWORD_DEFAULT_RAND_TO_INT), 
+			algo: PASSWORD_DEFAULT
+		);
 	}
 	
 }

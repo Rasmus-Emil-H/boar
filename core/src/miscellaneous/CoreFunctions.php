@@ -80,7 +80,7 @@ final class CoreFunctions {
     } 
 
     public static function getRemainingApplicationMemory(): int {
-        return ini_get('memory_limit') - memory_get_usage(true);
+        return ini_get('memory_limit') - memory_get_usage(real_usage: true);
     }
 
 }

@@ -22,10 +22,21 @@ final class Response {
         header('Content-Type: ' . $type);
     }
     
-    public function setResponse(int $code, array $message) {
+    public function setResponse(int $code, array $message = []) {
+        if (empty($message)) $message = $this->returnStdSuccesMessage();
+
         $this->setStatusCode($code);
         $this->setContentType('application/json');
+        
         exit(json_encode($message));
+    }
+
+    public function returnStdSuccesMessage(): array {
+        return ['responseJSON' => 'Success'];
+    }
+
+    public function returnMessage(string $message): array {
+        return [$message];
     }
 
     public function notFound(string $message) {
@@ -33,19 +44,19 @@ final class Response {
     }
 
     public function badToken() {
-        $this->setResponse(400, ['Bad token']);
+        $this->setResponse(400, $this->returnMessage('Bad token'));
     }
 
     public function dataConflict() {
-        $this->setResponse(409, ['Invalid input. Please try something else']);
+        $this->setResponse(409, $this->returnMessage('Invalid input. Please try something else'));
     }
 
     public function requestLimitReached() {
-        $this->setResponse(429, ['Too many requests']); 
+        $this->setResponse(429, $this->returnMessage('Too many requests')); 
     }
 
     public function methodNotAllowed() {
-        $this->setResponse(405, ['Method not allowed']);
+        $this->setResponse(405, $this->returnMessage('Method not allowed'));
     }
 
 }

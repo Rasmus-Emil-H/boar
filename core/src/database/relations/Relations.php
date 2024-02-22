@@ -14,7 +14,7 @@
 namespace app\core\src\database\relations;
 
 use \app\core\src\database\QueryBuilder;
-use app\core\src\database\table\Table;
+use \app\core\src\database\table\Table;
 use \app\core\src\miscellaneous\CoreFunctions;
 
 class Relations {
@@ -29,6 +29,17 @@ class Relations {
         return $instance->query()->select()->where([$this->getKeyField() => $this->key()]);
     }
 
+    public function hasOne(string $entity, string $entityKey) {
+        $instance = $this->getInstanceOf($entity);
+        $queryBuilder = new QueryBuilder($entity, $this->getTableName(), $this->key());
+        return $queryBuilder->select()->where([$instance->getKeyField() => $entityKey])->run();
+    }
+
+    public function attachedTo($entity, string $table, string $key, string $value) {
+        $queryBuilder = new QueryBuilder($entity, $table, $key);
+        return $queryBuilder->select()->where([$key => $value])->run();
+    }
+
     public function connectedWith(string $relatedEntity, string $table) {
         $queryBuilder = new QueryBuilder($relatedEntity, $table, '');
         return $queryBuilder->select()->where([$this->getKeyField() => $this->key()])->run();
@@ -39,9 +50,16 @@ class Relations {
         return $instance->find($this->getKeyField(), $this->key());
     }
 
+    public function isBasedOn(string $relatedEntity, string $key) {
+        $instance = $this->getInstanceOf($relatedEntity);
+        $queryBuilder = new QueryBuilder($relatedEntity, $this->getTableName(), $this->key());
+        return $queryBuilder->select()->where([$instance->getKeyField() => $key])->run(); 
+    }
+
     public function createPivot(...$keys) {
         $queryBuilder = new QueryBuilder(get_called_class(), $this->getPivot(), '');
         $queryBuilder->create(CoreFunctions::first($keys))->run();
+        return app()->getConnection()->getLastID();
     }
 
     public function manyToMany(string $relatedEntity): array {

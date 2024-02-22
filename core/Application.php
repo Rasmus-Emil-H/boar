@@ -34,14 +34,15 @@ final class Application {
     public static self $app;
 
     public function __construct() {
+
+        new src\WebApplicationFirewall();
+
         self::$app = $this;
         self::$ROOT_DIR = dirname(__DIR__);
 
         $this->config        = new src\config\Config();
         $this->session      = new src\Session();
         $this->request      = new src\Request($this);
-
-        new src\WebApplicationFirewall($this->request);
         
         $this->setConnection();
 

@@ -20,7 +20,7 @@ trait EntityQueryTrait {
     
     public function createEntity() {
         $this->getQueryBuilder()->create($this->data)->run();
-        $this->setKey($this->app->getConnection()->getLastID());
+        $this->setKey(app()->getConnection()->getLastID());
         return $this;
     }
 
@@ -70,7 +70,7 @@ trait EntityQueryTrait {
                 'EntityType' => $this->getTableName(), 
                 'EntityID' => $this->key() ?? 0,
                 'Data' => json_encode($data), 
-                'IP' => $this->app->getRequest()->getIP()
+                'IP' => app()->getRequest()->getIP()
             ])
             ->save(addMetaData: false);
         return $this;

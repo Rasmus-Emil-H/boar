@@ -33,14 +33,12 @@ abstract class Entity extends Relations {
     private $key;
     protected array $data = [];
     protected array $additionalConstructorMethods = [];
-    protected Application $app;
 
     abstract protected function getKeyField()  : string;
     abstract protected function getTableName() : string;
     
     public function __construct($data = null, ?array $allowedFields = null) {
         $this->set($data, $allowedFields);
-        $this->app = app();
         if ($this->exists()) $this->checkAdditionalConstructorMethods();
     }
 
@@ -108,7 +106,7 @@ abstract class Entity extends Relations {
             if(empty($this->data)) throw new \app\core\src\exceptions\EmptyException();
             return $this->createEntity();
         } catch(\Exception $e) {
-            $this->app->addSystemEvent([$e->getMessage()]);
+            app()->addSystemEvent([$e->getMessage()]);
             throw new \app\core\src\exceptions\NotFoundException($e->getMessage());
         }
     }
@@ -121,7 +119,7 @@ abstract class Entity extends Relations {
         return $this->data;
     }
 
-    protected function allowSave(): void {
+    public function checkAllowSave(): void {
         if (!$this->exists()) throw new \app\core\src\exceptions\EmptyException(self::INVALID_ENTITY_SAVE);
     }
 

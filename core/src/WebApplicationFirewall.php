@@ -9,9 +9,7 @@ class WebApplicationFirewall {
     protected const XSS_MESSAGE = 'XSS attempt detected';
     protected const DIE_MESSAGE = 'Request blocked: ';
 
-    public function __construct(
-        protected Request $request
-    ) {
+    public function __construct() {
         $this->inputData = $_REQUEST;
         $this->sanitizeInput($this->inputData);
         $this->detectSQLInjection();

@@ -13,15 +13,16 @@
 
 namespace app\core\src\database;
 
-use \app\core\Application;
 use \app\core\src\database\relations\Relations;
 use \app\core\src\traits\EntityQueryTrait;
 use \app\core\src\traits\EntityMagicMethodTrait;
+use \app\core\src\traits\EntityHTTPMethodTrait;
 
 abstract class Entity extends Relations {
 
     use EntityQueryTrait;
     use EntityMagicMethodTrait;
+    use EntityHTTPMethodTrait;
 
     private const INVALID_ENTITY_SAVE   = 'Entity has not yet been properly stored, did you call this method before ->save() ?';
     private const INVALID_ENTITY_STATUS = 'This entity does not have a status';
@@ -119,6 +120,12 @@ abstract class Entity extends Relations {
         return $this->data;
     }
 
+    public function getFrontendFriendlyData() {
+        $toBeDisplayed = $this->getData();
+        unset($toBeDisplayed[$this->getKeyField()]);
+        return $toBeDisplayed;
+    }
+
     public function checkAllowSave(): void {
         if (!$this->exists()) throw new \app\core\src\exceptions\EmptyException(self::INVALID_ENTITY_SAVE);
     }
@@ -127,9 +134,18 @@ abstract class Entity extends Relations {
         $this->set($entityProperties);
     }
 
-    public function dispatchMethod(string $method) {
+    /**
+     * Dispatcher for entity methods
+     * @throws \app\core\src\exceptions\NotFoundException
+     */
+
+    private function checkMethodValidity(string $method) {
         if (!method_exists($this, $method)) throw new \app\core\src\exceptions\NotFoundException(self::INVALID_ENTITY_METHOD);
-        return $this->{$method}();
+    }
+
+    public function dispatchMethod(string $method, mixed $arguments = []) {
+        $this->checkMethodValidity($method);
+        return $this->{$method}($arguments);
     }
 
 }

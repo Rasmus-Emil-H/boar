@@ -10,11 +10,24 @@ namespace app\core\src;
 
 final class Response {
 
+    private const HTTP_OK = 200;
+    private const HTTP_CREATED = 201;
+    private const HTTP_LOCATION_TEMP = 301;
+    private const HTTP_LOCATION_PERM = 302;
+    private const HTTP_BAD_REQUEST = 400;
+    private const HTTP_AUTHENTICATION_FAILED = 401;
+    private const HTTP_UNAUTHORIZED = 403;
+    private const HTTP_NOT_FOUND = 404;
+    private const HTTP_METHOD_NOT_ALLOWED = 405;
+    private const HTTP_DATA_CONFLICT = 409;
+    private const HTTP_TO_MANY_REQUEST = 429;
+
     public function setStatusCode(int $code) {
         http_response_code($code);
     }
 
     public function redirect(string $location) {
+        $this->setStatusCode(self::HTTP_LOCATION_TEMP);
         header('Location: ' . $location);
     }
     
@@ -39,28 +52,40 @@ final class Response {
         return [$message];
     }
 
-    public function notFound(string $message) {
-        $this->setResponse(404, [$message]);
+    public function ok() {
+        $this->setResponse(self::HTTP_OK);
     }
 
-    public function notAllowed() {
-        $this->setResponse(403, $this->returnMessage('Not allowed'));
+    public function created() {
+        $this->setResponse(self::HTTP_CREATED);
     }
 
     public function badToken() {
-        $this->setResponse(400, $this->returnMessage('Bad token'));
+        $this->setResponse(self::HTTP_BAD_REQUEST, $this->returnMessage('Bad token'));
     }
 
-    public function dataConflict() {
-        $this->setResponse(409, $this->returnMessage('Invalid input. Please try something else'));
+    public function unauthorized(string $message = 'Unauthorized') {
+        $this->setResponse(self::HTTP_AUTHENTICATION_FAILED, $this->returnMessage($message));
     }
 
-    public function requestLimitReached() {
-        $this->setResponse(429, $this->returnMessage('Too many requests')); 
+    public function notAllowed() {
+        $this->setResponse(self::HTTP_UNAUTHORIZED, $this->returnMessage('Not allowed'));
+    }
+
+    public function notFound(string $message = 'Resource not found') {
+        $this->setResponse(self::HTTP_NOT_FOUND, [$message]);
     }
 
     public function methodNotAllowed() {
-        $this->setResponse(405, $this->returnMessage('Method not allowed'));
+        $this->setResponse(self::HTTP_METHOD_NOT_ALLOWED, $this->returnMessage('Method not allowed'));
+    }
+
+    public function dataConflict(string $message = 'Invalid input. Please try something else') {
+        $this->setResponse(self::HTTP_DATA_CONFLICT, $this->returnMessage($message));
+    }
+
+    public function requestLimitReached() {
+        $this->setResponse(self::HTTP_TO_MANY_REQUEST, $this->returnMessage('Too many requests')); 
     }
 
 }

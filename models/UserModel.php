@@ -74,10 +74,10 @@ final class UserModel extends Entity {
 
 	public function validatePassword(string $password) {
 		if (!preg_match('/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%#*?&])[A-Za-z\d@$!%*?#&]{8,40}$/', $password)) 
-            app()->getResponse()->setResponse(409, [self::PASSWORD_ERROR_TEXT]);
+            app()->getResponse()->dataConflict(self::PASSWORD_ERROR_TEXT);
 	}
 
-	public function generateRandomPassword(): string {
+	public function generateRandomUserOrientedPassword(): string {
 		return password_hash(
 			password: rand(self::PASSWORD_DEFAULT_RAND_FROM_INT, self::PASSWORD_DEFAULT_RAND_TO_INT), 
 			algo: PASSWORD_DEFAULT

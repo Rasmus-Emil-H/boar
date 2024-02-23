@@ -38,7 +38,7 @@ final class AuthenticationModel {
     }
 
     protected function invalidLogin() {
-        CoreFunctions::app()->getResponse()->setResponse(401, ['Invalid login']);
+        app()->getResponse()->unauthorized('Invalid login');
     }
 
     /**
@@ -50,7 +50,7 @@ final class AuthenticationModel {
         $curl = new Curl();
         foreach ($this->data as $key => $values) $curl->{"set".ucfirst($key)($values)};
         $curl->send();
-        $content = $curl->content;
+        $content = $curl->getContent();
         $curl->close();
         return $content;
     }

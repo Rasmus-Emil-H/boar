@@ -43,6 +43,10 @@ function ths(string $string): string {
     return \app\core\src\miscellaneous\CoreFunctions::ths($string);
 }
 
+function hs(string $string): string {
+    return htmlspecialchars($string);
+}
+
 function app() {
     return \app\core\src\miscellaneous\CoreFunctions::app();
 }

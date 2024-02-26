@@ -59,7 +59,7 @@ class Controller {
             [$controller, $method] = preg_match('/:/', $childController) ? explode(':', $childController) : [$childController, self::DEFAULT_METHOD];
             $cController = (new ControllerFactory(['handler' => $controller]))->create();
             $cController->{$method}();
-            CoreFunctions::app()->getParentController()->setData($cController->getData());
+            app()->getParentController()->setData($cController->getData());
             $cController->setChildData();
         }
     }
@@ -84,7 +84,7 @@ class Controller {
 
     protected function returnValidEntityIfExists(): Entity {
         $entity = $this->returnEntity();
-        if (!$entity->exists()) $this->response->redirect('/home');
+        if (!$entity->exists()) $this->response->redirect('/trip');
         return $entity;
     }
 
@@ -106,6 +106,11 @@ class Controller {
 
     public function setLayout(string $layout): void {
         $this->layout = $layout;
+    }
+
+    public function setFrontendTemplateAndData(string $templateFile, array $data = []): void {
+        $this->setData($data);
+        $this->setView($templateFile);
     }
 
 }

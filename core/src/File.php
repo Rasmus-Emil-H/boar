@@ -51,7 +51,7 @@ final class File {
 
     protected function checkFileType(): bool {
         $fileType = preg_replace('~.*' . preg_quote('/', '~') . '~', '', $this->file->type);
-        return in_array($fileType, CoreFunctions::app()->getConfig()->get('fileHandling')->allowedFileTypes);
+        return in_array($fileType, app()->getConfig()->get('fileHandling')->allowedFileTypes);
     }
 
     public function validateFileName(): bool {

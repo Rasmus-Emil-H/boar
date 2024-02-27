@@ -11,7 +11,7 @@ class FooterController extends Controller {
 		$this->setView('footer', 'partials/');
 		$this->setData([
 			'footer' => $this->getView(), 
-			'js' => CoreFunctions::app()->getParentController()->getClientAssets()->get('js')
+			'js' => app()->getParentController()->getClientAssets()->get('js')
 		]);
 	}
 

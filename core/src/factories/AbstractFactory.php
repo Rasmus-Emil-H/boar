@@ -29,7 +29,7 @@ abstract class AbstractFactory {
     }
 
     public function validateObject(string $class) {
-        return CoreFunctions::app()->classCheck($class);
+        return app()->classCheck($class);
     }
 
     public function getKey(): ?string {

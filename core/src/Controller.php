@@ -101,7 +101,7 @@ class Controller {
     }
 
     protected function setView(string $view, string $dir = ''): void {
-        $this->view = CoreFunctions::app()->getView()->getTemplatePath($view, $dir);
+        $this->view = app()->getView()->getTemplatePath($view, $dir);
     }
 
     public function setLayout(string $layout): void {

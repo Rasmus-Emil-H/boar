@@ -23,11 +23,11 @@ class Cron {
             $cCronjob = (new CronjobFactory(['handler' => $cronJob->get('CronjobEntity')]))->create();
             foreach ($cCronjob->getCronjobs() as $cronjob) {
                 try {
-                    CoreFunctions::app()->addSystemEvent(['Starting new cronjob iteration ' . $cronjob]);
+                    app()->addSystemEvent(['Starting new cronjob iteration ' . $cronjob]);
                     $cCronjob->{$cronjob}();
-                    CoreFunctions::app()->addSystemEvent(['Cronlog ran without errors: ' . $cronjob]);
+                    app()->addSystemEvent(['Cronlog ran without errors: ' . $cronjob]);
                 } catch (\Exception $e) {
-                    CoreFunctions::app()->addSystemEvent(['Cronlog ran with errors: ' . json_encode($e)]);
+                    app()->addSystemEvent(['Cronlog ran with errors: ' . json_encode($e)]);
                 }
             }
         }

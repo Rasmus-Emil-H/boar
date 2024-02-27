@@ -189,7 +189,7 @@ class QueryBuilder implements Builder {
 
     public function fetchRow(?array $criteria = null) {
         $this->select()->where($criteria);
-        $response = CoreFunctions::app()->getConnection()->execute($this->query, $this->args, 'fetch');
+        $response = app()->getConnection()->execute($this->query, $this->args, 'fetch');
         $this->resetQuery();
         return $response;
     }
@@ -200,7 +200,7 @@ class QueryBuilder implements Builder {
     }
 
     public function run(string $fetchMode = 'fetchAll'): array {
-        $response = CoreFunctions::app()->getConnection()->execute($this->query, $this->args, $fetchMode);
+        $response = app()->getConnection()->execute($this->query, $this->args, $fetchMode);
         $this->resetQuery();
         $objects = [];
         if (!is_iterable($response)) return [];

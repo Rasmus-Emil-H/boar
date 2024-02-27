@@ -34,7 +34,7 @@ final class Router {
     }
 
     protected function createController(): void {
-        $app = CoreFunctions::app();
+        $app = app();
         if (empty($this->path) || $this->request->getPath() === '/') $app->getResponse()->redirect(CoreFunctions::first(self::$anonymousRoutes)->scalar);
         $handler = ucfirst(CoreFunctions::first($this->path)->scalar);
         $controller = (new ControllerFactory(['handler' => $handler]))->create();
@@ -49,7 +49,7 @@ final class Router {
     }
 
     protected function setTemplateControllers(): void {
-        if (CoreFunctions::app()::isCLI()) return;
+        if (app()::isCLI()) return;
         $this->getApplicationParentController()->setChildren(['Header', 'Footer']);
     }
 
@@ -69,7 +69,7 @@ final class Router {
     }
 
     private function getApplicationParentController(): Controller {
-        return CoreFunctions::app()->getParentController();
+        return app()->getParentController();
     }
 
     public function resolve(): void {

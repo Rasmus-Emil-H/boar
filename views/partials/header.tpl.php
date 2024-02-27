@@ -8,6 +8,6 @@
   </head>
 <body>
   
-<?php if(!\app\core\src\miscellaneous\CoreFunctions::app()::isGuest()): ?>
+<?php if(!app()::isGuest()): ?>
   <?php require_once $navbar; ?>
 <?php endif; ?>

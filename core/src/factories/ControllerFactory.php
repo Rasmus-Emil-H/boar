@@ -13,7 +13,7 @@ class ControllerFactory extends AbstractFactory {
     public function create(): Controller {
         $controller = ('\\app\controllers\\' . $this->getHandler() . self::CONTROLLER_AFFIX);
         $this->validateObject($controller);
-        $app = CoreFunctions::app();
+        $app = app();
         return new $controller($app->getRequest(), $app->getResponse(), $app->getSession(), new AssetsController());
     }
 

@@ -7,7 +7,7 @@ use \app\core\src\miscellaneous\CoreFunctions;
 class AssetsController {
     
     public function get(string $section): array {
-        return CoreFunctions::app()->getConfig()->get('clientAssets')->$section;
+        return app()->getConfig()->get('clientAssets')->$section;
     }
 
 }

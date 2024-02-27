@@ -41,7 +41,7 @@ class Migration {
     public function applyMigrations() {
         $this->createMigrationsTable();
         $appliedMigrations = $this->getAppliedMigrations();
-        $migrationsFolder = CoreFunctions::app()::$ROOT_DIR . self::MIGRATION_DIR;
+        $migrationsFolder = app()::$ROOT_DIR . self::MIGRATION_DIR;
         $migrations = scandir($migrationsFolder);
         $mappedMigrations = array_map(fn($object) => $object->Migration, $appliedMigrations);
         $missingMigrations = [];
@@ -50,7 +50,7 @@ class Migration {
             $actualMigration = str_replace('.php', '', $migration);
             if (!is_file($migrationFile) || in_array($actualMigration, $mappedMigrations)) continue;
             $date = preg_replace('/\_/', '-', substr(substr($migration, self::MIGRATION_DATE_OFFSET), 0, self::MIGRATION_DATE_LENGTH));
-            if (!strtotime($date)) CoreFunctions::app()->log('Invalid migration name ' . ($migration) . ', must be formatted: migration_yyyy_mm_dd_xxxx', exit: true);
+            if (!strtotime($date)) app()->log('Invalid migration name ' . ($migration) . ', must be formatted: migration_yyyy_mm_dd_xxxx', exit: true);
             isset($missingMigrations[strtotime($date)]) ? $missingMigrations[strtotime($date)+1] = $migration : $missingMigrations[strtotime($date)] = $migration;
         }
         ksort($missingMigrations);
@@ -58,7 +58,7 @@ class Migration {
     }
 
     public function iterateMigrations(array $toBeAppliedMigrations): void {
-        $app = CoreFunctions::app();
+        $app = app();
         foreach ($toBeAppliedMigrations as $migration) {
             require_once $app::$ROOT_DIR . self::MIGRATION_DIR . $migration;
             $handler = pathinfo($migration, PATHINFO_FILENAME);

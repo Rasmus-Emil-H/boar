@@ -36,15 +36,18 @@ class FileController extends Controller {
                 $cFile->setData([
                     'Name' => $file->getName(),
                     'Path' => $destination,
-                    'Hash' => hash_file('sha256', $destination)
+                    'Hash' => hash_file('sha256', $destination),
+                    'Type' => $request->body->type
                 ]);
 
                 $cFile
                     ->save()
                     ->createPivot(['EntityType' => $cEntity->getTableName(), 'EntityID' => $cEntity->key(), 'FileID' => $cFile->key()]);
+
+                $uploadedFiles[] = $file->getName();
             }
             
-            $this->response->setResponse(201, ['1234']);
+            $this->response->setResponse(201, $uploadedFiles);
         } catch (\Exception $error) {
             $this->response->setResponse(400, [$error->getMessage()]);
         }

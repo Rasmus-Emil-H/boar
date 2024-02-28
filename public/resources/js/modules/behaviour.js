@@ -22,7 +22,7 @@ export default {
             const _text = submitButton.html();
 
             submitButton.attr('disabled', true);
-            submitButton.html(autologik.components.loader());
+            submitButton.html(boar.components.loader());
             $.ajax({type: form.attr('method'), url: form.attr('action'), data: form.serialize(),
                 success: function (response, status) {
                     if (response.redirect) window.location.replace(response.redirect);
@@ -45,6 +45,7 @@ export default {
         const parent = $(target).closest('div.file-upload-parent');
         const entityType = parent.data('entityType');
         const entityID = parent.data('entityId');
+        const type = parent.data('type');
 
         if (!csrf || !parent || !entityType || !entityType) {
             alert('Required field(s) are missing!'); 
@@ -59,6 +60,7 @@ export default {
         body.append('entityType', entityType);
         body.append('entityID', entityID);
         body.append('eg-csrf-token-label', csrf);
+        body.append('type', type);
 
         await fetch('/file', {method: "POST", body})
             .then(function(response) {

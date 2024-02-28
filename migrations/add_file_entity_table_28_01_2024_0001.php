@@ -3,7 +3,7 @@
 use \app\core\src\database\table\Table;
 use \app\core\src\database\Schema;
 
-class add_file_entity_table_28_01_2024_0001 {
+class add_file_entity_table_28_02_2024_0001 {
 
     public function up() {
         (new Schema())->up('file_entity', function(Table $table) {
@@ -13,6 +13,7 @@ class add_file_entity_table_28_01_2024_0001 {
             $table->integer('FileID', 15);
             $table->timestamp();
             $table->primaryKey('FileEntityID');
+            $table->foreignKey('FileID', 'Files');
         });
     }
 

@@ -104,6 +104,15 @@ class Relations {
     }
 
     /**
+     * Target specific pivot
+     */
+
+    public function hasManyToMany(string $relatedEntity, string $pivot) {
+        $querBuilder = new QueryBuilder($relatedEntity, $pivot, '');
+        return $querBuilder->select()->where([Table::ENTITY_TYPE_COLUMN => $this->getTableName(), Table::ENTITY_ID_COLUMN => $this->key()]);
+    }
+
+    /**
      * Find entities on a table where the column and value is a match
      */
 

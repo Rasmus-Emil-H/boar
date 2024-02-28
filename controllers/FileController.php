@@ -28,6 +28,8 @@ class FileController extends Controller {
 
             $cEntity = $entity->create();
 
+            $customFileType = $request->body->type ?? 'defaultType';
+
             foreach ($request->files as $newFile) {
                 $file = new File($newFile);
                 $destination = $file->moveFile();
@@ -37,14 +39,14 @@ class FileController extends Controller {
                     'Name' => $file->getName(),
                     'Path' => $destination,
                     'Hash' => hash_file('sha256', $destination),
-                    'Type' => $request->body->type
+                    'Type' => $customFileType
                 ]);
 
                 $cFile
                     ->save()
                     ->createPivot(['EntityType' => $cEntity->getTableName(), 'EntityID' => $cEntity->key(), 'FileID' => $cFile->key()]);
 
-                $uploadedFiles[] = $file->getName();
+                $uploadedFiles[$customFileType] = $file->getName();
             }
             
             $this->response->setResponse(201, $uploadedFiles);

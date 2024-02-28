@@ -27,7 +27,7 @@ export default {
         if(!title) $('.modal-header').css({borderBottom: '0px'});
         if(cb) cb();
     },
-    spinner: function() {
+    loader: function() {
       return `<div class="spinner-border text-primary" role="status"><span class="sr-only">Loading...</span></div>`;
     },
     initToast: function(msg, color) {

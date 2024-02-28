@@ -118,7 +118,7 @@ class Relations {
 
     public function hasManyPolymorphic(string $class) {
         $polyMorphicEntity = $this->getInstanceOf($class);
-        return $polyMorphicEntity->search([Table::ENTITY_TYPE_COLUMN => $this->getKeyField(), Table::ENTITY_ID_COLUMN => $this->key()]);
+        return $polyMorphicEntity->search([Table::ENTITY_TYPE_COLUMN => $this->getTableName(), Table::ENTITY_ID_COLUMN => $this->key()]);
     }
 
 }

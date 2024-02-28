@@ -12,6 +12,9 @@ export default {
         this.globalNodeEventListeners();
     },
     globalNodeEventListeners: function() {
+
+        const self = this;
+
         $('form').submit(function (e) {
             e.preventDefault();
             const form = $(this);
@@ -34,21 +37,32 @@ export default {
         });
 
         $('input[type="file"]').on('change', function(e) {
-            this.uploadFile(e.target);
+            self.uploadFile(e.target);
         });
     },
     uploadFile: async function(target) {
         const csrf = $('[name="eg-csrf-token-label"]').val();
-        if (!csrf) {
-            alert('Token is missing!'); 
+        const parent = $(target).closest('div.file-upload-parent');
+        const entityType = parent.data('entityType');
+        const entityID = parent.data('entityId');
+
+        if (!csrf || !parent || !entityType || !entityType) {
+            alert('Required field(s) are missing!'); 
             return;
         }
-        let formData = new FormData();
-        formData.append("file", target.files[0]);
-        formData.append('eg-csrf-token-label', csrf);
-        await fetch('/file', {
-            method: "POST", 
-            body: formData
-        });
+        
+        const _backupNodes = parent.html();
+        parent.html(boar.components.loader());
+
+        let body = new FormData();
+        body.append("file", target.files[0]);
+        body.append('entityType', entityType);
+        body.append('entityID', entityID);
+        body.append('eg-csrf-token-label', csrf);
+
+        await fetch('/file', {method: "POST", body})
+            .then(function(response) {
+                parent.html(_backupNodes);
+            });
     }
 }

@@ -11,6 +11,7 @@ final class File {
     public const INVALID_FILE_SIZE  = 'File is to big';
     public const TPL_FILE_EXTENSION = '.tpl.php';
     public const VIEWS_FOLDER       = '/views/';
+    public const NO_FILES_ATTACHED = 'No files attached';
 
     protected const FILE_NOT_FOUND     = 'File not found';
     protected const MAXIMUM_FILE_SIZE  = 10000000;
@@ -21,7 +22,7 @@ final class File {
     ) {
         if (is_string($file)) $this->adjustFile();
         $this->file = (object)$this->file;
-        $this->fileDirectory ??= dirname(__DIR__, 2).'/uploads/';
+        $this->fileDirectory ??= dirname(__DIR__, 2).'/uploads';
     }
 
     public function adjustFile() {
@@ -33,10 +34,44 @@ final class File {
         ];
     }
 
-    public function moveFile(): bool {
+    public function getDirectory(): string {
+        return $this->fileDirectory;
+    }
+
+    public function getName(): string {
+        return $this->file->name;
+    }
+
+    public function setName(string $name): void {
+        $this->file->name = $name;
+    }
+
+    public function getTmpName(): string {
+        return $this->file->tmp_name;
+    }
+
+    public function getFileSize(): string {
+        return $this->file->size;
+    }
+
+    public function getFileType(): string {
+        return $this->file->type;
+    }
+
+    public function getFullFilePath(): string {
+        return $this->getDirectory() . $this->getName();
+    }
+
+    public function generateFinalName(): string {
+        $name = $this->getDirectory() . '/' . strtotime('now') . '-' . $this->getName();
+        return $name;
+    }
+
+    public function moveFile(): string {
         $this->validateFileConditions();
-        $destination = $this->fileDirectory.(strtotime('now').'-'.$this->file->name);
-        return move_uploaded_file($this->file->tmp_name, $destination);
+        $destination = $this->generateFinalName();
+        move_uploaded_file($this->getTmpName(), $destination);
+        return $destination;
     }
 
     public function validateFileConditions() {
@@ -46,16 +81,16 @@ final class File {
     }
 
     public function validateSize(): bool {
-        return $this->file['size'] < self::MAXIMUM_FILE_SIZE;
+        return $this->getFileSize() < self::MAXIMUM_FILE_SIZE;
     }
 
     protected function checkFileType(): bool {
-        $fileType = preg_replace('~.*' . preg_quote('/', '~') . '~', '', $this->file->type);
+        $fileType = preg_replace('~.*' . preg_quote('/', '~') . '~', '', $this->getFileType());
         return in_array($fileType, app()->getConfig()->get('fileHandling')->allowedFileTypes);
     }
 
     public function validateFileName(): bool {
-        $fileName = preg_replace('~\..*~', '', $this->file->name);
+        $fileName = preg_replace('~\..*~', '', $this->getName());
         return preg_match('/[a-zA-Z0-9]/', $fileName);
     }
 
@@ -69,7 +104,7 @@ final class File {
     }
 
     public function getFilePath() {
-        return $this->fileDirectory .'/'. $this->file->name;
+        return $this->getDirectory() .'/'. $this->getName();
     }
 
     public function exists() {

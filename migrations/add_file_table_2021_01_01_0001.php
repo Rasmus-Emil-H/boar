@@ -8,9 +8,10 @@ class add_file_table_2021_01_01_0001 {
     public function up() {
         (new Schema())->up('Files', function(Table $table) {
             $table->increments('FileID');
-            $table->varchar('Name', 50);
-            $table->varchar('Path', 50);
-            $table->timestamp('CreatedAt');
+            $table->varchar('Name', 255);
+            $table->varchar('Path', 255);
+            $table->varchar('Hash', 100);
+            $table->timestamp();
             $table->primaryKey('FileID');
         });
     }

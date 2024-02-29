@@ -21,8 +21,8 @@ class Gate {
 
     use GateStaticMethodTrait;
 
-    protected static function updateCar(Entity $carEntity): bool {
-        return $carEntity->user()->key() === CoreFunctions::applicationUser()->key();
+    protected static function canViewProduct(Entity $product): bool {
+        return $product->user()->key() === CoreFunctions::applicationUser()->key();
     }
 
 }

@@ -134,18 +134,29 @@ abstract class Entity extends Relations {
         $this->set($entityProperties);
     }
 
+    private function checkMethodValidity(string $method) {
+        if (!method_exists($this, $method)) throw new \app\core\src\exceptions\NotFoundException(self::INVALID_ENTITY_METHOD);
+    }
+
     /**
      * Dispatcher for entity methods
      * @throws \app\core\src\exceptions\NotFoundException
      */
 
-    private function checkMethodValidity(string $method) {
-        if (!method_exists($this, $method)) throw new \app\core\src\exceptions\NotFoundException(self::INVALID_ENTITY_METHOD);
-    }
-
     public function dispatchMethod(string $method, mixed $arguments = []) {
         $this->checkMethodValidity($method);
         return $this->{$method}($arguments);
+    }
+
+    /**
+     * HTTP Request dispatcher for entity methods
+     * @throws \app\core\src\exceptions\NotFoundException
+     */
+
+    public function dispatchHTTPMethod(string $httpRequestEntityMethod, mixed $httpBody) {
+        $this->setAllowedHTTPMethods();
+        $this->validateHTTPAction($httpBody, $httpRequestEntityMethod);
+        return $this->dispatchMethod($httpRequestEntityMethod, $httpBody);
     }
 
 }

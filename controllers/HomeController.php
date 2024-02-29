@@ -14,7 +14,7 @@ use \app\core\src\middlewares\AuthMiddleware;
 class HomeController extends Controller {
 
     public function index() {
-        $this->setView('home');
+        $this->setFrontendTemplateAndData(templateFile: 'home');
     }
 
 }

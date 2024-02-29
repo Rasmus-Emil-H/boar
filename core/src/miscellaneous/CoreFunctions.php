@@ -58,17 +58,19 @@ final class CoreFunctions {
         return self::hs(self::app()->getI18n()->translate($input));
     }
       
-    public static function first(array|object $iterable): object {
+    public static function first(array|object $iterable): ?object {
+        if (empty($iterable)) return null;
         return (object)$iterable[array_key_first($iterable)];
+    }
+
+    public static function last(array|object $iterable): ?object {
+        if (empty($iterable)) return null;
+        return (object)$iterable[array_key_last($iterable)];
     }
       
     public static function getIndex(array|object $iterable, int|string $expectedIndex): ?object {
           if (!isset($iterable[$expectedIndex])) return (object)['scalar' => 'Invalid'];
           return (object)$iterable[$expectedIndex];
-    }
-      
-    public static function last(array|object $iterable): object {
-        return (object)$iterable[array_key_last($iterable)];
     }
       
     public static function loopAndEcho(array|object $iterable, bool $echoKey = false): void {

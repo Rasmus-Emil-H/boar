@@ -21,8 +21,8 @@ export default {
             return self.submitForm(form);
         });
 
-        $('input[type="file"]').on('change', function(e) {
-            self.uploadFile(e.target);
+        $('.globalFileUploader').on('change', async function(e) {
+            await self.uploadFile(e.target);
         });
     },
     submitForm: function(form) {
@@ -36,7 +36,10 @@ export default {
             $.ajax({
                 type: form.attr('method'),
                 url: form.attr('action'),
-                data: form.serialize(),
+                data: new FormData(form[0]),
+                contentType: false,
+                cache: false,
+                processData: false,
                 success: function(response, status) {
                     if (response.redirect) window.location.replace(response.redirect);
                     resolve(response);

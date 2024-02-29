@@ -3,22 +3,23 @@
 namespace app\controllers;
 
 use \app\core\src\Controller;
-use \app\core\src\middlewares\AuthMiddleware;
+use \app\core\src\gate\Gate;
 use \app\models\ProductModel;
 
 
 class ProductController extends Controller {
 
-    protected string $entity = ProductModel::class;
-
     public function index() {
-        $this->setView('product');
+        $this->setFrontendTemplateAndData(templateFile: 'product');
     }
 
     public function edit() {
-        if ($this->request->isPost()) $this->crudEntity();
-        $this->isViewingValidEntity();
-        $this->setView('editProduct');
+        $product = $this->returnValidEntityIfExists();
+
+        if (!Gate::isAuthenticatedUserAllowed('canViewProduct', $product)) $this->response->notAllowed();
+        
+        if ($this->request->isGet())
+            return $this->setFrontendTemplateAndData(templateFile: 'editProduct', data: ["product" => $product]);
     }
 
 }

@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use \app\core\src\Controller;
+use \app\core\src\gate\Gate;
 use \app\core\src\miscellaneous\CoreFunctions;
 use app\models\OrderModel;
 
@@ -11,16 +12,22 @@ class OrderController extends Controller {
     protected string $entity = OrderModel::class;
 
     public function index() {
-        $this->setView('order');
-        $this->setData([
-            'orders' => CoreFunctions::applicationUser()->orders()
-        ]);
+
+        if ($this->request->isPost()) $this->response->methodNotAllowed();
+
+        if ($this->request->isGet())
+            return $this->setFrontendTemplateAndData(templateFile: 'order', data: [
+                'orders' => CoreFunctions::applicationUser()->orders()
+            ]);
     }
 
     public function edit() {
-        if ($this->request->isPost()) $this->crudEntity();
-        $this->isViewingValidEntity();
-        $this->setView('editOrder');
+        $order = $this->returnValidEntityIfExists();
+
+        if (!Gate::isAuthenticatedUserAllowed('editOrder', $order)) $this->response->notAllowed();
+        
+        if ($this->request->isGet())
+            return $this->setFrontendTemplateAndData(templateFile: 'editOrder', data: ["product" => $order]);
     }
 
 }

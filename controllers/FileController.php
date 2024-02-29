@@ -5,7 +5,6 @@ namespace app\controllers;
 use \app\core\src\Controller;
 use \app\core\src\factories\EntityFactory;
 use \app\core\src\File;
-use \app\core\src\gate\Gate;
 use \app\models\FileModel;
 
 class FileController extends Controller {

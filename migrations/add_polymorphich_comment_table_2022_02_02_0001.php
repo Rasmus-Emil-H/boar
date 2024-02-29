@@ -11,6 +11,7 @@ class add_polymorphic_comment_table_2022_02_02_0001 {
             $table->varchar('EntityType', 20);
             $table->integer('EntityID');
             $table->text('Comment');
+            $table->varchar('Type', 50);
             $table->timestamp();
             $table->primaryKey('CommentID');
         });

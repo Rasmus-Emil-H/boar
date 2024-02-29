@@ -15,29 +15,40 @@ export default {
 
         const self = this;
 
-        $('form').submit(function (e) {
+        $('form').submit(function(e) {
             e.preventDefault();
             const form = $(this);
-            const submitButton = form.find('[type="submit"]');
-            const _text = submitButton.html();
-
-            submitButton.attr('disabled', true);
-            submitButton.html(boar.components.loader());
-            $.ajax({type: form.attr('method'), url: form.attr('action'), data: form.serialize(),
-                success: function (response, status) {
-                    if (response.redirect) window.location.replace(response.redirect);
-                },
-                error: function (xhr, status, error) {
-                    
-                }
-            }).always(function() {
-                submitButton.attr('disabled', false);
-                submitButton.html(_text);
-            });
+            return self.submitForm(form);
         });
 
         $('input[type="file"]').on('change', function(e) {
             self.uploadFile(e.target);
+        });
+    },
+    submitForm: function(form) {
+        return new Promise(function(resolve, reject) {
+            const submitButton = form.find('button[type="submit"]');
+            const _text = submitButton.html();
+    
+            submitButton.attr('disabled', true);
+            submitButton.html(boar.components.loader());
+            
+            $.ajax({
+                type: form.attr('method'),
+                url: form.attr('action'),
+                data: form.serialize(),
+                success: function(response, status) {
+                    if (response.redirect) window.location.replace(response.redirect);
+                    resolve(response);
+                },
+                error: function(xhr, status, error) {
+                    reject(xhr);
+                }
+            }).always(function(res) {
+                submitButton.attr('disabled', false);
+                submitButton.html(_text);
+                resolve(res);
+            });
         });
     },
     uploadFile: async function(target) {

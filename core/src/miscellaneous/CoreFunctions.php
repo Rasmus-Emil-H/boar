@@ -83,4 +83,14 @@ final class CoreFunctions {
         return ini_get('memory_limit') - memory_get_usage(real_usage: true);
     }
 
+    public static function browseEntities(array $iterableEntities, string $identifierKey, string $identifierValue): array {
+        $result = [];
+        
+        foreach ($iterableEntities as $iterableEntity)
+            if ($iterableEntity->get($identifierKey) === $identifierValue)
+                $result[] = $iterableEntity;
+
+        return $result;
+    }
+
 }

@@ -10,8 +10,8 @@ class add_file_table_2021_01_01_0001 {
             $table->increments('FileID');
             $table->varchar('Name', 255);
             $table->varchar('Path', 255);
-            $table->varchar('Hash', 100);
             $table->varchar('Type', 50);
+            $table->varchar('Hash', 100);
             $table->timestamp();
             $table->primaryKey('FileID');
         });

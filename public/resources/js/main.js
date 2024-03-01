@@ -24,6 +24,7 @@ document.addEventListener("DOMContentLoaded", async function() {
             const module = await import(modulePath);
             const moduleName = modulePath.split('/').pop().replace('.js', '');
             window.boar[moduleName] = module.default;
+            Object.freeze(window.boar[moduleName]);
         } catch (error) {
             
         }

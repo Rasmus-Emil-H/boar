@@ -3,6 +3,7 @@
 namespace app\core\src;
 
 use \app\core\src\miscellaneous\CoreFunctions;
+use \app\core\src\utilities\Image;
 
 final class File {
 
@@ -71,7 +72,12 @@ final class File {
         $this->validateFileConditions();
         $destination = $this->generateFinalName();
         move_uploaded_file($this->getTmpName(), $destination);
+        $this->resizeImage(new Image($destination));
         return $destination;
+    }
+
+    private function resizeImage(Image $cImage) {
+        $cImage->resizeImage();
     }
 
     public function validateFileConditions() {

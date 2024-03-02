@@ -60,25 +60,33 @@ export default {
         const entityType = parent.data('entityType');
         const entityID = parent.data('entityId');
         const type = parent.data('type');
-
-        if (!csrf || !parent || !entityType || !entityType) {
-            alert('Required field(s) are missing!'); 
+    
+        if (!csrf || !parent || !entityType || !entityID) {
+            alert('Required field(s) are missing!');
             return;
         }
-        
+    
         const _backupNodes = parent.html();
         parent.html(boar.components.loader());
-
-        let body = new FormData();
+    
+        const body = new FormData();
         body.append("file", target.files[0]);
         body.append('entityType', entityType);
         body.append('entityID', entityID);
         body.append('eg-csrf-token-label', csrf);
         body.append('type', type);
-
-        await fetch('/file', {method: "POST", body})
-            .then(function(response) {
-                parent.html(_backupNodes);
-            });
+    
+        try {
+            const response = await fetch('/file', { method: "POST", body });
+            if (!response.ok) throw new Error('Network response was not ok');
+            const jsonResponse = await response.json();
+            boar.components.toast(jsonResponse);
+            parent.html(_backupNodes);
+            return jsonResponse;
+        } catch (error) {
+            console.error('Error uploading file:', error);
+            parent.html(_backupNodes);
+            throw error;
+        }
     }
 }

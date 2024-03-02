@@ -16,22 +16,22 @@ class Image {
 
     public function imageCreateFrom(): ?\GdImage {
 
-        $source = null;
-        if ($this->imageType == IMAGETYPE_JPEG) $source = imagecreatefromjpeg($this->imagePath);
-        if ($this->imageType == IMAGETYPE_PNG)  $source = imagecreatefrompng($this->imagePath);
-        if ($this->imageType == IMAGETYPE_GIF)  $source = imagecreatefromgif($this->imagePath);
+        $gdImage = null;
+        if ($this->imageType == IMAGETYPE_JPEG) $gdImage = imagecreatefromjpeg($this->imagePath);
+        if ($this->imageType == IMAGETYPE_PNG)  $gdImage = imagecreatefrompng($this->imagePath);
+        if ($this->imageType == IMAGETYPE_GIF)  $gdImage = imagecreatefromgif($this->imagePath);
 
-        return $source;
+        return $gdImage;
     }
 
     public function resizeImage($width = self::DEFAULT_RESIZE_WIDTH, $height = self::DEFAULT_RESIZE_HEIGHT): bool {
         $imageInfo = getimagesize($this->imagePath);
         $this->imageType = $imageInfo[2];
-        $source = $this->imageCreateFrom();
-        $resized = imagescale($source, $width, $height);
+        $gdImage = $this->imageCreateFrom();
+        $resized = imagescale($gdImage, $width, $height);
 
         imagejpeg($resized, $this->imagePath);
-        imagedestroy($source);
+        imagedestroy($gdImage);
         imagedestroy($resized);
 
         return true;

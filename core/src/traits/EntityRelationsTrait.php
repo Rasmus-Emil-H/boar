@@ -11,14 +11,14 @@
 |
 */
 
-namespace app\core\src\database\relations;
+namespace app\core\src\traits;
 
 use \app\core\src\database\QueryBuilder;
 use \app\core\src\database\table\Table;
 use \app\core\src\miscellaneous\CoreFunctions;
 use \app\core\src\factories\ModelFactory;
 
-class Relations {
+trait EntityRelationsTrait {
 
     /**
      * Return entity

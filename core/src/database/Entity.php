@@ -13,16 +13,17 @@
 
 namespace app\core\src\database;
 
-use \app\core\src\database\relations\Relations;
 use \app\core\src\traits\EntityQueryTrait;
 use \app\core\src\traits\EntityMagicMethodTrait;
 use \app\core\src\traits\EntityHTTPMethodTrait;
+use \app\core\src\traits\EntityRelationsTrait;
 
-abstract class Entity extends Relations {
+abstract class Entity {
 
     use EntityQueryTrait;
     use EntityMagicMethodTrait;
     use EntityHTTPMethodTrait;
+    use EntityRelationsTrait;
 
     private const INVALID_ENTITY_SAVE   = 'Entity has not yet been properly stored, did you call this method before ->save() ?';
     private const INVALID_ENTITY_STATUS = 'This entity does not have a status';

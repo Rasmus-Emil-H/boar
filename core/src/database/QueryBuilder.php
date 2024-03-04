@@ -163,8 +163,8 @@ class QueryBuilder implements Builder {
         return $this;
     }
 
-    public function orderBy(string $order): self {
-        $this->query .= ' ORDER BY ' . $order;
+    public function orderBy(string $field, string $order): self {
+        $this->query .= ' ORDER BY ' . $field . ' ' . $order;
         return $this;
     }
 
@@ -189,7 +189,7 @@ class QueryBuilder implements Builder {
 
     public function fetchRow(?array $criteria = null) {
         $this->select()->where($criteria);
-        $response = app()->getConnection()->execute($this->query, $this->args, 'fetch');
+        $response = CoreFunctions::app()->getConnection()->execute($this->query, $this->args, 'fetch');
         $this->resetQuery();
         return $response;
     }
@@ -200,7 +200,7 @@ class QueryBuilder implements Builder {
     }
 
     public function run(string $fetchMode = 'fetchAll'): array {
-        $response = app()->getConnection()->execute($this->query, $this->args, $fetchMode);
+        $response = CoreFunctions::app()->getConnection()->execute($this->query, $this->args, $fetchMode);
         $this->resetQuery();
         $objects = [];
         if (!is_iterable($response)) return [];

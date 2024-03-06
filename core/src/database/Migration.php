@@ -15,7 +15,6 @@ namespace app\core\src\database;
 use \app\models\MigrationModel;
 use \app\core\src\database\seeders\DatabaseSeeder;
 use \app\core\src\factories\MigrationFactory;
-use \app\core\src\miscellaneous\CoreFunctions;
 
 class Migration {
 

@@ -160,4 +160,8 @@ abstract class Entity {
         return $this->dispatchMethod($httpRequestEntityMethod, $httpBody);
     }
 
+    public function getCreatedTimestamp(): string {
+        return $this->get('CreatedAt');
+    }
+
 }

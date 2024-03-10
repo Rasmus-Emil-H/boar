@@ -52,8 +52,8 @@ final class Response {
         return [$message];
     }
 
-    public function ok() {
-        $this->setResponse(self::HTTP_OK);
+    public function ok(string|array $message = '') {
+        $this->setResponse(self::HTTP_OK, ['responseJSON' => $message]);
     }
 
     public function created() {

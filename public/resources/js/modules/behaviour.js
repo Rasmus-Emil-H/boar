@@ -15,7 +15,7 @@ export default {
 
         const self = this;
 
-        $('form').submit(function(e) {
+        $('body').on('submit', 'form', function(e) {
             e.preventDefault();
             const form = $(this);
             return self.submitForm(form);
@@ -41,7 +41,10 @@ export default {
                 cache: false,
                 processData: false,
                 success: function(response, status) {
-                    if (response.redirect) window.location.replace(response.redirect);
+                    if (typeof response.responseJSON === 'object') 
+                        boar.components.toast(response.responseJSON.message ?? 'Success', boar.constants.mdbootstrap.SUCCESS_CLASS);
+                    else 
+                        boar.components.toast(response.responseJSON, boar.constants.mdbootstrap.SUCCESS_CLASS);
                     resolve(response);
                 },
                 error: function(xhr, status, error) {

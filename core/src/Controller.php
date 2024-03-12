@@ -3,7 +3,7 @@
 /**
  * Bootstrap Controller 
  * AUTHOR: RE_WEB
- * @package app\core\Controller
+ * @package app\core\src
  */
 
 namespace app\core\src;
@@ -14,9 +14,11 @@ use \app\core\src\miscellaneous\CoreFunctions;
 use \app\controllers\AssetsController;
 use \app\core\src\database\Entity;
 use \app\core\src\factories\EntityFactory;
-use \app\models\FileModel;
+use \app\core\src\traits\ControllerMethodTrait;
 
 class Controller {
+
+    use ControllerMethodTrait;
 
     private const DEFAULT_METHOD = 'index';
 
@@ -102,7 +104,7 @@ class Controller {
     }
 
     protected function setView(string $view, string $dir = ''): void {
-        $this->view = app()->getView()->getTemplatePath($view, $dir);
+        $this->view = CoreFunctions::app()->getView()->getTemplatePath($view, $dir);
     }
 
     public function setLayout(string $layout): void {
@@ -112,31 +114,6 @@ class Controller {
     public function setFrontendTemplateAndData(string $templateFile, array $data = []): void {
         $this->setData($data);
         $this->setView($templateFile);
-    }
-
-    public function moveRequestFiles(Entity $entity): array {
-        $files = [];
-        foreach ($this->requestBody->files as $newFile) {
-            $file = new File($newFile);
-            if (empty($file->getName())) continue;
-            if (!isset($this->requestBody->body->imageType)) throw new \app\core\src\exceptions\NotFoundException('No image type found!');
-            $destination = $file->moveFile();
-
-            $cFile = new FileModel();
-            $cFile->setData([
-                'Name' => $file->getName(),
-                'Path' => $destination,
-                'Hash' => hash_file('sha256', $destination),
-                'Type' => $this->requestBody->body->imageType
-            ]);
-
-            $cFile->save();
-            $cFile->createPivot([
-				'EntityType' => $entity->getTableName(), 'EntityID' => $entity->key(), 'FileID' => $cFile->key()
-			]);
-            $files[] = $cFile->key();
-        }
-        return $files;
     }
 
 }

@@ -13,8 +13,13 @@ trait EntityQueryTrait {
     private const INVALID_ENTITY_STATUS = 'This entity does not have a status';
     private const FIND_OR_CREATE_NEW_DATA_ENTRY = ' was created due to a data entry';
 
-    public function patchEntity() {
+    public function patchEntity(): self {
         $this->getQueryBuilder()->patch($this->data, $this->getKeyField(), $this->key())->run('fetch');
+        return $this;
+    }
+
+    public function patchField(array $data): self {
+        $this->getQueryBuilder()->patch($data, $this->getKeyField(), $this->key())->run('fetch');
         return $this;
     }
     

@@ -87,8 +87,8 @@ final class Application {
         $this->parentController = $controller;
     }
 
-    public function addSystemEvent(array $data): void {
-        (new SystemEventModel(['Data' => json_encode($data)]))->save(addMetaData: false);
+    public function addSystemEvent(array|string $data): void {
+        (new SystemEventModel(['Data' => is_string($data) ? $data : json_encode($data)]))->save(addMetaData: false);
     }
 
     public function log(string $message, bool $exit = false): void {

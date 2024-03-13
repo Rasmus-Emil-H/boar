@@ -89,7 +89,7 @@ abstract class Entity {
         $this->key = $key;
     }
 
-    public function key() {
+    public function key(): ?string {
         return $this->key;
     }
 
@@ -131,7 +131,7 @@ abstract class Entity {
         if (!$this->exists()) throw new \app\core\src\exceptions\EmptyException(self::INVALID_ENTITY_SAVE);
     }
 
-    protected function setTmpProperties(array $entityProperties): void {
+    public function setTmpProperties(array $entityProperties): void {
         $this->set($entityProperties);
     }
 
@@ -161,7 +161,7 @@ abstract class Entity {
     }
 
     public function getCreatedTimestamp(): string {
-        return $this->get('CreatedAt');
+        return date('d-m-Y H:i', strtotime($this->get('CreatedAt')));
     }
 
 }

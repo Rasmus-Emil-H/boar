@@ -45,4 +45,13 @@ trait ControllerMethodTrait {
             $this->response->methodNotAllowed(); 
     }
 
+    public function checkAction() {
+        if (isset($this->requestBody->body->action)) return;
+        throw new \app\core\src\exceptions\NotFoundException('Action was not found');
+    }
+
+    public function determineClientResponseMethod(mixed $dispatchedHTTPMethodResult): string {
+        return is_string($dispatchedHTTPMethodResult) ? (is_int(strpos($dispatchedHTTPMethodResult ?? '', 'Errors')) ? 'dataConflict' : 'ok') : 'ok';
+    }
+
 }

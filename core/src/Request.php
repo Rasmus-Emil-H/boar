@@ -58,6 +58,15 @@ class Request {
     public function getArgument(int|string $index): mixed {
         return CoreFunctions::getIndex($this->args, $index);
     }
+
+    public function getQueryParameters(): array {
+        $parameters = [];
+        foreach (explode('&', $this->getServerInformation()['QUERY_STRING']) as $parameter) {
+            [$param, $value] = explode('=', $parameter);
+            $parameters[$param] = $value;
+        }
+        return $parameters;
+    }
     
     public function getReferer(): string {
         return $this->getServerInformation()['HTTP_REFERER'];

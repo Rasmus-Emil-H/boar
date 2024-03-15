@@ -95,6 +95,15 @@ trait EntityRelationsTrait {
     }
 
     /**
+     * Create a pivot relation with N amount of KVPs
+     */
+
+     public function createCustomPivot($table, ...$keys) {
+        $queryBuilder = new QueryBuilder(get_called_class(), $table, '');
+        return $queryBuilder->create(CoreFunctions::first($keys))->run();
+    }
+
+    /**
      * Find entites on pivot table where parent primary key is a match
      */
 

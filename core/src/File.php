@@ -4,8 +4,11 @@ namespace app\core\src;
 
 use \app\core\src\miscellaneous\CoreFunctions;
 use \app\core\src\utilities\Image;
+use \app\core\src\traits\FileStaticMethodTrait;
 
 final class File {
+
+    use FileStaticMethodTrait;
 
     public const INVALID_EXTENSION  = 'Invalid file extension';
     public const INVALID_FILE_NAME  = 'Invalid file name';

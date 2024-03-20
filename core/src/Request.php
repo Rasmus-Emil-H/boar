@@ -60,12 +60,17 @@ class Request {
     }
 
     public function getQueryParameters(): array {
-        $parameters = [];
-        foreach (explode('&', $this->getServerInformation()['QUERY_STRING']) as $parameter) {
-            [$param, $value] = explode('=', $parameter);
-            $parameters[$param] = $value;
+        try {
+            $parameters = [];
+            foreach (explode('&', $this->getServerInformation()['QUERY_STRING']) as $parameter) {
+                if ($parameter === '') continue;
+                [$param, $value] = explode('=', $parameter);
+                $parameters[$param] = $value;
+            }
+            return $parameters;
+        } catch (\Exception $e) {
+            return [];
         }
-        return $parameters;
     }
     
     public function getReferer(): string {

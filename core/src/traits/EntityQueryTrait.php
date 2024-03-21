@@ -12,6 +12,7 @@ trait EntityQueryTrait {
     private const INVALID_ENTITY_DATA   = 'Data can not be empty';
     private const INVALID_ENTITY_STATUS = 'This entity does not have a status';
     private const FIND_OR_CREATE_NEW_DATA_ENTRY = ' was created due to a data entry';
+    private const INVALID_ENTITY = 'Invalid entity';
 
     public function patchEntity(): self {
         $this->getQueryBuilder()->patch($this->data, $this->getKeyField(), $this->key())->run('fetch');
@@ -48,6 +49,7 @@ trait EntityQueryTrait {
     }
 
     public function delete() {
+        if (!$this->exists()) throw new \app\core\src\exceptions\ForbiddenException(self::INVALID_ENTITY);
         return $this->getQueryBuilder()->delete()->where([$this->getKeyField() => $this->key()])->run();
     }
 

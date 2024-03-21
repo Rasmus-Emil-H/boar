@@ -17,7 +17,7 @@ final class File {
     public const VIEWS_FOLDER       = '/views/';
     public const NO_FILES_ATTACHED = 'No files attached';
 
-    protected const FILE_NOT_FOUND     = 'File not found';
+    public const FILE_NOT_FOUND     = 'File not found';
     protected const MAXIMUM_FILE_SIZE  = 10000000;
 
     public function __construct(

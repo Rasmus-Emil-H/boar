@@ -15,6 +15,7 @@ final class File {
     public const INVALID_FILE_SIZE  = 'File is to big';
     public const TPL_FILE_EXTENSION = '.tpl.php';
     public const VIEWS_FOLDER       = '/views/';
+    public const LAYOUTS_FOLDER     = '/views/layouts/';
     public const NO_FILES_ATTACHED = 'No files attached';
 
     public const FILE_NOT_FOUND     = 'File not found';

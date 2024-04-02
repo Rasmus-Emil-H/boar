@@ -41,7 +41,7 @@ final class Router {
         $controllerMethod = $this->path[1] ?? '';
         $app->setParentController($controller);
         $this->method = $controllerMethod === '' || !method_exists($controller, $controllerMethod) ? self::INDEX_METHOD : $controllerMethod;
-        if (!method_exists($controller, $this->method)) $app->getResponse()->redirect('/home');
+        if (!method_exists($controller, $this->method)) $app->getResponse()->redirect('/trip');
     }
 
     protected function runMiddlewares(): void {
@@ -64,12 +64,29 @@ final class Router {
         $controllerData = $controller->getData();
         extract($controllerData, EXTR_SKIP);
         require_once $controllerData['header'];
-        require_once $controller->getView();
+        echo $this->handleControllerLayout($controller, $controllerData);
         require_once $controllerData['footer'];
     }
 
+    private function handleControllerLayout(Controller $controller, array $data) {
+        $viewContent = $this->getTplFile($controller, $data);
+        $layoutFile = app()::$ROOT_DIR .  File::LAYOUTS_FOLDER . $controller->getLayout() . File::TPL_FILE_EXTENSION;
+        extract($data, EXTR_SKIP);
+        ob_start();
+        include_once $layoutFile;
+        $layoutFileContent = ob_get_clean();
+        return str_replace('{{content}}', $viewContent, $layoutFileContent);
+    }
+
+    private function getTplFile(Controller $controller, array $data): string {
+        extract($data, EXTR_SKIP);
+        ob_start();
+        include_once $controller->getView();
+        return ob_get_clean();
+    }
+
     private function getApplicationParentController(): Controller {
-        return app()->getParentController();
+        return CoreFunctions::app()->getParentController();
     }
 
     public function resolve(): void {

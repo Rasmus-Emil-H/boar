@@ -111,6 +111,10 @@ class Controller {
         $this->layout = $layout;
     }
 
+    public function getLayout(): string {
+        return $this->layout;
+    }
+
     public function setFrontendTemplateAndData(string $templateFile, array $data = []): void {
         $this->setData($data);
         $this->setView($templateFile);

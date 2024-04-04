@@ -87,7 +87,6 @@ class Controller {
 
     protected function returnValidEntityIfExists(): Entity {
         $entity = $this->returnEntity();
-        if (!$entity->exists()) $this->response->redirect('/trip');
         return $entity;
     }
 

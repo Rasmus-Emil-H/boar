@@ -139,4 +139,13 @@ trait EntityRelationsTrait {
         return $polyMorphicEntity->search([Table::ENTITY_TYPE_COLUMN => $this->getTableName(), Table::ENTITY_ID_COLUMN => $this->key()]);
     }
 
+    /**
+     * Remove specific relation
+     */
+
+    public function deleteRelation(array $keys) {
+        $queryBuilder = new QueryBuilder($this, $this->getPivot(), $this->key());
+        return $queryBuilder->delete()->where($keys)->run();
+    }
+
 }

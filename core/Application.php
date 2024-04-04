@@ -17,7 +17,13 @@ use \app\models\SystemEventModel;
 use \app\models\UserModel;
 use \app\core\src\miscellaneous\CoreFunctions;
 
+use \app\core\src\traits\ApplicationGetterTrait;
+use \app\core\src\traits\ApplicationStaticMethodTrait;
+
 final class Application {
+
+    use ApplicationGetterTrait;
+    use ApplicationStaticMethodTrait;
 
     protected src\Router $router;
     protected src\Request $request;
@@ -75,7 +81,7 @@ final class Application {
     public function classCheck(string $class): void {
         if (class_exists($class)) return;
         $this->addSystemEvent(['Invalid class was called: ' . $class]);
-        if (!self::isDevSite()) $this->getResponse()->notFound('Not found');
+        if (!self::isDevSite()) $this->getResponse()->notFound();
         CoreFunctions::dd('Invalid class: ' . $class);
     }
 
@@ -104,69 +110,6 @@ final class Application {
             if ($this->isDevSite()) CoreFunctions::d($applicationError);
             CoreFunctions::dd('Application error');
         }
-    }
-
-    /**
-    |----------------------------------------------------------------------------
-    | Static methods
-    |----------------------------------------------------------------------------
-    |
-    */
-
-    public static function isCLI(): bool {
-        return php_sapi_name() === 'cli';     
-    }
-
-    public static function isGuest(): bool {
-        return !(new UserModel())->hasActiveSession();
-    }
-
-    public function getUser(): ?UserModel {
-        if (!$this->session->get('user')) return null;
-        return new UserModel($this->session->get('user'));
-    }
-
-    public static function isDevSite(): bool {
-        return self::$app->config->get('inDevelopment') === true;
-    }
-
-    /**
-    |----------------------------------------------------------------------------
-    | Protected property getters
-    |----------------------------------------------------------------------------
-    |
-    */
-
-    public function getConfig(): src\config\Config {
-        return $this->config;
-    }
-
-    public function getConnection(): Connection {
-        return $this->connection;
-    }
-
-    public function getSession(): src\Session {
-        return $this->session;
-    }
-
-    public function getResponse(): src\Response {
-        return $this->response;
-    }
-
-    public function getRequest(): src\Request {
-        return $this->request;
-    }
-
-    public function getI18n(): src\I18n {
-        return $this->i18n;
-    }
-
-    public function getView(): src\View {
-        return $this->view;
-    }
-
-    public function getLogger(): src\utilities\Logger {
-        return $this->logger;
     }
     
 }

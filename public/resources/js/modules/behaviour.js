@@ -27,7 +27,7 @@ export default {
     },
     submitForm: function(form) {
         return new Promise(function(resolve, reject) {
-            const submitButton = form.find('button[type="submit"]');
+            const submitButton = form.find('button[type="submit"]').last();
             const _text = submitButton.html();
     
             submitButton.attr('disabled', true);

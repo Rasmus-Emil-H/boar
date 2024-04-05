@@ -89,6 +89,15 @@ final class Application {
         return $this->parentController;
     }
 
+    public function setLanguage(string $language): void {
+        $cLanguage = new \app\models\LanguageModel();
+        $search = $cLanguage->search(['Name' => $language]);
+     
+        if (empty($search)) $this->response->notFound();
+     
+        $this->session->set('language', Corefunctions::first($search)->get('code'));
+    }
+
     public function setParentController(src\Controller $controller): void {
         $this->parentController = $controller;
     }

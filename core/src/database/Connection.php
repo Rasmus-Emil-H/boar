@@ -24,6 +24,8 @@ class Connection {
     ];
 
     private \Pdo $pdo;
+
+    private array $queryCache;
     
     protected function __construct(#[\SensitiveParameter] array $pdoConfigurations) {
         $this->pdo = new \PDO($pdoConfigurations['dsn'], $pdoConfigurations['user'], $pdoConfigurations['password'], $this->defaultPdoOptions);
@@ -47,12 +49,27 @@ class Connection {
         return self::$instance;
     }
 
+    private function checkQueryCache(string $cacheKey) {
+      if (isset($this->queryCache[$cacheKey])) return $this->queryCache[$cacheKey];
+    }
+
+   private function setCacheKeyResult(string $key, mixed $result): void {
+        $this->queryCache[$key] = $result;      
+    }
+
     public function execute(#[\SensitiveParameter] string $query, #[\SensitiveParameter] array $args = [], string $fetchType = 'fetchAll') {
         try {
+            $cacheKey = md5($query . serialize($args));
+            $result = $this->checkQueryCache($cacheKey);
+            if ($result) return $result;
+
             $stmt = $this->pdo->prepare($query);
             $stmt->execute($args);
             $result = $stmt->{$fetchType}();
             $stmt = null;
+
+            $this->setCacheKeyResult($cacheKey, $result);
+  
             return $result;
         } catch (\PDOException $e) {
             if (!app()::isDevSite()) return;

@@ -60,8 +60,8 @@ class Connection {
     public function execute(#[\SensitiveParameter] string $query, #[\SensitiveParameter] array $args = [], string $fetchType = 'fetchAll') {
         try {
             $cacheKey = md5($query . serialize($args));
-            $result = $this->checkQueryCache($cacheKey);
-            if ($result) return $result;
+            $cachedResultBasedOnCacheKey = $this->checkQueryCache($cacheKey);
+            if ($cachedResultBasedOnCacheKey) return $cachedResultBasedOnCacheKey;
 
             $stmt = $this->pdo->prepare($query);
             $stmt->execute($args);

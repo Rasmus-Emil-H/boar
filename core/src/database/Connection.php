@@ -17,6 +17,8 @@ use \app\core\src\miscellaneous\CoreFunctions;
 class Connection {
     private static ?Connection $instance = null;
 
+    private const DEFAULT_SQL_QUERY_FETCH_TYPE = 'fetchAll';
+
     private array $defaultPdoOptions = [
         \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_OBJ,
         \PDO::ATTR_EMULATE_PREPARES => false,
@@ -57,7 +59,7 @@ class Connection {
         $this->queryCache[$cacheKey] = $result;
     }
 
-    public function execute(#[\SensitiveParameter] string $query, #[\SensitiveParameter] array $args = [], string $fetchType = 'fetchAll') {
+    public function execute(#[\SensitiveParameter] string $query, #[\SensitiveParameter] array $args = [], string $fetchType = self::DEFAULT_SQL_QUERY_FETCH_TYPE) {
         try {
             
             $cacheKey = md5($query . serialize($args));

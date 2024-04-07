@@ -53,15 +53,16 @@ class Connection {
       if (isset($this->queryCache[$cacheKey])) return $this->queryCache[$cacheKey];
     }
 
-   private function setCacheKeyResult(string $key, mixed $result): void {
-        $this->queryCache[$key] = $result;      
+   private function setCacheKeyResult(string $cacheKey, mixed $result): void {
+        $this->queryCache[$cacheKey] = $result;
     }
 
     public function execute(#[\SensitiveParameter] string $query, #[\SensitiveParameter] array $args = [], string $fetchType = 'fetchAll') {
         try {
+            
             $cacheKey = md5($query . serialize($args));
-            $cachedResultBasedOnCacheKey = $this->checkQueryCache($cacheKey);
-            if ($cachedResultBasedOnCacheKey) return $cachedResultBasedOnCacheKey;
+            $cachedSQLQueryResultBasedOnCacheKey = $this->checkQueryCache($cacheKey);
+            if ($cachedSQLQueryResultBasedOnCacheKey) return $cachedSQLQueryResultBasedOnCacheKey;
 
             $stmt = $this->pdo->prepare($query);
             $stmt->execute($args);

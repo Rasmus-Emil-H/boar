@@ -50,3 +50,10 @@ function hs(string $string): string {
 function app() {
     return \app\core\src\miscellaneous\CoreFunctions::app();
 }
+
+function getIterableJsonEncodedData(array|object $iterable): array {
+    $result = [];
+    foreach ($iterable as $iteration)
+        $result[] = json_encode($iteration->getData());
+    return $result;
+}

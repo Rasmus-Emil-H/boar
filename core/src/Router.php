@@ -37,11 +37,16 @@ final class Router {
         $app = app();
         if (empty($this->path) || $this->request->getPath() === '/') $app->getResponse()->redirect(CoreFunctions::first(self::$anonymousRoutes)->scalar);
         $handler = ucfirst(CoreFunctions::first($this->path)->scalar);
+        if ($this->isResource($handler)) return;
         $controller = (new ControllerFactory(['handler' => $handler]))->create();
         $controllerMethod = $this->path[1] ?? '';
         $app->setParentController($controller);
         $this->method = $controllerMethod === '' || !method_exists($controller, $controllerMethod) ? self::INDEX_METHOD : $controllerMethod;
         if (!method_exists($controller, $this->method)) $app->getResponse()->redirect('/trip');
+    }
+
+    private function isResource(string $handler): bool {
+        return str_contains(strtolower($handler), strtolower('resource'));
     }
 
     protected function runMiddlewares(): void {

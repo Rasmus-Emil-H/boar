@@ -23,6 +23,8 @@ class QueryBuilder implements Builder {
     public const BIND        = ' = :';
     public const INNERJOIN   = ' INNER JOIN ';
 
+    private const SQL_DESCRIBE = ' DESCRIBE ';
+
     protected const DEFAULT_LIMIT = 100;
     protected const DEFAULT_OFFSET = 0;
     
@@ -35,7 +37,6 @@ class QueryBuilder implements Builder {
 
     private array $comparisonOperators = ['=', '<>', '!=', '>', '<', '>=', '<='];
     
-
     public function __construct(
         public string $class, 
         public string $table, 
@@ -178,7 +179,7 @@ class QueryBuilder implements Builder {
     }
 
     public function describeTable() {
-        $this->query = ' DESCRIBE ' . $this->table;
+        $this->query = self::SQL_DESCRIBE . $this->table;
         $this->run();
     }
 

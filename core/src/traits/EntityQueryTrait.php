@@ -14,13 +14,16 @@ trait EntityQueryTrait {
     private const FIND_OR_CREATE_NEW_DATA_ENTRY = ' was created due to a data entry';
     private const INVALID_ENTITY = 'Invalid entity';
 
+    private const SQL_IS_NOT_NULL = 'IS NOT NULL';
+    private const SQL_FETCH_MODE_FETCH = 'fetch';
+
     public function patchEntity(): self {
-        $this->getQueryBuilder()->patch($this->data, $this->getKeyField(), $this->key())->run('fetch');
+        $this->getQueryBuilder()->patch($this->data, $this->getKeyField(), $this->key())->run(self::SQL_FETCH_MODE_FETCH);
         return $this;
     }
 
     public function patchField(array $data): self {
-        $this->getQueryBuilder()->patch($data, $this->getKeyField(), $this->key())->run('fetch');
+        $this->getQueryBuilder()->patch($data, $this->getKeyField(), $this->key())->run(self::SQL_FETCH_MODE_FETCH);
         return $this;
     }
     
@@ -49,7 +52,6 @@ trait EntityQueryTrait {
     }
 
     public function delete() {
-        if (!$this->exists()) throw new \app\core\src\exceptions\ForbiddenException(self::INVALID_ENTITY);
         return $this->getQueryBuilder()->delete()->where([$this->getKeyField() => $this->key()])->run();
     }
 
@@ -58,7 +60,7 @@ trait EntityQueryTrait {
     }
 
      public function trashed() {
-        return $this->getQueryBuilder()->select()->where([Table::DELETED_AT_COLUMN => 'IS NOT NULL'])->run();
+        return $this->getQueryBuilder()->select()->where([Table::DELETED_AT_COLUMN => self::SQL_IS_NOT_NULL])->run();
     }
 
     public function getQueryBuilder(?string $table = null): QueryBuilder {

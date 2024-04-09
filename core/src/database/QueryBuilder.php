@@ -58,7 +58,7 @@ class QueryBuilder implements Builder {
     
     public function bindValues(array $arguments): void {
         foreach($arguments as $selector => $value) {
-            $this->query .= ( array_key_first($arguments) === $selector ? self::WHERE : self::AND ) . $selector . self::BIND . $selector;
+            $this->query .= (array_key_first($arguments) === $selector ? self::WHERE : self::AND) . $selector . self::BIND . $selector;
             $this->setArgumentPair($selector, $value);
         }
     }

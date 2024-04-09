@@ -66,28 +66,24 @@ final class Router {
 
     protected function hydrateDOM(): void {
         $controller = $this->getApplicationParentController();
-        $controllerData = $controller->getData();
-        extract($controllerData, EXTR_SKIP);
-        require_once $controllerData['header'];
-        echo $this->handleControllerLayout($controller, $controllerData);
-        require_once $controllerData['footer'];
+        echo $this->handleFrontendHydration($controller, $controller->getData());
     }
 
-    private function handleControllerLayout(Controller $controller, array $data) {
-        $viewContent = $this->getTplFile($controller, $data);
+    private function handleFrontendHydration(Controller $controller, array $data) {
+        extract($data, EXTR_SKIP);
         $layoutFile = app()::$ROOT_DIR .  File::LAYOUTS_FOLDER . $controller->getLayout() . File::TPL_FILE_EXTENSION;
-        extract($data, EXTR_SKIP);
+        
         ob_start();
-        include_once $layoutFile;
-        $layoutFileContent = ob_get_clean();
-        return str_replace('{{content}}', $viewContent, $layoutFileContent);
-    }
+            include_once $controller->getView();
+        $viewContent = ob_get_clean();
 
-    private function getTplFile(Controller $controller, array $data): string {
-        extract($data, EXTR_SKIP);
         ob_start();
-        include_once $controller->getView();
-        return ob_get_clean();
+            require_once $data['header'];
+            include_once $layoutFile;
+            require_once $data['footer'];
+        $layoutFileContent = ob_get_clean();
+
+        return str_replace('{{content}}', $viewContent, $layoutFileContent);
     }
 
     private function getApplicationParentController(): Controller {

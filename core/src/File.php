@@ -105,6 +105,7 @@ final class File {
     }
 
     public function unlink(): bool {
+        if (!$this->exists()) return false;
         return unlink($this->getFilePath());
     }
 

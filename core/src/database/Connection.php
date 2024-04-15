@@ -76,7 +76,7 @@ class Connection {
             $stmt->execute($args);
             $result = $stmt->{$fetchType}();
             $stmt = null;
-
+            
             if (isset($cacheKey)) $this->setCacheKeyResult($cacheKey, $result);
   
             return $result;
@@ -87,7 +87,7 @@ class Connection {
         }
     }
 
-    public function getLastID() {
+    public function getLastInsertedID() {
         return $this->pdo->lastInsertId();
     }
 }

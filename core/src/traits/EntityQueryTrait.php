@@ -29,7 +29,7 @@ trait EntityQueryTrait {
     
     public function createEntity() {
         $this->getQueryBuilder()->create($this->data)->run();
-        $this->setKey(app()->getConnection()->getLastID());
+        $this->setKey(app()->getConnection()->getLastInsertedID());
         return $this;
     }
 

@@ -91,7 +91,7 @@ trait EntityRelationsTrait {
     public function createPivot(...$keys) {
         $queryBuilder = new QueryBuilder(get_called_class(), $this->getPivot(), '');
         $queryBuilder->create(CoreFunctions::first($keys))->run();
-        return app()->getConnection()->getLastID();
+        return app()->getConnection()->getLastInsertedID();
     }
 
     /**

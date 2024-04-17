@@ -140,7 +140,7 @@ trait EntityRelationsTrait {
     }
 
     /**
-     * Remove specific relation
+     * Remove relation
      */
 
     public function deleteRelation(array $keys) {

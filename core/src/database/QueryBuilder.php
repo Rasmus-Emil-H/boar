@@ -24,6 +24,8 @@ class QueryBuilder implements Builder {
     public const INNERJOIN   = ' INNER JOIN ';
 
     private const SQL_DESCRIBE = ' DESCRIBE ';
+    private const GROUP_BY     = ' GROUP BY ';
+    private const ORDER_BY     = ' ORDER BY ';
 
     protected const DEFAULT_LIMIT = 100;
     protected const DEFAULT_OFFSET = 0;
@@ -45,8 +47,24 @@ class QueryBuilder implements Builder {
         $this->resetQuery();
     }
 
+    private function upsertQuery(string $query): void {
+        $this->query .= $query;
+    }
+
+    private function updateQueryArguments($key, $value): void {
+        $this->args[$key] = $value;
+    }
+
+    private function getQuery(): string {
+        return $this->query;
+    }
+
+    private function getArguments(): array {
+        return $this->args;
+    }
+
     public function select(array $fields = ['*']): self {
-        $this->query .= 'SELECT ' . implode(', ', $fields) . '  FROM ' . $this->table;
+        $this->upsertQuery('SELECT ' . implode(', ', $fields) . '  FROM ' . $this->table);
         return $this;
     }
 
@@ -58,53 +76,59 @@ class QueryBuilder implements Builder {
     
     public function bindValues(array $arguments): void {
         foreach($arguments as $selector => $value) {
-            $this->query .= (array_key_first($arguments) === $selector ? self::WHERE : self::AND) . $selector . self::BIND . $selector;
+            $this->upsertQuery((array_key_first($arguments) === $selector ? self::WHERE : self::AND) . $selector . self::BIND . $selector);
             $this->setArgumentPair($selector, $value);
         }
     }
 
     public function valueToPlaceholder(array $fields): self {
         foreach ($fields as $fieldKey => $fieldValue) {
-            $this->query .= ':' . ( array_key_last($fields) === $fieldKey ? $fieldKey : $fieldKey . ',' );
-            $this->args[$fieldKey] = $fieldValue;
+            $this->upsertQuery(':' . ( array_key_last($fields) === $fieldKey ? $fieldKey : $fieldKey . ',' ));
+            $this->updateQueryArguments($fieldKey, $fieldValue);
         }
         return $this;
     }
 
     public function setArgumentPair(string $key, mixed $value): self {
-        $this->args[$key] = $value;
+        $this->updateQueryArguments($key, $value);
         return $this;
     }
 
     public function innerJoin(string $table, string $using): self {
-        $this->query .= self::INNERJOIN . " {$table} USING({$using}) ";
+        $this->upsertQuery(self::INNERJOIN . " {$table} USING({$using}) ");
+        return $this;
+    }
+
+    public function count(string $count, string $countName = 'count'): self {
+        $this->upsertQuery("SELECT COUNT({$count}) as {$countName} FROM {$this->table}");
         return $this;
     }
     
     public function leftJoin(string $table, string $on, array $and = []): self {
         $implodedAnd = (count($and) > 0 ? self::AND : '') . implode(self::AND, $and);
-        $this->query .= " LEFT JOIN {$table} {$on} {$implodedAnd} ";
+        $this->upsertQuery(" LEFT JOIN {$table} {$on} {$implodedAnd} ");
         return $this;
     }
 
     public function rightJoin(string $table, string $on, array $and = []): self {
         $implodedAnd = (count($and) > 0 ? self::AND : '') . implode(self::AND, $and);
-        $this->query .= " RIGHT JOIN {$table} {$on} {$implodedAnd} ";
+        $this->upsertQuery(" RIGHT JOIN {$table} {$on} {$implodedAnd} ");
         return $this;
     }
 
     public function in(string $field, array $ins): self {
          $queryINString = array_map(function($fieldKey, $fieldValue) {
-            $this->args["inCounter$fieldKey"] = $fieldValue;
+            $this->updateQueryArguments("inCounter$fieldKey", $fieldValue);
             return " :inCounter$fieldKey ";
         }, array_keys($ins), array_values($ins));
-        $this->query .= " AND $field IN ( " . implode(', ', $queryINString) . " ) ";
+
+        $this->upsertQuery(" AND $field IN ( " . implode(', ', $queryINString) . " ) ");
         return $this;
     }
 
     public function create(array|object $fields): self {
         $this->preparePlaceholdersAndBoundValues((array)$fields, 'insert');
-        $this->query .= "INSERT INTO {$this->table} ({$this->fields}) VALUES ({$this->placeholders})";
+        $this->upsertQuery("INSERT INTO {$this->table} ({$this->fields}) VALUES ({$this->placeholders})");
         return $this;
     }
 
@@ -121,87 +145,115 @@ class QueryBuilder implements Builder {
         $this->query .= "UPDATE {$this->table} SET ";
 
         foreach ($fields as $fieldKey => $fieldValue) {
-            $this->args[$fieldKey] = $fieldValue;
-            $this->query .= " $fieldKey = :$fieldKey " . (array_key_last($fields) === $fieldKey ? '' : ',');
+            $this->updateQueryArguments($fieldKey, $fieldValue);
+            $this->upsertQuery(" $fieldKey = :$fieldKey " . (array_key_last($fields) === $fieldKey ? '' : ','));
         }
 
         if ($primaryKeyField && $primaryKey) {
-            $this->query .= " WHERE $primaryKeyField = :primaryKey ";
-            $this->args['primaryKey'] = $primaryKey;
+            $this->upsertQuery(" WHERE $primaryKeyField = :primaryKey ");
+            $this->updateQueryArguments('primaryKey', $primaryKey);
         }
 
         return $this;
     }
 
+    private function getComparisonOperators(): array {
+        return $this->comparisonOperators;
+    }
+
     public function delete(): self {
-        $this->query .= ' DELETE FROM ' . $this->table;
+        $this->upsertQuery(' DELETE FROM ' . $this->table);
         return $this;
     }
 
     public function limit(int $limit = self::DEFAULT_LIMIT, int $offset = self::DEFAULT_OFFSET): self {
-        $this->query .= " LIMIT :limit OFFSET :offset ";
-        $this->args += compact('limit', 'offset');
+        $this->upsertQuery(" LIMIT :limit OFFSET :offset ");
+        $this->updateQueryArguments('limit', $limit);
+        $this->updateQueryArguments('offset', $offset);
         return $this;
     }
 
     public function where(array $arguments): self {
         foreach ($arguments as $selector => $sqlValue) {
-            list($comparison, $sqlValue) = Parser::sqlComparsion(($sqlValue ?? ''), $this->comparisonOperators);
-            $this->args[$selector] = $sqlValue;
-            $this->query .= (strpos($this->query, self::WHERE) === false ? self::WHERE : self::AND) . "{$selector} {$comparison} :{$selector}";
+            list($comparison, $sqlValue) = Parser::sqlComparsion(($sqlValue ?? ''), $this->getComparisonOperators());
+            $this->updateQueryArguments($selector, $sqlValue);
+            $this->upsertQuery((strpos($this->query, self::WHERE) === false ? self::WHERE : self::AND) . "{$selector} {$comparison} :{$selector}");
         }
         return $this;
     }
 
     public function between(string $from, string $to, int $interval, $dateFormat = '%Y-%m-%d'): self {
-        $this->query .= " AND STR_TO_DATE(:dateFormat) BETWEEN DATE(:from) - INTERVAL :interval DAY AND DATE(:from) + INTERVAL :interval DAY ";
-        $this->args += compact('dateFormat', 'from', 'to', 'interval');
+        $this->upsertQuery(" AND STR_TO_DATE(:dateFormat) BETWEEN DATE(:from) - INTERVAL :interval DAY AND DATE(:from) + INTERVAL :interval DAY ");
+        $this->updateQueryArguments('dateFormat', $dateFormat);
+        $this->updateQueryArguments('from', $from);
+        $this->updateQueryArguments('to', $to);
+        $this->updateQueryArguments('interval', $interval);
         return $this;
     }
 
     public function groupBy(string $group): self {
-        $this->query .= ' GROUP BY ' . $group;
+        $this->upsertQuery(self::GROUP_BY . $group);
         return $this;
     }
 
     public function orderBy(string $field, string $order): self {
-        $this->query .= ' ORDER BY ' . $field . ' ' . $order;
+        $this->upsertQuery(self::ORDER_BY . $field . ' ' . $order);
         return $this;
     }
 
     public function like(array $arguments): self {
         foreach ($arguments as $selector => $sqlValue) {
-            list($comparison, $sqlValue) = Parser::sqlComparsion(($sqlValue ?? ''), $this->comparisonOperators);
-            $this->args[$selector] = $sqlValue;
-            $this->query .= (strpos($this->query, self::WHERE) === false ? self::WHERE : self::AND) . "{$selector} LIKE CONCAT('%', :{$selector}, '%') ";
+            list($comparison, $sqlValue) = Parser::sqlComparsion(($sqlValue ?? ''), $this->getComparisonOperators());
+            $this->updateQueryArguments($selector, $sqlValue);
+            $this->upsertQuery((strpos($this->query, self::WHERE) === false ? self::WHERE : self::AND) . "{$selector} LIKE CONCAT('%', :{$selector}, '%') ");
         }
         return $this;
     }
 
     public function describeTable() {
-        $this->query = self::SQL_DESCRIBE . $this->table;
+        $this->upsertQuery(self::SQL_DESCRIBE . $this->table);
         $this->run();
     }
 
     public function rawSQL(string $sql): self {
-        $this->query = $sql;
+        $this->upsertQuery($sql);
+        return $this;
+    }
+
+    public function before(string $field): self {
+        $this->where([$field => '< ' . date('Y-m-d')]);
+        return $this;
+    }
+
+    public function beforeToday(string $field = 'CreatedAt'): self {
+        $this->where([$field => '< CURRENT_DATE()']);
+        return $this;
+    }
+
+    public function after(string $field): self {
+        $this->where([$field => '> CURRENT_DATE()']);
+        return $this;
+    }
+
+    public function afterToday(string $field = 'CreatedAt'): self {
+        $this->where([$field => '> CURRENT_DATE()']);
         return $this;
     }
 
     public function fetchRow(?array $criteria = null) {
         $this->select()->where($criteria);
-        $response = CoreFunctions::app()->getConnection()->execute($this->query, $this->args, 'fetch');
+        $response = app()->getConnection()->execute($this->getQuery(), $this->getArguments(), 'fetch');
         $this->resetQuery();
         return $response;
     }
 
     public function debugQuery() {
-        CoreFunctions::d("Currently debugging query: " . $this->query);
-        CoreFunctions::dd($this->args);
+        CoreFunctions::d("Currently debugging query: " . $this->getQuery());
+        CoreFunctions::dd($this->getArguments());
     }
 
     public function run(string $fetchMode = 'fetchAll'): array {
-        $response = CoreFunctions::app()->getConnection()->execute($this->query, $this->args, $fetchMode);
+        $response = app()->getConnection()->execute($this->getQuery(), $this->getArguments(), $fetchMode);
         $this->resetQuery();
         $objects = [];
         if (!is_iterable($response)) return [];

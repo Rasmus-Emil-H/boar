@@ -21,14 +21,14 @@ class Html {
 
     public static function pagination(int $sqlDataQueryLength): string {
 
+        $tableConfigurations = app()->getConfig()->get('frontend')->table;
+        if (!$tableConfigurations) throw new \app\core\src\exceptions\NotFoundException(self::MISSING_TABLE_CONFIG_ERROR_MESSAGE);
+
         $queryArguments = app()->getRequest()->getCompleteRequestBody()->body;
         $pageIndex = !isset($queryArguments->page) ? 0 : (int)$queryArguments->page ?? 0;
 
         $queryParameters = app()->getRequest()->getServerInformation()['QUERY_STRING'];
         $replacedQueryParamaters = '&' . preg_replace('/page=\d+&?/', '', $queryParameters);
-
-        $tableConfigurations = app()->getConfig()->get('frontend')->table;
-        if (!$tableConfigurations) throw new \app\core\src\exceptions\NotFoundException(self::MISSING_TABLE_CONFIG_ERROR_MESSAGE);
 
         $maxAllowedFrontendPages = $tableConfigurations->maximumPageInterval;
 

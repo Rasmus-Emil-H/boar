@@ -13,7 +13,6 @@ trait EntityQueryTrait {
     private const INVALID_ENTITY_STATUS = 'This entity does not have a status';
     private const FIND_OR_CREATE_NEW_DATA_ENTRY = ' was created due to a data entry';
     private const INVALID_ENTITY = 'Invalid entity';
-
     private const SQL_IS_NOT_NULL = 'IS NOT NULL';
     private const SQL_FETCH_MODE_FETCH = 'fetch';
 

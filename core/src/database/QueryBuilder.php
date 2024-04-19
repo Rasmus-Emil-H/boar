@@ -142,7 +142,7 @@ class QueryBuilder implements Builder {
     }
 
     public function patch(array $fields, ?string $primaryKeyField = null, ?string $primaryKey = null): self {
-        $this->query .= "UPDATE {$this->table} SET ";
+        $this->upsertQuery("UPDATE {$this->table} SET ");
 
         foreach ($fields as $fieldKey => $fieldValue) {
             $this->updateQueryArguments($fieldKey, $fieldValue);
@@ -205,7 +205,8 @@ class QueryBuilder implements Builder {
         foreach ($arguments as $selector => $sqlValue) {
             list($comparison, $sqlValue) = Parser::sqlComparsion(($sqlValue ?? ''), $this->getComparisonOperators());
             $this->updateQueryArguments($selector, $sqlValue);
-            $this->upsertQuery((strpos($this->query, self::WHERE) === false ? self::WHERE : self::AND) . "{$selector} LIKE CONCAT('%', :{$selector}, '%') ");
+            $sql = (strpos($this->query, self::WHERE) === false ? self::WHERE : self::AND) . "{$selector} LIKE CONCAT('%', :{$selector}, '%') ";
+            $this->upsertQuery($sql);
         }
         return $this;
     }

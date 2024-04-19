@@ -43,14 +43,14 @@ class Html {
             <div class="card-footer border-0 p-0 mt-2">
 				<nav aria-label="pagination">
 					<ul class="pagination mb-0 d-flex justify-content-start">
-                        <li class="page-item"><a class="page-link" href="?page=<?= $pageIndex++ . $replacedQueryParamaters; ?>"><i class="fa-solid fa-chevron-left"></i></a></li>
+                        <li class="page-item"><a class="page-link" href="?page=<?= ($pageIndex - 1) . $replacedQueryParamaters; ?>"><i class="fa-solid fa-chevron-left"></i></a></li>
                             <?php
                                 for($i = 0; $i < $totalPaginationPagesNeeded; $i++): ?>
                                     <?php if($i > 20) continue; ?>
                                     <li class="page-item"><a class="page-link" <?= $i === $pageIndex ? 'style="color:red;font-weight:800;text-decoration:underline;"' : ''; ?> href="?page=<?= $i . $replacedQueryParamaters; ?>"><?= hs($i); ?></a></li>
                                 <?php endfor;
                             ?>
-						<li class="page-item"><a class="page-link" href="?page=<?= $pageIndex-- . $replacedQueryParamaters; ?>"><i class="fa-solid fa-chevron-right"></i></a></li>
+						<li class="page-item"><a class="page-link" href="?page=<?= ($pageIndex + 1) . $replacedQueryParamaters; ?>"><i class="fa-solid fa-chevron-right"></i></a></li>
 					</ul>
 				</nav>
 			</div>

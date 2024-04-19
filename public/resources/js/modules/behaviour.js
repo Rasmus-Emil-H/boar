@@ -16,6 +16,7 @@ export default {
         const self = this;
 
         $('body').on('submit', 'form', function(e) {
+            if ($(e.target).attr('method') === 'GET') return;
             e.preventDefault();
             const form = $(this);
             return self.submitForm(form);

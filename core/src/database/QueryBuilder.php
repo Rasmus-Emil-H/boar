@@ -166,9 +166,14 @@ class QueryBuilder implements Builder {
         return $this;
     }
 
-    public function limit(int $limit = self::DEFAULT_LIMIT, int $offset = self::DEFAULT_OFFSET): self {
-        $this->upsertQuery(" LIMIT :limit OFFSET :offset ");
+    public function limit(int $limit = self::DEFAULT_LIMIT): self {
+        $this->upsertQuery(" LIMIT :limit ");
         $this->updateQueryArguments('limit', $limit);
+        return $this;
+    }
+
+    public function offset(int $offset = self::DEFAULT_OFFSET): self {
+        $this->upsertQuery(" OFFSET :offset ");
         $this->updateQueryArguments('offset', $offset);
         return $this;
     }

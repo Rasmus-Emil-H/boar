@@ -19,9 +19,9 @@ final class CoreFunctions {
     public static function displayDD($input, $title = 'Debugging'): void {
         if (self::app()::isCli()) exit($input);
         echo '<pre style="padding: 2rem; background-color: #3a6b39; color: white; border-radius: 4px;margin-top: 10px;text-wrap:wrap;" class="debug">';
-        if ($title) echo '<h2 class="text-center">' . $title . '</h2><hr>';
+        echo '<h2 class="text-center">' . $title . '</h2><hr><p style="font-size:.5rem;">';
         var_dump($input);
-        if ($title) echo '<hr /><h2 class="text-center">End of ' . $title . '</h2></pre>';
+        if ($title) echo '</p><hr /><h2 class="text-center">End of ' . $title . '</h2></pre>';
     }
       
     public static function dd(mixed $input, $title = ''): void {
@@ -35,7 +35,7 @@ final class CoreFunctions {
     }
       
     public static function hs($input): string {
-        return Html::escape($input);
+        return htmlspecialchars($input);
     }
       
     public static function app(): object {

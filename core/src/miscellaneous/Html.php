@@ -17,21 +17,18 @@ namespace app\core\src\miscellaneous;
 class Html {
 
     private const PAGINATION_ADDITIONAL_PAGE_ALLOCATOR = 1;
-
-    public static function escape(string $input): string {
-        return htmlspecialchars($input);
-    }
+    private const MISSING_TABLE_CONFIG_ERROR_MESSAGE = 'Frontend table configurations is missing!';
 
     public static function pagination(int $sqlDataQueryLength): string {
 
         $queryArguments = app()->getRequest()->getCompleteRequestBody()->body;
-        $pageIndex = (int)$queryArguments->page ?? 0;
+        $pageIndex = !isset($queryArguments->page) ? 0 : (int)$queryArguments->page ?? 0;
 
         $queryParameters = app()->getRequest()->getServerInformation()['QUERY_STRING'];
         $replacedQueryParamaters = '&' . preg_replace('/page=\d+&?/', '', $queryParameters);
 
         $tableConfigurations = app()->getConfig()->get('frontend')->table;
-        if (!$tableConfigurations) throw new \app\core\src\exceptions\NotFoundException('Frontend table configurations is missing!');
+        if (!$tableConfigurations) throw new \app\core\src\exceptions\NotFoundException(self::MISSING_TABLE_CONFIG_ERROR_MESSAGE);
 
         $maxAllowedFrontendPages = $tableConfigurations->maximumPageInterval;
 

@@ -37,12 +37,10 @@ class Pagination {
     }
 
     public function calculatePages(): array {
-
         $needsManyPages = $this->totalPaginationPagesNeeded > $this->maxAllowedFrontendPages;
         $pageDivision = $this->maxAllowedFrontendPages / self::PAGINATION_ADDITIONAL_PAGE_DIVIDER;
 
         $firstVisuelPage = $needsManyPages ? $this->pageIndex - $pageDivision < 0 ? 0 : $this->pageIndex - $pageDivision : 0;
-
         $lastVisualPage = $needsManyPages ? $this->pageIndex + $pageDivision > $this->totalPaginationPagesNeeded ? $this->totalPaginationPagesNeeded : $this->pageIndex + $pageDivision : $this->totalPaginationPagesNeeded;
 
         for ($page = $firstVisuelPage; $page <= $lastVisualPage; $page++) $pages[] = $page;

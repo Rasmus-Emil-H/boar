@@ -68,7 +68,7 @@ class Pagination {
 					</ul>
 				</nav>
 			</div>
-
 		<?php return ob_get_clean();
 	}
+    
 }

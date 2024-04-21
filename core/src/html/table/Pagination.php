@@ -4,6 +4,7 @@ namespace app\core\src\html\table;
 
 class Pagination {
 
+    private const PAGINATION_START_PAGE = 0;
     private const PAGINATION_ADDITIONAL_PAGE_ALLOCATOR = 1;
     private const PAGINATION_ADDITIONAL_PAGE_DIVIDER = 2;
     private const MISSING_TABLE_CONFIG_ERROR_MESSAGE = 'Frontend table configurations is missing!';
@@ -39,9 +40,11 @@ class Pagination {
     public function calculatePages(): array {
         $needsManyPages = $this->totalPaginationPagesNeeded > $this->maxAllowedFrontendPages;
         $pageDivision = $this->maxAllowedFrontendPages / self::PAGINATION_ADDITIONAL_PAGE_DIVIDER;
+        $negativIndex = $this->pageIndex - $pageDivision;
+        $positiveIndex = $this->pageIndex + $pageDivision;
 
-        $firstVisuelPage = $needsManyPages ? $this->pageIndex - $pageDivision < 0 ? 0 : $this->pageIndex - $pageDivision : 0;
-        $lastVisualPage = $needsManyPages ? $this->pageIndex + $pageDivision > $this->totalPaginationPagesNeeded ? $this->totalPaginationPagesNeeded : $this->pageIndex + $pageDivision : $this->totalPaginationPagesNeeded;
+        $firstVisuelPage = $needsManyPages ? $negativIndex < self::PAGINATION_START_PAGE ? self::PAGINATION_START_PAGE : $negativIndex : self::PAGINATION_START_PAGE;
+        $lastVisualPage = $needsManyPages ? $positiveIndex > $this->totalPaginationPagesNeeded ? $this->totalPaginationPagesNeeded : $positiveIndex : $this->totalPaginationPagesNeeded;
 
         for ($page = $firstVisuelPage; $page <= $lastVisualPage; $page++) $pages[] = $page;
 

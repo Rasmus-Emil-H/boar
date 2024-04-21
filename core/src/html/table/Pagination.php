@@ -34,7 +34,7 @@ class Pagination {
             if ($max > $totalPaginationPagesNeeded) $max = $totalPaginationPagesNeeded;
             for($page = $min; $page <= $max; $page++) $pages[] = $page;
         } else {
-            $max = $pageIndex + ($maxAllowedFrontendPages/self::PAGINATION_ADDITIONAL_PAGE_DIVIDER);
+            $max = $pageIndex + ($maxAllowedFrontendPages / self::PAGINATION_ADDITIONAL_PAGE_DIVIDER);
             for($page = 0; $page <= $totalPaginationPagesNeeded; $page++) $pages[] = $page;
         }
 

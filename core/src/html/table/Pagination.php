@@ -10,12 +10,12 @@ class Pagination {
 
     private int $pageIndex;
     private int $maxAllowedFrontendPages;
+    private int $totalPaginationPagesNeeded;
     private string $replacedQueryParamaters;
     private array $pages;
 
     public function __construct(
-        private int $sqlDataQueryLength,
-        private int $totalPaginationPagesNeeded = 0
+        private int $sqlDataQueryLength
     ) {
         $app = app();
 

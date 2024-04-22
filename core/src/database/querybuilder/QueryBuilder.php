@@ -2,7 +2,7 @@
 
 /**
 |----------------------------------------------------------------------------
-| Query builder
+| Query builder initial extension
 |----------------------------------------------------------------------------
 |
 | @author RE_WEB
@@ -10,58 +10,12 @@
 |
 */
 
-namespace app\core\src\database;
+namespace app\core\src\database\querybuilder;
 
-use \app\core\src\utilities\Builder;
 use \app\core\src\utilities\Parser;
 use \app\core\src\miscellaneous\CoreFunctions;
 
-class QueryBuilder implements Builder {
-
-    public const WHERE       = ' WHERE ';
-    public const AND         = ' AND ';
-    public const BIND        = ' = :';
-    public const INNERJOIN   = ' INNER JOIN ';
-
-    private const SQL_DESCRIBE = ' DESCRIBE ';
-    private const GROUP_BY     = ' GROUP BY ';
-    private const ORDER_BY     = ' ORDER BY ';
-
-    protected const DEFAULT_LIMIT = 100;
-    protected const DEFAULT_OFFSET = 0;
-    
-    protected string $query  = '';
-    protected string $where  = '';
-    protected string $fields = '';
-    protected string $placeholders = '';
-
-    protected array $args = [];
-
-    private array $comparisonOperators = ['=', '<>', '!=', '>', '<', '>=', '<='];
-    
-    public function __construct(
-        public string $class, 
-        public string $table, 
-        public string $keyID
-    ) {
-        $this->resetQuery();
-    }
-
-    private function upsertQuery(string $query): void {
-        $this->query .= $query;
-    }
-
-    private function updateQueryArguments($key, $value): void {
-        $this->args[$key] = $value;
-    }
-
-    private function getQuery(): string {
-        return $this->query;
-    }
-
-    private function getArguments(): array {
-        return $this->args;
-    }
+class QueryBuilder extends QueryBuilderBase {
 
     public function select(array $fields = ['*']): self {
         $this->upsertQuery('SELECT ' . implode(', ', $fields) . '  FROM ' . $this->table);
@@ -189,10 +143,12 @@ class QueryBuilder implements Builder {
 
     public function between(string $from, string $to, int $interval, $dateFormat = '%Y-%m-%d'): self {
         $this->upsertQuery(" AND STR_TO_DATE(:dateFormat) BETWEEN DATE(:from) - INTERVAL :interval DAY AND DATE(:from) + INTERVAL :interval DAY ");
+
         $this->updateQueryArguments('dateFormat', $dateFormat);
         $this->updateQueryArguments('from', $from);
         $this->updateQueryArguments('to', $to);
         $this->updateQueryArguments('interval', $interval);
+        
         return $this;
     }
 
@@ -201,7 +157,7 @@ class QueryBuilder implements Builder {
         return $this;
     }
 
-    public function orderBy(string $field, string $order): self {
+    public function orderBy(string $field, string $order = self::DEFAULT_ASCENDING_ORDER): self {
         $this->upsertQuery(self::ORDER_BY . $field . ' ' . $order);
         return $this;
     }
@@ -246,6 +202,13 @@ class QueryBuilder implements Builder {
         return $this;
     }
 
+    public function subQuery(\Closure $callback): self {
+        $this->upsertQuery(self::SUBQUERY_OPEN);
+        call_user_func($callback, $this);
+        $this->upsertQuery(self::SUBQUERY_CLOSE);
+        return $this;
+    }
+
     public function fetchRow(?array $criteria = null) {
         $this->select()->where($criteria);
         $response = app()->getConnection()->execute($this->getQuery(), $this->getArguments(), 'fetch');
@@ -265,14 +228,6 @@ class QueryBuilder implements Builder {
         if (!is_iterable($response)) return [];
         foreach ($response as $obj) $objects[] = new $this->class((array)$obj);
         return $objects;
-    }
-
-    public function resetQuery() {
-        $this->where = '';
-        $this->query = '';
-        $this->fields = '';
-        $this->args = [];
-        $this->placeholders = '';
     }
 
 }

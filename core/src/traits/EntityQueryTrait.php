@@ -2,7 +2,7 @@
 
 namespace app\core\src\traits;
 
-use \app\core\src\database\QueryBuilder;
+use \app\core\src\database\querybuilder\QueryBuilder;
 use \app\core\src\database\table\Table;
 use \app\core\src\database\EntityMetaData;
 use \app\core\src\miscellaneous\CoreFunctions;

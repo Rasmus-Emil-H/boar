@@ -13,6 +13,7 @@
 
 namespace app\core\src\database;
 
+use \app\core\src\miscellaneous\CoreFunctions;
 use \app\core\src\traits\EntityQueryTrait;
 use \app\core\src\traits\EntityMagicMethodTrait;
 use \app\core\src\traits\EntityHTTPMethodTrait;
@@ -71,6 +72,7 @@ abstract class Entity {
 
         if(isset($data[$key])) {
             $exists = $this->getQueryBuilder()->fetchRow([$key => $data[$key]]);
+            if (is_array($exists)) $exists = CoreFunctions::first($exists);
             if(!empty($exists)) {
                 $this->setKey($exists->{$this->getKeyField()});
                 $this->setData((array)$exists);
@@ -115,6 +117,10 @@ abstract class Entity {
 
     public function get(string $key): string|bool {
         return $this->data[$key] ?? false; 
+    }
+
+    public function propertyExists(string $property): bool {
+        return isset($this->data[$property]);
     }
 
     public function getData(): array {

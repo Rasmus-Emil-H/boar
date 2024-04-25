@@ -22,6 +22,11 @@ class QueryBuilder extends QueryBuilderBase {
         return $this;
     }
 
+    public function selectFromSub(string $fields = '*') {
+        $this->upsertQuery('SELECT ' . $fields . ' FROM ');
+        return $this; 
+    }
+
     public function initializeNewEntity(array $data): void {
         $this->bindValues($data);
         $this->create($data);
@@ -157,7 +162,8 @@ class QueryBuilder extends QueryBuilderBase {
         return $this;
     }
 
-    public function orderBy(string $field, string $order = self::DEFAULT_ASCENDING_ORDER): self {
+    public function orderBy(string|array $field, string $order = self::DEFAULT_ASCENDING_ORDER): self {
+        if (is_iterable($field)) $field = implode(',', $field);
         $this->upsertQuery(self::ORDER_BY . $field . ' ' . $order);
         return $this;
     }
@@ -209,6 +215,11 @@ class QueryBuilder extends QueryBuilderBase {
         return $this;
     }
 
+    public function as(string $as): self {
+        $this->upsertQuery('as ' . $as . ' ');
+        return $this;
+    }
+
     public function fetchRow(?array $criteria = null) {
         $this->select()->where($criteria);
         $response = app()->getConnection()->execute($this->getQuery(), $this->getArguments(), 'fetch');
@@ -226,7 +237,8 @@ class QueryBuilder extends QueryBuilderBase {
         $this->resetQuery();
         $objects = [];
         if (!is_iterable($response)) return [];
-        foreach ($response as $obj) $objects[] = new $this->class((array)$obj);
+        foreach ($response as $obj)
+            $objects[] = new $this->class((array)$obj);
         return $objects;
     }
 

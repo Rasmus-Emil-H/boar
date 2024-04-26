@@ -66,5 +66,11 @@
     },
     "fileHandling": {
         "allowedFileTypes": ["jpg", "jpeg", "webp", "png", "xml", "pdf", "octet-stream"]
+    },
+    "frontend": {
+        "table": {
+            "paginationDefaultEntityLength": 50,
+            "maximumPageInterval": 20
+        }
     }
 }

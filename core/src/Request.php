@@ -24,6 +24,8 @@ class Request {
     private const REQUEST_MADE_KEY = 'requestsMade';
     private const INITIAL_INDEX_ATTEMPT = '-0';
 
+    private array $redundantQuerySearchKeys = ['page', 'orderBy', 'sortBy'];
+
     protected string $allowedRequestAmount;
     protected string $allowedRequestMinutes;
     protected string $requestAttempts;
@@ -156,6 +158,17 @@ class Request {
         $this->allowedSecondsForRequestInterval = ($this->allowedRequestMinutes * self::SECONDS_THROTTLER);
         $this->attempts = ((string)strtotime('+'.$this->allowedRequestMinutes.' minutes') . self::INITIAL_INDEX_ATTEMPT);
         if (!$this->requestAttempts) $this->app->getSession()->set(self::REQUEST_MADE_KEY, $this->attempts);
+    }
+
+    public function getPageOffset() {
+        $parameters = $this->getQueryParameters();
+        return ($parameters['page'] ?? 0) * app()->getConfig()->get('frontend')->table->maximumPageInterval;
+    }
+
+    public function getQuerySearchParameters() {
+        $parameters = $this->getQueryParameters();
+        foreach ($this->redundantQuerySearchKeys as $key) unset($parameters[$key]);
+        return $parameters;
     }
 
 }

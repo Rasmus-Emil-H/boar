@@ -29,7 +29,7 @@ abstract class QueryBuilderBase implements Builder {
     protected const DEFAULT_ASCENDING_ORDER = ' ASC ';
     protected const DEFAULT_DESCENDING_ORDER = ' DESC ';
 
-    protected const DEFAULT_LIMIT = 50;
+    protected const DEFAULT_LIMIT = 20;
     protected const DEFAULT_OFFSET = 0;
     
     protected string $query  = '';

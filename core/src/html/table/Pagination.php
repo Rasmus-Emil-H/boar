@@ -5,7 +5,6 @@ namespace app\core\src\html\table;
 class Pagination {
 
     private const PAGINATION_START_PAGE = 0;
-    private const PAGINATION_ADDITIONAL_PAGE_ALLOCATOR = 1;
     private const PAGINATION_ADDITIONAL_PAGE_DIVIDER = 2;
     private const MISSING_TABLE_CONFIG_ERROR_MESSAGE = 'Frontend table configurations is missing!';
 
@@ -46,7 +45,7 @@ class Pagination {
 
     private function getPages(): void {
         // In case its n.(n > 0) we have to allocate an additional page
-        $this->totalPaginationPagesNeeded = (int)($this->sqlDataQueryLength / $this->maxAllowedFrontendPages) + self::PAGINATION_ADDITIONAL_PAGE_ALLOCATOR;
+        $this->totalPaginationPagesNeeded = (int)($this->sqlDataQueryLength / $this->maxAllowedFrontendPages);
         $this->pages = $this->calculatePages();
     }
 
@@ -65,12 +64,13 @@ class Pagination {
     }
 
     public function create(): string {
+        if (empty($this->totalPaginationPagesNeeded)) return '';
         ob_start(); ?>
             <div class="card-footer border-0 p-0 mt-2">
 				<nav aria-label="pagination">
 					<ul class="pagination mb-0 d-flex justify-content-start">
                         <?php if($this->pageIndex > 0): ?>
-                            <li class="page-item"><a class="page-link" href="?page=<?= ($this->pageIndex - 1) . $this->replacedQueryParamaters; ?>"><i class="fa-solid fa-chevron-left"></i></a></li>
+                            <li class="page-item d-flex-center"><a class="page-link" href="?page=<?= ($this->pageIndex - 1) . $this->replacedQueryParamaters; ?>"><i class="fa-solid fa-chevron-left"></i></a></li>
                         <?php endif; ?>
                             <?php foreach($this->pages as $page): ?>
                                 <li class="page-item">
@@ -80,7 +80,7 @@ class Pagination {
                                 </li>
                             <?php endforeach; ?>
 						<?php if($this->pageIndex !== $this->totalPaginationPagesNeeded): ?>
-                            <li class="page-item"><a class="page-link" href="?page=<?= ($this->pageIndex + 1) . $this->replacedQueryParamaters; ?>"><i class="fa-solid fa-chevron-right"></i></a></li>
+                            <li class="page-item d-flex-center"><a class="page-link" href="?page=<?= ($this->pageIndex + 1) . $this->replacedQueryParamaters; ?>"><i class="fa-solid fa-chevron-right"></i></a></li>
                         <?php endif; ?>
 					</ul>
 				</nav>

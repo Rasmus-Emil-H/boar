@@ -22,7 +22,7 @@ class QueryBuilder extends QueryBuilderBase {
         return $this;
     }
 
-    public function selectFromSub(string $fields = '*') {
+    public function selectFromSubQuery(string $fields = '*') {
         $this->upsertQuery('SELECT ' . $fields . ' FROM ');
         return $this; 
     }
@@ -137,7 +137,7 @@ class QueryBuilder extends QueryBuilderBase {
         return $this;
     }
 
-    public function where(array $arguments): self {
+    public function where(array $arguments = []): self {
         foreach ($arguments as $selector => $sqlValue) {
             list($comparison, $sqlValue) = Parser::sqlComparsion(($sqlValue ?? ''), $this->getComparisonOperators());
             $this->updateQueryArguments($selector, $sqlValue);

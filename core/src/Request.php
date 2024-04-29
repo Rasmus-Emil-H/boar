@@ -122,18 +122,18 @@ class Request {
         return json_decode(file_get_contents('php://input'));
     }
 
-    private function checkAmountOfRequest() {
+    private function checkAmountOfRequest(): void {
         if ($this->app::isCLI()) return;
         $this->setRatelimiting();
         $this->checkRateLimit();
     }
 
-    protected function setRatelimiting() {
+    protected function setRatelimiting(): void {
         $this->allowedRequestMinutes = $this->requestConfig->minutes;
         $this->allowedRequestAmount  = $this->requestConfig->amount;
     }
 
-    protected function checkRateLimit() {
+    protected function checkRateLimit(): void{
         $app = $this->app;
         $session = $app->getSession();
         $this->requestAttempts = $session->get(self::REQUEST_MADE_KEY);
@@ -142,30 +142,46 @@ class Request {
         $this->handleCurrentSessionRateLimit();
     }
 
-    protected function validateCurrentSessionRateLimit() {
+    protected function validateCurrentSessionRateLimit(): void {
         $this->updateCurrentSessionRateLimit();
         list($initialUnixSessionRateLimitInstance, $requestAttemptCounter) = explode('-', $this->requestAttempts);
         $this->subtractedSeconds = (strtotime('now') - (int)$initialUnixSessionRateLimitInstance);
         $this->app->getSession()->set(self::REQUEST_MADE_KEY, str_replace(('-'.$requestAttemptCounter), ('-'.($requestAttemptCounter+1)), $this->requestAttempts));
     }
 
-    protected function handleCurrentSessionRateLimit() {
+    protected function handleCurrentSessionRateLimit(): void {
         if ($this->requestAttempts > $this->allowedRequestAmount) $this->app->getResponse()->requestLimitReached();
         if ($this->subtractedSeconds > $this->allowedSecondsForRequestInterval) $this->app->getSession()->set(self::REQUEST_MADE_KEY, $this->attempts);
     }
 
-    protected function updateCurrentSessionRateLimit() {
+    protected function updateCurrentSessionRateLimit(): void {
         $this->allowedSecondsForRequestInterval = ($this->allowedRequestMinutes * self::SECONDS_THROTTLER);
         $this->attempts = ((string)strtotime('+'.$this->allowedRequestMinutes.' minutes') . self::INITIAL_INDEX_ATTEMPT);
         if (!$this->requestAttempts) $this->app->getSession()->set(self::REQUEST_MADE_KEY, $this->attempts);
     }
 
-    public function getPageOffset() {
+    public function getPageOffset(): int {
         $parameters = $this->getQueryParameters();
         return ($parameters['page'] ?? 0) * app()->getConfig()->get('frontend')->table->maximumPageInterval;
     }
 
-    public function getQuerySearchParameters() {
+    public function getOrderBy(): mixed {
+        return $this->getQueryParameters()['orderBy'] ?? null;
+    }
+
+    public function getSortOrder(): mixed {
+        return $this->getQueryParameters()['sortBy'] ?? null;
+    }
+
+    public function getPage(): mixed {
+        return $this->getQueryParameters()['page'] ?? null;
+    }
+
+    public function checkQueryStart() {
+        return (strpos($this->getServerInformation()['QUERY_STRING'], '?') ? '' :  '?');
+    }
+
+    public function getQuerySearchParameters(): array {
         $parameters = $this->getQueryParameters();
         foreach ($this->redundantQuerySearchKeys as $key) unset($parameters[$key]);
         return $parameters;

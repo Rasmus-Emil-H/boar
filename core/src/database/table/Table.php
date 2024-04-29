@@ -19,6 +19,7 @@ class Table {
     protected string $name;
     protected array $columns = [];
 
+    public const COMPLETED_COLUMN   = 'Completed';
     public const DELETED_AT_COLUMN  = 'DeletedAt';
     public const STATUS_COLUMN      = 'Status';
     public const SORT_ORDER_COLUMN  = 'SortOrder';

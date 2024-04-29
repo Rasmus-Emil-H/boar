@@ -134,4 +134,8 @@ trait EntityQueryTrait {
         return $cEntity;
     }
 
+    public function complete() {
+		$this->patchField([Table::COMPLETED_COLUMN => 1]);
+	}
+
 }

@@ -188,4 +188,12 @@ class Request {
         return $parameters;
     }
 
+    public function querySearchParametersAsString(): string {
+        $str = '';
+        $fields = $this->getQueryParameters();
+        foreach ($fields as $field => $value) 
+            $str .= $field . '=' . $value . (array_key_last($fields) === $field ? '' : '&');
+        return $str;
+    }
+
 }

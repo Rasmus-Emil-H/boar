@@ -24,7 +24,7 @@ class Request {
     private const REQUEST_MADE_KEY = 'requestsMade';
     private const INITIAL_INDEX_ATTEMPT = '-0';
 
-    private array $redundantQuerySearchKeys = ['page', 'orderBy', 'sortBy'];
+    public array $redundantQuerySearchKeys = ['page', 'orderBy', 'sortBy'];
 
     protected string $allowedRequestAmount;
     protected string $allowedRequestMinutes;
@@ -184,6 +184,7 @@ class Request {
     public function getQuerySearchParameters(): array {
         $parameters = $this->getQueryParameters();
         foreach ($this->redundantQuerySearchKeys as $key) unset($parameters[$key]);
+        foreach ($parameters as $key => $value) if (!$value) unset($parameters[$key]);
         return $parameters;
     }
 

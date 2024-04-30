@@ -82,8 +82,7 @@ class Connection {
             return $result;
         } catch (\PDOException $e) {
             if (!app()::isDevSite()) return;
-            $errorQuery = 'QUERY FAIL: ' . $query . ' ------ EXCEPTION: ' . $e;
-            CoreFunctions::dd($errorQuery);
+            CoreFunctions::dd('SQL QUERY FAIL: <br><br>QUERY: ' . $query . PHP_EOL . '<br>' . $e);
         }
     }
 

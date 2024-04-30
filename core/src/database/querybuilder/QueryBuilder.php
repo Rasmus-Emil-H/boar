@@ -35,7 +35,7 @@ class QueryBuilder extends QueryBuilderBase {
     
     public function bindValues(array $arguments): void {
         foreach($arguments as $selector => $value) {
-            $this->upsertQuery((array_key_first($arguments) === $selector ? self::WHERE : self::AND) . $selector . self::BIND . $selector);
+            $this->upsertQuery((array_key_first($arguments) === $selector ? $this::WHERE : $this::AND) . $selector . $this::BIND . $selector);
             $this->setArgumentPair($selector, $value);
         }
     }
@@ -54,7 +54,7 @@ class QueryBuilder extends QueryBuilderBase {
     }
 
     public function innerJoin(string $table, string $using): self {
-        $this->upsertQuery(self::INNERJOIN . " {$table} USING({$using}) ");
+        $this->upsertQuery($this::INNERJOIN . " {$table} USING({$using}) ");
         return $this;
     }
 
@@ -64,13 +64,13 @@ class QueryBuilder extends QueryBuilderBase {
     }
     
     public function leftJoin(string $table, string $on, array $and = []): self {
-        $implodedAnd = (count($and) > 0 ? self::AND : '') . implode(self::AND, $and);
+        $implodedAnd = (count($and) > 0 ? $this::AND : '') . implode($this::AND, $and);
         $this->upsertQuery(" LEFT JOIN {$table} {$on} {$implodedAnd} ");
         return $this;
     }
 
     public function rightJoin(string $table, string $on, array $and = []): self {
-        $implodedAnd = (count($and) > 0 ? self::AND : '') . implode(self::AND, $and);
+        $implodedAnd = (count($and) > 0 ? $this::AND : '') . implode($this::AND, $and);
         $this->upsertQuery(" RIGHT JOIN {$table} {$on} {$implodedAnd} ");
         return $this;
     }
@@ -137,11 +137,25 @@ class QueryBuilder extends QueryBuilderBase {
         return $this;
     }
 
+    private function checkStart(): string {
+        return (strpos($this->query, $this::WHERE) === false ? $this::WHERE : $this::AND);
+    }
+
     public function where(array $arguments = []): self {
         foreach ($arguments as $selector => $sqlValue) {
-            list($comparison, $sqlValue) = Parser::sqlComparsion(($sqlValue ?? ''), $this->getComparisonOperators());
-            $this->updateQueryArguments($selector, $sqlValue);
-            $this->upsertQuery((strpos($this->query, self::WHERE) === false ? self::WHERE : self::AND) . "{$selector} {$comparison} :{$selector}");
+            $dateField = str_contains($selector, $this::DEFAULT_FRONTEND_DATE_FROM_INDICATOR) || str_contains($selector, $this::DEFAULT_FRONTEND_DATE_TO_INDICATOR);
+            if ($dateField) {
+                list($order, $field) = explode('-', $selector);
+                $selector = preg_replace('/[^a-zA-Z0-9]/', '', $selector);
+                $sqlValue = date($this::DEFAULT_SQL_DATE_FORMAT, strtotime($sqlValue));
+                $arrow = $order === 'from' ? '>' : '<';
+                $this->upsertQuery($this->checkStart() . "{$field} " . $arrow . "= :{$selector}");
+                $this->updateQueryArguments($selector, $sqlValue);
+            } else {
+                list($comparison, $sqlValue) = Parser::sqlComparsion(($sqlValue ?? ''), $this->getComparisonOperators());
+                $this->updateQueryArguments($selector, $sqlValue);
+                $this->upsertQuery($this->checkStart() . "{$selector} {$comparison} :{$selector}");
+            }
         }
         return $this;
     }
@@ -158,13 +172,13 @@ class QueryBuilder extends QueryBuilderBase {
     }
 
     public function groupBy(string $group): self {
-        $this->upsertQuery(self::GROUP_BY . $group);
+        $this->upsertQuery($this::GROUP_BY . $group);
         return $this;
     }
 
     public function orderBy(string|array $field, string $order = self::DEFAULT_ASCENDING_ORDER): self {
         if (is_iterable($field)) $field = implode(',', $field);
-        $this->upsertQuery(self::ORDER_BY . $field . ' ' . $order);
+        $this->upsertQuery($this::ORDER_BY . $field . ' ' . $order);
         return $this;
     }
 
@@ -172,14 +186,24 @@ class QueryBuilder extends QueryBuilderBase {
         foreach ($arguments as $selector => $sqlValue) {
             list($comparison, $sqlValue) = Parser::sqlComparsion(($sqlValue ?? ''), $this->getComparisonOperators());
             $this->updateQueryArguments($selector, $sqlValue);
-            $sql = (strpos($this->query, self::WHERE) === false ? self::WHERE : self::AND) . "{$selector} LIKE CONCAT('%', :{$selector}, '%') ";
+            $sql = $this->checkStart() . "{$selector} LIKE CONCAT('%', :{$selector}, '%') ";
             $this->upsertQuery($sql);
         }
         return $this;
     }
 
+    public function isNull(string $field): self {
+        $this->upsertQuery($this->checkStart() . " {$field} IS NULL ");
+        return $this;
+    }
+    
+    public function isNotNull(string $field): self {
+        $this->upsertQuery($this->checkStart() . " {$field} IS NOT NULL ");
+        return $this;
+    }
+
     public function describeTable() {
-        $this->upsertQuery(self::SQL_DESCRIBE . $this->table);
+        $this->upsertQuery($this::SQL_DESCRIBE . $this->table);
         $this->run();
     }
 
@@ -209,9 +233,9 @@ class QueryBuilder extends QueryBuilderBase {
     }
 
     public function subQuery(\Closure $callback): self {
-        $this->upsertQuery(self::SUBQUERY_OPEN);
+        $this->upsertQuery($this::SUBQUERY_OPEN);
         call_user_func($callback, $this);
-        $this->upsertQuery(self::SUBQUERY_CLOSE);
+        $this->upsertQuery($this::SUBQUERY_CLOSE);
         return $this;
     }
 

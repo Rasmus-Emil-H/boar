@@ -70,6 +70,7 @@ class Pagination {
 				<nav aria-label="pagination">
 					<ul class="pagination mb-0 d-flex justify-content-start">
                         <?php if($this->pageIndex > 0): ?>
+                            <li class="page-item d-flex-center"><a class="page-link" href="?page=<?= (0) . $this->replacedQueryParamaters; ?>"><i class="fa-solid fa-angles-left"></i></a></li>
                             <li class="page-item d-flex-center"><a class="page-link" href="?page=<?= ($this->pageIndex - 1) . $this->replacedQueryParamaters; ?>"><i class="fa-solid fa-chevron-left"></i></a></li>
                         <?php endif; ?>
                             <?php foreach($this->pages as $page): ?>
@@ -81,6 +82,7 @@ class Pagination {
                             <?php endforeach; ?>
 						<?php if($this->pageIndex !== $this->totalPaginationPagesNeeded): ?>
                             <li class="page-item d-flex-center"><a class="page-link" href="?page=<?= ($this->pageIndex + 1) . $this->replacedQueryParamaters; ?>"><i class="fa-solid fa-chevron-right"></i></a></li>
+                            <li class="page-item d-flex-center"><a class="page-link" href="?page=<?= ($this->totalPaginationPagesNeeded - 1) . $this->replacedQueryParamaters; ?>"><i class="fa-solid fa-angles-right"></i></a></li>
                         <?php endif; ?>
 					</ul>
 				</nav>

@@ -25,6 +25,8 @@ class Table {
     public const SORT_ORDER_COLUMN  = 'SortOrder';
     public const ENTITY_TYPE_COLUMN = 'EntityType';
     public const ENTITY_ID_COLUMN   = 'EntityID';
+    public const SORT_ASC           = 'ASC';
+    public const SORT_DESC          = 'DESC';
 
     private const INT_COLUMN_TYPE       = 'INT';
     private const FLOAT_COLUMN_TYPE     = 'FLOAT';
@@ -109,9 +111,9 @@ class Table {
 
     public function dropColumns(array|string $columns) {
         if (is_string($columns)) (array)$columns;
-        foreach ( $columns as $column ) {
-            $static = new Column($column, 'drop');
-        }
+        
+        foreach ( $columns as $column )
+            new Column($column, 'drop');
     }
 
     public function getColumns(): array {

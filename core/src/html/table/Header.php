@@ -2,6 +2,8 @@
 
 namespace app\core\src\html\table;
 
+use \app\core\src\database\table\Table;
+
 class Header {
 
     private \app\core\src\Request $request; 
@@ -19,14 +21,14 @@ class Header {
     }
 
     private function setup() {
-        $this->queryParameters = $this->request->getServerInformation()['QUERY_STRING'];
+        $this->queryParameters = $this->request->getQueryString();
         $this->orderBy = $this->request->getOrderBy() ?? '';
         $this->sortBy = $this->request->getSortOrder() ?? '';
         $this->page = $this->request->getPage() ?? '';
     }
 
     private function determineSortOrder(): string {
-        return is_int(strpos($this->queryParameters, 'DESC')) ? 'ASC' : 'DESC';
+        return is_int(strpos($this->queryParameters, Table::SORT_DESC)) ? Table::SORT_ASC : Table::SORT_DESC;
     }
     
     private function getPage(): string {
@@ -34,7 +36,7 @@ class Header {
     }
 
     private function alterQueryParameters(string $field): string {
-        return $this->request->checkQueryStart() . $this->getPage() . self::SORT_BY . $field . self::ORDER_BY . $this->determineSortOrder();
+        return $this->request->checkQueryStart() . $this->getPage() . $this->request->querySearchParametersAsString() . self::SORT_BY . $field . self::ORDER_BY . $this->determineSortOrder();
     }
 
     public function create(): string {

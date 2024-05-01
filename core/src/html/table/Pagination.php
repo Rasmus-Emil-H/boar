@@ -39,7 +39,7 @@ class Pagination {
     }
 
     private function alterQueryParameters(): void {
-        $queryParameters = $this->app->getRequest()->getServerInformation()['QUERY_STRING'];
+        $queryParameters = $this->app->getRequest()->getQueryString();
         $this->replacedQueryParamaters = '&' . preg_replace('/page=\d+&?/', '', $queryParameters);
     }
 

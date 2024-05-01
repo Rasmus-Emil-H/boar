@@ -52,6 +52,10 @@ final class Response {
         return [$message];
     }
 
+    public function customOKResponse(string $key, string|array $message = '') {
+        $this->setResponse(self::HTTP_OK, [$key => $message]);
+    }
+
     public function ok(string|array $message = '') {
         $this->setResponse(self::HTTP_OK, ['responseJSON' => $message]);
     }

@@ -30,6 +30,7 @@ error_reporting(E_ALL);
 define('CRONJOB_CLI_CHECK', 'CronjobScheduler');
 define('DATABASE_MIGRATION_CLI_CHECK', 'DatabaseMigration');
 define('CLI_TOOL_NOT_FOUND_MESSAGE', 'CLI TOOL NOT FOUND' . PHP_EOL);
+define('DRIVER_AUTHORIZED_INDEX_PATH', '/trip');
 define('IS_CLI', isset($argv));
 
 /**
@@ -53,7 +54,16 @@ function app() {
 
 function getIterableJsonEncodedData(array|object $iterable): array {
     $result = [];
-    foreach ($iterable as $iteration)
-        $result[] = json_encode($iteration->getData());
+
+    foreach ($iterable as $iteration) {
+        if (!method_exists($iteration, 'getData')) 
+            throw new \app\core\src\exceptions\NotFoundException("getData method was not found");
+        
+        foreach ($iteration->getData() as $dataKey => $dataValue) {
+            if (is_iterable($dataValue)) $result[$iteration->key()][$dataKey] = getIterableJsonEncodedData($dataValue);
+            else $result[$iteration->key()][$dataKey] = json_encode($dataValue);
+        }
+    }
+
     return $result;
 }

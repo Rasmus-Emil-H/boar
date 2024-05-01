@@ -29,8 +29,8 @@ abstract class QueryBuilderBase implements Builder {
     protected const DEFAULT_ASCENDING_ORDER = ' ASC ';
     protected const DEFAULT_DESCENDING_ORDER = ' DESC ';
     protected const DEFAULT_SQL_DATE_FORMAT = 'Y/m/d';
-    protected const DEFAULT_FRONTEND_DATE_FROM_INDICATOR = 'from';
-    protected const DEFAULT_FRONTEND_DATE_TO_INDICATOR = 'to';
+    protected const DEFAULT_FRONTEND_DATE_FROM_INDICATOR = 'from-';
+    protected const DEFAULT_FRONTEND_DATE_TO_INDICATOR = 'to-';
 
     protected const DEFAULT_LIMIT = 20;
     protected const DEFAULT_OFFSET = 0;

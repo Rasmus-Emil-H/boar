@@ -178,7 +178,11 @@ class Request {
     }
 
     public function checkQueryStart() {
-        return (strpos($this->getServerInformation()['QUERY_STRING'], '?') ? '' :  '?');
+        return (strpos($this->getQueryString(), '?') ? '' :  '?');
+    }
+
+    public function getQueryString(): string {
+        return $this->getServerInformation()['QUERY_STRING'] ?? '';
     }
 
     public function getQuerySearchParameters(): array {

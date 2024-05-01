@@ -259,10 +259,13 @@ class QueryBuilder extends QueryBuilderBase {
     public function run(string $fetchMode = 'fetchAll'): array {
         $response = app()->getConnection()->execute($this->getQuery(), $this->getArguments(), $fetchMode);
         $this->resetQuery();
+        
         $objects = [];
         if (!is_iterable($response)) return [];
+
         foreach ($response as $obj)
             $objects[] = new $this->class((array)$obj);
+
         return $objects;
     }
 

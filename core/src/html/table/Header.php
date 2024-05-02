@@ -36,7 +36,10 @@ class Header {
     }
 
     private function alterQueryParameters(string $field): string {
-        return $this->request->checkQueryStart() . $this->getPage() . $this->request->querySearchParametersAsString() . self::SORT_BY . $field . self::ORDER_BY . $this->determineSortOrder();
+        $params = '';
+        foreach ($this->request->getQuerySearchParameters() as $k => $v) $params .= '&'.$k.'='.$v;
+        
+        return $this->request->checkQueryStart() . $this->getPage() . $params . self::SORT_BY . $field . self::ORDER_BY . $this->determineSortOrder();
     }
 
     public function create(): string {

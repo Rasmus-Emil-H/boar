@@ -53,8 +53,9 @@ class QueryBuilder extends QueryBuilderBase {
         return $this;
     }
 
-    public function innerJoin(string $table, string $using): self {
-        $this->upsertQuery($this::INNERJOIN . " {$table} USING({$using}) ");
+    public function innerJoin(string $table, string $using = ''): self {
+        if ($using !== '') $using = " USING({$using}) ";
+        $this->upsertQuery($this::INNERJOIN . " {$table} {$using} ");
         return $this;
     }
 
@@ -82,6 +83,11 @@ class QueryBuilder extends QueryBuilderBase {
         }, array_keys($ins), array_values($ins));
 
         $this->upsertQuery(" AND $field IN ( " . implode(', ', $queryINString) . " ) ");
+        return $this;
+    }
+
+    public function on(string $field): self {
+        $this->upsertQuery(" ON {$field} ");
         return $this;
     }
 
@@ -153,8 +159,9 @@ class QueryBuilder extends QueryBuilderBase {
                 $this->updateQueryArguments($selector, $sqlValue);
             } else {
                 list($comparison, $sqlValue) = Parser::sqlComparsion(($sqlValue ?? ''), $this->getComparisonOperators());
-                $this->updateQueryArguments($selector, $sqlValue);
-                $this->upsertQuery($this->checkStart() . "{$selector} {$comparison} :{$selector}");
+                $key = preg_replace('/[^a-zA-Z0-9]/', '', $selector);
+                $this->updateQueryArguments($key, $sqlValue);
+                $this->upsertQuery($this->checkStart() . "{$selector} {$comparison} :{$key}");
             }
         }
         return $this;

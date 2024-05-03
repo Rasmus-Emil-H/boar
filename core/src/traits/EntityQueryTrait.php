@@ -22,6 +22,9 @@ trait EntityQueryTrait {
     }
 
     public function patchField(array $data): self {
+        unset($data['eg-csrf-token-label']);
+        unset($data['action']);
+        
         $this->getQueryBuilder()->patch($data, $this->getKeyField(), $this->key())->run(self::SQL_FETCH_MODE_FETCH);
         return $this;
     }

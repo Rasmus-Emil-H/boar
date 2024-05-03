@@ -36,10 +36,7 @@ class Header {
     }
 
     private function alterQueryParameters(string $field): string {
-        $params = '';
-        foreach ($this->request->getQuerySearchParameters() as $k => $v) $params .= '&'.$k.'='.$v;
-        
-        return $this->request->checkQueryStart() . $this->getPage() . $params . self::SORT_BY . $field . self::ORDER_BY . $this->determineSortOrder();
+        return $this->request->checkQueryStart() . $this->getPage() . $this->request->querySearchParamsAndValues() . self::SORT_BY . $field . self::ORDER_BY . $this->determineSortOrder();
     }
 
     public function create(): string {
@@ -49,7 +46,7 @@ class Header {
                     <?php foreach($this->fields as $key => $field): ?>
                         <th>
                             <a class="active-menu-item" <?= $this->sortBy === $field ? 'style="color:red;"' : ''; ?> href="<?= $this->alterQueryParameters($field); ?>">
-                                <?= hs($key); ?>
+                                <?= is_int($key) ? '' : hs($key); ?>
                                 <?= $this->sortBy === $field && $this->orderBy === 'ASC' ? '<i class="fa-solid fa-arrow-up"></i>' : ''; ?>
                                 <?= $this->sortBy === $field && $this->orderBy === 'DESC' ? '<i class="fa-solid fa-arrow-down"></i>' : ''; ?>
                             </a>

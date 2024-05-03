@@ -165,15 +165,15 @@ class Request {
         return ($parameters['page'] ?? 0) * app()->getConfig()->get('frontend')->table->maximumPageInterval;
     }
 
-    public function getOrderBy(): mixed {
+    public function getOrderBy(): ?string {
         return $this->getQueryParameters()['orderBy'] ?? null;
     }
 
-    public function getSortOrder(): mixed {
+    public function getSortOrder(): ?string {
         return $this->getQueryParameters()['sortBy'] ?? null;
     }
 
-    public function getPage(): mixed {
+    public function getPage(): ?string {
         return $this->getQueryParameters()['page'] ?? null;
     }
 
@@ -187,8 +187,13 @@ class Request {
 
     public function getQuerySearchParameters(): array {
         $parameters = $this->getQueryParameters();
+        
         foreach ($this->redundantQuerySearchKeys as $key) unset($parameters[$key]);
-        foreach ($parameters as $key => $value) if (!$value) unset($parameters[$key]);
+        foreach ($parameters as $key => &$value) {
+            if ($value === '') unset($parameters[$key]);
+            $value = urldecode($value);
+        }
+
         return $parameters;
     }
 

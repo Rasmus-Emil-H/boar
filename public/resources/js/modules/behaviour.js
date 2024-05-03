@@ -26,14 +26,31 @@ export default {
             await self.uploadFile(e.target);
         });
     },
-    submitForm: function(form) {
+    checkRequiredFormFields: async function(form) {
+        let canProceed = true;
+
+        await $(form).find('input:not(:hidden), select, textarea').each(function(i, e) {
+            const el = $(e);
+            if (el.attr('required') && !el.val()) {
+                el.addClass('border border-danger');
+                canProceed = false;
+            }
+        });
+
+        return canProceed;
+    },
+    submitForm: async function(form) {
+        const self = this;
+
+        const checkRequiredFormFields = await self.checkRequiredFormFields(form[0]) 
+        if (!checkRequiredFormFields) return;
+        
         return new Promise(function(resolve, reject) {
             const submitButton = form.find('button[type="submit"]').last();
             const _text = submitButton.html();
-    
             submitButton.attr('disabled', true);
-            submitButton.html(boar.components.loader());
-            
+            submitButton.html(autologik.components.loader());
+
             $.ajax({
                 type: form.attr('method'),
                 url: form.attr('action'),
@@ -42,13 +59,11 @@ export default {
                 cache: false,
                 processData: false,
                 success: function(response, status) {
-                    if (typeof response.responseJSON === 'object') 
-                        boar.components.toast(response.responseJSON.message ?? 'Success', boar.constants.mdbootstrap.SUCCESS_CLASS);
-                    else 
-                        boar.components.toast(response.responseJSON, boar.constants.mdbootstrap.SUCCESS_CLASS);
+                    self.checkSubmittedFormResponse(response);
                     resolve(response);
                 },
                 error: function(xhr, status, error) {
+                    autologik.components.toast(xhr.responseJSON, autologik.constants.mdbootstrap.ERROR_CLASS);
                     reject(xhr);
                 }
             }).always(function(res) {
@@ -57,6 +72,21 @@ export default {
                 resolve(res);
             });
         });
+    },
+    checkSubmittedFormResponse: function(response) {
+        if (response.responseJSON) {
+            if (typeof response.responseJSON === 'object') 
+                autologik.components.toast(response.responseJSON.message ?? 'Success', autologik.constants.mdbootstrap.SUCCESS_CLASS); 
+            else 
+                autologik.components.toast(response.responseJSON, autologik.constants.mdbootstrap.SUCCESS_CLASS);
+        }
+        if (response.redirect) window.location.replace(response.redirect);
+    },
+    referenceGETForm(form) {
+        let href = '?';
+        const fd = new FormData(form);
+        for (const pair of fd.entries()) href += `&${pair[0]}=${pair[1]}`;
+        location.href = href;
     },
     uploadFile: async function(target) {
         const csrf = $('[name="eg-csrf-token-label"]').val();

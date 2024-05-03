@@ -67,3 +67,7 @@ function getIterableJsonEncodedData(array|object $iterable): array {
 
     return $result;
 }
+
+function debug($data) {
+    file_put_contents('wtf.json', json_encode($data));
+}

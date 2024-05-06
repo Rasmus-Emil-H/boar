@@ -38,7 +38,6 @@ final class Application {
 
     public static string $ROOT_DIR;
     public static self $app;
-
     public function __construct() {
 
         new src\WebApplicationFirewall();
@@ -72,7 +71,17 @@ final class Application {
         if (!$this->session->get('language')) $this->session->set('language', self::$app->config->get('locale')->default);
     }
 
+    public function setLanguage(string $language): void {
+        $cLanguage = new \app\models\LanguageModel();
+        $search = $cLanguage->search(['Code' => $language]);
+
+        if (empty($search)) $this->response->notFound();
+
+        $this->session->set('language', $language);
+    }
+
     private function validateUserSession() {
+        if (str_contains($this->request->getPath(), 'admin')) return;
         $validSession = (new UserModel())->hasActiveSession();
         if (!in_array($this->request->getPath(), $this->router::$anonymousRoutes) && !$validSession) 
             $this->response->redirect(CoreFunctions::first($this->router::$anonymousRoutes)->scalar);
@@ -80,22 +89,13 @@ final class Application {
 
     public function classCheck(string $class): void {
         if (class_exists($class)) return;
-        $this->addSystemEvent(['Invalid class was called: ' . $class]);
+        $this->addSystemEvent(['Invalid class was called: ' . $class . json_encode(debug_backtrace())]);
         if (!self::isDevSite()) $this->getResponse()->notFound();
         CoreFunctions::dd('Invalid class: ' . $class);
     }
 
     public function getParentController(): src\Controller {
         return $this->parentController;
-    }
-
-    public function setLanguage(string $language): void {
-        $cLanguage = new \app\models\LanguageModel();
-        $search = $cLanguage->search(['Name' => $language]);
-     
-        if (empty($search)) $this->response->notFound();
-     
-        $this->session->set('language', Corefunctions::first($search)->get('code'));
     }
 
     public function setParentController(src\Controller $controller): void {

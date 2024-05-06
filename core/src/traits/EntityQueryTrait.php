@@ -21,7 +21,9 @@ trait EntityQueryTrait {
         return $this;
     }
 
-    public function patchField(array $data): self {
+    public function patchField(array|object $data): self {
+        $data = (array)$data;
+
         unset($data['eg-csrf-token-label']);
         unset($data['action']);
         

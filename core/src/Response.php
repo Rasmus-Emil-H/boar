@@ -57,6 +57,8 @@ final class Response {
     }
 
     public function ok(string|array $message = '') {
+        if (empty($message)) $message = $this->returnStdSuccesMessage();
+        
         $this->setResponse(self::HTTP_OK, ['responseJSON' => $message]);
     }
 

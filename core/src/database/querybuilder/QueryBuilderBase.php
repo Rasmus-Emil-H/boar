@@ -19,7 +19,7 @@ abstract class QueryBuilderBase implements Builder {
     public const WHERE       = ' WHERE ';
     public const AND         = ' AND ';
     public const BIND        = ' = :';
-    public const INNERJOIN   = ' INNER JOIN ';
+    public const INNER_JOIN   = ' INNER JOIN ';
     public const SUBQUERY_OPEN  = ' ( ';
     public const SUBQUERY_CLOSE = ' ) ';
 

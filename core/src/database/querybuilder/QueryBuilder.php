@@ -55,7 +55,7 @@ class QueryBuilder extends QueryBuilderBase {
 
     public function innerJoin(string $table, string $using = ''): self {
         if ($using !== '') $using = " USING({$using}) ";
-        $this->upsertQuery($this::INNERJOIN . " {$table} {$using} ");
+        $this->upsertQuery($this::INNER_JOIN . " {$table} {$using} ");
         return $this;
     }
 

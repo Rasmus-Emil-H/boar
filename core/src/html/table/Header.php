@@ -45,7 +45,7 @@ class Header {
                 <tr>
                     <?php foreach($this->fields as $key => $field): ?>
                         <th>
-                            <a class="active-menu-item" <?= $this->sortBy === $field ? 'style="color:red;"' : ''; ?> href="<?= $this->alterQueryParameters($field); ?>">
+                            <a class="active-menu-item" <?= $this->sortBy === $field ? 'style="color:red;"' : ''; ?> href="<?= empty($field) ? '#' : $this->alterQueryParameters($field); ?>">
                                 <?= is_int($key) ? '' : hs($key); ?>
                                 <?= $this->sortBy === $field && $this->orderBy === 'ASC' ? '<i class="fa-solid fa-arrow-up"></i>' : ''; ?>
                                 <?= $this->sortBy === $field && $this->orderBy === 'DESC' ? '<i class="fa-solid fa-arrow-down"></i>' : ''; ?>

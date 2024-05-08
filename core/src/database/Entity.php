@@ -170,4 +170,8 @@ abstract class Entity {
         return date('d-m-Y H:i', strtotime(($date !== '' ? $date : $this->get('CreatedAt'))));
     }
 
+    public function requireExistence() {
+        if (!$this->exists()) app()->getRequest()->notFound();
+    }
+
 }

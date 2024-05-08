@@ -48,8 +48,10 @@ final class LanguageModel extends Entity {
 
 	public function getTranslations() {
 		$frontend = [];
+		
 		foreach ($this->translations() as $translation)
-			$frontend[hs($translation->key())] = hs($translation->get('Translation'));
+			$frontend[hs($translation->key())] = [hs($translation->get('Translation')) => hs($translation->get('TranslationHumanReadable'))];
+
 		return $frontend;
 	}
 

@@ -17,7 +17,6 @@ final class UserModel extends Entity {
 	private const ROLE_ADMIN  = 'Admin';
 	private const ROLE_USER   = 'User';
 	
-
 	public function getTableName(): string {
 		return 'Users';
 	}

@@ -54,4 +54,13 @@ trait ControllerMethodTrait {
         return is_string($dispatchedHTTPMethodResult) ? (is_int(strpos($dispatchedHTTPMethodResult ?? '', 'Errors')) ? 'dataConflict' : 'ok') : 'ok';
     }
 
+    public function delete() {
+        $this->denyGETRequest();
+
+        $cEntity = $this->returnValidEntityIfExists();
+        $cEntity->delete();
+        
+        $this->response->ok(hs('Deleted'));
+    }
+
 }

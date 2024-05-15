@@ -114,10 +114,10 @@ trait EntityQueryTrait {
         return $this;
     }
 
-    public function setRelationelTableSortOrder(string $table, int $sortOrder, $additionalConditions): void {
+    public function setRelationelTableSortOrder(string $table, int $sortOrder, $additionalConditions = []): void {
         $this->getQueryBuilder($table)
             ->patch([Table::SORT_ORDER_COLUMN => $sortOrder])
-            ->where([...$additionalConditions])
+            ->where($additionalConditions)
             ->run();
     }
 
@@ -142,5 +142,16 @@ trait EntityQueryTrait {
     public function complete() {
 		$this->patchField([Table::COMPLETED_COLUMN => 1]);
 	}
+
+    public function add(object $arguments) {
+        $data = (array)$arguments;
+
+        unset($data['eg-csrf-token-label']);
+        unset($data['action']); 
+
+        $cEntity = new $this();
+        $cEntity->set($data);
+        $cEntity->save();
+    }
 
 }

@@ -152,6 +152,8 @@ trait EntityQueryTrait {
         $cEntity = new $this();
         $cEntity->set($data);
         $cEntity->save();
+
+        if (method_exists($cEntity, 'frontendFields')) return $cEntity->frontendFields();
     }
 
 }

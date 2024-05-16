@@ -59,6 +59,12 @@ class QueryBuilder extends QueryBuilderBase {
         return $this;
     }
 
+    public function innerJoins(array $innerJoinConditions): self {
+        foreach ($innerJoinConditions as $table => $using)
+            $this->innerJoin($table, $using);
+        return $this;
+    }
+
     public function count(string $count, string $countName = 'count'): self {
         $this->upsertQuery("SELECT COUNT({$count}) as {$countName} FROM {$this->table}");
         return $this;

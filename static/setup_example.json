@@ -72,5 +72,8 @@
             "paginationDefaultEntityLength": 50,
             "maximumPageInterval": 20
         }
+    },
+    "integrations": {
+        
     }
 }

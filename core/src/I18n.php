@@ -1,10 +1,14 @@
 <?php
 
 /**
- * Translation
- * AUTHOR: RE_WEB
- * @package app\core
- */
+|----------------------------------------------------------------------------
+| Bootstrap Translations
+|----------------------------------------------------------------------------
+|
+| @author RE_WEB
+| @package app\core\src
+|
+*/
 
 namespace app\core\src;
 
@@ -26,14 +30,14 @@ final class I18n {
 
     public function translate(string $toTranslate): string {
         $translationExists = (new TranslationModel())->query()->select()->where(['LanguageID' => $this->languageID, 'Translation' => $toTranslate])->run();
-        if ($translationExists) return CoreFunctions::first($translationExists)->get('Translation');
+        if ($translationExists) return CoreFunctions::first($translationExists)->get('TranslationHumanReadable');
         $this->registerMissingTranslation($toTranslate);
         return $toTranslate;
     }
 
     public function registerMissingTranslation(string $missingTranslation) {
         (new TranslationModel())
-            ->set(['Translation' => $missingTranslation, 'LanguageID' => $this->languageID, 'TranslationHash' => Hash::create()])
+            ->set(['Translation' => $missingTranslation, 'TranslationHumanReadable' => $missingTranslation, 'LanguageID' => $this->languageID, 'TranslationHash' => Hash::create()])
             ->save();
     }
     

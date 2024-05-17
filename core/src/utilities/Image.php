@@ -1,5 +1,15 @@
 <?php
 
+/**
+|----------------------------------------------------------------------------
+| Bootstrap Image
+|----------------------------------------------------------------------------
+|
+| @author RE_WEB
+| @package app\core\src\utilities
+|
+*/
+
 namespace app\core\src\utilities;
 
 class Image {
@@ -40,9 +50,9 @@ class Image {
 
         $aspectRatio = $width / $height;
 
-        return $width / $height > self::DEFAULT_RESIZE_WIDTH / self::DEFAULT_RESIZE_HEIGHT ? 
-        [self::WIDTH => self::DEFAULT_RESIZE_WIDTH, self::HEIGHT => self::DEFAULT_RESIZE_WIDTH / $aspectRatio] :
-        [self::WIDTH => self::DEFAULT_RESIZE_HEIGHT * $aspectRatio, self::HEIGHT => self::DEFAULT_RESIZE_HEIGHT];
+        return ($width / $height) > (self::DEFAULT_RESIZE_WIDTH / self::DEFAULT_RESIZE_HEIGHT) ? 
+            [self::WIDTH => self::DEFAULT_RESIZE_WIDTH, self::HEIGHT => self::DEFAULT_RESIZE_WIDTH / $aspectRatio] :
+            [self::WIDTH => self::DEFAULT_RESIZE_HEIGHT * $aspectRatio, self::HEIGHT => self::DEFAULT_RESIZE_HEIGHT];
     }
 
     public function resizeImage(int $newWidth = self::DEFAULT_RESIZE_WIDTH, int $newHeight = self::DEFAULT_RESIZE_HEIGHT): bool {

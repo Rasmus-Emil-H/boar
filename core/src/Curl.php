@@ -10,7 +10,6 @@
 |
 */
 
-
 namespace app\core\src;
 
 final class Curl {

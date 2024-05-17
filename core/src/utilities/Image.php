@@ -13,7 +13,7 @@ class Image {
     private const WIDTH = 'width'; 
     private const HEIGHT = 'width'; 
 
-    public function __construct($imagePath) {
+    public function __construct(string $imagePath) {
         $this->imagePath = $imagePath;
     }
 

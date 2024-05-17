@@ -76,6 +76,10 @@ trait EntityQueryTrait {
         return $this->query()->select()->where([$field => $value])->run();
     }
 
+    public function findByMultiple(array $conditions): array {
+        return $this->query()->select()->where($conditions)->run();
+    }
+
     public function addMetaData(array $data): self {
         if (empty($data)) throw new \InvalidArgumentException(self::INVALID_ENTITY_DATA);
         (new EntityMetaData())

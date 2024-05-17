@@ -65,4 +65,15 @@ trait ControllerMethodTrait {
         $this->response->{$this->determineClientResponseMethod(dispatchedHTTPMethodResult: $response)}($response ?? '');
     }
 
+    public function view() {
+        $this->denyPOSTRequest();
+
+        $cEntity = $this->returnValidEntityIfExists();
+
+        $request = $this->requestBody->body;
+        $response = $cEntity->dispatchHTTPMethod($request->action, $request);
+
+        $this->response->{$this->determineClientResponseMethod(dispatchedHTTPMethodResult: $response)}($response ?? '');
+    }
+
 }

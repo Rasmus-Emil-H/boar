@@ -54,4 +54,15 @@ trait ControllerMethodTrait {
         return is_string($dispatchedHTTPMethodResult) ? (is_int(strpos($dispatchedHTTPMethodResult ?? '', 'Errors')) ? 'dataConflict' : 'ok') : 'ok';
     }
 
+    public function edit() {
+        $this->denyGETRequest();
+
+        $cEntity = $this->returnValidEntityIfExists();
+
+        $request = $this->requestBody->body;
+        $response = $cEntity->dispatchHTTPMethod($request->action, $request);
+
+        $this->response->{$this->determineClientResponseMethod(dispatchedHTTPMethodResult: $response)}($response ?? '');
+    }
+
 }

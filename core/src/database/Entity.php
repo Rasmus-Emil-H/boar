@@ -171,7 +171,7 @@ abstract class Entity {
     }
 
     public function requireExistence() {
-        if (!$this->exists()) app()->getRequest()->notFound();
+        if (!$this->exists()) app()->getResponse()->notFound();
     }
 
 }

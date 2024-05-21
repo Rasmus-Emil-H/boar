@@ -1,10 +1,14 @@
 <?php
 
 /**
- * Bootstrap Controller 
- * AUTHOR: RE_WEB
- * @package app\core\src
- */
+|----------------------------------------------------------------------------
+| Default controller
+|----------------------------------------------------------------------------
+| 
+| @author RE_WEB
+| @package \app\core\src
+|
+*/
 
 namespace app\core\src;
 

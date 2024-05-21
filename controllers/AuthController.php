@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use \app\core\src\Controller;
+use \app\core\src\database\table\Table;
 use \app\core\src\miscellaneous\CoreFunctions;
 use \app\models\UserModel;
 use \app\models\AuthenticationModel;
@@ -49,7 +50,7 @@ class AuthController extends Controller {
         if ($newPassword !== $this->requestBody->body->passwordRepeat) $this->response->setResponse(409, ['Passwords do not match']);
 
         $userToResetPasswordOn = (new UserModel())->checkPasswordResetToken($resetToken);
-        $userID = CoreFunctions::first($userToResetPasswordOn)->get('EntityID');
+        $userID = CoreFunctions::first($userToResetPasswordOn)->get(Table::ENTITY_TYPE_COLUMN);
         $user = new UserModel($userID);
         $user->resetPassword($newPassword, $resetToken);
     }

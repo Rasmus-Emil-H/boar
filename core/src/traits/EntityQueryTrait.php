@@ -84,8 +84,8 @@ trait EntityQueryTrait {
         if (empty($data)) throw new \InvalidArgumentException(self::INVALID_ENTITY_DATA);
         (new EntityMetaData())
             ->set([
-                'EntityType' => $this->getTableName(), 
-                'EntityID' => $this->key() ?? 0,
+                Table::ENTITY_TYPE_COLUMN => $this->getTableName(), 
+                Table::ENTITY_ID_COLUMN => $this->key() ?? 0,
                 'Data' => json_encode($data), 
                 'IP' => app()->getRequest()->getIP()
             ])

@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use \app\core\src\Controller;
+use \app\core\src\database\table\Table;
 use \app\core\src\factories\EntityFactory;
 use \app\core\src\File;
 use \app\core\src\gate\Gate;
@@ -44,7 +45,7 @@ class FileController extends Controller {
 
                 $cFile
                     ->save()
-                    ->createPivot(['EntityType' => $cEntity->getTableName(), 'EntityID' => $cEntity->key(), 'FileID' => $cFile->key()]);
+                    ->createPivot([Table::ENTITY_TYPE_COLUMN => $cEntity->getTableName(), Table::ENTITY_ID_COLUMN => $cEntity->key(), $cFile->getKeyField() => $cFile->key()]);
 
                 $path = file_get_contents($cFile->get('Path'));
                 $b64 = 'data:image/jpeg;base64,' . base64_encode($path);
@@ -61,7 +62,6 @@ class FileController extends Controller {
 	}
 
     public function delete() {
-
         $this->denyGETRequest();
 
         $cFile = new FileModel($this->requestBody->body->EntityID);

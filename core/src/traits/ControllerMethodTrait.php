@@ -4,6 +4,7 @@ namespace app\core\src\traits;
 
 use \app\models\FileModel;
 use \app\core\src\database\Entity;
+use \app\core\src\database\table\Table;
 use \app\core\src\File;
 
 trait ControllerMethodTrait {
@@ -27,7 +28,7 @@ trait ControllerMethodTrait {
 
             $cFile->save();
             $cFile->createPivot([
-				'EntityType' => $entity->getTableName(), 'EntityID' => $entity->key(), 'FileID' => $cFile->key()
+				Table::ENTITY_TYPE_COLUMN => $entity->getTableName(), Table::ENTITY_ID_COLUMN => $entity->key(), $cFile->getKeyField() => $cFile->key()
 			]);
 
             $files[] = $cFile->key();

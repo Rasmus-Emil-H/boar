@@ -45,7 +45,7 @@ final class Application {
         self::$app = $this;
         self::$ROOT_DIR = dirname(__DIR__);
 
-        $this->config        = new src\config\Config();
+        $this->config       = new src\config\Config();
         $this->session      = new src\Session();
         $this->request      = new src\Request($this);
         

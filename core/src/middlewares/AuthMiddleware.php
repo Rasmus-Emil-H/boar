@@ -8,8 +8,6 @@
 
 namespace app\core\src\middlewares;
 
-use \app\core\src\exceptions\ForbiddenException;
-
 class AuthMiddleware extends Middleware {
 
     public array $actions = [];

@@ -40,5 +40,9 @@ final class I18n {
             ->set(['Translation' => $missingTranslation, 'TranslationHumanReadable' => $missingTranslation, 'LanguageID' => $this->languageID, 'TranslationHash' => Hash::create()])
             ->save();
     }
+
+    public function getCurrentLanguageObject() {
+        return new LanguageModel($this->languageID);
+    }
     
 }

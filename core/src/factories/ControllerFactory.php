@@ -2,9 +2,8 @@
 
 namespace app\core\src\factories;
 
-use app\controllers\AssetsController;
+use \app\controllers\AssetsController;
 use \app\core\src\Controller;
-use \app\core\src\miscellaneous\CoreFunctions;
 
 class ControllerFactory extends AbstractFactory {
 

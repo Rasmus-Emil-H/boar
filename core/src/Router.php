@@ -87,7 +87,7 @@ final class Router {
     }
 
     private function getApplicationParentController(): Controller {
-        return CoreFunctions::app()->getParentController();
+        return app()->getParentController();
     }
 
     public function resolve(): void {

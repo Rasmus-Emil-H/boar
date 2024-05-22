@@ -107,9 +107,9 @@ trait EntityRelationsTrait {
      * Find entites on pivot table where parent primary key is a match
      */
 
-    public function manyToMany(string $relatedEntity): array {
+    public function manyToMany(string $relatedEntity) {
         $queryBuilder = new QueryBuilder($relatedEntity, $this->getPivot(), '');
-        return $queryBuilder->select()->where([$this->getKeyField() => $this->key()])->run();
+        return $queryBuilder->select()->where([$this->getKeyField() => $this->key()]);
     }
 
     /**
@@ -137,6 +137,11 @@ trait EntityRelationsTrait {
     public function hasManyPolymorphic(string $class) {
         $polyMorphicEntity = $this->getInstanceOf($class);
         return $polyMorphicEntity->search([Table::ENTITY_TYPE_COLUMN => $this->getTableName(), Table::ENTITY_ID_COLUMN => $this->key()]);
+    }
+
+    public function directTableObjectRelation(string $related, int $key) {
+        $instance = $this->getInstanceOf($related);
+        return new $instance($key);
     }
 
     /**

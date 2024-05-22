@@ -14,4 +14,8 @@ final class TranslationModel extends Entity {
 		return 'TranslationID';
 	}
 
+	public function language() {
+		return $this->directTableObjectRelation(LanguageModel::class, $this->get('LanguageID'));
+	}
+
 }

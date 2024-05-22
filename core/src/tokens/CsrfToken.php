@@ -9,8 +9,6 @@
 
 namespace app\core\src\tokens;
 
-use \app\core\src\miscellaneous\CoreFunctions;
-
 class CsrfToken {
 
     private string $formTokenLabel = 'eg-csrf-token-label';

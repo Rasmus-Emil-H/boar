@@ -46,7 +46,7 @@ final class Router {
     }
 
     private function isResource(string $handler): bool {
-        return str_contains(strtolower($handler), strtolower('resource'));
+        return str_contains(strtolower($handler), strtolower('resource')) || str_contains(strtolower($handler), strtolower('css'));
     }
 
     protected function runMiddlewares(): void {

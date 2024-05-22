@@ -139,6 +139,10 @@ trait EntityRelationsTrait {
         return $polyMorphicEntity->search([Table::ENTITY_TYPE_COLUMN => $this->getTableName(), Table::ENTITY_ID_COLUMN => $this->key()]);
     }
 
+    /**
+     * Find parent entity where parent entity key is directly on child table
+     */
+
     public function directTableObjectRelation(string $related, int $key) {
         $instance = $this->getInstanceOf($related);
         return new $instance($key);

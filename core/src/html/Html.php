@@ -16,6 +16,12 @@ namespace app\core\src\html;
 
 class Html {
 
-    
+    public static function datePicker($value, $name, $placeholder): string {
+        ob_start(); ?>
+            <div data-mdb-start-day="1" class="form-outline" data-mdb-datepicker-init data-mdb-input-init data-mdb-inline="true" data-mdb-format="dd-mm-yyyy" >
+                <input value="<?= hs($value ?? ''); ?>" name="<?= hs($name); ?>" type="text" class="form-control" id="datetimepickerExample" placeholder="<?= hs($placeholder); ?>" />
+            </div>
+        <?php return ob_get_clean();
+    }    
 
 }

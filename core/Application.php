@@ -52,7 +52,7 @@ final class Application {
         $this->setConnection();
 
         $this->response     = new src\Response();
-        $this->router       = new src\Router($this->getRequest());
+        $this->router       = new src\Router($this->request);
         $this->view         = new src\View();
         $this->logger       = new src\utilities\Logger();
 
@@ -81,7 +81,6 @@ final class Application {
     }
 
     private function validateUserSession() {
-        if (str_contains($this->request->getPath(), 'admin')) return;
         $validSession = (new UserModel())->hasActiveSession();
         if (!in_array($this->request->getPath(), $this->router::$anonymousRoutes) && !$validSession) 
             $this->response->redirect(CoreFunctions::first($this->router::$anonymousRoutes)->scalar);
@@ -89,7 +88,7 @@ final class Application {
 
     public function classCheck(string $class): void {
         if (class_exists($class)) return;
-        $this->addSystemEvent(['Invalid class was called: ' . $class . json_encode(debug_backtrace())]);
+        $this->logger->log('Invalid class was called: ' . $class . json_encode(debug_backtrace()));
         if (!self::isDevSite()) $this->getResponse()->notFound();
         CoreFunctions::dd('Invalid class: ' . $class);
     }

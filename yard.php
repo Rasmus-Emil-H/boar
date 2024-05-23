@@ -30,6 +30,7 @@ error_reporting(E_ALL);
 define('CRONJOB_CLI_CHECK', 'CronjobScheduler');
 define('DATABASE_MIGRATION_CLI_CHECK', 'DatabaseMigration');
 define('CLI_TOOL_NOT_FOUND_MESSAGE', 'CLI TOOL NOT FOUND' . PHP_EOL);
+define('DRIVER_AUTHORIZED_INDEX_PATH', '/trip');
 define('IS_CLI', isset($argv));
 
 /**
@@ -73,5 +74,5 @@ function debug($data) {
 }
 
 function renderComponent($method, $arguments) {
-    return \app\core\src\html\Html::$method($arguments);
+    return \app\core\src\html\Html::$method(...$arguments);
 }

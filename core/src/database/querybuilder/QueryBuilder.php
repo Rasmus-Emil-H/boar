@@ -18,12 +18,17 @@ use \app\core\src\miscellaneous\CoreFunctions;
 class QueryBuilder extends QueryBuilderBase {
 
     public function select(array $fields = ['*']): self {
-        $this->upsertQuery('SELECT ' . implode(', ', $fields) . '  FROM ' . $this->table);
+        $this->upsertQuery($this::SELECT . implode(', ', $fields) . $this::FROM . $this->table);
+        return $this;
+    }
+
+    public function selectFrom(array $fields, string $from = ''): self {
+        $this->upsertQuery($this::SELECT . implode(', ', $fields) . $this::FROM . $from);
         return $this;
     }
 
     public function selectFromSubQuery(string $fields = '*') {
-        $this->upsertQuery('SELECT ' . $fields . ' FROM ');
+        $this->upsertQuery($this::SELECT . $fields . $this::FROM);
         return $this; 
     }
 
@@ -143,9 +148,7 @@ class QueryBuilder extends QueryBuilderBase {
     }
     
     public function partitionBy(string $sqlMethod, string $partitonBy, string $additionalLogic = ''): self {
-        $this->upsertQuery($sqlMethod . ' OVER (PARTITION BY :partitionBy ' . ($additionalLogic ?: '') . ')');
-        $this->updateQueryArguments('partitionBy', $partitonBy);
-        if ($additionalLogic) $this->updateQueryArguments('additionalLogic', $additionalLogic);
+        $this->upsertQuery($sqlMethod . ' OVER (PARTITION BY ' . $partitonBy . ' ' . ($additionalLogic ?: '') . ') ');
         return $this;
     }
 
@@ -185,6 +188,16 @@ class QueryBuilder extends QueryBuilderBase {
         return $this;
     }
 
+    public function forceWhere(array $arguments = []): self {
+        foreach ($arguments as $selector => $sqlValue) {
+            list($comparison, $sqlValue) = Parser::sqlComparsion(($sqlValue ?? ''), $this->getComparisonOperators());
+            $key = preg_replace('/[^a-zA-Z0-9]/', '', $selector);
+            $this->updateQueryArguments($key, $sqlValue);
+            $this->upsertQuery($this::WHERE . " {$selector} {$comparison} :{$key}");
+        }
+        return $this;
+    }
+
     public function between(string $from, string $to, int $interval, $dateFormat = '%Y-%m-%d'): self {
         $this->upsertQuery(" AND STR_TO_DATE(:dateFormat) BETWEEN DATE(:from) - INTERVAL :interval DAY AND DATE(:from) + INTERVAL :interval DAY ");
 
@@ -198,6 +211,11 @@ class QueryBuilder extends QueryBuilderBase {
 
     public function groupBy(string $group): self {
         $this->upsertQuery($this::GROUP_BY . $group);
+        return $this;
+    }
+
+    public function from(string $from): self {
+        $this->upsertQuery($this::FROM . $from);
         return $this;
     }
 
@@ -265,7 +283,7 @@ class QueryBuilder extends QueryBuilderBase {
     }
 
     public function distinct(): self {
-        $this->upsertQuery('SELECT DISTINCT ' . $this->fields . ' FROM ' . $this->table);
+        $this->upsertQuery('SELECT DISTINCT ' . $this->fields . $this::FROM . $this->table);
         return $this;
     }
 

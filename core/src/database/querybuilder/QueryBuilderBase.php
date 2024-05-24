@@ -26,6 +26,8 @@ abstract class QueryBuilderBase implements Builder {
     public const WITH = ' WITH ';
     public const AS = ' AS ';
     public const DELETE_FROM = ' DELETE FROM ';
+    public const FROM = ' FROM ';
+    public const SELECT = ' SELECT ';
 
     protected const SQL_DESCRIBE = ' DESCRIBE ';
     protected const GROUP_BY     = ' GROUP BY ';
@@ -44,6 +46,8 @@ abstract class QueryBuilderBase implements Builder {
     protected string $fields = '';
     protected string $placeholders = '';
 
+    protected string $lastQueryPart = '';
+
     protected array $args = [];
 
     protected array $comparisonOperators = ['=', '<>', '!=', '>', '<', '>=', '<='];
@@ -58,6 +62,15 @@ abstract class QueryBuilderBase implements Builder {
 
     public function upsertQuery(string $query): void {
         $this->query .= $query;
+        $this->insertLastQueryPart($query);
+    }
+
+    private function insertLastQueryPart(string $query) {
+        $this->lastQueryPart = $query;
+    }
+
+    public function getLastQueryPart() {
+        return $this->lastQueryPart;
     }
 
     public function updateQueryArguments($key, $value): void {

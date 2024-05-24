@@ -23,6 +23,10 @@ abstract class QueryBuilderBase implements Builder {
     public const SUBQUERY_OPEN  = ' ( ';
     public const SUBQUERY_CLOSE = ' ) ';
 
+    public const WITH = ' WITH ';
+    public const AS = ' AS ';
+    public const DELETE_FROM = ' DELETE FROM ';
+
     protected const SQL_DESCRIBE = ' DESCRIBE ';
     protected const GROUP_BY     = ' GROUP BY ';
     protected const ORDER_BY     = ' ORDER BY ';

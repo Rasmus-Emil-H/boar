@@ -133,7 +133,19 @@ class QueryBuilder extends QueryBuilderBase {
     }
 
     public function delete(): self {
-        $this->upsertQuery(' DELETE FROM ' . $this->table);
+        $this->upsertQuery($this::DELETE_FROM . $this->table);
+        return $this;
+    }
+
+    public function with(string $temp): self {
+        $this->upsertQuery($this::WITH . $temp . ' AS ');
+        return $this;
+    }
+    
+    public function partitionBy(string $sqlMethod, string $partitonBy, string $additionalLogic = ''): self {
+        $this->upsertQuery($sqlMethod . ' OVER (PARTITION BY :partitionBy ' . ($additionalLogic ?: '') . ')');
+        $this->updateQueryArguments('partitionBy', $partitonBy);
+        if ($additionalLogic) $this->updateQueryArguments('additionalLogic', $additionalLogic);
         return $this;
     }
 
@@ -258,7 +270,7 @@ class QueryBuilder extends QueryBuilderBase {
     }
 
     public function as(string $as): self {
-        $this->upsertQuery('as ' . $as . ' ');
+        $this->upsertQuery($this::AS . $as);
         return $this;
     }
 

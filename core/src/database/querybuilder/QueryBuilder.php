@@ -143,7 +143,7 @@ class QueryBuilder extends QueryBuilderBase {
     }
 
     public function with(string $temp): self {
-        $this->upsertQuery($this::WITH . $temp . ' AS ');
+        $this->upsertQuery($this::WITH . $temp . $this::AS);
         return $this;
     }
     
@@ -236,12 +236,12 @@ class QueryBuilder extends QueryBuilderBase {
     }
 
     public function isNull(string $field): self {
-        $this->upsertQuery($this->checkStart() . " {$field} IS NULL ");
+        $this->upsertQuery($this->checkStart() . $field . $this::IS_NULL);
         return $this;
     }
     
     public function isNotNull(string $field): self {
-        $this->upsertQuery($this->checkStart() . " {$field} IS NOT NULL ");
+        $this->upsertQuery($this->checkStart() . $field . $this::IS_NOT_NULL);
         return $this;
     }
 

@@ -28,6 +28,8 @@ abstract class QueryBuilderBase implements Builder {
     public const DELETE_FROM = ' DELETE FROM ';
     public const FROM = ' FROM ';
     public const SELECT = ' SELECT ';
+    public const IS_NULL = ' IS NULL ';
+    public const IS_NOT_NULL = ' IS NOT NULL ';
 
     protected const SQL_DESCRIBE = ' DESCRIBE ';
     protected const GROUP_BY     = ' GROUP BY ';

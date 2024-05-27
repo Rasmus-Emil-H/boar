@@ -22,7 +22,7 @@ class QueryBuilder extends QueryBuilderBase {
         return $this;
     }
 
-    public function selectFieldFrom(array $fields, string $from = ''): self {
+    public function selectFieldsFrom(array $fields, string $from = ''): self {
         $this->upsertQuery($this::SELECT . implode(', ', $fields) . $this::FROM . $from);
         return $this;
     }

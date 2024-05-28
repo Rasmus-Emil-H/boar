@@ -49,7 +49,7 @@ export default {
             const submitButton = form.find('button[type="submit"]').last();
             const _text = submitButton.html();
             submitButton.attr('disabled', true);
-            submitButton.html(autologik.components.loader());
+            submitButton.html(boar.components.loader());
 
             $.ajax({
                 type: form.attr('method'),
@@ -63,7 +63,7 @@ export default {
                     resolve(response);
                 },
                 error: function(xhr, status, error) {
-                    autologik.components.toast(xhr.responseJSON, autologik.constants.mdbootstrap.ERROR_CLASS);
+                    boar.components.toast(xhr.responseJSON, boar.constants.mdbootstrap.ERROR_CLASS);
                     reject(xhr);
                 }
             }).always(function(res) {
@@ -76,10 +76,11 @@ export default {
     checkSubmittedFormResponse: function(response) {
         if (response.responseJSON) {
             if (typeof response.responseJSON === 'object') 
-                autologik.components.toast(response.responseJSON.message ?? 'Success', autologik.constants.mdbootstrap.SUCCESS_CLASS); 
+                boar.components.toast(response.responseJSON.message ?? 'Success', boar.constants.mdbootstrap.SUCCESS_CLASS); 
             else 
-                autologik.components.toast(response.responseJSON, autologik.constants.mdbootstrap.SUCCESS_CLASS);
+                boar.components.toast(response.responseJSON, boar.constants.mdbootstrap.SUCCESS_CLASS);
         }
+        
         if (response.redirect) window.location.replace(response.redirect);
     },
     referenceGETForm(form) {

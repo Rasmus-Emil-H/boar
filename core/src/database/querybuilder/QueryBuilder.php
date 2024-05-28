@@ -176,7 +176,7 @@ class QueryBuilder extends QueryBuilderBase {
                 if (str_contains($order, '.')) $table = CoreFunctions::first(explode('.', $order))->scalar;
                 $selector = preg_replace('/[^a-zA-Z0-9]/', '', $selector);
                 $sqlValue = date($this::DEFAULT_SQL_DATE_FORMAT, strtotime($sqlValue));
-                $arrow = $order === 'from' ? '>' : '<';
+                $arrow = CoreFunctions::last(explode('.', $order))->scalar === 'from' ? '>' : '<';
                 $this->upsertQuery($this->checkStart() . (isset($table) && $table ? $table . '.' : '') . "{$field} " . $arrow . "= :{$selector}");
                 $this->updateQueryArguments($selector, $sqlValue);
             } else {

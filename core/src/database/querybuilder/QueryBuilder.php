@@ -173,10 +173,11 @@ class QueryBuilder extends QueryBuilderBase {
             $dateField = str_contains($selector, $this::DEFAULT_FRONTEND_DATE_FROM_INDICATOR) || str_contains($selector, $this::DEFAULT_FRONTEND_DATE_TO_INDICATOR);
             if ($dateField) {
                 list($order, $field) = explode('-', $selector);
+                if (str_contains($order, '.')) $table = CoreFunctions::first(explode('.', $order))->scalar;
                 $selector = preg_replace('/[^a-zA-Z0-9]/', '', $selector);
                 $sqlValue = date($this::DEFAULT_SQL_DATE_FORMAT, strtotime($sqlValue));
                 $arrow = $order === 'from' ? '>' : '<';
-                $this->upsertQuery($this->checkStart() . "{$field} " . $arrow . "= :{$selector}");
+                $this->upsertQuery($this->checkStart() . (isset($table) && $table ? $table . '.' : '') . "{$field} " . $arrow . "= :{$selector}");
                 $this->updateQueryArguments($selector, $sqlValue);
             } else {
                 list($comparison, $sqlValue) = Parser::sqlComparsion(($sqlValue ?? ''), $this->getComparisonOperators());

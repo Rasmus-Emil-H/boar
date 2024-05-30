@@ -12,12 +12,13 @@
 
 namespace app\core\src\database\table;
 
-use app\core\src\miscellaneous\CoreFunctions;
+use \app\core\src\miscellaneous\CoreFunctions;
 
 class Table {
 
     protected string $name;
     protected array $columns = [];
+    protected string $columnName;
 
     public const COMPLETED_COLUMN   = 'Completed';
     public const DELETED_AT_COLUMN  = 'DeletedAt';
@@ -37,7 +38,7 @@ class Table {
     private const PRIMARY_KEY           = 'PRIMARY_KEY';
     private const TIMESTAMP             = 'TIMESTAMP DEFAULT CURRENT_TIMESTAMP';
 
-    public const MAX_COLUMN_LENGTH      = 255;
+    public const  MAX_COLUMN_LENGTH      = 255;
     private const DEFAULT_UUID_LENGTH   = 128;
     private const DEFAULT_VARCHAR_LIMIT = 75;
     private const DEFAULT_INTEGER_LIMIT = 10;
@@ -48,6 +49,7 @@ class Table {
 
     public function createColumn(string $columnName, string $type, array $options = []) {
         $this->columns[] = new Column($columnName, $type, $options);
+        $this->setColumnName($columnName);
     }
 
     public function increments(string $columnName): self {
@@ -101,6 +103,20 @@ class Table {
         return $this;
     }
 
+    private function getFormattedColumnIndexName() {
+        return strtolower($this->getColumnName().'_idx');
+    }
+
+    public function addIndex(): self {
+        $this->createColumn($this->getFormattedColumnIndexName(), 'ADD_INDEX');
+        return $this;
+    }
+
+    public function dropIndex(string $index): self {
+        $this->createColumn($index, 'DROP_INDEX'); 
+        return $this;
+    }
+
     public function add() {
         CoreFunctions::last($this->getColumns())->setType('ADD_COLUMN');
     }
@@ -114,6 +130,14 @@ class Table {
         
         foreach ( $columns as $column )
             new Column($column, 'drop');
+    }
+
+    public function getColumnName() {
+        return $this->columnName;
+    }
+
+    public function setColumnName(string $columnName) {
+        $this->columnName = $columnName;
     }
 
     public function getColumns(): array {

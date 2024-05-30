@@ -40,7 +40,7 @@ final class UserModel extends Entity {
 		$checkForDirect = $app->getSession()->get('redirect');
 		$app->getSession()->unset('redirect');
 		$app->addSystemEvent([$this->get('Name') . ' logged in']);
-		$app->getResponse()->setResponse(200, ['redirect' => $checkForDirect ? $checkForDirect : '/trip']);
+		$app->getResponse()->setResponse(200, ['redirect' => $checkForDirect ? $checkForDirect : '/home']);
 	}
 
 	public function logout() {

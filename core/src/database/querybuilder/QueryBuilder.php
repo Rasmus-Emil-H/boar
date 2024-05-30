@@ -142,6 +142,11 @@ class QueryBuilder extends QueryBuilderBase {
         return $this;
     }
 
+    public function truncate(): self {
+        $this->upsertQuery($this::TRUNCATE . $this->table);
+        return $this;
+    }
+
     public function with(string $temp): self {
         $this->upsertQuery($this::WITH . $temp . $this::AS);
         return $this;

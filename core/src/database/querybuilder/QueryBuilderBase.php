@@ -26,6 +26,7 @@ abstract class QueryBuilderBase implements Builder {
     public const WITH = ' WITH ';
     public const AS = ' AS ';
     public const DELETE_FROM = ' DELETE FROM ';
+    public const TRUNCATE = ' TRUNCATE TABLE ';
     public const FROM = ' FROM ';
     public const SELECT = ' SELECT ';
     public const IS_NULL = ' IS NULL ';

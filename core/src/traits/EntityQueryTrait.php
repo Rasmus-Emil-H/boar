@@ -60,7 +60,7 @@ trait EntityQueryTrait {
     }
 
      public function truncate() {
-        return $this->getQueryBuilder()->delete()->run();
+        return $this->getQueryBuilder()->truncate()->run();
     }
 
      public function trashed() {

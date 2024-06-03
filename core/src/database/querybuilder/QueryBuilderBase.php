@@ -80,7 +80,7 @@ abstract class QueryBuilderBase implements Builder {
 
     /**
      * LIFO observer for most recent query part
-     * @return string
+     * @return ?string
      */
 
     public function getLastQueryPart(): ?string {

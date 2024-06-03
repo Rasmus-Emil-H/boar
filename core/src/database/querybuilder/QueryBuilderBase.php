@@ -82,16 +82,20 @@ abstract class QueryBuilderBase implements Builder {
         return $this->lastQueryPart;
     }
 
+    private function checkQueryKey(string $key) {
+        if (isset($this->args[$key])) debug('Your key: ' . $key . ' is already set in the current query');
+    }
+
     public function updateQueryArguments(array $arguments): void {
         foreach ($arguments as $key => $value) {
-            if (isset($this->args[$key])) debug('Your key: ' . $key . ' is already set in the current query');
+            $this->checkQueryKey($key);
 
             $this->args[$key] = $value;
         }
     }
 
-    public function updateQueryArgument($key, $value): void {
-        if (isset($this->args[$key])) debug('Your key: ' . $key . ' is already set in the current query');
+    public function updateQueryArgument(string $key, string $value): void {
+        $this->checkQueryKey($key);
 
         $this->args[$key] = $value;
     }

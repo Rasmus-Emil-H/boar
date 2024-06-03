@@ -77,13 +77,13 @@ class QueryBuilder extends QueryBuilderBase {
     
     public function leftJoin(string $table, string $on, array $and = []): self {
         $implodedAnd = (count($and) > 0 ? $this::AND : '') . implode($this::AND, $and);
-        $this->upsertQuery(" LEFT JOIN {$table} {$on} {$implodedAnd} ");
+        $this->upsertQuery(self::LEFT_JOIN . "{$table} {$on} {$implodedAnd} ");
         return $this;
     }
 
     public function rightJoin(string $table, string $on, array $and = []): self {
         $implodedAnd = (count($and) > 0 ? $this::AND : '') . implode($this::AND, $and);
-        $this->upsertQuery(" RIGHT JOIN {$table} {$on} {$implodedAnd} ");
+        $this->upsertQuery(self::RIGHT_JOIN . "{$table} {$on} {$implodedAnd} ");
         return $this;
     }
 

@@ -16,10 +16,12 @@ use \app\core\src\utilities\Builder;
 
 abstract class QueryBuilderBase implements Builder {
 
-    public const WHERE       = ' WHERE ';
-    public const AND         = ' AND ';
-    public const BIND        = ' = :';
-    public const INNER_JOIN   = ' INNER JOIN ';
+    public const WHERE          = ' WHERE ';
+    public const AND            = ' AND ';
+    public const BIND           = ' = :';
+    public const INNER_JOIN     = ' INNER JOIN ';
+    public const LEFT_JOIN      = ' LEFT JOIN ';
+    public const RIGHT_JOIN     = ' RIGHT JOIN ';
     public const SUBQUERY_OPEN  = ' ( ';
     public const SUBQUERY_CLOSE = ' ) ';
 

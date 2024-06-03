@@ -78,8 +78,13 @@ abstract class QueryBuilderBase implements Builder {
         $this->lastQueryPart = $query;
     }
 
-    public function getLastQueryPart() {
-        return $this->lastQueryPart;
+    /**
+     * LIFO observer for most recent query part
+     * @return string
+     */
+
+    public function getLastQueryPart(): ?string {
+        return $this->lastQueryPart ?? null;
     }
 
     private function checkQueryKey(string $key) {

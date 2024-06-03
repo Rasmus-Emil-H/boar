@@ -18,6 +18,9 @@ abstract class QueryBuilderBase implements Builder {
 
     public const WHERE          = ' WHERE ';
     public const AND            = ' AND ';
+    public const OR             = ' OR ';
+    public const LIMIT          = ' LIMIT ';
+    public const OFFSET         = ' OFFSET ';
     public const BIND           = ' = :';
     public const INNER_JOIN     = ' INNER JOIN ';
     public const LEFT_JOIN      = ' LEFT JOIN ';
@@ -56,6 +59,7 @@ abstract class QueryBuilderBase implements Builder {
     protected array $args = [];
 
     protected array $comparisonOperators = ['=', '<>', '!=', '>', '<', '>=', '<='];
+    public const DEFAULT_REGEX_REPLACE_PATTERN = '/[^a-zA-Z0-9]/';
     
     public function __construct(
         public string $class, 
@@ -78,7 +82,17 @@ abstract class QueryBuilderBase implements Builder {
         return $this->lastQueryPart;
     }
 
-    public function updateQueryArguments($key, $value): void {
+    public function updateQueryArguments(array $arguments): void {
+        foreach ($arguments as $key => $value) {
+            if (isset($this->args[$key])) debug('Your key: ' . $key . ' is already set in the current query');
+
+            $this->args[$key] = $value;
+        }
+    }
+
+    public function updateQueryArgument($key, $value): void {
+        if (isset($this->args[$key])) debug('Your key: ' . $key . ' is already set in the current query');
+
         $this->args[$key] = $value;
     }
 

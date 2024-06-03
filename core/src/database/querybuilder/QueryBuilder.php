@@ -48,13 +48,13 @@ class QueryBuilder extends QueryBuilderBase {
     public function valueToPlaceholder(array $fields): self {
         foreach ($fields as $fieldKey => $fieldValue) {
             $this->upsertQuery(':' . ( array_key_last($fields) === $fieldKey ? $fieldKey : $fieldKey . ',' ));
-            $this->updateQueryArguments($fieldKey, $fieldValue);
+            $this->updateQueryArgument($fieldKey, $fieldValue);
         }
         return $this;
     }
 
     public function setArgumentPair(string $key, mixed $value): self {
-        $this->updateQueryArguments($key, $value);
+        $this->updateQueryArgument($key, $value);
         return $this;
     }
 
@@ -77,19 +77,19 @@ class QueryBuilder extends QueryBuilderBase {
     
     public function leftJoin(string $table, string $on, array $and = []): self {
         $implodedAnd = (count($and) > 0 ? $this::AND : '') . implode($this::AND, $and);
-        $this->upsertQuery(self::LEFT_JOIN . "{$table} {$on} {$implodedAnd} ");
+        $this->upsertQuery($this::LEFT_JOIN . "{$table} {$on} {$implodedAnd} ");
         return $this;
     }
 
     public function rightJoin(string $table, string $on, array $and = []): self {
         $implodedAnd = (count($and) > 0 ? $this::AND : '') . implode($this::AND, $and);
-        $this->upsertQuery(self::RIGHT_JOIN . "{$table} {$on} {$implodedAnd} ");
+        $this->upsertQuery($this::RIGHT_JOIN . "{$table} {$on} {$implodedAnd} ");
         return $this;
     }
 
     public function in(string $field, array $ins): self {
          $queryINString = array_map(function($fieldKey, $fieldValue) {
-            $this->updateQueryArguments("inCounter$fieldKey", $fieldValue);
+            $this->updateQueryArgument("inCounter$fieldKey", $fieldValue);
             return " :inCounter$fieldKey ";
         }, array_keys($ins), array_values($ins));
 
@@ -121,13 +121,13 @@ class QueryBuilder extends QueryBuilderBase {
         $this->upsertQuery("UPDATE {$this->table} SET ");
 
         foreach ($fields as $fieldKey => $fieldValue) {
-            $this->updateQueryArguments($fieldKey, $fieldValue);
+            $this->updateQueryArgument($fieldKey, $fieldValue);
             $this->upsertQuery(" $fieldKey = :$fieldKey " . (array_key_last($fields) === $fieldKey ? '' : ','));
         }
 
         if ($primaryKeyField && $primaryKey) {
-            $this->upsertQuery(" WHERE $primaryKeyField = :primaryKey ");
-            $this->updateQueryArguments('primaryKey', $primaryKey);
+            $this->upsertQuery($this::WHERE . " $primaryKeyField = :primaryKey ");
+            $this->updateQueryArgument('primaryKey', $primaryKey);
         }
 
         return $this;
@@ -158,19 +158,19 @@ class QueryBuilder extends QueryBuilderBase {
     }
 
     public function limit(int $limit = self::DEFAULT_LIMIT): self {
-        $this->upsertQuery(" LIMIT :limit ");
-        $this->updateQueryArguments('limit', $limit);
+        $this->upsertQuery($this::LIMIT . ' :limit ');
+        $this->updateQueryArgument('limit', $limit);
         return $this;
     }
 
     public function offset(int $offset = self::DEFAULT_OFFSET): self {
-        $this->upsertQuery(" OFFSET :offset ");
-        $this->updateQueryArguments('offset', $offset);
+        $this->upsertQuery($this::OFFSET . ' :offset ');
+        $this->updateQueryArgument('offset', $offset);
         return $this;
     }
 
     private function checkStart(): string {
-        return (strpos($this->query, $this::WHERE) === false ? $this::WHERE : $this::AND);
+        return (strpos($this->getQuery(), $this::WHERE) === false ? $this::WHERE : $this::AND);
     }
 
     public function where(array $arguments = []): self {
@@ -179,17 +179,30 @@ class QueryBuilder extends QueryBuilderBase {
             if ($dateField) {
                 list($order, $field) = explode('-', $selector);
                 if (str_contains($order, '.')) $table = CoreFunctions::first(explode('.', $order))->scalar;
-                $selector = preg_replace('/[^a-zA-Z0-9]/', '', $selector);
+
+                $selector = preg_replace($this::DEFAULT_REGEX_REPLACE_PATTERN, '', $selector);
                 $sqlValue = date($this::DEFAULT_SQL_DATE_FORMAT, strtotime($sqlValue));
                 $arrow = CoreFunctions::last(explode('.', $order))->scalar === 'from' ? '>' : '<';
+
                 $this->upsertQuery($this->checkStart() . (isset($table) && $table ? $table . '.' : '') . "{$field} " . $arrow . "= :{$selector}");
-                $this->updateQueryArguments($selector, $sqlValue);
+                $this->updateQueryArgument($selector, $sqlValue);
             } else {
                 list($comparison, $sqlValue) = Parser::sqlComparsion(($sqlValue ?? ''), $this->getComparisonOperators());
-                $key = preg_replace('/[^a-zA-Z0-9]/', '', $selector);
-                $this->updateQueryArguments($key, $sqlValue);
+                $key = preg_replace($this::DEFAULT_REGEX_REPLACE_PATTERN, '', $selector);
+
+                $this->updateQueryArgument($key, $sqlValue);
                 $this->upsertQuery($this->checkStart() . "{$selector} {$comparison} :{$key}");
             }
+        }
+        return $this;
+    }
+
+    public function or(array $arguments) {
+        foreach ($arguments as $selector => $sqlValue) {
+            list($comparison, $sqlValue) = Parser::sqlComparsion(($sqlValue ?? ''), $this->getComparisonOperators());
+            $key = trim($this::OR) . preg_replace($this::DEFAULT_REGEX_REPLACE_PATTERN, '', $selector);
+            $this->updateQueryArgument($key, $sqlValue);
+            $this->upsertQuery($this::OR . " {$selector} {$comparison} :{$key}");
         }
         return $this;
     }
@@ -197,8 +210,9 @@ class QueryBuilder extends QueryBuilderBase {
     public function forceWhere(array $arguments = []): self {
         foreach ($arguments as $selector => $sqlValue) {
             list($comparison, $sqlValue) = Parser::sqlComparsion(($sqlValue ?? ''), $this->getComparisonOperators());
-            $key = preg_replace('/[^a-zA-Z0-9]/', '', $selector);
-            $this->updateQueryArguments($key, $sqlValue);
+            $key = preg_replace($this::DEFAULT_REGEX_REPLACE_PATTERN, '', $selector);
+
+            $this->updateQueryArgument($key, $sqlValue);
             $this->upsertQuery($this::WHERE . " {$selector} {$comparison} :{$key}");
         }
         return $this;
@@ -207,10 +221,7 @@ class QueryBuilder extends QueryBuilderBase {
     public function between(string $from, string $to, int $interval, $dateFormat = '%Y-%m-%d'): self {
         $this->upsertQuery(" AND STR_TO_DATE(:dateFormat) BETWEEN DATE(:from) - INTERVAL :interval DAY AND DATE(:from) + INTERVAL :interval DAY ");
 
-        $this->updateQueryArguments('dateFormat', $dateFormat);
-        $this->updateQueryArguments('from', $from);
-        $this->updateQueryArguments('to', $to);
-        $this->updateQueryArguments('interval', $interval);
+        $this->updateQueryArguments(['dateFormat' => $dateFormat, 'from' => $from, 'to' => $to, 'interval' => $interval]);
         
         return $this;
     }
@@ -234,7 +245,7 @@ class QueryBuilder extends QueryBuilderBase {
     public function like(array $arguments): self {
         foreach ($arguments as $selector => $sqlValue) {
             list($comparison, $sqlValue) = Parser::sqlComparsion(($sqlValue ?? ''), $this->getComparisonOperators());
-            $this->updateQueryArguments($selector, $sqlValue);
+            $this->updateQueryArgument($selector, $sqlValue);
             $sql = $this->checkStart() . "{$selector} LIKE CONCAT('%', :{$selector}, '%') ";
             $this->upsertQuery($sql);
         }
@@ -301,7 +312,7 @@ class QueryBuilder extends QueryBuilderBase {
     public function having(array $conditions): self {
         foreach ($conditions as $field => $value) {
             $this->upsertQuery("HAVING {$field} = :{$field}");
-            $this->updateQueryArguments($field, $value);
+            $this->updateQueryArgument($field, $value);
         }
         return $this;
     }

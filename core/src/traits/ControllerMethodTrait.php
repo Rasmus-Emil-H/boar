@@ -52,7 +52,11 @@ trait ControllerMethodTrait {
     }
 
     public function determineClientResponseMethod(mixed $dispatchedHTTPMethodResult): string {
-        return is_string($dispatchedHTTPMethodResult) ? (is_int(strpos($dispatchedHTTPMethodResult ?? '', 'Errors')) ? 'dataConflict' : 'ok') : 'ok';
+        if (is_array($dispatchedHTTPMethodResult)) $dispatchedHTTPMethodResult = $dispatchedHTTPMethodResult['message'] ?? '';
+
+        $backendMessageContainsErrorInString = is_int(strpos($dispatchedHTTPMethodResult ?? '', 'Errors')) || is_int(strpos($dispatchedHTTPMethodResult ?? '', 'Error'));
+
+        return is_string($dispatchedHTTPMethodResult) ? ($backendMessageContainsErrorInString ? 'dataConflict' : 'ok') : 'ok';
     }
 
     public function edit() {

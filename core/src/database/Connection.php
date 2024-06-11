@@ -61,7 +61,6 @@ class Connection {
 
     public function execute(#[\SensitiveParameter] string $query, #[\SensitiveParameter] array $args = [], string $fetchType = self::DEFAULT_SQL_QUERY_FETCH_TYPE) {
         try {
-
             if (is_iterable($args)) {
                 $serializedArguments = [];
                 foreach ($args as $arg)
@@ -82,7 +81,7 @@ class Connection {
             return $result;
         } catch (\PDOException $e) {
             if (!app()::isDevSite()) return;
-            CoreFunctions::dd('SQL QUERY FAIL: ' . PHP_EOL.PHP_EOL . $query . PHP_EOL.PHP_EOL . $e);
+            CoreFunctions::dd('SQL QUERY FAIL: ' . PHP_EOL.PHP_EOL . implode(PHP_EOL, explode(',', $query)) . PHP_EOL.PHP_EOL . $e);
         }
     }
 

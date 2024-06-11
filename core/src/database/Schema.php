@@ -34,10 +34,18 @@ class Schema {
 
     public function createIfNotExists(Table $table) {
         $query = self::CREATE_TABLE_SYNTAX . $table->getName() . '(';
-        foreach ($table->getColumns() as $columnKey => $columnOptions)
-            $query .= 
-                $columnOptions->queryString() . 
-                Utilities::appendToStringIfKeyNotLast($table->getColumns(), $columnKey);
+        $columns = $table->getColumns();
+
+        foreach ($columns as $columnKey => $columnOptions) {
+            $type = $columnOptions->get('type');
+            $query .= $columnOptions->queryString();
+
+            if (
+                !str_contains($type, 'CASCADE') &&
+                !str_contains($type, 'FOREIGN_KEY')
+            )
+                $query .= Utilities::appendToStringIfKeyNotLast($columns, $columnKey);
+        }
 
         $query .= ')';
         (new MigrationModel())->query()->rawSQL($query)->run();

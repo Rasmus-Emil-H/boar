@@ -38,6 +38,9 @@ class Table {
     private const PRIMARY_KEY           = 'PRIMARY_KEY';
     private const TIMESTAMP             = 'TIMESTAMP DEFAULT CURRENT_TIMESTAMP';
 
+    private const ON_DELETE_CASCADE = 'ON_DELETE_CASCADE';
+    private const ON_UPDATE_CASCADE = 'ON_UPDATE_CASCADE';
+
     public const  MAX_COLUMN_LENGTH      = 255;
     private const DEFAULT_UUID_LENGTH   = 128;
     private const DEFAULT_VARCHAR_LIMIT = 75;
@@ -103,12 +106,22 @@ class Table {
         return $this;
     }
 
+    public function onDeleteCascade(): self {
+        $this->createColumn('', self::ON_DELETE_CASCADE);
+        return $this;
+    }
+
+    public function onUpdateCascade(): self {
+        $this->createColumn('', self::ON_UPDATE_CASCADE);
+        return $this;
+    }
+
     private function getFormattedColumnIndexName() {
-        return strtolower($this->getColumnName().'_idx');
+        return strtolower(CoreFunctions::last($this->getColumns())->get('name').'_idx');
     }
 
     public function addIndex(): self {
-        $this->createColumn($this->getFormattedColumnIndexName(), 'ADD_INDEX');
+        $this->createColumn($this->getFormattedColumnIndexName(), 'ADD_INDEX', ['name' => CoreFunctions::last($this->getColumns())->get('name')]);
         return $this;
     }
 

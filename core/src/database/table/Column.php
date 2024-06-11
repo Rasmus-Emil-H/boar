@@ -11,6 +11,8 @@ class Column {
     protected const ADD_COLUMN  = 'ADD_COLUMN';
     protected const ADD_INDEX   = 'ADD_INDEX';
     protected const DROP_INDEX  = 'DROP_INDEX';
+    protected const ON_DELETE_CASCADE  = 'ON_DELETE_CASECADE';
+    protected const ON_UPDATE_CASCADE  = 'ON_UPDATE_CASCADE';
 
     protected string $name;
     protected string $type;
@@ -67,6 +69,12 @@ class Column {
                         ( $isAlteringTable ? 'ADD CONSTRAINT ' . $this->getForeignKeyPrefix() . $this->foreignColumn : '' ) . 
                         " FOREIGN KEY ($this->name) REFERENCES $this->foreignTable($this->foreignColumn)";
                     break;
+                case self::ON_DELETE_CASCADE:
+                    $query = ' ON DELETE CASECADE ';
+                    break;
+                case self::ON_UPDATE_CASCADE:
+                        $query = ' ON UPDATE CASECADE ';
+                        break;
                 case self::DROP_COLUMN:
                     $query = 'DROP COLUMN ' . $this->type . ' ' . $this->name;
                     break;

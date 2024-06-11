@@ -81,7 +81,7 @@ class Connection {
             return $result;
         } catch (\PDOException $e) {
             if (!app()::isDevSite()) return;
-            CoreFunctions::dd('SQL QUERY FAIL: ' . PHP_EOL.PHP_EOL . implode(PHP_EOL, explode(',', $query)) . PHP_EOL.PHP_EOL . $e);
+            CoreFunctions::dd('SQL QUERY FAIL: ' . PHP_EOL.PHP_EOL . implode(',' . PHP_EOL, explode(',', $query)) . PHP_EOL.PHP_EOL . $e);
         }
     }
 

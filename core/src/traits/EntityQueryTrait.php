@@ -147,7 +147,7 @@ trait EntityQueryTrait {
 		$this->patchField([Table::COMPLETED_COLUMN => 1]);
 	}
 
-    public function add(object $arguments) {
+    public function add(object $arguments): ?array {
         $data = (array)$arguments;
 
         unset($data['eg-csrf-token-label']);
@@ -158,6 +158,8 @@ trait EntityQueryTrait {
         $cEntity->save();
 
         if (method_exists($cEntity, 'frontendFields')) return $cEntity->frontendFields();
+        
+        return null;
     }
 
 }

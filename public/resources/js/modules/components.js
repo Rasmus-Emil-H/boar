@@ -28,9 +28,6 @@ export default {
         if(cb) cb();
     },
     loader: function() {
-      return `<div class="spinner-border text-primary" role="status"><span class="sr-only">Loading...</span></div>`;
-    },
-    initToast: function(msg, color) {
-      console.log(msg, color);
+      return `<div class="spinner-border text-primary d-flex justify-content-center" role="status"><span class="sr-only">Loading...</span></div>`;
     }
 }

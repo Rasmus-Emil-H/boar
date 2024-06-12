@@ -37,14 +37,9 @@ class Schema {
         $columns = $table->getColumns();
 
         foreach ($columns as $columnKey => $columnOptions) {
-            $type = $columnOptions->get('type');
+            $columnType = $columnOptions->get('type');
             $query .= $columnOptions->queryString();
-
-            if (
-                !str_contains($type, 'CASCADE') &&
-                !str_contains($type, 'FOREIGN_KEY')
-            )
-                $query .= Utilities::appendToStringIfKeyNotLast($columns, $columnKey);
+            $query .= Utilities::appendToStringIfKeyNotLast($columns, $columnKey);
         }
 
         $query .= ')';

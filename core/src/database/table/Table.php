@@ -38,8 +38,7 @@ class Table {
     private const PRIMARY_KEY           = 'PRIMARY_KEY';
     private const TIMESTAMP             = 'TIMESTAMP DEFAULT CURRENT_TIMESTAMP';
 
-    private const ON_DELETE_CASCADE = 'ON_DELETE_CASCADE';
-    private const ON_UPDATE_CASCADE = 'ON_UPDATE_CASCADE';
+    private const FOREIGN_KEY_TYPE = 'FOREIGN_KEY';
 
     public const  MAX_COLUMN_LENGTH      = 255;
     private const DEFAULT_UUID_LENGTH   = 128;
@@ -106,13 +105,28 @@ class Table {
         return $this;
     }
 
+    public function getLastForeignKey(): ?object {
+        $lastForeignKey = null;
+        foreach ($this->getColumns() as $column) {
+            if ($column->get('type') === SELF::FOREIGN_KEY_TYPE) $lastForeignKey = $column;
+        }
+        return $lastForeignKey;
+        
+    }
+
     public function onDeleteCascade(): self {
-        $this->createColumn('', self::ON_DELETE_CASCADE);
+        $foreignKeyCheck = $this->getLastForeignKey();
+        if (!$foreignKeyCheck) return $this;
+
+        $foreignKeyCheck->addConstraint(['ON DELETE CASCADE' => null]);
         return $this;
     }
 
     public function onUpdateCascade(): self {
-        $this->createColumn('', self::ON_UPDATE_CASCADE);
+        $foreignKeyCheck = $this->getLastForeignKey();
+        if (!$foreignKeyCheck) return $this;
+
+        $foreignKeyCheck->addConstraint(['ON UPDATE CASCADE' => null]);
         return $this;
     }
 

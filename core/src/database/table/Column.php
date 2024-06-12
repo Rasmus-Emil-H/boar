@@ -47,7 +47,7 @@ class Column {
     }
 
     private function setOptionsString() {
-        foreach ($this->get('options') as $optionKey => $option)  
+        foreach ($this->get('options') as $optionKey => $option)
             $this->optionString .= ' ' . (in_array($optionKey, $this->exclude) ? '' : $optionKey) . ' ' . ($option ?? '');
     }
 
@@ -67,14 +67,8 @@ class Column {
                 case self::FOREIGN_KEY:
                     $query = 
                         ( $isAlteringTable ? 'ADD CONSTRAINT ' . $this->getForeignKeyPrefix() . $this->foreignColumn : '' ) . 
-                        " FOREIGN KEY ($this->name) REFERENCES $this->foreignTable($this->foreignColumn)";
+                        " FOREIGN KEY ($this->name) REFERENCES $this->foreignTable($this->foreignColumn) " . $this->getOptionsString();
                     break;
-                case self::ON_DELETE_CASCADE:
-                    $query = ' ON DELETE CASECADE ';
-                    break;
-                case self::ON_UPDATE_CASCADE:
-                        $query = ' ON UPDATE CASECADE ';
-                        break;
                 case self::DROP_COLUMN:
                     $query = 'DROP COLUMN ' . $this->type . ' ' . $this->name;
                     break;

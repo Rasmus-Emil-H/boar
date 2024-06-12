@@ -14,5 +14,9 @@ class ForeignKey extends Column {
         $this->foreignTable = $foreignTable;
         $this->foreignColumn = $foreignColumn;
     }
+
+    public function addConstraint(array $options): void {
+        $this->options = array_merge($this->options, $options);
+    }
     
 }

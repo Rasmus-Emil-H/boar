@@ -107,9 +107,9 @@ class Table {
 
     public function getLastForeignKey(): ?object {
         $lastForeignKey = null;
-        foreach ($this->getColumns() as $column) {
+        foreach ($this->getColumns() as $column)
             if ($column->get('type') === SELF::FOREIGN_KEY_TYPE) $lastForeignKey = $column;
-        }
+            
         return $lastForeignKey;
         
     }

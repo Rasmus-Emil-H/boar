@@ -174,4 +174,8 @@ abstract class Entity {
         if (!$this->exists()) app()->getResponse()->notFound();
     }
 
+    public function __call($name, $arguments) {
+        app()->getResponse()->notFound();
+    }
+
 }

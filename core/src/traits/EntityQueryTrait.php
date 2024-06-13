@@ -162,4 +162,18 @@ trait EntityQueryTrait {
         return null;
     }
 
+    public function edit(object $arguments): ?array {
+        $data = (array)$arguments;
+
+        unset($data['eg-csrf-token-label']);
+        unset($data['action']); 
+
+        $this->set($data);
+        $this->save();
+
+        if (method_exists($this, 'frontendFields')) return $this->frontendFields();
+        
+        return null;
+    }
+
 }

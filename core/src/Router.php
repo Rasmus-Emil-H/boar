@@ -39,10 +39,11 @@ final class Router {
         $handler = ucfirst(CoreFunctions::first($this->path)->scalar);
         if ($this->isResource($handler)) return;
         $controller = (new ControllerFactory(['handler' => $handler]))->create();
+        if (!$controller) $app->getResponse()->redirect('/');
         $controllerMethod = $this->path[1] ?? '';
         $app->setParentController($controller);
         $this->method = $controllerMethod === '' || !method_exists($controller, $controllerMethod) ? self::INDEX_METHOD : $controllerMethod;
-        if (!method_exists($controller, $this->method)) $app->getResponse()->redirect('/trip');
+        if (!method_exists($controller, $this->method)) $app->getResponse()->redirect('/');
     }
 
     private function isResource(string $handler): bool {

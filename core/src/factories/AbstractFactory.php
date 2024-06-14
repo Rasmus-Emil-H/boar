@@ -28,7 +28,7 @@ abstract class AbstractFactory {
         return CoreFunctions::getIndex($this->arguments, 'handler')->scalar;
     }
 
-    public function validateObject(string $class) {
+    public function validateObject(string $class): bool {
         return app()->classCheck($class);
     }
 

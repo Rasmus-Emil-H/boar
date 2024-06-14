@@ -75,3 +75,7 @@ function debug($data) {
 function renderComponent($method, $arguments = []) {
     return \app\core\src\html\Html::$method(...$arguments);
 }
+
+function panic(string $reason = ''): void {
+    exit($reason);
+}

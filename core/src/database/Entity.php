@@ -115,7 +115,7 @@ abstract class Entity {
         }
     }
 
-    public function get(string $key): string|bool {
+    public function get(string $key): mixed {
         return $this->data[$key] ?? false; 
     }
 

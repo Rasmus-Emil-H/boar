@@ -28,7 +28,7 @@ final class Router {
     public static $anonymousRoutes = ['/auth/login', '/auth/signup', '/auth/resetPassword', '/auth/twofactor', '/auth/requestNewPassword', '/auth/validateTwofactor'];
 
     public function __construct(
-       public Request $request
+        private Request $request
     ) {
         $this->path = $request->getArguments();
     }

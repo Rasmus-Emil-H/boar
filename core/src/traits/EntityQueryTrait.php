@@ -148,7 +148,7 @@ trait EntityQueryTrait {
 	}
 
     public function __call(string $name, array $arguments) {
-        if ($name === 'CRUD') {
+        if ($name === 'crud') {
             $data = (array)$arguments;
 
             unset($data['eg-csrf-token-label']);

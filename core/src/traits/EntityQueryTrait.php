@@ -147,30 +147,6 @@ trait EntityQueryTrait {
 		$this->patchField([Table::COMPLETED_COLUMN => 1]);
 	}
 
-    public function __call(string $name, array $arguments) {
-        if ($name === 'crud') {
-            $data = (array)$arguments;
-
-            unset($data['eg-csrf-token-label']);
-            unset($data['action']); 
-
-            $argc = count($arguments);
-
-            if ($argc === 1) {
-                $cEntity = new $this();
-                $cEntity->set($data);
-                $cEntity->save(); 
-            } else if ($argc === 2) {
-                $this->set($data);
-                $this->save();
-                $cEntity = $this;
-            }
-
-            return method_exists($cEntity, 'frontendFields') ? $cEntity->frontendFields() : null;
-
-        }
-    }
-
     public function add(object $arguments): ?array {
         return $this->crud($arguments);
     }

@@ -48,7 +48,7 @@ export default {
         const fd = new FormData(form[0]);
 
         $(form[0]).find('[type="checkbox"]').each(function() {
-            fd.append($(this).prop('name'), Number($(this).prop('checked')));
+            fd.set($(this).prop('name'), Number($(this).prop('checked')));
         });
         
         return new Promise(function(resolve, reject) {

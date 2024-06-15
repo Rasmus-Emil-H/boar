@@ -44,17 +44,23 @@ export default {
 
         const checkRequiredFormFields = await self.checkRequiredFormFields(form[0]) 
         if (!checkRequiredFormFields) return;
+
+        const fd = new FormData(form[0]);
+
+        $(form[0]).find('[type="checkbox"]').each(function() {
+            fd.append($(this).prop('name'), Number($(this).prop('checked')));
+        });
         
         return new Promise(function(resolve, reject) {
             const submitButton = form.find('button[type="submit"]').last();
             const _text = submitButton.html();
             submitButton.attr('disabled', true);
-            submitButton.html(boar.components.loader());
+            submitButton.html(window.boar.components.loader());
 
             $.ajax({
                 type: form.attr('method'),
                 url: form.attr('action'),
-                data: new FormData(form[0]),
+                data: fd,
                 contentType: false,
                 cache: false,
                 processData: false,
@@ -63,7 +69,7 @@ export default {
                     resolve(response);
                 },
                 error: function(xhr, status, error) {
-                    boar.components.toast(xhr.responseJSON, boar.constants.mdbootstrap.ERROR_CLASS);
+                    window.boar.components.toast(xhr.responseJSON, window.boar.constants.mdbootstrap.ERROR_CLASS);
                     reject(xhr);
                 }
             }).always(function(res) {

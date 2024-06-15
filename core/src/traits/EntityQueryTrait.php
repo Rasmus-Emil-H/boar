@@ -147,33 +147,36 @@ trait EntityQueryTrait {
 		$this->patchField([Table::COMPLETED_COLUMN => 1]);
 	}
 
+    public function __call(string $name, array $arguments) {
+        if ($name === 'CRUD') {
+            $data = (array)$arguments;
+
+            unset($data['eg-csrf-token-label']);
+            unset($data['action']); 
+
+            $argc = count($arguments);
+
+            if ($argc === 1) {
+                $cEntity = new $this();
+                $cEntity->set($data);
+                $cEntity->save(); 
+            } else if ($argc === 2) {
+                $this->set($data);
+                $this->save();
+                $cEntity = $this;
+            }
+
+            return method_exists($cEntity, 'frontendFields') ? $cEntity->frontendFields() : null;
+
+        }
+    }
+
     public function add(object $arguments): ?array {
-        $data = (array)$arguments;
-
-        unset($data['eg-csrf-token-label']);
-        unset($data['action']); 
-
-        $cEntity = new $this();
-        $cEntity->set($data);
-        $cEntity->save();
-
-        if (method_exists($cEntity, 'frontendFields')) return $cEntity->frontendFields();
-        
-        return null;
+        return $this->crud($arguments);
     }
 
     public function edit(object $arguments): ?array {
-        $data = (array)$arguments;
-
-        unset($data['eg-csrf-token-label']);
-        unset($data['action']); 
-
-        $this->set($data);
-        $this->save();
-
-        if (method_exists($this, 'frontendFields')) return $this->frontendFields();
-        
-        return null;
+        return $this->crud($arguments, 'edit');
     }
 
 }

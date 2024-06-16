@@ -184,7 +184,7 @@ abstract class Entity {
             throw new \app\core\src\exceptions\ForbiddenException('Invalid parameter numbers');
     }
 
-    public function __call(string $name, array $arguments) {
+    public function __call(string $name, array $arguments): ?array {
         $argc = count($arguments);
 
         if ($name === 'crud') {
@@ -208,6 +208,8 @@ abstract class Entity {
             return isset($cEntity) && method_exists($cEntity, 'frontendFields') ? $cEntity->frontendFields() : null;
 
         }
+
+        return null;
     }
 
 }

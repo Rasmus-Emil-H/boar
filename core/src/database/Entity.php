@@ -71,6 +71,7 @@ abstract class Entity {
     public function set($data = null, array $allowedFields = null): Entity {
         $data = $this->convertData($data, $allowedFields);
         $key = $this->getKeyField();
+
         if ($data !== null && gettype($data) !== "array") $data = [$key => $data];
 
         if(isset($data[$key])) {
@@ -108,6 +109,7 @@ abstract class Entity {
 
     public function save(bool $addMetaData = true): self {
         if ($addMetaData) $this->addMetaData([$this->data]);
+
         try {
             if ($this->exists()) return $this->patchEntity();
             if(empty($this->data)) throw new \app\core\src\exceptions\EmptyException();

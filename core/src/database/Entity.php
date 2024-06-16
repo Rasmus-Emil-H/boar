@@ -174,14 +174,21 @@ abstract class Entity {
         if (!$this->exists()) app()->getResponse()->notFound();
     }
 
+    private function checkOverloadArgumentCount(int $count, array $possibleLengthRequirements): void {
+        if (!in_array($count, $possibleLengthRequirements)) 
+            throw new \app\core\src\exceptions\ForbiddenException('Invalid parameter numbers');
+    }
+
     public function __call(string $name, array $arguments) {
         if ($name === 'crud') {
+            $argc = count($arguments);
+
+            $this->checkOverloadArgumentCount($argc, [1, 2]);
+
             $data = (array)CoreFunctions::first($arguments);
 
             unset($data['eg-csrf-token-label']);
             unset($data['action']); 
-
-            $argc = count($arguments);
 
             if ($argc === 1) {
                 $cEntity = new $this();

@@ -185,31 +185,27 @@ abstract class Entity {
     }
 
     public function __call(string $name, array $arguments): ?array {
+        if ($name !== 'crud') return null;
+
         $argc = count($arguments);
+        $this->checkOverloadArgumentCount($argc, [self::OVERLOAD_ARGC_NEW_ENTITY, self::OVERLOAD_ARGC_EDIT_ENTITY]);
 
-        if ($name === 'crud') {
-            $this->checkOverloadArgumentCount($argc, [self::OVERLOAD_ARGC_NEW_ENTITY, self::OVERLOAD_ARGC_EDIT_ENTITY]);
+        $data = (array)CoreFunctions::first($arguments);
 
-            $data = (array)CoreFunctions::first($arguments);
+        unset($data['eg-csrf-token-label']);
+        unset($data['action']); 
 
-            unset($data['eg-csrf-token-label']);
-            unset($data['action']); 
-
-            if ($argc === self::OVERLOAD_ARGC_NEW_ENTITY) {
-                $cEntity = new $this();
-                $cEntity->set($data);
-                $cEntity->save(); 
-            } else if ($argc === self::OVERLOAD_ARGC_EDIT_ENTITY) {
-                $this->set($data);
-                $this->save();
-                $cEntity = $this;
-            }
-
-            return isset($cEntity) && method_exists($cEntity, 'frontendFields') ? $cEntity->frontendFields() : null;
-
+        if ($argc === self::OVERLOAD_ARGC_NEW_ENTITY) {
+            $cEntity = new $this();
+            $cEntity->set($data);
+            $cEntity->save(); 
+        } else if ($argc === self::OVERLOAD_ARGC_EDIT_ENTITY) {
+            $this->set($data);
+            $this->save();
+            $cEntity = $this;
         }
 
-        return null;
+        return isset($cEntity) && method_exists($cEntity, 'frontendFields') ? $cEntity->frontendFields() : null;
     }
 
 }

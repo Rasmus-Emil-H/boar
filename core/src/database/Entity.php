@@ -33,6 +33,9 @@ abstract class Entity {
     private const INVALID_ENTITY_STATIC_METHOD = 'Invalid static method';
     private const INVALID_ENTITY_METHOD = 'Invalid non static method method';
 
+    private const OVERLOAD_ARGC_NEW_ENTITY  = 1;
+    private const OVERLOAD_ARGC_EDIT_ENTITY = 2;
+
     private $key;
     protected array $data = [];
     protected array $additionalConstructorMethods = [];
@@ -180,21 +183,21 @@ abstract class Entity {
     }
 
     public function __call(string $name, array $arguments) {
-        if ($name === 'crud') {
-            $argc = count($arguments);
+        $argc = count($arguments);
 
-            $this->checkOverloadArgumentCount($argc, [1, 2]);
+        if ($name === 'crud') {
+            $this->checkOverloadArgumentCount($argc, [self::OVERLOAD_ARGC_NEW_ENTITY, self::OVERLOAD_ARGC_EDIT_ENTITY]);
 
             $data = (array)CoreFunctions::first($arguments);
 
             unset($data['eg-csrf-token-label']);
             unset($data['action']); 
 
-            if ($argc === 1) {
+            if ($argc === self::OVERLOAD_ARGC_NEW_ENTITY) {
                 $cEntity = new $this();
                 $cEntity->set($data);
                 $cEntity->save(); 
-            } else if ($argc === 2) {
+            } else if ($argc === self::OVERLOAD_ARGC_EDIT_ENTITY) {
                 $this->set($data);
                 $this->save();
                 $cEntity = $this;

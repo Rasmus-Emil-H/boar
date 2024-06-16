@@ -35,11 +35,11 @@ abstract class Entity {
 
     private const OVERLOAD_ARGC_NEW_ENTITY  = 1;
     private const OVERLOAD_ARGC_EDIT_ENTITY = 2;
-
     private $key;
     protected array $data = [];
     protected array $additionalConstructorMethods = [];
-
+    
+    private array $availableCallMethods = ['crud'];
     abstract protected function getKeyField()  : string;
     abstract protected function getTableName() : string;
     
@@ -179,13 +179,17 @@ abstract class Entity {
         if (!$this->exists()) app()->getResponse()->notFound();
     }
 
+    private function checkAvailableCallMethods(string $method): bool {
+        return in_array($method, $this->availableCallMethods);
+    }
+
     private function checkOverloadArgumentCount(int $count, array $possibleLengthRequirements): void {
         if (!in_array($count, $possibleLengthRequirements)) 
             throw new \app\core\src\exceptions\ForbiddenException('Invalid parameter numbers');
     }
 
-    public function __call(string $name, array $arguments): ?array {
-        if ($name !== 'crud') return null;
+    public function __call(string $method, array $arguments): ?array {
+        if (!$this->checkAvailableCallMethods($method)) return null;
 
         $argc = count($arguments);
         $this->checkOverloadArgumentCount($argc, [self::OVERLOAD_ARGC_NEW_ENTITY, self::OVERLOAD_ARGC_EDIT_ENTITY]);

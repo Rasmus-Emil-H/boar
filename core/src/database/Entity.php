@@ -40,6 +40,7 @@ abstract class Entity {
     protected array $additionalConstructorMethods = [];
     
     private array $availableCallMethods = ['crud'];
+    
     abstract protected function getKeyField()  : string;
     abstract protected function getTableName() : string;
     

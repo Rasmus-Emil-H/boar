@@ -82,6 +82,7 @@ trait EntityQueryTrait {
 
     public function addMetaData(array $data): self {
         if (empty($data)) throw new \InvalidArgumentException(self::INVALID_ENTITY_DATA);
+
         (new EntityMetaData())
             ->set([
                 Table::ENTITY_TYPE_COLUMN => $this->getTableName(), 
@@ -90,6 +91,7 @@ trait EntityQueryTrait {
                 'IP' => app()->getRequest()->getIP()
             ])
             ->save(addMetaData: false);
+            
         return $this;
     }
 

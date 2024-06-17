@@ -91,7 +91,7 @@ trait EntityQueryTrait {
                 'IP' => app()->getRequest()->getIP()
             ])
             ->save(addMetaData: false);
-            
+
         return $this;
     }
 
@@ -138,10 +138,12 @@ trait EntityQueryTrait {
     public function findOrCreate(string $whereKey, string $whereValue, array $data = []): \app\core\src\database\Entity {
         $lookup = $this->find($whereKey, $whereValue);
         if (!empty($lookup)) return CoreFunctions::first($lookup);
+
         $cEntity = (new $this());
         $cEntity->setData($data);
         $cEntity->save();
         $cEntity->addMetaData([$this->getTableName() . self::FIND_OR_CREATE_NEW_DATA_ENTRY])->save();
+        
         return $cEntity;
     }
 

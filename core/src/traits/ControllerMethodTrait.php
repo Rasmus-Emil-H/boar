@@ -6,23 +6,28 @@ use \app\models\FileModel;
 use \app\core\src\database\Entity;
 use \app\core\src\database\table\Table;
 use \app\core\src\File;
+use \app\core\src\miscellaneous\Hash;
 
 trait ControllerMethodTrait {
 
     public function moveRequestFiles(Entity $entity, string $type = ''): array {
         $files = [];
+        
         foreach ($this->requestBody->files as $newFile) {
             app()->addSystemEvent([$newFile]);
             $file = new File($newFile);
+
             if (empty($file->getName())) continue;
-            if (!isset($this->requestBody->body->imageType)) throw new \app\core\src\exceptions\NotFoundException('No image type found!');
+            if (!isset($this->requestBody->body->imageType)) 
+                throw new \app\core\src\exceptions\NotFoundException('No image type found!');
+
             $destination = $file->moveFile();
 
             $cFile = new FileModel();
             $cFile->setData([
                 'Name' => $file->getName(),
                 'Path' => $destination,
-                'Hash' => hash_file('sha256', $destination),
+                'Hash' => Hash::file($destination),
                 'Type' => $this->requestBody->body->imageType
             ]);
 

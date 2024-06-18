@@ -7,6 +7,7 @@ use \app\core\src\database\table\Table;
 use \app\core\src\factories\EntityFactory;
 use \app\core\src\File;
 use \app\core\src\gate\Gate;
+use \app\core\src\miscellaneous\Hash;
 use \app\models\FileModel;
 
 class FileController extends Controller {
@@ -39,7 +40,7 @@ class FileController extends Controller {
                 $cFile->setData([
                     'Name' => $file->getName(),
                     'Path' => $destination,
-                    'Hash' => hash_file('sha256', $destination),
+                    'Hash' => Hash::file($destination),
                     'Type' => $customFileType
                 ]);
 
@@ -65,7 +66,7 @@ class FileController extends Controller {
         $this->denyGETRequest();
 
         $cFile = new FileModel($this->requestBody->body->EntityID);
-        // if (!Gate::canEditFile($cFile)) $this->response->notAllowed();
+        if (!Gate::canEditFile($cFile)) $this->response->notAllowed();
         if (!$cFile->exists()) $this->response->dataConflict(hs(File::FILE_NOT_FOUND));
         
         $cFile->delete();

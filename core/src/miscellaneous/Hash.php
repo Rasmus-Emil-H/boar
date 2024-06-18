@@ -4,6 +4,8 @@ namespace app\core\src\miscellaneous;
 
 class Hash {
 
+    private const DEFAULT_ALGORITHM = 'sha256';
+
     protected const DEFAULT_HASH_LENGTH = 50;
 
     public static function create(int $length = self::DEFAULT_HASH_LENGTH): string {
@@ -14,13 +16,17 @@ class Hash {
     }
 
     public static function uuid(): string {
-        return hash('sha256', uniqid());
+        return hash(self::DEFAULT_ALGORITHM, uniqid());
     }
 
     public static function createdBasedOn(string $base, int $length = self::DEFAULT_HASH_LENGTH) {
         $b64 = base64_encode($base);
         $uniqueString = substr(preg_replace("/[^a-zA-Z0-9]/", "", $b64), 0, $length);
         return $uniqueString;
+    }
+
+    public static function file(string $input): bool|string {
+        return hash_file(self::DEFAULT_ALGORITHM, $input);
     }
 
 }

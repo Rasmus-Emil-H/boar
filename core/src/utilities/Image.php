@@ -57,14 +57,13 @@ class Image {
 
     public function resizeImage(int $newWidth = self::DEFAULT_RESIZE_WIDTH, int $newHeight = self::DEFAULT_RESIZE_HEIGHT): bool {
         $imageInfo = getimagesize($this->imagePath);
-        if ($imageInfo === false)
-            return false;
+
+        if ($imageInfo === false) return false;
 
         $this->imageType = $imageInfo[2];
         $gdImage = $this->imageCreateFrom();
 
-        if ($gdImage === null)
-            return false;
+        if ($gdImage === null) return false;
 
         $dimensions = $this->evaluateDimensions([$newWidth, $newHeight]);
         $resized = imagescale($gdImage, $dimensions[self::WIDTH], $dimensions[self::HEIGHT], IMG_BILINEAR_FIXED);

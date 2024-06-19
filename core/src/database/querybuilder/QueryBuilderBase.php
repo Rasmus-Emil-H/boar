@@ -99,7 +99,7 @@ abstract class QueryBuilderBase implements Builder {
         }
     }
 
-    public function updateQueryArgument(string $key, string $value): void {
+    public function updateQueryArgument(string $key, ?string $value): void {
         $this->checkQueryKey($key);
 
         $this->args[$key] = $value;

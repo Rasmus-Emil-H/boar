@@ -35,20 +35,22 @@ final class Router {
 
     protected function createController(): void {
         $app = app();
-        
+
         if (empty($this->path) || $this->request->getPath() === '/') $app->getResponse()->redirect(CoreFunctions::first(self::$anonymousRoutes)->scalar);
 
         $handler = ucfirst(CoreFunctions::first($this->path)->scalar);
         if ($this->isResource($handler)) return;
 
+        $defaultRoute = $app->getConfig()->get('routes')->defaults->redirectTo;
+
         $controller = (new ControllerFactory(['handler' => $handler]))->create();
-        if (!$controller) $app->getResponse()->redirect($app->getConfig()->routes->defaults->redirectTo);
+        if (!$controller) $app->getResponse()->redirect($defaultRoute);
 
         $controllerMethod = $this->path[1] ?? '';
         $app->setParentController($controller);
         $this->method = $controllerMethod === '' || !method_exists($controller, $controllerMethod) ? self::INDEX_METHOD : $controllerMethod;
 
-        if (!method_exists($controller, $this->method)) $app->getResponse()->redirect($app->getConfig()->routes->defaults->redirectTo);
+        if (!method_exists($controller, $this->method)) $app->getResponse()->redirect($defaultRoute);
     }
 
     private function isResource(string $handler): bool {

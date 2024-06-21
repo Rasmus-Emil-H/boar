@@ -16,6 +16,11 @@
             "iv": ""
         }
     },
+    "routes": {
+        "defaults": {
+            "redirectTo": "/auth/login"
+        }
+    },
     "hash": {
         "salt": "",
         "peber": ""

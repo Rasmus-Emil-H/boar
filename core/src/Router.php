@@ -28,26 +28,31 @@ final class Router {
     public static $anonymousRoutes = ['/auth/login', '/auth/signup', '/auth/resetPassword', '/auth/twofactor', '/auth/requestNewPassword', '/auth/validateTwofactor'];
 
     public function __construct(
-        private Request $request
+       private Request $request
     ) {
         $this->path = $request->getArguments();
     }
 
     protected function createController(): void {
         $app = app();
+        
         if (empty($this->path) || $this->request->getPath() === '/') $app->getResponse()->redirect(CoreFunctions::first(self::$anonymousRoutes)->scalar);
+
         $handler = ucfirst(CoreFunctions::first($this->path)->scalar);
         if ($this->isResource($handler)) return;
+
         $controller = (new ControllerFactory(['handler' => $handler]))->create();
-        if (!$controller) $app->getResponse()->redirect('/');
+        if (!$controller) $app->getResponse()->redirect($app->getConfig()->routes->defaults->redirectTo);
+
         $controllerMethod = $this->path[1] ?? '';
         $app->setParentController($controller);
         $this->method = $controllerMethod === '' || !method_exists($controller, $controllerMethod) ? self::INDEX_METHOD : $controllerMethod;
-        if (!method_exists($controller, $this->method)) $app->getResponse()->redirect('/');
+
+        if (!method_exists($controller, $this->method)) $app->getResponse()->redirect($app->getConfig()->routes->defaults->redirectTo);
     }
 
     private function isResource(string $handler): bool {
-        return str_contains(strtolower($handler), strtolower('resource')) || str_contains(strtolower($handler), strtolower('css'));
+        return str_contains(strtolower($handler), strtolower('/resources'));
     }
 
     protected function runMiddlewares(): void {

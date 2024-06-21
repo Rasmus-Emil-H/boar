@@ -59,6 +59,7 @@ final class Application {
         $this->getLanguage();
         $this->validateUserSession();
         $this->i18n         = new src\I18n();
+
     }
 
     protected function setConnection() {
@@ -82,15 +83,15 @@ final class Application {
 
     private function validateUserSession() {
         $validSession = (new UserModel())->hasActiveSession();
-        if (!in_array($this->request->getPath(), $this->router::$anonymousRoutes) && !$validSession) 
-            $this->response->redirect(CoreFunctions::first($this->router::$anonymousRoutes)->scalar);
+
+        $defaultUnauthenticatedRoute = $this->getConfig()->get('routes')->unauthenticated;
+
+        if (!in_array($this->request->getPath(), $defaultUnauthenticatedRoute) && !$validSession) 
+            $this->response->redirect(CoreFunctions::first($defaultUnauthenticatedRoute)->scalar);
     }
 
-    public function classCheck(string $class): void {
-        if (class_exists($class)) return;
-        $this->logger->log('Invalid class was called: ' . $class . json_encode(debug_backtrace()));
-        if (!self::isDevSite()) $this->getResponse()->notFound();
-        CoreFunctions::dd('Invalid class: ' . $class);
+    public function classCheck(string $class): bool {
+        return class_exists($class);
     }
 
     public function getParentController(): src\Controller {

@@ -19,7 +19,15 @@
     "routes": {
         "defaults": {
             "redirectTo": "/auth/login"
-        }
+        },
+        "unauthenticated": [
+            "/auth/login", 
+            "/auth/signup",
+            "/auth/resetPassword",
+            "/auth/twofactor",
+            "/auth/requestNewPassword",
+            "/auth/validateTwofactor"
+        ]
     },
     "hash": {
         "salt": "",

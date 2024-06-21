@@ -25,8 +25,6 @@ final class Router {
     protected array $path;
     protected string $method;
 
-    public static $anonymousRoutes = ['/auth/login', '/auth/signup', '/auth/resetPassword', '/auth/twofactor', '/auth/requestNewPassword', '/auth/validateTwofactor'];
-
     public function __construct(
        private Request $request
     ) {
@@ -36,7 +34,8 @@ final class Router {
     protected function createController(): void {
         $app = app();
 
-        if (empty($this->path) || $this->request->getPath() === '/') $app->getResponse()->redirect(CoreFunctions::first(self::$anonymousRoutes)->scalar);
+        if (empty($this->path) || $this->request->getPath() === '/') 
+            $app->getResponse()->redirect(CoreFunctions::first($app->getConfig()->get('routes')->unauthenticated)->scalar);
 
         $handler = ucfirst(CoreFunctions::first($this->path)->scalar);
         if ($this->isResource($handler)) return;

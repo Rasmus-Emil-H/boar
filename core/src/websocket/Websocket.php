@@ -18,13 +18,9 @@ class Websocket {
         Logger::checkPortUsage($this->serverConfig->getPort());
 
         $context = $this->serverConfig->getStreamContext();
-        $server = stream_socket_server(
-            'ssl://' . $this->serverConfig->getAddress() . ':' . $this->serverConfig->getPort(), 
-            $errno, 
-            $errstr, 
-            STREAM_SERVER_BIND | STREAM_SERVER_LISTEN, 
-            $context
-        );
+        $address = $this->serverConfig->getAddress() . ':' . $this->serverConfig->getPort();
+        
+        $server = stream_socket_server('ssl://' . $address, $errno, $errstr, STREAM_SERVER_BIND | STREAM_SERVER_LISTEN, $context);
 
         if (!$server) die("Error: $errstr ($errno)");
 

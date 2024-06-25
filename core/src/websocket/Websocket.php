@@ -11,11 +11,9 @@ class Websocket {
 
     public function __construct() {
         
-        $this->serverConfig = new ServerConfig(
-            '0.0.0.0', 12345, 
-            'YOUR_CERT_PATH', 
-            'YOUR_KEY_PATH'
-        );
+        $websocketConfigs = app()->getConfig()->get('integrations')->websocket->paths;
+
+        $this->serverConfig = new ServerConfig(address: '0.0.0.0', port: 12345, certFile: $websocketConfigs->cert, keyFile: $websocketConfigs->key);
 
         Logger::checkPortUsage($this->serverConfig->getPort());
 

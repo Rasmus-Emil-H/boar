@@ -87,6 +87,11 @@
         }
     },
     "integrations": {
-        
+       "websocket": {
+            "paths": {
+                "cert": "YOUR_PATH",
+                "key": "YOUR_PATH"
+            }
+        } 
     }
 }

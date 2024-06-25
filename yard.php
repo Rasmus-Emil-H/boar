@@ -29,6 +29,8 @@ error_reporting(E_ALL);
 
 define('CRONJOB_CLI_CHECK', 'CronjobScheduler');
 define('DATABASE_MIGRATION_CLI_CHECK', 'DatabaseMigration');
+define('WEBSOCKET_INIT', 'WebsocketInit');
+
 define('CLI_TOOL_NOT_FOUND_MESSAGE', 'CLI TOOL NOT FOUND' . PHP_EOL);
 define('IS_CLI', isset($argv));
 

@@ -65,10 +65,11 @@ class FileController extends Controller {
     public function delete() {
         $this->denyGETRequest();
 
-        $cFile = new FileModel($this->requestBody->body->EntityID);
-        if (!Gate::canEditFile($cFile)) $this->response->notAllowed();
-        if (!$cFile->exists()) $this->response->dataConflict(hs(File::FILE_NOT_FOUND));
-        
+        $cFile = $this->returnValidEntityIfExists();
+
+        // if (!Gate::canEditFile($cFile)) $this->response->notAllowed();
+
+        $cFile->requireExistence();
         $cFile->delete();
 
         $this->response->ok(hs('File deleted'));

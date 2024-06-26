@@ -67,7 +67,7 @@ class FileController extends Controller {
 
         $cFile = $this->returnValidEntityIfExists();
 
-        // if (!Gate::canEditFile($cFile)) $this->response->notAllowed();
+        if (!Gate::canEditFile($cFile)) $this->response->notAllowed();
 
         $cFile->requireExistence();
         $cFile->delete();

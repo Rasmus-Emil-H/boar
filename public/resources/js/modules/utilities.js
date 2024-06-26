@@ -1,18 +1,14 @@
 export default {
-    initializeObjects: function(root) {
-        let totalObject = {};
-        $(`${root}`).each(function(i,e) {
-            let href = $(this);
-            totalObject[`${href.attr('name')}`] = $(this).val();
+    htmlspecialchars: function(str) {
+        if (typeof str !== 'string') return str;
+        return str.replace(/[&<>"']/g, function(match) {
+            return {
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#039;'
+            }[match];
         });
-        return totalObject;
-    },
-    fetchFormInputs: function(form) {
-        let totalObject = {};
-        $(form).find('input').each(function(i,e) {
-            let href = $(this);
-            totalObject[`${href.attr('name')}`] = $(this).val();
-        });
-        return totalObject;
-    }
+    } 
 }

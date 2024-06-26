@@ -11,7 +11,6 @@ const modulesToImport = [
   "../../serviceworkerInit.js",
   "./modules/utilities.js",
   "./modules/components.js",
-  "./modules/http.js",
   "./modules/behaviour.js"
 ];
 

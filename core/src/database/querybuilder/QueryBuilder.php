@@ -12,6 +12,7 @@
 
 namespace app\core\src\database\querybuilder;
 
+use \app\core\src\database\table\Table;
 use \app\core\src\utilities\Parser;
 use \app\core\src\miscellaneous\CoreFunctions;
 
@@ -239,6 +240,11 @@ class QueryBuilder extends QueryBuilderBase {
     public function orderBy(string|array $field, string $order = self::DEFAULT_ASCENDING_ORDER): self {
         if (is_iterable($field)) $field = implode(',', $field);
         $this->upsertQuery($this::ORDER_BY . $field . ' ' . $order);
+        return $this;
+    }
+
+    public function orderBySortOrder(string $order = self::DEFAULT_ASCENDING_ORDER): self {
+        $this->upsertQuery($this::ORDER_BY . Table::SORT_ORDER_COLUMN . ' ' . $order);
         return $this;
     }
 

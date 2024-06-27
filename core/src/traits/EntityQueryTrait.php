@@ -120,6 +120,12 @@ trait EntityQueryTrait {
         return $this;
     }
 
+    public function updateSortOrder(int $sortOrder): self {
+        $this->set([Table::SORT_ORDER_COLUMN => $sortOrder]);
+        $this->save();
+        return $this;
+    }
+
     public function setRelationelTableSortOrder(string $table, int $sortOrder, $additionalConditions = []): void {
         $this->getQueryBuilder($table)
             ->patch([Table::SORT_ORDER_COLUMN => $sortOrder])

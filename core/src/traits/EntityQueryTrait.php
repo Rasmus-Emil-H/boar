@@ -119,9 +119,8 @@ trait EntityQueryTrait {
         return $this;
     }
 
-    public function updateSortOrder(int $sortOrder): self {
-        $this->set([Table::SORT_ORDER_COLUMN => $sortOrder]);
-        $this->save();
+    public function patchSortOrder(int $sortOrder): self {
+        $this->patchField([Table::SORT_ORDER_COLUMN => $sortOrder]);
         return $this;
     }
 

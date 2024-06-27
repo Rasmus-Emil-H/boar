@@ -176,6 +176,10 @@ abstract class Entity {
         return date('d-m-Y H:i', strtotime(($date !== '' ? $date : $this->get('CreatedAt'))));
     }
 
+    public function getSortOrder(): ?int {
+        return $this->get('SortOrder') ?? null;
+    }
+
     public function requireExistence() {
         if (!$this->exists()) app()->getResponse()->notFound();
     }
@@ -203,7 +207,7 @@ abstract class Entity {
         if ($argc === self::OVERLOAD_ARGC_NEW_ENTITY) {
             $cEntity = new $this();
             $cEntity->set($data);
-            $cEntity->save(); 
+            $cEntity->save();
         } else if ($argc === self::OVERLOAD_ARGC_EDIT_ENTITY) {
             $this->set($data);
             $this->save();

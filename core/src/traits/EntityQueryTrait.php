@@ -104,7 +104,6 @@ trait EntityQueryTrait {
     }
 
     public function setStatus(int $status): self {
-        var_dump($this);
         if (!$this->get(Table::STATUS_COLUMN)) throw new \app\core\src\exceptions\ForbiddenException(self::INVALID_ENTITY_STATUS);
         $this->set([Table::STATUS_COLUMN => $status])->save();
         return $this;

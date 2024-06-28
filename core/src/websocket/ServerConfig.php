@@ -3,17 +3,15 @@
 namespace app\core\src\websocket;
 
 class ServerConfig {
-    private string $address;
-    private int $port;
-    private string $certFile;
-    private string $keyFile;
+    
     private const WRAPPER = 'ssl';
 
-    public function __construct(string $address, int $port, string $certFile, string $keyFile) {
-        $this->address = $address;
-        $this->port = $port;
-        $this->certFile = $certFile;
-        $this->keyFile = $keyFile;
+    public function __construct(
+        private string $address, 
+        private int $port, 
+        private string $certFile, 
+        private string $keyFile
+    ) {
     }
 
     public function getStreamContext() {
@@ -23,12 +21,11 @@ class ServerConfig {
                 'local_pk' => $this->keyFile,
                 'allow_self_signed' => false,
                 'verify_peer' => false,
+                'crypto_method' => STREAM_CRYPTO_METHOD_TLS_SERVER,
+                'capture_peer_cert' => true,
+                'capture_peer_cert_chain' => true
             ]
         ]);
-
-        stream_context_set_option($context, self::WRAPPER, 'crypto_method', STREAM_CRYPTO_METHOD_TLS_SERVER);
-        stream_context_set_option($context, self::WRAPPER, 'capture_peer_cert', true);
-        stream_context_set_option($context, self::WRAPPER, 'capture_peer_cert_chain', true);
 
         return $context;
     }

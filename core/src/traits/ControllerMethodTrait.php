@@ -86,4 +86,26 @@ trait ControllerMethodTrait {
         $this->response->{$this->determineClientResponseMethod(dispatchedHTTPMethodResult: $response)}($response ?? '');
     }
 
+    public function appendFilesToRequestBody() {
+        $customFileType = $this->requestBody->body->fileType ?? 'DefaultFile';
+
+        foreach ($this->requestBody->files as $newFile) {
+            $file = new File($newFile);
+            
+            if (empty($file->getName())) continue;
+            $destination = $file->moveFile();
+
+            $cFile = new FileModel();
+            $cFile->setData([
+                'Name' => $file->getName(),
+                'Path' => $destination,
+                'Hash' => Hash::file($destination),
+                'Type' => $customFileType
+            ]);
+
+            $cFile->save();
+            $this->requestBody->body->$customFileType = $cFile;
+        }
+    }
+
 }

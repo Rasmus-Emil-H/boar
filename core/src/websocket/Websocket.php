@@ -4,39 +4,54 @@ namespace app\core\src\websocket;
 
 class Websocket {
 
+    private static ?Websocket $instance = null;
+
     private ServerConfig $serverConfig;
     private ClientManager $clientManager;
     private HandshakeHandler $handshakeHandler;
     private MessageHandler $messageHandler;
+    private $server;
 
-    public function __construct() {
-        
-        $websocketConfigs = app()->getConfig()->get('integrations')->websocket->paths;
+    private function __construct() {
+        $this->setupServer();
+        $this->setupAdditionals();
+        $this->main();
+    }
 
-        $this->serverConfig = new ServerConfig(address: '0.0.0.0', port: 12345, certFile: $websocketConfigs->cert, keyFile: $websocketConfigs->key);
+    private function setupServer() {
+        $websocketConfigs = app()->getConfig()->get('integrations')->websocket;
+
+        $this->serverConfig = new ServerConfig(
+            address: $websocketConfigs->address, 
+            port: $websocketConfigs->port, 
+            certFile: $websocketConfigs->paths->cert, 
+            keyFile: $websocketConfigs->paths->key
+        );
 
         Logger::checkPortUsage($this->serverConfig->getPort());
 
         $context = $this->serverConfig->getStreamContext();
         $address = $this->serverConfig->getAddress() . ':' . $this->serverConfig->getPort();
         
-        $server = stream_socket_server('ssl://' . $address, $errno, $errstr, STREAM_SERVER_BIND | STREAM_SERVER_LISTEN, $context);
+        $this->server = stream_socket_server('ssl://' . $address, $errno, $errstr, STREAM_SERVER_BIND | STREAM_SERVER_LISTEN, $context);
 
-        if (!$server) die("Error: $errstr ($errno)");
+        if (!$this->server) die("Error: $errstr ($errno)");
 
-        stream_set_blocking($server, false);
+        stream_set_blocking($this->server, false);
+
         Logger::yell("Server started at {$this->serverConfig->getAddress()}:{$this->serverConfig->getPort()}\n");
+    }
 
-        $this->clientManager    = new ClientManager($server);
+    private function setupAdditionals() {
+        $this->clientManager    = new ClientManager($this->server);
         $this->handshakeHandler = new HandshakeHandler();
         $this->messageHandler   = new MessageHandler();
-
-        $this->main();
     }
 
     private function main() {
         while (true) {
             sleep(1);
+
             $readSockets = array_merge([$this->clientManager->getServer()], $this->clientManager->getClients());
             $writeSockets = null;
             $exceptSockets = null;
@@ -59,4 +74,18 @@ class Websocket {
             $this->messageHandler->broadcastMessage($this->clientManager->getClients(), "Now: " . time());
         }
     }
+
+    public static function getInstance(): Websocket {
+        if (!self::$instance) self::$instance = new Websocket();
+        return self::$instance;
+    }
+
+    public function getClientManager(): ClientManager {
+        return $this->clientManager;
+    }
+
+    public static function kill() {
+        posix_kill(app()->getConfig()->get('integrations')->websocket->address, SIGTERM);
+    }
+
 }

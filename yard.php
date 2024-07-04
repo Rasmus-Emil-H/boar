@@ -27,11 +27,6 @@ error_reporting(E_ALL);
 |
 */
 
-define('CRONJOB_CLI_CHECK', 'CronjobScheduler');
-define('DATABASE_MIGRATION_CLI_CHECK', 'DatabaseMigration');
-define('WEBSOCKET_INIT', 'WebsocketInit');
-
-define('CLI_TOOL_NOT_FOUND_MESSAGE', 'CLI TOOL NOT FOUND' . PHP_EOL);
 define('IS_CLI', isset($argv));
 
 /**
@@ -59,7 +54,6 @@ function getIterableJsonEncodedData(array|object $iterable): array {
     $result = [];
 
     foreach ($iterable as $iteration) {
-        var_dump($iteration);
         if (!method_exists($iteration, 'getData')) 
             throw new \app\core\src\exceptions\NotFoundException("getData method was not found");
         

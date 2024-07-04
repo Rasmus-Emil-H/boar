@@ -11,7 +11,8 @@ const modulesToImport = [
   "../../serviceworkerInit.js",
   "./modules/utilities.js",
   "./modules/components.js",
-  "./modules/behaviour.js"
+  "./modules/behaviour.js",
+  "./modules/websocket.js"
 ];
 
 document.addEventListener("DOMContentLoaded", async function() {
@@ -23,6 +24,7 @@ document.addEventListener("DOMContentLoaded", async function() {
             const module = await import(modulePath);
             const moduleName = modulePath.split('/').pop().replace('.js', '');
             window.boar[moduleName] = module.default;
+            if (modulePath.includes('websocket')) continue;
             Object.freeze(window.boar[moduleName]);
         } catch (error) {
             

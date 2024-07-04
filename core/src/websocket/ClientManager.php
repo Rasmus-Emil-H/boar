@@ -3,6 +3,7 @@
 namespace app\core\src\websocket;
 
 class ClientManager {
+
     private $server;
     private array $clients = [];
     private const CLIENT_CONNECTED = 'Client connected' . PHP_EOL;
@@ -17,6 +18,7 @@ class ClientManager {
 
         stream_set_blocking($client, false);
         $this->clients[] = $client;
+
         echo self::CLIENT_CONNECTED;
         return $client;
     }
@@ -28,6 +30,10 @@ class ClientManager {
         echo "Client disconnected\n";
     }
 
+    /**
+     * @return [\resource]
+     */
+
     public function getClients(): array {
         return $this->clients;
     }
@@ -36,10 +42,22 @@ class ClientManager {
         return $this->server;
     }
 
+    public function getClient($client): mixed {
+        $clients = $this->getClients();
+        return $clients[$client] ?? null;
+    }
+
+    public function sendMessageToClient($client, $message): bool|int {
+        if (!$this->getClient($client)) return false;
+
+        return fwrite($client, $message);
+    }
+
     /**
      * Enable if you want to remove passives
      */
-    public function removePassiveClient($data, $client) {
+
+    public function removePassiveClient($client, $data) {
         return;
         
         if ($data === false || strlen($data) === 0)

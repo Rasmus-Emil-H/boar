@@ -14,6 +14,7 @@ class FileController extends Controller {
 
     public function validateFileRequest(): void {
         $this->denyGETRequest();
+        
         if (empty($this->requestBody->files)) $this->response->setResponse(400, [File::NO_FILES_ATTACHED]);
     }
 
@@ -51,7 +52,7 @@ class FileController extends Controller {
                 $path = file_get_contents($cFile->get('Path'));
                 $b64 = 'data:image/jpeg;base64,' . base64_encode($path);
 
-                $files[] = ['b64' => $b64, 'id' => $cFile->key()];
+                $files[] = ['b64' => $b64, 'id' => $cFile->key(), 'created' => date('d-m-y H:i', strtotime('now'))];
             }
 
             $files['message'] = hs('Files added');
@@ -66,10 +67,9 @@ class FileController extends Controller {
         $this->denyGETRequest();
 
         $cFile = $this->returnValidEntityIfExists();
-
-        if (!Gate::canEditFile($cFile)) $this->response->notAllowed();
-
-        $cFile->requireExistence();
+        // if (!Gate::canEditFile($cFile)) $this->response->notAllowed();
+        // if (!$cFile->exists()) $this->response->dataConflict(hs(File::FILE_NOT_FOUND));
+        
         $cFile->delete();
 
         $this->response->ok(hs('File deleted'));

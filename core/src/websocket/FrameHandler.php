@@ -31,9 +31,7 @@ class FrameHandler {
                 if (isset($payload[$i]))
                     $payload[$i] ^= $scalars['mask'][$i % 4];
 
-        $decodedData = implode('', array_map('chr', $payload));
-
-        return $decodedData;
+        return implode('', array_map('chr', $payload));
     }
 
     private function shiftScalars(int $payloadLength, array $bytes): array {

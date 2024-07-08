@@ -66,7 +66,12 @@ final class UserModel extends Entity {
 	}
 
 	public function hasActiveSession() {
-		$session = (new SessionModel())->query()->select()->where(['Value' => app()->getSession()->get('SessionID'), $this->getKeyField() => app()->getSession()->get('user')])->run();
+		$session = (new SessionModel())
+			->query()
+			->select()
+			->where(['Value' => app()->getSession()->get('SessionID'), $this->getKeyField() => app()->getSession()->get('user')])
+		->run();
+
         return !empty($session) && CoreFunctions::first($session)->exists();
 	}
 

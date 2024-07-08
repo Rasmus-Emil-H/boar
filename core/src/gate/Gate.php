@@ -22,7 +22,9 @@ class Gate {
     use GateStaticMethodTrait;
 
     protected static function canViewProduct(Entity $product): bool {
-        return $product->user()->key() === CoreFunctions::applicationUser()->key();
+        $user = CoreFunctions::applicationUser();
+        
+        return $product->user()->key() === $user->key() || $user->isAdmin();
     }
 
 }

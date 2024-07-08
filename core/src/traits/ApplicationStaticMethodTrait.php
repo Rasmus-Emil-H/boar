@@ -2,7 +2,7 @@
 
 namespace app\core\src\traits;
 
-use app\models\UserModel;
+use \app\models\UserModel;
 
 trait ApplicationStaticMethodTrait {
     

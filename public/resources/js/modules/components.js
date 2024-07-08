@@ -1,4 +1,19 @@
 export default {
+    toast: function(message) {
+        return `
+          <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header">
+              <img src="..." class="rounded me-2" alt="...">
+              <strong class="me-auto">Bootstrap</strong>
+              <small>Now</small>
+              <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body">
+              ${message}
+            </div>
+          </div>
+        `;
+    },
     initModal: function(title, body, id, hidefooter = null, buttonHider = null, buttonText = '', cb = null) {
         let modal = document.createElement('div');
         let modalID = Math.round(Math.random() * 100000);

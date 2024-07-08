@@ -2,6 +2,8 @@
 
 namespace app\core\src\traits;
 
+use \app\models\UserModel;
+
 trait ApplicationGetterTrait {
     
     /**
@@ -41,6 +43,11 @@ trait ApplicationGetterTrait {
 
     public function getLogger(): \app\core\src\utilities\Logger {
         return $this->logger;
+    }
+
+    public function getUser(): ?UserModel {
+        if (!$this->session->get('user')) return null;
+        return new UserModel($this->session->get('user'));
     }
 
 }

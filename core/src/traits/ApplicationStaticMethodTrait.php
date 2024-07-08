@@ -21,13 +21,8 @@ trait ApplicationStaticMethodTrait {
         return !(new UserModel())->hasActiveSession();
     }
 
-    public function getUser(): ?UserModel {
-        if (!$this->session->get('user')) return null;
-        return new UserModel($this->session->get('user'));
-    }
-
     public static function isDevSite(): bool {
-        return self::$app->config->get('inDevelopment') === true;
+        return self::$app->getConfig()->get('inDevelopment') === true;
     }
 
 }

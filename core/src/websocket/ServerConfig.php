@@ -15,13 +15,19 @@ class ServerConfig {
         
     }
 
+    private function defaultPairs(): array {
+        return [
+            'local_cert' => $this->certFile,
+            'local_pk' => $this->keyFile,
+            'allow_self_signed' => false,
+            'verify_peer' => false,
+        ];
+    }
+
     public function getStreamContext() {
         return stream_context_create([
             self::WRAPPER => [
-                'local_cert' => $this->certFile,
-                'local_pk' => $this->keyFile,
-                'allow_self_signed' => false,
-                'verify_peer' => false,
+                ...$this->defaultPairs(),
                 'crypto_method' => STREAM_CRYPTO_METHOD_TLS_SERVER,
                 'capture_peer_cert' => true,
                 'capture_peer_cert_chain' => true
@@ -32,10 +38,7 @@ class ServerConfig {
     public function getBackendClientStreamContext() {
         return stream_context_create([
             self::WRAPPER => [
-                'local_cert' => $this->certFile,
-                'local_pk' => $this->keyFile,
-                'allow_self_signed' => false,
-                'verify_peer' => false,
+                ...$this->defaultPairs(),
                 'crypto_method' => STREAM_CRYPTO_METHOD_TLS_CLIENT
             ]
         ]);

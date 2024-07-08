@@ -6,9 +6,9 @@ class HandshakeHandler {
     
     public function prepareHeaders(string $key): string {
         $headers = "HTTP/1.1 101 Switching Protocols\r\n";
-        $headers .= Constants::HEADER_UPGRADE;
-        $headers .= Constants::HEADER_CONNECTION_UPGRADE;
-        $headers .= Constants::HEADER_WEBSOCKET_VERSION;
+        $headers .= "Upgrade: websocket\r\n";
+        $headers .= "Connection: Upgrade\r\n";
+        $headers .= "Sec-WebSocket-Version: 13\r\n";
         $headers .= "Sec-WebSocket-Accept: $key\r\n\r\n";
 
         return $headers;

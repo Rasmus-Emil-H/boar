@@ -5,11 +5,8 @@ namespace app\controllers;
 use \app\core\src\Controller;
 use \app\core\src\gate\Gate;
 use \app\core\src\miscellaneous\CoreFunctions;
-use app\models\OrderModel;
 
 class OrderController extends Controller {
-
-    protected string $entity = OrderModel::class;
 
     public function index() {
 

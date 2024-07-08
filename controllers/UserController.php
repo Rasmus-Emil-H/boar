@@ -9,11 +9,11 @@ use app\models\UserModel;
 class UserController extends Controller {
 
     public function index() {
-        $this->setView('users');
+        $this->setFrontendTemplateAndData('users');
     }
 
     public function profile() {
-        $this->setView('profile');
+        $this->setFrontendTemplateAndData('profile');
     }
 
 }

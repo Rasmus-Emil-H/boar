@@ -22,12 +22,12 @@ class OrderController extends Controller {
     }
 
     public function edit() {
-        $order = $this->returnValidEntityIfExists();
+        $cOrder = $this->returnValidEntityIfExists();
 
-        if (!Gate::isAuthenticatedUserAllowed('editOrder', $order)) $this->response->notAllowed();
+        if (!Gate::isAuthenticatedUserAllowed('editOrder', $cOrder)) $this->response->notAllowed();
         
         if ($this->request->isGet())
-            return $this->setFrontendTemplateAndData(templateFile: 'editOrder', data: ["product" => $order]);
+            return $this->setFrontendTemplateAndData(templateFile: 'editOrder', data: ['cOrder' => $cOrder]);
     }
 
 }

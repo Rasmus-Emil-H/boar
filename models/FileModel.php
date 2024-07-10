@@ -49,7 +49,11 @@ final class FileModel extends Entity {
 
 		$this
 			->save()
-			->createPivot([Table::ENTITY_TYPE_COLUMN => $arguments->body->entityType, Table::ENTITY_ID_COLUMN => $arguments->body->entityID, $this->getKeyField() => $this->key()]);
+			->createPivot([
+				Table::ENTITY_TYPE_COLUMN => $arguments->body->entityType, 
+				Table::ENTITY_ID_COLUMN => $arguments->body->entityID, 
+				$this->getKeyField() => $this->key()
+			]);
 
 		$path = file_get_contents($arguments->destination);
 		$b64 = 'data:image/' . $arguments->file->getFileType() . ';base64,' . base64_encode($path);

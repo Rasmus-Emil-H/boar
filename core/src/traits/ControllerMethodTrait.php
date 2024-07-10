@@ -3,43 +3,10 @@
 namespace app\core\src\traits;
 
 use \app\models\FileModel;
-use \app\core\src\database\Entity;
-use \app\core\src\database\table\Table;
 use \app\core\src\File;
 use \app\core\src\miscellaneous\Hash;
 
 trait ControllerMethodTrait {
-
-    public function moveRequestFiles(Entity $entity, string $type = ''): array {
-        $files = [];
-        
-        foreach ($this->requestBody->files as $newFile) {
-            app()->addSystemEvent([$newFile]);
-            $file = new File($newFile);
-
-            if (empty($file->getName())) continue;
-            if (!isset($this->requestBody->body->imageType)) 
-                throw new \app\core\src\exceptions\NotFoundException('No image type found!');
-
-            $destination = $file->moveFile();
-
-            $cFile = new FileModel();
-            $cFile->setData([
-                'Name' => $file->getName(),
-                'Path' => $destination,
-                'Hash' => Hash::file($destination),
-                'Type' => $this->requestBody->body->imageType
-            ]);
-
-            $cFile->save();
-            $cFile->createPivot([
-				Table::ENTITY_TYPE_COLUMN => $entity->getTableName(), Table::ENTITY_ID_COLUMN => $entity->key(), $cFile->getKeyField() => $cFile->key()
-			]);
-
-            $files[] = $cFile->key();
-        }
-        return $files;
-    }
 
     public function denyGETRequest() {
         if ($this->request->isGet()) 
@@ -66,22 +33,24 @@ trait ControllerMethodTrait {
 
     public function edit() {
         $this->denyGETRequest();
-
-        $cEntity = $this->returnValidEntityIfExists();
-
-        $request = $this->requestBody->body;
-        $response = $cEntity->dispatchHTTPMethod($request->action, $request);
-
-        $this->response->{$this->determineClientResponseMethod(dispatchedHTTPMethodResult: $response)}($response ?? '');
+        $this->dispatchMethodOnEntity();
     }
 
     public function view() {
         $this->denyPOSTRequest();
+        $this->dispatchMethodOnEntity();
+    }
 
+    public function delete() {
+        $this->denyGETRequest();
+        $this->dispatchMethodOnEntity('delete');
+    }
+
+    private function dispatchMethodOnEntity(string $method = '') {
         $cEntity = $this->returnValidEntityIfExists();
 
         $request = $this->requestBody->body;
-        $response = $cEntity->dispatchHTTPMethod($request->action, $request);
+        $response = $cEntity->dispatchHTTPMethod($request->action ?? $method, $request);
 
         $this->response->{$this->determineClientResponseMethod(dispatchedHTTPMethodResult: $response)}($response ?? '');
     }

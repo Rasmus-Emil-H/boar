@@ -1,10 +1,8 @@
 # Boar PHP minimal MVC 🐗
 
-## Overview
+## Intro
 
-Boar is a lightweight PHP MVC framework designed to facilitate the creation of web applications. 
-
-It follows the Model-View-Controller (MVC) architectural pattern, providing a separation of concerns, making it easier to manage and maintain your application.
+Boar is a lightweight PHP MVC framework designed to facilitate the creation of web applications.
 
 ## Features
 
@@ -67,6 +65,59 @@ A global yard.php file is provided for oftenly used methods, function, in order 
 
 This yard file by default provides the app() function that will grant you access to the application instance from where you can get the global objects that is being set at bootstrapping.
 
+## Views
+
+### Templates
+
+Views are the file that your browser renders, they should be set by the controller and be located at ~/views and follow the .tpl.php extension
+
+You can return a view, and variable to that view in your controller
+
+```
+<?php
+
+namespace app\controllers;
+
+use \app\core\src\Controller;
+
+class HomeController extends Controller {
+
+    public function index() {
+        $this->denyPOSTRequest();
+        
+        $this->setFrontendTemplateAndData(templateFile: 'languages', data: ['boar' => 'is live and running']);
+    }
+
+}
+```
+
+The data array can now be directly accesed from the frontend file
+
+languages.tpl.php
+```
+<?= hs($boar); ?>
+```
+
+### Layouts
+
+If you need differents layouts you can specify them by doing the following:
+
+```
+<?php
+
+namespace app\controllers;
+
+class AuthController extends Controller {
+
+    public function login(): void {
+        $this->setClientLayoutStructure(layout: 'auth', view: 'login');
+    }
+    
+}
+```
+
+The layout must be located in ~/views/layouts dir
+
 ### Controllers
 
 Creating a controller is straightforward, either cp one of existing or create a new as below.
@@ -122,6 +173,76 @@ final class LanguageModel extends Entity {
 ```
 
 Models extends the Entity that has access to various methods that will ease the way you interact with the database
+
+## Controller - Method interaction
+
+A controller should always resolve to a model, this can happen in various ways but a default implemented way happens in ~/core/src/traits/ControllerMethodTrait.php
+
+There are three default method provided (edit, view and delete) which dispatches the dispatchMethodOnEntity method.
+
+You can create methods however you like and dispatchMethodOnEntity should be seen as a base for automatically creating the entity with the returnValidEntityIfExists method, then getting the body from the Request object and dispatching the method on the model.
+
+### Allowed http methods from the model
+
+The allowed http method should be manually be specified to avoid fuzzing and other jacksters. Like below.
+
+
+```
+<?php
+
+namespace app\models;
+
+use \app\core\src\database\Entity;
+
+final class LanguageModel extends Entity {
+
+	private const ALLOWED_HTTP_METHODS = [
+		'getTranslations', 'create', 'remove'
+	];
+
+	public function setAllowedHTTPMethods() {
+		$this->setValidHTTPMethods(self::ALLOWED_HTTP_METHODS);
+	}
+```
+
+If you forget to include your method in the ALLOWED_HTTP_METHODS array, a method not allowed response will be returned to the client.
+
+## Request - Response cycle
+
+Controllers are instansiated with a Request and Response object.
+
+The Request object are responsible for getting the body from the client, within the proper context, and can be accesed by any controllers like so
+
+```
+$body = $this->requestBody;
+```
+
+The Response object are responsible for returning the proper response to the client, based on various scenarios, and can be done like so
+
+```
+<?php
+
+/**
+ * Language controller
+ * AUTHOR: RE_WEB
+ * @package app\controllers
+ */
+
+namespace app\controllers;
+
+use \app\core\src\Controller;
+
+class LanguageController extends Controller {
+
+    public function changeSession() {
+        $this->response->ok();
+    }
+    
+}
+
+```
+
+Please refer to ~/core/src/Response.php for the allowed methods and extend to your needs
 
 ### File handling
 

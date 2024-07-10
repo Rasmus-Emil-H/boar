@@ -14,8 +14,7 @@ class AuthController extends Controller {
         if ((new UserModel())->hasActiveSession()) $this->response->redirect('/home');
         if ($this->request->isPost()) new AuthenticationModel($this->requestBody, 'applicationLogin');
         
-        $this->setLayout('auth');
-        $this->setFrontendTemplateAndData('login');
+        $this->setClientLayoutStructure('auth', 'login');
     }
 
     public function logout(): void {

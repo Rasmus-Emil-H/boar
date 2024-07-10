@@ -45,7 +45,6 @@ final class LanguageModel extends Entity {
 		$this->setValidHTTPMethods(self::ALLOWED_HTTP_METHODS);
 	}
 
-
 	public function getTranslations() {
 		$frontend = [];
 		

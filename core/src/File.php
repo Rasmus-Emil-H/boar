@@ -44,7 +44,7 @@ final class File {
     }
 
     public function getName(): string {
-        return $this->file->name;
+        return str_replace(' ', '', $this->file->name);
     }
 
     public function setName(string $name): void {

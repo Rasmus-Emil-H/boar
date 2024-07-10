@@ -18,16 +18,12 @@ class ClientManager {
         stream_set_blocking($client, false);
         $this->clients[] = $client;
 
-        Logger::yell(Constants::CLIENT_CONNECTED);
-
         return $client;
     }
 
     public function removeClient($client) {
         fclose($client);
         unset($this->clients[array_search($client, $this->clients)]);
-
-        Logger::yell(Constants::CLIENT_DISCONNECTED);
     }
 
     /**

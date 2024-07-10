@@ -27,8 +27,5 @@ class Constants {
 
     public const DEFAULT_CLIENT_MESSAGE = '123456';
 
-    public const HEADER_UPGRADE = 'Upgrade: websocket\r\n';
-    public const HEADER_CONNECTION_UPGRADE = 'Connection: Upgrade\r\n';
-    public const HEADER_WEBSOCKET_VERSION = 'Sec-WebSocket-Version: 13\r\n';
 
 }

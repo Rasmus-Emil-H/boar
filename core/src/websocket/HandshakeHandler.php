@@ -17,10 +17,10 @@ class HandshakeHandler {
     public function prepareBackendClientHeaders(string $key, object $websocketConfigs): string {
         $request = "GET / HTTP/1.1\r\n";
         $request .= "Host: {$websocketConfigs->address}:{$websocketConfigs->port}\r\n";
-        $request .= Constants::HEADER_UPGRADE;
-        $request .= Constants::HEADER_CONNECTION_UPGRADE;
+        $request .= "Upgrade: websocket\r\n";
+        $request .= "Connection: Upgrade\r\n";
         $request .= "Sec-WebSocket-Key: $key\r\n";
-        $request .= Constants::HEADER_WEBSOCKET_VERSION;
+        $request .= "Sec-WebSocket-Version: 13\r\n";
         $request .= "\r\n";
 
         return $request;

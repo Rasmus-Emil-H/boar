@@ -389,6 +389,12 @@ Comes with a default serviceworker implementation, use as you wish
 
 ### Form submissions
 
+All POST form submissions must include a valid CSRF token, this should be included in the form like below
+
+```
+<?= (new \app\core\src\tokens\CsrfToken())->insertHiddenToken(); ?>
+```
+
 By default, window.boar.behaviour will intercept all forms and return a promise from which you can do what you want
 
 In the frontend you can then await this behaviour, or let it submit as normal, and do custom tasks like below

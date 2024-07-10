@@ -20,7 +20,7 @@ Boar is a lightweight PHP MVC framework designed to facilitate the creation of w
 
 Contains the main application code.
 
-- **config/**: Configuration files for the application.
+- **static/**: Configuration files for the application.
 - **controllers/**: Controller classes responsible for handling requests and returning responses.
 - **models/**: Model classes for interacting with the database.
 - **views/**: View templates for rendering HTML.

@@ -75,6 +75,10 @@
         "429": {
             "minutes": 5,
             "amount": 200
+        },
+        "limit": {
+            "minutes": 5,
+            "amount": 200
         }
     },
     "fileHandling": {

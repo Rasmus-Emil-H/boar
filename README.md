@@ -16,7 +16,7 @@ Boar is a lightweight PHP MVC framework designed to facilitate the creation of w
 - **CSRF Protection**: Cross-Site Request Forgery protection for form submissions.
 - **Validation**: Input validation for ensuring data integrity.
 
-### core/src
+### ~
 
 Contains the main application code.
 
@@ -24,7 +24,7 @@ Contains the main application code.
 - **controllers/**: Controller classes responsible for handling requests and returning responses.
 - **models/**: Model classes for interacting with the database.
 - **views/**: View templates for rendering HTML.
-- **Core/**: Core framework classes that provide the foundation for the MVC framework.
+- **core/**: Core framework classes that provide the foundation for the MVC framework.
 
 ### public/
 

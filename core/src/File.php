@@ -68,7 +68,7 @@ final class File {
     }
 
     public function generateFinalName(): string {
-        $name = $this->getDirectory() . '/' . strtotime('now') . '-' . $this->getName();
+        $name = $this->getDirectory() . '/' . strtotime('now') . rand(1, 20000) . '-' . $this->getName();
         return $name;
     }
 

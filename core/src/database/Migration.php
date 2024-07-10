@@ -19,6 +19,8 @@ use \app\core\src\factories\MigrationFactory;
 class Migration {
 
     private const SUCCESSFULL_MIGRATION = 'Successfully applied new migration: ';
+    private const INVALID_MIGRATION_NAME = 'Invalid migration name ';
+    private const MIGRATION_FORMAT = ', must be formatted: migration_yyyy_mm_dd_xxxx';
     
     protected const MIGRATION_DIR = '/migrations/';
     protected const MIGRATION_DATE_LENGTH = 10;
@@ -49,14 +51,17 @@ class Migration {
         foreach ($migrations as $migration) {
             $migrationFile = $migrationsFolder . $migration;
             $actualMigration = str_replace('.php', '', $migration);
+            
             if (!is_file($migrationFile) || in_array($actualMigration, $mappedMigrations)) continue;
+
             $date = preg_replace('/\_/', '-', substr(substr($migration, self::MIGRATION_DATE_OFFSET), 0, self::MIGRATION_DATE_LENGTH));
-            if (!strtotime($date)) app()->log('Invalid migration name ' . ($migration) . ', must be formatted: migration_yyyy_mm_dd_xxxx', exit: true);
+            if (!strtotime($date)) app()->log(self::INVALID_MIGRATION_NAME . ($migration) . self::MIGRATION_FORMAT, exit: true);
+
             isset($missingMigrations[strtotime($date)]) ? $missingMigrations[strtotime($date)+1] = $migration : $missingMigrations[strtotime($date)] = $migration;
         }
         
         ksort($missingMigrations);
-        
+
         $this->iterateMigrations($missingMigrations);
     }
 

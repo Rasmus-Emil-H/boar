@@ -266,6 +266,8 @@ Please refer to ~/core/src/Response.php for the allowed methods and extend to yo
 
 POSTing a file to /file will automatically handle the file for you and mv it to the uploads dir and insert a row into the database, based on the requested entity
 
+window.boar.behaviour have a default input file listener (uploadFile) so that if you have input type of file with a class of globalFileUploader you can directly upload files without having to do more, however certain data attributes must be present in order to attach the file to the proper entity. (entityType, entityType, type)
+
 ### Query building
 
 Boar comes with a querybuilder, located at core/src/database and can be accessed directly on the models by doing

@@ -22,7 +22,7 @@ abstract class AbstractFactory {
         
     }
     
-    abstract public function create();
+    abstract public function create(): ?object;
 
     public function getHandler(): string {
         return CoreFunctions::getIndex($this->arguments, 'handler')->scalar;

@@ -8,9 +8,10 @@ use \app\core\src\Controller;
 class ControllerFactory extends AbstractFactory {
 
     protected const CONTROLLER_AFFIX = 'Controller';
+    protected const CONTROLLER_NAMESPACE = '\\app\controllers\\';
 
     public function create(): ?Controller {
-        $controller = ('\\app\controllers\\' . $this->getHandler() . self::CONTROLLER_AFFIX);
+        $controller = self::CONTROLLER_NAMESPACE . $this->getHandler() . self::CONTROLLER_AFFIX;
         if (!$this->validateObject($controller)) return null;
         
         $app = app();

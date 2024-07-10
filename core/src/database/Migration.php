@@ -40,10 +40,12 @@ class Migration {
     public function applyMigrations() {
         $this->createMigrationsTable();
         $appliedMigrations = $this->getAppliedMigrations();
+
         $migrationsFolder = app()::$ROOT_DIR . self::MIGRATION_DIR;
         $migrations = scandir($migrationsFolder);
         $mappedMigrations = array_map(fn($object) => $object->Migration, $appliedMigrations);
         $missingMigrations = [];
+
         foreach ($migrations as $migration) {
             $migrationFile = $migrationsFolder . $migration;
             $actualMigration = str_replace('.php', '', $migration);
@@ -52,7 +54,9 @@ class Migration {
             if (!strtotime($date)) app()->log('Invalid migration name ' . ($migration) . ', must be formatted: migration_yyyy_mm_dd_xxxx', exit: true);
             isset($missingMigrations[strtotime($date)]) ? $missingMigrations[strtotime($date)+1] = $migration : $missingMigrations[strtotime($date)] = $migration;
         }
+        
         ksort($missingMigrations);
+        
         $this->iterateMigrations($missingMigrations);
     }
 
@@ -61,10 +65,13 @@ class Migration {
         foreach ($toBeAppliedMigrations as $migration) {
             require_once $app::$ROOT_DIR . self::MIGRATION_DIR . $migration;
             $handler = pathinfo($migration, PATHINFO_FILENAME);
+
             if (strlen($handler) > table\Table::MAX_COLUMN_LENGTH) $app->log("Classname ($handler) is too long!", exit: true);
             $app->classCheck($handler);
-            (new MigrationFactory(['handler' => $handler]))->create()->up();
+
+            (new MigrationFactory(compact('handler')))->create()->up();
             (new MigrationModel())->set(['Migration' => $handler])->save(addMetaData: false);
+
             $app->log(self::SUCCESSFULL_MIGRATION . $handler);
         }
 
@@ -72,7 +79,7 @@ class Migration {
     }
 
     public function seedLanguage() {
-       (new DatabaseSeeder())->up('Language', ['Name' => 'English', 'Code' => 'en'], 1); 
+       (new DatabaseSeeder())->up('Language', ['Name' => 'English', 'Code' => app()->getConfig()->get('locale')->default], 1); 
     }
 
 }

@@ -25,8 +25,8 @@ trait EntityRelationsTrait {
      */
 
     private function getInstanceOf(string $class) {
-        $class = preg_replace('/Model/', '', CoreFunctions::last(explode('\\', $class))->scalar);
-        return (new ModelFactory(['handler' => $class]))->create();
+        $handler = preg_replace('/Model/', '', CoreFunctions::last(explode('\\', $class))->scalar);
+        return (new ModelFactory(compact('handler')))->create();
     }
 
     /**

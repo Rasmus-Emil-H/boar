@@ -42,7 +42,7 @@ final class Router {
 
         $defaultRoute = $app->getConfig()->get('routes')->defaults->redirectTo;
 
-        $controller = (new ControllerFactory(['handler' => $handler]))->create();
+        $controller = (new ControllerFactory(compact('handler')))->create();
         if (!$controller) $app->getResponse()->redirect($defaultRoute);
 
         $controllerMethod = $this->path[1] ?? '';

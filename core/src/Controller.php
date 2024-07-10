@@ -63,8 +63,8 @@ class Controller {
 
     public function setChildData(): void {
         foreach ($this->getChildren() as $childController) {
-            [$controller, $method] = preg_match('/:/', $childController) ? explode(':', $childController) : [$childController, self::DEFAULT_METHOD];
-            $cController = (new ControllerFactory(['handler' => $controller]))->create();
+            [$handler, $method] = preg_match('/:/', $childController) ? explode(':', $childController) : [$childController, self::DEFAULT_METHOD];
+            $cController = (new ControllerFactory(compact('handler')))->create();
             $cController->{$method}();
             app()->getParentController()->setData($cController->getData());
             $cController->setChildData();
@@ -85,8 +85,9 @@ class Controller {
 
     protected function returnEntity(): Entity {
         $request = $this->request->getArguments();
-        $entityID = CoreFunctions::getIndex($request, 2)->scalar;
-        return (new EntityFactory(['handler' => ucfirst(CoreFunctions::first($request)->scalar), 'key' => $entityID]))->create();
+        $key = CoreFunctions::getIndex($request, 2)->scalar;
+        $handler = ucfirst(CoreFunctions::first($request)->scalar);
+        return (new EntityFactory(compact('handler', 'key')))->create();
     }
 
     protected function returnValidEntityIfExists(): Entity {

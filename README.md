@@ -203,6 +203,8 @@ final class LanguageModel extends Entity {
 	public function setAllowedHTTPMethods() {
 		$this->setValidHTTPMethods(self::ALLOWED_HTTP_METHODS);
 	}
+
+}
 ```
 
 If you forget to include your method in the ALLOWED_HTTP_METHODS array, a method not allowed response will be returned to the client.
@@ -211,13 +213,29 @@ If you forget to include your method in the ALLOWED_HTTP_METHODS array, a method
 
 Controllers are instansiated with a Request and Response object.
 
-The Request object are responsible for getting the body from the client, within the proper context, and can be accesed by any controllers like so
+The Request object are responsible for getting the body from the client, within the proper context, and can be accesed by any controllers like below in the body variable
 
 ```
-$body = $this->requestBody;
+<?php
+
+namespace app\controllers;
+
+use \app\core\src\Controller;
+
+class LanguageController extends Controller {
+
+    public function changeSession() {
+		$this->denyGETRequest();
+
+		$body = $this->requestBody;
+
+        $this->response->ok('42069');
+    }
+    
+}
 ```
 
-The Response object are responsible for returning the proper response to the client, based on various scenarios, and can be done like so
+The Response object are responsible for returning the proper response to the client, based on various scenarios, and can be done like below
 
 ```
 <?php

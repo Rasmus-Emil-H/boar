@@ -129,7 +129,7 @@ The code above will instansiate a new query builder based on the Language table 
 // Or debug current query by ->debugQuery(); instead of run();
 ```
 
-### Relations
+### Entity relations
 
 A default implementation of table relations has been created and can be found at ~/core/src/traits/EntityRelationsTrait from where you can describe relations based on your entities. Default methods has been provided and can be accesses like this (hasMany)
 

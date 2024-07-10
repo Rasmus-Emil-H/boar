@@ -382,3 +382,22 @@ Located at ~/public/resources/js/main.js you can import objects that you include
 Once you include new paths to modulesToImport they will be avaliable at window.boar.YOUR_MODULE_NAME
 
 Please note that objects will be frozen
+
+### Serviceworker
+
+Comes with a default serviceworker implementation, use as you wish
+
+### Form submissions
+
+By default, window.boar.behaviour will intercept all forms and return a promise from which you can do what you want
+
+In the frontend you can then await this behaviour, or let it submit as normal, and do custom tasks like below
+
+```
+
+$(document).on('click', '.something', async function(e) {
+    e.preventDefault();
+    const res = await window.boar.behaviour.submitForm($(e.target).closest('form'));
+    // Do something with the res
+});
+```

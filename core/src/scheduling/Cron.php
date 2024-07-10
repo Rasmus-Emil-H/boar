@@ -2,8 +2,7 @@
 
 namespace app\core\src\scheduling;
 
-use app\core\src\factories\CronjobFactory;
-use app\core\src\miscellaneous\CoreFunctions;
+use \app\core\src\factories\CronjobFactory;
 use \app\models\CronModel;
 
 class Cron {
@@ -20,16 +19,10 @@ class Cron {
 
     public function run() {
         foreach ((new CronModel())->all() as $cronJob) {
-            $cCronjob = (new CronjobFactory(['handler' => $cronJob->get('CronjobEntity')]))->create();
-            foreach ($cCronjob->getCronjobs() as $cronjob) {
-                try {
-                    app()->addSystemEvent(['Starting new cronjob iteration ' . $cronjob]);
-                    $cCronjob->{$cronjob}();
-                    app()->addSystemEvent(['Cronlog ran without errors: ' . $cronjob]);
-                } catch (\Exception $e) {
-                    app()->addSystemEvent(['Cronlog ran with errors: ' . json_encode($e)]);
-                }
-            }
+            $handler = $cronJob->get('CronjobEntity');
+            $cCronjob = (new CronjobFactory(compact('handler')))->create();
+
+            foreach ($cCronjob->getCronjobs() as $cronjob) $cCronjob->{$cronjob}();
         }
     }
 

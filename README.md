@@ -129,6 +129,26 @@ The code above will instansiate a new query builder based on the Language table 
 // Or debug current query by ->debugQuery(); instead of run();
 ```
 
+### Relations
+
+A default implementation of table relations has been created and can be found at ~/core/src/traits/EntityRelationsTrait from where you can describe relations based on your entities. Default methods has been provided and can be accesses like this (hasMany)
+
+```
+<?php
+
+namespace app\models;
+
+use \app\core\src\database\Entity;
+
+final class LanguageModel extends Entity {
+
+	public function translations() {
+		return $this->hasMany(TranslationModel::class)->run();
+	}
+	
+}
+```
+
 ### Database migrations
 
 Making changes to the database should be done via a migration.

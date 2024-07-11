@@ -254,7 +254,24 @@ In your custom methods, in order for the application to fetch you the correct en
 Should you need a new object or another you would do like below
 
 ```
-$cLanguage = new LanguageModel(N);
+<?php
+
+namespace app\controllers;
+
+use \app\core\src\Controller;
+
+class LanguageController extends Controller {
+
+    public function someMethod() {
+        // If the path primary key exists on the proper model, a Entity will be loaded for you, based on the context
+        $cLanguage = $this->returnValidEntityIfExists();
+
+        $request = $this->requestBody->body;
+        $response = $cLanguage->dispatchHTTPMethod($request->action, $request);
+
+        $this->response->{$this->determineClientResponseMethod(dispatchedHTTPMethodResult: $response)}($response ?? '');
+    }
+}
 ```
 
 ## Request - Response cycle

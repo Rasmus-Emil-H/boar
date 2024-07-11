@@ -2,7 +2,7 @@
 
 namespace app\core\src\database\querybuilder;
 
-trait Constants {
+class Constants {
 
     public const WHERE          = ' WHERE ';
     public const AND            = ' AND ';

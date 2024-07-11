@@ -12,11 +12,8 @@
 
 namespace app\core\src\database\querybuilder;
 
-use \app\core\src\utilities\Builder;
+abstract class QueryBuilderBase extends Constants {
 
-abstract class QueryBuilderBase implements Builder {
-
-    use Constants;
     
     public const DEFAULT_REGEX_REPLACE_PATTERN = '/[^a-zA-Z0-9]/';
     

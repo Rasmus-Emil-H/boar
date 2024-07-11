@@ -48,4 +48,6 @@ class Constants {
 
     protected array $comparisonOperators = ['=', '<>', '!=', '>', '<', '>=', '<='];
 
+    public const DEFAULT_REGEX_REPLACE_PATTERN = '/[^a-zA-Z0-9]/';
+
 }

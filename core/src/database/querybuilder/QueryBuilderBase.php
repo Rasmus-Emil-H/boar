@@ -13,9 +13,6 @@
 namespace app\core\src\database\querybuilder;
 
 abstract class QueryBuilderBase extends Constants {
-
-    
-    public const DEFAULT_REGEX_REPLACE_PATTERN = '/[^a-zA-Z0-9]/';
     
     public function __construct(
         public string $class, 

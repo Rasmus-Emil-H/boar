@@ -118,7 +118,7 @@ class AuthController extends Controller {
 
 The layout must be located in ~/views/layouts dir
 
-### Controllers
+## Controllers
 
 Creating a controller is straightforward, either cp one of existing or create a new as below.
 
@@ -148,7 +148,7 @@ denyGETRequest(), denyPOSTRequest(), isGet(), isPost()
 
 Should you wish to execute logic before methods run, you can provide a middleware that extends ~/core/src/middlewares/Middleware.
 
-### Models
+## Models
 
 Creating a model is straightforward, either cp one of existing or create a new as below
 

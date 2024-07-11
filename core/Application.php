@@ -82,6 +82,9 @@ final class Application {
     }
 
     private function validateUserSession() {
+
+        if (IS_CLI) return;
+
         $validSession = (new UserModel())->hasActiveSession();
 
         $defaultUnauthenticatedRoute = $this->getConfig()->get('routes')->unauthenticated;

@@ -212,9 +212,9 @@ If you forget to include your method in the ALLOWED_HTTP_METHODS array, a method
 When you want to make a request from you client, an example would be
 
 
-controller/method/primarykey
+POST controller/method/primarykey
 ```
-/language/edit/1
+POST /language/edit/1
 ```
 
 You can then use

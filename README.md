@@ -265,6 +265,7 @@ class LanguageController extends Controller {
     public function someMethod() {
         // If the path primary key exists on the proper model, a Entity will be loaded for you, based on the context
         $cLanguage = $this->returnValidEntityIfExists();
+        $cLanguage->requireExistence();
 
         $request = $this->requestBody->body;
         $response = $cLanguage->dispatchHTTPMethod($request->action, $request);

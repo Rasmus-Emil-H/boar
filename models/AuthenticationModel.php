@@ -34,7 +34,7 @@ final class AuthenticationModel {
         $user = CoreFunctions::first($user);
         $passwordVerify = password_verify($this->data->password, $user->get('Password'));
         if (!$passwordVerify) $this->invalidLogin();
-        return $user->authenticate($user);
+        return $user->login();
     }
 
     protected function invalidLogin() {

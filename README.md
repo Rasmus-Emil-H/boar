@@ -346,7 +346,7 @@ Custom exceptions can be made and should reside within ~/core/src/exceptions and
 
 ## Gate
 
-A default gate implementation is in place and be be used whereever you like.
+A default gate implementation is in place and can be used where ever you like
 
 Gates in this context is meant to be a repetetive reducer but allowing you to specify readable methods with a clear intent, like below
 

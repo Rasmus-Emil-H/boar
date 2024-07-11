@@ -10,12 +10,12 @@
 const version = '?t=1';
 
 const modulesToImport = [
-  "../../serviceworkerInit.js"+version,
-  "./modules/utilities.js"+version,
-  "./modules/components.js"+version,
-  "./modules/behaviour.js"+version,
-  "./modules/constants.js"+version,
-  "./modules/websocket.js"+version
+  `../../serviceworkerInit.js${version}`,
+  `./modules/utilities.js${version}`,
+  `./modules/components.js${version}`,
+  `./modules/behaviour.js${version}`,
+  `./modules/constants.js${version}`,
+  `./modules/websocket.js${version}`
 ];
 
 document.addEventListener("DOMContentLoaded", async function() {

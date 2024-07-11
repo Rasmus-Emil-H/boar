@@ -31,9 +31,11 @@ final class AuthenticationModel {
     public function applicationLogin() {
         $user = (new UserModel)->find('Email', $this->data->email);
         if (empty($user)) $this->invalidLogin();
+
         $user = CoreFunctions::first($user);
         $passwordVerify = password_verify($this->data->password, $user->get('Password'));
         if (!$passwordVerify) $this->invalidLogin();
+        
         return $user->login();
     }
 

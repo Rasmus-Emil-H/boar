@@ -174,6 +174,33 @@ final class LanguageModel extends Entity {
 
 Models extends the Entity that has access to various methods that will ease the way you interact with the database
 
+### Patching entities
+
+Patching can become quite cumbersome, and because of that, boar comes with various methods on children of Entity that allows you to
+create, read, update and delete on Entities, without having to repeat yourself to much.
+
+Example of entity methods below
+
+```
+$cLanguage = new LanguageModel(N);
+
+// Patching
+$cLanguage->patchField(['Name' => $arguments->Name]);
+
+$cLanguage->complete();
+$cLanguage->findOrCreate();
+$cLanguage->init($args);
+$cLanguage->edit($args);
+
+// Add meta data
+$cLanguage->addMetaData(['Meta test']);
+
+// Deleting
+$cLanguage->delete();
+$cLanguage->softDelete();
+```
+
+
 ## Controller - Method interaction
 
 A controller should always resolve to a model, this can happen in various ways but a default implemented way happens in ~/core/src/traits/ControllerMethodTrait.php

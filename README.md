@@ -340,6 +340,10 @@ And in main.js include
 await window.boar.websocket.init();
 ```
 
+## Exceptions
+
+Custom exceptions can be made and should reside within ~/core/src/exceptions and should contain a code(int) and a message (string)
+
 ## CLI
 
 ### Tools

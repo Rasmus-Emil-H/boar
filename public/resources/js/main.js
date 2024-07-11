@@ -35,6 +35,7 @@ document.addEventListener("DOMContentLoaded", async function() {
     }
 
     // await window.boar.serviceworkerInit.init();
-    await window.boar.behaviour.init();
+    // await window.autologik.websocket.init();
 
+    await window.boar.behaviour.init();
 });

@@ -24,12 +24,6 @@ Options -Indexes
 Header add x-skip-access-control-check "true"
 Options +FollowSymlinks
 
-# RewriteCond %{HTTPS} off
-# RewriteRule .* https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
-
-# RewriteCond %{HTTP_HOST} ^www [NC]
-# RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
-
 <IfModule mod_rewrite.c>
     RewriteEngine On
 

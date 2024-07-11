@@ -11,7 +11,8 @@ use \app\models\AuthenticationModel;
 class AuthController extends Controller {
 
     public function login(): void {
-        if ((new UserModel())->hasActiveSession()) $this->response->redirect('/home');
+        if ((new UserModel())->hasActiveSession()) $this->response->redirect(app()->getConfig()->get('routes')->defaults->redirectTo);
+        
         if ($this->request->isPost()) new AuthenticationModel($this->requestBody, 'applicationLogin');
         
         $this->setClientLayoutStructure('auth', 'login');

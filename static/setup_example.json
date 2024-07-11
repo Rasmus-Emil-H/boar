@@ -19,7 +19,7 @@
     },
     "routes": {
         "defaults": {
-            "redirectTo": "/auth/login"
+            "redirectTo": "/home"
         },
         "unauthenticated": [
             "/auth/login", 

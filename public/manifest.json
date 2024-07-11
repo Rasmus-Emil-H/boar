@@ -7,7 +7,7 @@
     "service_worker": "serviceworkerInstall.js",
     "color": "#f44336"
   },
-  "start_url": "/auth/home",
+  "start_url": "/auth/login",
   "theme_color": "03045e",
   "background_color": "03045e",
   "icons": [

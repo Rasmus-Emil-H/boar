@@ -69,6 +69,7 @@ final class Application {
     }
 
     public function getLanguage() {
+        if (IS_CLI) return;
         if (!$this->session->get('language')) $this->session->set('language', self::$app->config->get('locale')->default);
     }
 

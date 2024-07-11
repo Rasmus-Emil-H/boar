@@ -247,7 +247,6 @@ class LanguageController extends Controller {
 
     public function changeSession() {
 		$this->denyGETRequest();
-
 		$body = $this->requestBody;
 
         $this->response->ok('42069');

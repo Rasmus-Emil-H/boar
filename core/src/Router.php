@@ -46,6 +46,7 @@ final class Router {
         if (!$controller) $app->getResponse()->redirect($defaultRoute);
 
         $controllerMethod = $this->path[1] ?? '';
+
         $app->setParentController($controller);
         $this->method = $controllerMethod === '' || !method_exists($controller, $controllerMethod) ? self::INDEX_METHOD : $controllerMethod;
 

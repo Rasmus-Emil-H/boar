@@ -1,5 +1,6 @@
 {
     "appName": "boar",
+    "appIcon": "/favicon.ico",
     "version": "0.1",
     "env": {
         

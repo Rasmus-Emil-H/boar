@@ -3,7 +3,7 @@
 use \app\core\src\database\table\Table;
 use \app\core\src\database\Schema;
 
-class add_polymorphic_comment_table_2022_02_02_0001 {
+class add_polymorphich_comment_table_2022_02_02_0001 {
 
     public function up() {
         (new Schema())->up('Comments', function(Table $table) {

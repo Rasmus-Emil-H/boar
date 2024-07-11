@@ -197,7 +197,7 @@ use \app\core\src\database\Entity;
 final class LanguageModel extends Entity {
 
 	private const ALLOWED_HTTP_METHODS = [
-		'getTranslations', 'create', 'remove'
+		'getTranslations', 'create', 'delete'
 	];
 
 	public function setAllowedHTTPMethods() {
@@ -208,6 +208,27 @@ final class LanguageModel extends Entity {
 ```
 
 If you forget to include your method in the ALLOWED_HTTP_METHODS array, a method not allowed response will be returned to the client.
+
+When you want to make a request from you client, an example would be
+
+
+controller/method/primarykey
+```
+/language/edit/1
+```
+
+You can then use
+
+```
+$cEntity = $this->returnValidEntityIfExists();
+```
+
+In your custom methods, in order for the application to fetch you the correct entity based on the context.
+Should you need a new object or another you would do like below
+
+```
+$cLanguage = new LanguageModel(N);
+```
 
 ## Request - Response cycle
 

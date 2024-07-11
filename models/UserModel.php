@@ -36,6 +36,7 @@ final class UserModel extends Entity {
 		$app = app();
 		$sessionID = Hash::uuid();
         $app->getSession()->set('SessionID', $sessionID);
+		$app->getSession()->set('user', $this->key());
         (new SessionModel())->set(['Value' => $sessionID, $this->getKeyField() => $this->key()])->save();
 		$checkForDirect = $app->getSession()->get('redirect');
 		$app->getSession()->unset('redirect');

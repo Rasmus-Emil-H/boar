@@ -25,7 +25,7 @@ document.addEventListener("DOMContentLoaded", async function() {
     for (const modulePath of modulesToImport) {
         try {
             const module = await import(modulePath);
-            const moduleName = modulePath.split('/').pop().replace('.js'+version, '');
+            const moduleName = modulePath.split('/').pop().replace(`.js${version}`, '');
             window.boar[moduleName] = module.default;
             if (modulePath.includes('websocket')) continue;
             Object.freeze(window.boar[moduleName]);

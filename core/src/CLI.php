@@ -19,8 +19,9 @@ class CLI {
     }
 
     private static function checkValidity(string $task) {
-        if (!array_key_exists($task, self::getJobs()))
-            throw new \app\core\src\exceptions\NotFoundException('CLI TOOL NOT FOUND' . PHP_EOL);
+        if (array_key_exists($task, self::getJobs())) return;
+
+        throw new \app\core\src\exceptions\NotFoundException('CLI TOOL NOT FOUND' . PHP_EOL);
     }
 
     public static function checkTask(string $task): void {

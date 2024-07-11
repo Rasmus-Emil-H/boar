@@ -12,7 +12,7 @@ class AuthController extends Controller {
 
     public function login(): void {
         if ((new UserModel())->hasActiveSession()) $this->response->redirect(app()->getConfig()->get('routes')->defaults->redirectTo);
-        
+
         if ($this->request->isPost()) new AuthenticationModel($this->requestBody, 'applicationLogin');
         
         $this->setClientLayoutStructure('auth', 'login');
@@ -63,7 +63,7 @@ class AuthController extends Controller {
         $emailExists = (new UserModel())->find('Email', $request->body->email);
         if ($emailExists) $this->response->dataConflict();
 
-        $user = (new UserModel())
+        (new UserModel())
             ->set(['Email' => $request->body->email, 'Name' => $request->body->name, 'Password' => password_hash($request->body->password, PASSWORD_DEFAULT)])
             ->save()
             ->setRole('User')

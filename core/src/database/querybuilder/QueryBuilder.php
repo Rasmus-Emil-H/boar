@@ -288,17 +288,17 @@ class QueryBuilder extends QueryBuilderBase {
     }
 
     public function beforeToday(string $field = 'CreatedAt'): self {
-        $this->where([$field => '< CURRENT_DATE()']);
+        $this->where([$field => $this::LOWER_THAN_CURRENT_DAY]);
         return $this;
     }
 
     public function after(string $field): self {
-        $this->where([$field => '> CURRENT_DATE()']);
+        $this->where([$field => $this::HIGHER_THAN_CURRENT_DAY]);
         return $this;
     }
 
     public function afterToday(string $field = 'CreatedAt'): self {
-        $this->where([$field => '> CURRENT_DATE()']);
+        $this->where([$field => $this::HIGHER_THAN_CURRENT_DAY]);
         return $this;
     }
 

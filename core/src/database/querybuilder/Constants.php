@@ -33,6 +33,8 @@ class Constants {
     protected const DEFAULT_SQL_DATE_FORMAT = 'Y/m/d';
     protected const DEFAULT_FRONTEND_DATE_FROM_INDICATOR = 'from-';
     protected const DEFAULT_FRONTEND_DATE_TO_INDICATOR = 'to-';
+    protected const LOWER_THAN_CURRENT_DAY = '< CURRENT_DATE()';
+    protected const HIGHER_THAN_CURRENT_DAY = '> CURRENT_DATE()';
 
     protected const DEFAULT_LIMIT = 20;
     protected const DEFAULT_OFFSET = 0;

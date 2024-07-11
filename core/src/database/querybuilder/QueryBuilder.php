@@ -177,17 +177,9 @@ class QueryBuilder extends QueryBuilderBase {
     public function where(array $arguments = []): self {
         foreach ($arguments as $selector => $sqlValue) {
             $dateField = str_contains($selector, $this::DEFAULT_FRONTEND_DATE_FROM_INDICATOR) || str_contains($selector, $this::DEFAULT_FRONTEND_DATE_TO_INDICATOR);
-            if ($dateField) {
-                list($order, $field) = explode('-', $selector);
-                if (str_contains($order, '.')) $table = CoreFunctions::first(explode('.', $order))->scalar;
 
-                $selector = preg_replace($this::DEFAULT_REGEX_REPLACE_PATTERN, '', $selector);
-                $sqlValue = date($this::DEFAULT_SQL_DATE_FORMAT, strtotime($sqlValue));
-                $arrow = CoreFunctions::last(explode('.', $order))->scalar === 'from' ? '>' : '<';
-
-                $this->upsertQuery($this->checkStart() . (isset($table) && $table ? $table . '.' : '') . "{$field} " . $arrow . "= :{$selector}");
-                $this->updateQueryArgument($selector, $sqlValue);
-            } else {
+            if ($dateField) $this->handleDateClausing($selector, $sqlValue);
+            else {
                 list($comparison, $sqlValue) = Parser::sqlComparsion(($sqlValue ?? ''), $this->getComparisonOperators());
                 $key = preg_replace($this::DEFAULT_REGEX_REPLACE_PATTERN, '', $selector);
 
@@ -196,6 +188,18 @@ class QueryBuilder extends QueryBuilderBase {
             }
         }
         return $this;
+    }
+
+    private function handleDateClausing(string $selector, string $sqlValue) {
+        list($order, $field) = explode('-', $selector);
+        if (str_contains($order, '.')) $table = CoreFunctions::first(explode('.', $order))->scalar;
+
+        $selector = preg_replace($this::DEFAULT_REGEX_REPLACE_PATTERN, '', $selector);
+        $sqlValue = date($this::DEFAULT_SQL_DATE_FORMAT, strtotime($sqlValue));
+        $arrow = CoreFunctions::last(explode('.', $order))->scalar === 'from' ? '>' : '<';
+
+        $this->upsertQuery($this->checkStart() . (isset($table) && $table ? $table . '.' : '') . "{$field} " . $arrow . "= :{$selector}");
+        $this->updateQueryArgument($selector, $sqlValue);
     }
 
     public function or(array $arguments) {

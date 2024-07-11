@@ -348,8 +348,9 @@ Custom exceptions can be made and should reside within ~/core/src/exceptions and
 
 A default gate implementation is in place and can be used where ever you like
 
-Gates in this context is meant to be a repetetive reducer but allowing you to specify readable methods with a clear intent, like below
+Gates in this context is meant to be a repetetive reducer by allowing you to specify readable methods with a clear intent, like below
 
+ProductController.php
 ```
 <?php
 
@@ -368,6 +369,29 @@ class ProductController extends Controller {
         
         if ($this->request->isGet())
             return $this->setFrontendTemplateAndData(templateFile: 'editProduct', data: ["product" => $cProduct]);
+    }
+
+}
+```
+
+Gate.php
+```
+<?php
+
+namespace app\core\src\gate;
+
+use \app\core\src\database\Entity;
+use \app\core\src\miscellaneous\CoreFunctions;
+use \app\core\src\traits\GateStaticMethodTrait;
+
+class Gate {
+
+    use GateStaticMethodTrait;
+
+    protected static function canViewProduct(Entity $product): bool {
+        $user = CoreFunctions::applicationUser();
+        
+        return $product->user()->key() === $user->key() || $user->isAdmin();
     }
 
 }

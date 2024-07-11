@@ -70,6 +70,7 @@ final class Application {
 
     public function getLanguage() {
         if (IS_CLI) return;
+        
         if (!$this->session->get('language')) $this->session->set('language', self::$app->config->get('locale')->default);
     }
 
@@ -83,7 +84,6 @@ final class Application {
     }
 
     private function validateUserSession() {
-
         if (IS_CLI) return;
 
         $validSession = (new UserModel())->hasActiveSession();

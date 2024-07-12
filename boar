@@ -1,0 +1,9 @@
+#!/usr/bin/env php
+<?php
+
+require_once 'vendor/autoload.php';
+
+use \app\core\src\console\ConsoleCommand;
+
+$command = new ConsoleCommand();
+$command->run($argv);

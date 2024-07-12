@@ -289,6 +289,43 @@ Controllers are instansiated with a Request and Response object.
 
 The Request object are responsible for getting the body from the client, within the proper context, and can be accesed by any controllers like below in the body variable
 
+### Request 
+
+The parent controller setups various things once a controller is instansiated via the factory. 
+These values can be directly fetched from child controllers via
+
+You can get the query parameters from any controller like below
+
+```
+$search = $this->request->getQuerySearchParameters();
+```
+
+### Response
+
+The response object lets you answer to the client in a predictable and easy way like below with the "ok" method
+The response object has variouos methods for responding and can be extended upon as fits your needs
+
+```
+<?php
+
+use \app\core\src\Controller;
+
+class LanguageController extends Controller {
+
+    public function someMethod() {
+        // Get request body
+        $request = $this->requestBody;
+
+        // Do some logic from a model or the controller
+
+        // Respond to the client
+        $this->response->ok();
+    }
+    
+}
+
+```
+
 ```
 <?php
 

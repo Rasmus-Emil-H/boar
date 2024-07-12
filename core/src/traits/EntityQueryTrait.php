@@ -72,12 +72,16 @@ trait EntityQueryTrait {
         return (new QueryBuilder(get_called_class(), $table, $this->getKeyField()));
     }
 
+    private function bootstrapQuery(array $fields = ['*']): QueryBuilder {
+        return $this->query()->select();
+    }
+
     public function find(string $field, string $value): array {
-        return $this->query()->select()->where([$field => $value])->run();
+        return $this->bootstrapQuery()->where([$field => $value])->run();
     }
 
     public function findByMultiple(array $conditions): array {
-        return $this->query()->select()->where($conditions)->run();
+        return $this->bootstrapQuery()->where($conditions)->run();
     }
 
     public function addMetaData(array $data): self {
@@ -136,14 +140,14 @@ trait EntityQueryTrait {
     }
 
     public function search(array $arguments): array {
-        return $this->query()->select()->where($arguments)->run();
+        return $this->bootstrapQuery()->where($arguments)->run();
     }
 
     public function findOrCreate(string $whereKey, string $whereValue, array $data = []): \app\core\src\database\Entity {
         $lookup = $this->find($whereKey, $whereValue);
         if (!empty($lookup)) return CoreFunctions::first($lookup);
 
-        $cEntity = (new $this());
+        $cEntity = new $this();
         $cEntity->setData($data);
         $cEntity->save();
         $cEntity->addMetaData([$this->getTableName() . self::FIND_OR_CREATE_NEW_DATA_ENTRY])->save();

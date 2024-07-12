@@ -10,6 +10,7 @@
 const version = '?t=1';
 const modulesDir = './modules/';
 const jsExtension = '.js';
+const appName = 'boar'
 
 const modules = ['utilities', 'components', 'behaviour', 'constants', 'websocket'];
 const allModules = modules.map(function(module) {
@@ -23,22 +24,22 @@ const modulesToImport = [
 
 document.addEventListener("DOMContentLoaded", async function() {
 
-  window.boar = {};
+  window[appName] = {};
   
     for (const modulePath of modulesToImport) {
         try {
             const module = await import(modulePath);
             const moduleName = modulePath.split('/').pop().replace(`${jsExtension}${version}`, '');
-            window.boar[moduleName] = module.default;
+            window[appName][moduleName] = module.default;
             if (modulePath.includes('websocket')) continue;
-            Object.freeze(window.boar[moduleName]);
+            Object.freeze(window[appName][moduleName]);
         } catch (error) {
             
         }
     }
 
-    // await window.boar.serviceworkerInit.init();
-    // await window.autologik.websocket.init();
+    // await window[appName].serviceworkerInit.init();
+    // await window[appName].websocket.init();
 
-    await window.boar.behaviour.init();
+    await window[appName].behaviour.init();
 });

@@ -150,6 +150,7 @@ This yard file by default provides the app() function that will grant you access
     ### Middlewares
 
     Should you wish to execute logic before methods run, you can provide a middleware that extends ~/core/src/middlewares/Middleware.</details>
+</details>
 
 <details>
     <summary>Models</summary>

@@ -1,69 +1,71 @@
 # Boar PHP minimal MVC 🐗
 
-## Intro
+<details>
+    <summary>Intro</summary>
 
-Boar is a lightweight PHP MVC framework designed to facilitate the creation of web applications.
+    Boar is a lightweight PHP MVC framework designed to facilitate the creation of web applications.
 
-## Features
+    ## Features
 
-- **MVC Architecture**: Separates the application logic (Model), user interface (View), and control flow (Controller).
-- **Routing**: A simple and flexible routing system to map URLs to controllers and actions.
-- **Dependency Injection**: Easily manage dependencies and services within the application.
-- **Configuration Management**: Centralized configuration for different environments.
-- **Template Engine**: Use of PHP as a templating engine for rendering views.
-- **Error Handling**: Error handling and logging mechanism.
-- **Session Management**: Built-in session handling for managing user sessions.
-- **CSRF Protection**: Cross-Site Request Forgery protection for form submissions.
-- **Validation**: Input validation for ensuring data integrity.
+    - **MVC Architecture**: Separates the application logic (Model), user interface (View), and control flow (Controller).
+    - **Routing**: A simple and flexible routing system to map URLs to controllers and actions.
+    - **Dependency Injection**: Easily manage dependencies and services within the application.
+    - **Configuration Management**: Centralized configuration for different environments.
+    - **Template Engine**: Use of PHP as a templating engine for rendering views.
+    - **Error Handling**: Error handling and logging mechanism.
+    - **Session Management**: Built-in session handling for managing user sessions.
+    - **CSRF Protection**: Cross-Site Request Forgery protection for form submissions.
+    - **Validation**: Input validation for ensuring data integrity.
 
-### ~
+    ### ~
 
-Contains the main application code.
+    Contains the main application code.
 
-- **static/**: Configuration files for the application.
-- **controllers/**: Controller classes responsible for handling requests and returning responses.
-- **models/**: Model classes for interacting with the database.
-- **views/**: View templates for rendering HTML.
-- **core/**: Core framework classes that provide the foundation for the MVC framework.
+    - **static/**: Configuration files for the application.
+    - **controllers/**: Controller classes responsible for handling requests and returning responses.
+    - **models/**: Model classes for interacting with the database.
+    - **views/**: View templates for rendering HTML.
+    - **core/**: Core framework classes that provide the foundation for the MVC framework.
 
-### public/
+    ### public/
 
-The public-facing directory that serves as the entry point for the application.
+    The public-facing directory that serves as the entry point for the application.
 
-- **index.php**: The main entry point of the application, initializing the framework.
-- **.htaccess**: Configuration for URL rewriting to route all requests through `index.php`.
+    - **index.php**: The main entry point of the application, initializing the framework.
+    - **.htaccess**: Configuration for URL rewriting to route all requests through `index.php`.
 
-### vendor/
+    ### vendor/
 
-Contains third-party libraries and dependencies managed via Composer.
+    Contains third-party libraries and dependencies managed via Composer.
 
-## Setup
+    ## Setup
 
-git clone https://github.com/Troldefar/boar.git && cd boar && composer install
+    git clone https://github.com/Troldefar/boar.git && cd boar && composer install
 
-Update the ~/static/setup.json (Database credentials)
+    Update the ~/static/setup.json (Database credentials)
 
-Run the command: php public/index.php DatabaseMigration
+    Run the command: php public/index.php DatabaseMigration
 
-Observe default tables with default values are now set up and the application is ready to go
+    Observe default tables with default values are now set up and the application is ready to go
 
-## Configuration
+    ## Configuration
 
-### ~/static/setup.json
+    ### ~/static/setup.json
 
-The `setup.json` file contains configuration settings for your application.
+    The `setup.json` file contains configuration settings for your application.
 
-The setup file includes, by default;
+    The setup file includes, by default;
 
-Database, client assets, request configs, allowed file types, integrations, states, etc
+    Database, client assets, request configs, allowed file types, integrations, states, etc
 
-## Helpers
+    ## Helpers
 
-### yard.php
+    ### yard.php
 
-A global yard.php file is provided for oftenly used methods, function, in order to reduce specific namespace contexts.
+    A global yard.php file is provided for oftenly used methods, function, in order to reduce specific namespace contexts.
 
-This yard file by default provides the app() function that will grant you access to the application instance from where you can get the global objects that is being set at bootstrapping.
+    This yard file by default provides the app() function that will grant you access to the application instance from where you can get the global objects that is being set at bootstrapping.
+</details>
 
 <details>
     <summary>Views</summary>
@@ -403,134 +405,140 @@ await window.boar.websocket.init();
 
 Custom exceptions can be made and should reside within ~/core/src/exceptions and should contain a code(int) and a message (string)
 
-## Gate
+<details>
+    <summary>Gate</summary>
 
-A default gate implementation is in place and can be used where ever you like
+    A default gate implementation is in place and can be used where ever you like
 
-Gates in this context is meant to be a repetetive reducer by allowing you to specify readable methods with a clear intent, like below
+    Gates in this context is meant to be a repetetive reducer by allowing you to specify readable methods with a clear intent, like below
 
-ProductController.php
-```
-<?php
+    ProductController.php
+    ```
+    <?php
 
-namespace app\controllers;
+    namespace app\controllers;
 
-use \app\core\src\Controller;
-use \app\core\src\gate\Gate;
-use \app\models\ProductModel;
+    use \app\core\src\Controller;
+    use \app\core\src\gate\Gate;
+    use \app\models\ProductModel;
 
-class ProductController extends Controller {
+    class ProductController extends Controller {
 
-    public function edit() {
-        $cProduct = $this->returnValidEntityIfExists();
+        public function edit() {
+            $cProduct = $this->returnValidEntityIfExists();
 
-        if (!Gate::isAuthenticatedUserAllowed('canViewProduct', $cProduct)) $this->response->notAllowed();
-        
-        if ($this->request->isGet())
-            return $this->setFrontendTemplateAndData(templateFile: 'editProduct', data: ["product" => $cProduct]);
+            if (!Gate::isAuthenticatedUserAllowed('canViewProduct', $cProduct)) $this->response->notAllowed();
+            
+            if ($this->request->isGet())
+                return $this->setFrontendTemplateAndData(templateFile: 'editProduct', data: ["product" => $cProduct]);
+        }
+
     }
+    ```
 
-}
-```
+    Gate.php
+    ```
+    <?php
 
-Gate.php
-```
-<?php
+    namespace app\core\src\gate;
 
-namespace app\core\src\gate;
+    use \app\core\src\database\Entity;
+    use \app\core\src\miscellaneous\CoreFunctions;
+    use \app\core\src\traits\GateStaticMethodTrait;
 
-use \app\core\src\database\Entity;
-use \app\core\src\miscellaneous\CoreFunctions;
-use \app\core\src\traits\GateStaticMethodTrait;
+    class Gate {
 
-class Gate {
+        use GateStaticMethodTrait;
 
-    use GateStaticMethodTrait;
+        protected static function canViewProduct(Entity $product): bool {
+            $user = CoreFunctions::applicationUser();
+            
+            return $product->user()->key() === $user->key() || $user->isAdmin();
+        }
 
-    protected static function canViewProduct(Entity $product): bool {
-        $user = CoreFunctions::applicationUser();
-        
-        return $product->user()->key() === $user->key() || $user->isAdmin();
     }
+    ```
+</details>
 
-}
-```
+<details>
+    <summary>CLI & Cron jobs</summary>
 
-## CLI
+    ### Tools
 
-### Tools
+    Three different CLI tools are provided ouf of the box and can be found ~/core/src/CLI.php
 
-Three different CLI tools are provided ouf of the box and can be found ~/core/src/CLI.php
+    Provided more as your application grow
 
-Provided more as your application grow
+    ## Cron jobs
 
-## Cron jobs
+    ### Scheduling
 
-### Scheduling
+    Boar comes with built in cron functionality.
 
-Boar comes with built in cron functionality.
+    To run the cron manager you can do as below:
 
-To run the cron manager you can do as below:
+    ```
+    * * * * * php ~/public/index.php CronjobScheduler
+    ```
 
-```
-* * * * * php ~/public/index.php CronjobScheduler
-```
+    Once this is setup you touch a file in ~/core/src/scheduling 
 
-Once this is setup you touch a file in ~/core/src/scheduling 
+    (TestScheduler is already provided) and must be added to the CronJob table as an entry with CronjobEntity = 'TestScheduler'
 
-(TestScheduler is already provided) and must be added to the CronJob table as an entry with CronjobEntity = 'TestScheduler'
+    ### Console commands
 
-### Console commands
+    Boar comes with a very minor command for creating an entity. In your terminal you can type
 
-Boar comes with a very minor command for creating an entity. In your terminal you can type
+    ```
+    php boar create-entity test
+    ```
 
-```
-php boar create-entity test
-```
+    The cmd above will create: A controller, a model, a migration file and a view
+</details>
 
-The cmd above will create: A controller, a model, a migration file and a view
+<details>
+    <summary>Database migrations</summary>
 
-## Database migrations
+    Making changes to the database should be done via a migration.
 
-Making changes to the database should be done via a migration.
+    Migrations are located under the ~/migrations dir and examples are implemented.
 
-Migrations are located under the ~/migrations dir and examples are implemented.
+    Example below where we have two methods, up for creating the table and down for dropping the table.
 
-Example below where we have two methods, up for creating the table and down for dropping the table.
+    The second argument provided for up is the closure from where you can set column and determine keys on your table.
 
-The second argument provided for up is the closure from where you can set column and determine keys on your table.
+    File name must match the class name.
 
-File name must match the class name.
+    ```
+    <?php
 
-```
-<?php
+    use \app\core\src\database\table\Table;
+    use \app\core\src\database\Schema;
 
-use \app\core\src\database\table\Table;
-use \app\core\src\database\Schema;
+    class add_translations_table_2018_12_16_0001 {
 
-class add_translations_table_2018_12_16_0001 {
+        public function up() {
+            (new Schema())->up('Translations', function(Table $table) {
+                $table->increments('TranslationID');
+                $table->varchar('Translation', 50);
+                $table->varchar('TranslationHumanReadable', 100);
+                $table->integer('LanguageID', 2);
+                $table->varchar('TranslationHash', 50);
+                $table->timestamp();
+                $table->primaryKey('TranslationID');
+                $table->foreignKey('LanguageID', 'Languages', 'LanguageID');
+            });
+        }
 
-    public function up() {
-        (new Schema())->up('Translations', function(Table $table) {
-            $table->increments('TranslationID');
-            $table->varchar('Translation', 50);
-            $table->varchar('TranslationHumanReadable', 100);
-            $table->integer('LanguageID', 2);
-            $table->varchar('TranslationHash', 50);
-            $table->timestamp();
-            $table->primaryKey('TranslationID');
-            $table->foreignKey('LanguageID', 'Languages', 'LanguageID');
-        });
+        public function down() {
+            (new Schema())->down('Translations'); 
+        }
+
     }
+    ```
 
-    public function down() {
-        (new Schema())->down('Translations'); 
-    }
-
-}
-```
-
-Once you are ready you can run php public/index.php DatabaseMigration and observe that your table has been created with the correct columns, types and relations.
+    Once you are ready you can run php public/index.php DatabaseMigration and observe that your table has been created with the correct columns, types and relations.
+</details>
 
 ## WAF
 

@@ -338,11 +338,13 @@
     ```
 </details>
 
-### File handling
+<details>
+    <summary>File handling</summary>
 
-POSTing a file to /file will automatically handle the file for you and mv it to the uploads dir and insert a row into the database, based on the requested entity
+    POSTing a file to /file will automatically handle the file for you and mv it to the uploads dir and insert a row into the database, based on the requested entity
 
-window.boar.behaviour have a default input file listener (uploadFile) so that if you have input type of file with a class of globalFileUploader you can directly upload files without having to do more, however certain data attributes must be present in order to attach the file to the proper entity. (entityType, entityType, type)
+    window.boar.behaviour have a default input file listener (uploadFile) so that if you have input type of file with a class of globalFileUploader you can directly upload files without having to do more, however certain data attributes must be present in order to attach the file to the proper entity. (entityType, entityType, type)
+</details>
 
 <details>
     <summary>Query building</summary>
@@ -385,21 +387,23 @@ window.boar.behaviour have a default input file listener (uploadFile) so that if
     ```
 </details>
 
-## Websocket
+<details>
+    <summary>Websocket</summary>
 
-A default "no library" websocket is avaliable and can be run via
+    A default "no library" websocket is avaliable and can be run via
 
-```
-nohup php public/index.php WebsocketInit & 
+    ```
+    nohup php public/index.php WebsocketInit & 
 
-// (Or however you like)
-```
+    // (Or however you like)
+    ```
 
-And in main.js include
+    And in main.js include
 
-```
-await window.boar.websocket.init();
-```
+    ```
+    await window.boar.websocket.init();
+    ```
+</details>
 
 ## Exceptions
 

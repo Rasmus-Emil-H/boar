@@ -326,52 +326,6 @@ class LanguageController extends Controller {
 
 ```
 
-```
-<?php
-
-namespace app\controllers;
-
-use \app\core\src\Controller;
-
-class LanguageController extends Controller {
-
-    public function changeSession() {
-		$this->denyGETRequest();
-		$body = $this->requestBody;
-
-        $this->response->ok('42069');
-    }
-    
-}
-```
-
-The Response object are responsible for returning the proper response to the client, based on various scenarios, and can be done like below
-
-```
-<?php
-
-/**
- * Language controller
- * AUTHOR: RE_WEB
- * @package app\controllers
- */
-
-namespace app\controllers;
-
-use \app\core\src\Controller;
-
-class LanguageController extends Controller {
-
-    public function changeSession() {
-        $this->response->ok();
-    }
-    
-}
-
-```
-
-Please refer to ~/core/src/Response.php for the allowed methods and extend to your needs
-
 ### File handling
 
 POSTing a file to /file will automatically handle the file for you and mv it to the uploads dir and insert a row into the database, based on the requested entity

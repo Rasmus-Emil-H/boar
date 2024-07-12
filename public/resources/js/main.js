@@ -9,14 +9,14 @@
 
 const version = '?t=1';
 const modulesDir = './modules/';
+const modules = ['utilities', 'components', 'behaviour', 'constants', 'websocket'];
+const allModules = modules.map(function(module) {
+  return `${modulesDir}${module}.js${version}`;
+});
 
 const modulesToImport = [
   `../../serviceworkerInit.js${version}`,
-  `${modulesDir}utilities.js${version}`,
-  `${modulesDir}components.js${version}`,
-  `${modulesDir}behaviour.js${version}`,
-  `${modulesDir}constants.js${version}`,
-  `${modulesDir}websocket.js${version}`
+  ...allModules
 ];
 
 document.addEventListener("DOMContentLoaded", async function() {

@@ -586,7 +586,7 @@
 
     $(document).on('click', '.something', async function(e) {
         e.preventDefault();
-        const res = await window.boar.behaviour.submitForm($(e.target).closest('form'));
+        const res = await window[appName].behaviour.submitForm($(e.target).closest('form'));
         // Do something with the res
     });
     ```

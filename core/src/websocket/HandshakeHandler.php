@@ -30,6 +30,8 @@ class HandshakeHandler {
         $request = fread($client, 5000);
         Logger::yell("Request received:\n$request\n");
 
+        var_dump($request);
+
         preg_match(Constants::WEBSOCKET_HEADER_KEY, $request, $matches);
 
         if (!isset($matches[1])) {
@@ -41,7 +43,7 @@ class HandshakeHandler {
         $key = base64_encode(
             pack(
                 Constants::PACK_FORMAT_ARG_HEX_ENTIRE_STRING, 
-                sha1($matches[1] . app()->getConfig()->get('integrations')->websocket->sha1key)
+                sha1($matches[1] . Constants::getConfigs()->sha1key)
             )
         );
 

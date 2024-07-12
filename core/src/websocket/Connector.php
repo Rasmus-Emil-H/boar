@@ -15,7 +15,7 @@ class Connector {
 
     private static function tryConnect(): mixed {
 
-        $websocketConfigs = app()->getConfig()->get('integrations')->websocket;
+        $websocketConfigs = Constants::getConfigs();
 
         $serverConfig = new ServerConfig(
             address: $websocketConfigs->address, 
@@ -27,7 +27,7 @@ class Connector {
         $context = $serverConfig->getBackendClientStreamContext();
         $address = $serverConfig->getAddress() . ':' . $serverConfig->getPort();
 
-        $client = stream_socket_client('ssl://' . $address, $errno, $errstr, 30, STREAM_CLIENT_CONNECT, $context);
+        $client = @stream_socket_client('ssl://' . $address, $errno, $errstr, null, STREAM_CLIENT_CONNECT, $context);
 
         if (!$client) {
             app()->getResponse()->ok("Failed to connect: $errstr ($errno)\n");
@@ -43,7 +43,8 @@ class Connector {
     }
 
     private static function performHandshake($client) {
-        $websocketConfigs = app()->getConfig()->get('integrations')->websocket;
+        $websocketConfigs = Constants::getConfigs();
+
         $key = base64_encode(openssl_random_pseudo_bytes(16));
 
         $handshaker = new HandshakeHandler();

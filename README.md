@@ -211,7 +211,7 @@ You can create methods however you like and dispatchMethodOnEntity should be see
 
 ### Allowed http methods from the model
 
-The allowed http method should be manually be specified to avoid fuzzing and other jacksters. Like below.
+The allowed http methods should be manually be specified to avoid fuzzing and other jacksters. Like below.
 
 
 ```
@@ -223,13 +223,9 @@ use \app\core\src\database\Entity;
 
 final class LanguageModel extends Entity {
 
-	private const ALLOWED_HTTP_METHODS = [
+	protected array $ALLOWED_HTTP_METHODS = [
 		'getTranslations', 'create', 'delete'
 	];
-
-	public function setAllowedHTTPMethods() {
-		$this->setValidHTTPMethods(self::ALLOWED_HTTP_METHODS);
-	}
 
 }
 ```

@@ -156,6 +156,10 @@ abstract class Entity {
      * @throws \app\core\src\exceptions\NotFoundException
      */
 
+    public function setAllowedHTTPMethods() {
+		$this->setValidHTTPMethods($this->ALLOWED_HTTP_METHODS);
+	}
+
     public function dispatchMethod(string $method, mixed $arguments = []) {
         $this->checkMethodValidity($method);
         return $this->{$method}($arguments);

@@ -37,13 +37,9 @@ final class LanguageModel extends Entity {
 	  |
 	 */
 
-	private const ALLOWED_HTTP_METHODS = [
+	protected array $ALLOWED_HTTP_METHODS = [
 		'getTranslations', 'create', 'remove'
 	];
-
-	public function setAllowedHTTPMethods() {
-		$this->setValidHTTPMethods(self::ALLOWED_HTTP_METHODS);
-	}
 
 	public function getTranslations() {
 		$frontend = [];

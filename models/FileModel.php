@@ -31,13 +31,9 @@ final class FileModel extends Entity {
 	  |
 	 */
 
-	private const ALLOWED_HTTP_METHODS = [
+	protected array $ALLOWED_HTTP_METHODS = [
 		'attachFile', 'delete'
 	];
-
-	public function setAllowedHTTPMethods() {
-		$this->setValidHTTPMethods(self::ALLOWED_HTTP_METHODS);
-	}
 
 	public function attachFile(object $arguments) {
 		$this->setData([

@@ -25,7 +25,7 @@
     - **controllers/**: Controller classes responsible for handling requests and returning responses.
     - **models/**: Model classes for interacting with the database.
     - **views/**: View templates for rendering HTML.
-    - **core/**: Core framework classes that provide the foundation for the MVC framework.
+    - **core/src/**: Core framework classes that provide the foundation for the MVC framework.
 
     ### public/
 
@@ -588,4 +588,4 @@
         // Do something with the res
     });
     ```
-</details>
+****</details>

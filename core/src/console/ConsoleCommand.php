@@ -26,7 +26,7 @@ class ConsoleCommand {
     }
 
     protected function printUsage() {
-        echo "Usage: php autologik create-entity <entity-type> <entity-name>\n";
+        echo "Usage: php boar create-entity <entity-type> <entity-name>\n";
     }
 
     

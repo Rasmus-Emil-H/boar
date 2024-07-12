@@ -7,7 +7,7 @@ class CreateEntity {
     protected $entityTypes = ['controller', 'model', 'migration', 'view'];
 
     public function createEntity(string $entityName) {
-        $this->checkEntityExsistence($entityName);
+        $this->checkEntityExistence($entityName);
 
         echo "Creating entity: $entityName\n";
 
@@ -17,7 +17,7 @@ class CreateEntity {
         }
     }
 
-    private function checkEntityExsistence(string $entityName) {
+    private function checkEntityExistence(string $entityName) {
         $filename = "models/{$entityName}Model.php";
         if (!file_exists($filename)) return;
 

@@ -151,14 +151,14 @@ abstract class Entity {
         if (!method_exists($this, $method)) throw new \app\core\src\exceptions\NotFoundException(self::INVALID_ENTITY_METHOD);
     }
 
+    public function setAllowedHTTPMethods() {
+		$this->setValidHTTPMethods($this->ALLOWED_HTTP_METHODS);
+	}
+
     /**
      * Dispatcher for entity methods
      * @throws \app\core\src\exceptions\NotFoundException
      */
-
-    public function setAllowedHTTPMethods() {
-		$this->setValidHTTPMethods($this->ALLOWED_HTTP_METHODS);
-	}
 
     public function dispatchMethod(string $method, mixed $arguments = []) {
         $this->checkMethodValidity($method);

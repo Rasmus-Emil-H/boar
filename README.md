@@ -277,7 +277,7 @@
 
     use \app\core\src\Controller;
 
-    class LanguageController extends Controller {
+    class LanguageController extends Controller {****
 
         public function someMethod() {
             // If the path primary key exists on the proper model, a Entity will be loaded for you, based on the context
@@ -588,4 +588,4 @@
         // Do something with the res
     });
     ```
-****</details>
+</details>

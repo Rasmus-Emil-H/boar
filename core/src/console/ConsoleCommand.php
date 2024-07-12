@@ -7,10 +7,7 @@ use \app\core\src\console\cmds\CreateEntity;
 class ConsoleCommand {
 
     public function run($argv) {
-        if (count($argv) < 3) {
-            $this->printUsage();
-            return;
-        }
+        if (!$this->checkArguments($argv)) return;
 
         $command = $argv[1];
         $entityName = $argv[2];
@@ -23,6 +20,13 @@ class ConsoleCommand {
                 echo "Unknown command: $command\n";
                 $this->printUsage();
         }
+    }
+
+    private function checkArguments($argv): bool {
+        $argc = count($argv) < 3;
+        if (!$argc) $this->printUsage();
+        
+        return $argc;
     }
 
     protected function printUsage() {

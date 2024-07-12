@@ -4,9 +4,9 @@ namespace app\core\src\console\cmds;
 
 class CreateEntity {
 
-    protected $entityTypes = ['controller', 'model', 'migration', 'view'];
+    protected array $entityTypes = ['controller', 'model', 'migration', 'view'];
 
-    public function createEntity(string $entityName) {
+    public function createEntity(string $entityName): void {
         $this->checkEntityExistence($entityName);
 
         echo "Creating entity: $entityName\n";
@@ -17,14 +17,14 @@ class CreateEntity {
         }
     }
 
-    private function checkEntityExistence(string $entityName) {
+    private function checkEntityExistence(string $entityName): void {
         $filename = "models/{$entityName}Model.php";
         if (!file_exists($filename)) return;
 
         exit('Entity already exists - Aborting operation');
     }
 
-    protected function createController($name) {
+    protected function createController(string $name): void {
         $controllerTemplate = <<<EOT
         <?php
 
@@ -46,7 +46,7 @@ class CreateEntity {
         echo "Created controller: $filename\n";
     }
 
-    protected function createView($name) {
+    protected function createView(string $name): void {
         $controllerTemplate = <<<EOT
         Im a template file for $name!
         EOT;
@@ -56,7 +56,7 @@ class CreateEntity {
         echo "Created view: $filename\n";
     }
 
-    protected function createModel($name) {
+    protected function createModel(string $name): void {
         $modelTemplate = <<<EOT
         <?php
 
@@ -82,8 +82,12 @@ class CreateEntity {
         echo "Created model: $filename\n";
     }
 
-    protected function createMigration($name) {
-        $migrationName = 'add_'.strtolower($name).'_table_'.date('Y_m_d', strtotime('now')).'_0001';
+    private function formatMigrationName(string $name): string {
+        return 'add_'.strtolower($name).'_table_'.date('Y_m_d', strtotime('now')).'_0001';
+    }
+
+    protected function createMigration(string $name): void {
+        $migrationName = $this->formatMigrationName($name);
         $tableNamespace = 'use \app\core\src\database\table\Table';
 
         $migrationTemplate = <<<EOT

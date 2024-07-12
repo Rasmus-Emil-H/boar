@@ -200,6 +200,18 @@ $cLanguage->delete();
 $cLanguage->softDelete();
 ```
 
+Other examples of CRUDing things within the entire entity context can be browsed like below
+
+```
+$cLanguage = new LanguageModel();
+
+// Searching
+$cLanguage->find('Name', 'English');
+$cLanguage->search(['Name' => 'English']);
+
+// Truncating
+$cLanguage->truncate();
+```
 
 ## Controller - Method interaction
 

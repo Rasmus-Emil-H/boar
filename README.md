@@ -474,6 +474,15 @@ Once this is setup you touch a file in ~/core/src/scheduling
 
 (TestScheduler is already provided) and must be added to the CronJob table as an entry with CronjobEntity = 'TestScheduler'
 
+### Console commands
+
+Boar comes with a very minor command for creating an entity. In your terminal you can type
+
+```
+php boar create-entity test
+```
+
+The cmd above will create: A controller, a model, a migration file and a view
 
 ## Database migrations
 

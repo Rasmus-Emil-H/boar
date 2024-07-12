@@ -93,6 +93,15 @@ class CreateEntity {
         $migrationTemplate = <<<EOT
         <?php
 
+        /**
+        |----------------------------------------------------------------------------
+        | Automatically created migration
+        |----------------------------------------------------------------------------
+        |
+        | Adjust table specifications to your needs
+        |
+        */
+
         $tableNamespace;
         use \app\core\src\database\Schema;
 

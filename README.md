@@ -65,223 +65,230 @@ A global yard.php file is provided for oftenly used methods, function, in order 
 
 This yard file by default provides the app() function that will grant you access to the application instance from where you can get the global objects that is being set at bootstrapping.
 
-## Views
+<details>
+    <summary>Views</summary>
 
-### Templates
+    ### Templates
 
-Views are the file that your browser renders, they should be set by the controller and be located at ~/views and follow the .tpl.php extension
+    Views are the file that your browser renders, they should be set by the controller and be located at ~/views and follow the .tpl.php extension
 
-You can return a view, and variable to that view in your controller
+    You can return a view, and variable to that view in your controller
 
-```
-<?php
+    ```
+    <?php
 
-namespace app\controllers;
+    namespace app\controllers;
 
-use \app\core\src\Controller;
+    use \app\core\src\Controller;
 
-class HomeController extends Controller {
+    class HomeController extends Controller {
 
-    public function index() {
-        $this->denyPOSTRequest();
+        public function index() {
+            $this->denyPOSTRequest();
+            
+            $this->setFrontendTemplateAndData(templateFile: 'languages', data: ['boar' => 'is live and running']);
+        }
+
+    }
+    ```
+
+    The data array can now be directly accesed from the frontend file
+
+    languages.tpl.php
+    ```
+    <?= hs($boar); ?>
+    ```
+
+    ### Layouts
+
+    If you need differents layouts you can specify them by doing the following:
+
+    ```
+    <?php
+
+    namespace app\controllers;
+
+    class AuthController extends Controller {
+
+        public function login(): void {
+            $this->setClientLayoutStructure(layout: 'auth', view: 'login');
+        }
         
-        $this->setFrontendTemplateAndData(templateFile: 'languages', data: ['boar' => 'is live and running']);
     }
+    ```
 
-}
-```
+    The layout must be located in ~/views/layouts dir
+</details>
 
-The data array can now be directly accesed from the frontend file
+<details>
+    <summary>Controllers</summary>
 
-languages.tpl.php
-```
-<?= hs($boar); ?>
-```
+    Creating a controller is straightforward, either cp one of existing or create a new as below.
 
-### Layouts
+    ```
+    <?php
 
-If you need differents layouts you can specify them by doing the following:
+    namespace app\controllers;
 
-```
-<?php
+    use \app\core\src\Controller;
 
-namespace app\controllers;
+    class LanguageController extends Controller {
 
-class AuthController extends Controller {
+        public function index() {
 
-    public function login(): void {
-        $this->setClientLayoutStructure(layout: 'auth', view: 'login');
-    }
-    
-}
-```
-
-The layout must be located in ~/views/layouts dir
-
-## Controllers
-
-Creating a controller is straightforward, either cp one of existing or create a new as below.
-
-```
-<?php
-
-namespace app\controllers;
-
-use \app\core\src\Controller;
-
-class LanguageController extends Controller {
-
-    public function index() {
+        }
 
     }
+    ```
 
-}
-```
+    Should you make a request to a controller without specifying a method, the index method will try to run
 
-Should you make a request to a controller without specifying a method, the index method will try to run
+    Controllers have access to various methods that can help you ease your development experience, some are listed below;
 
-Controllers have access to various methods that can help you ease your development experience, some are listed below;
+    denyGETRequest(), denyPOSTRequest(), isGet(), isPost()
 
-denyGETRequest(), denyPOSTRequest(), isGet(), isPost()
+    ### Middlewares
 
-### Middlewares
+    Should you wish to execute logic before methods run, you can provide a middleware that extends ~/core/src/middlewares/Middleware.</details>
 
-Should you wish to execute logic before methods run, you can provide a middleware that extends ~/core/src/middlewares/Middleware.
+<details>
+    <summary>Models</summary>
 
-## Models
+    Creating a model is straightforward, either cp one of existing or create a new as below
 
-Creating a model is straightforward, either cp one of existing or create a new as below
+    ```
+    <?php
 
-```
-<?php
+    namespace app\models;
 
-namespace app\models;
+    use \app\core\src\database\Entity;
 
-use \app\core\src\database\Entity;
+    final class LanguageModel extends Entity {
 
-final class LanguageModel extends Entity {
-
-	public function getTableName(): string {
-		return 'Languages';
-	}
-	
-	public function getKeyField(): string {
-		return 'LanguageID';
-	}
-    
-}
-```
-
-Models extends the Entity that has access to various methods that will ease the way you interact with the database
-
-### Patching entities
-
-Patching can become quite cumbersome, and because of that, boar comes with various methods on children of Entity that allows you to
-create, read, update and delete on Entities, without having to repeat yourself to much.
-
-Example of entity methods below
-
-```
-$cLanguage = new LanguageModel(N);
-
-// Patching
-$cLanguage->patchField(['Name' => $arguments->Name]);
-
-$cLanguage->complete();
-$cLanguage->findOrCreate();
-$cLanguage->init($args);
-$cLanguage->edit($args);
-
-// Add meta data
-$cLanguage->addMetaData(['Meta test']);
-
-// Deleting
-$cLanguage->delete();
-$cLanguage->softDelete();
-```
-
-Other examples of CRUDing things within the entire entity context can be browsed like below
-
-```
-$cLanguage = new LanguageModel();
-
-// Searching
-$cLanguage->find('Name', 'English');
-$cLanguage->search(['Name' => 'English']);
-
-// Truncating
-$cLanguage->truncate();
-```
-
-## Controller - Method interaction
-
-A controller should always resolve to a model, this can happen in various ways but a default implemented way happens in ~/core/src/traits/ControllerMethodTrait.php
-
-There are three default method provided (edit, view and delete) which dispatches the dispatchMethodOnEntity method.
-
-You can create methods however you like and dispatchMethodOnEntity should be seen as a base for automatically creating the entity with the returnValidEntityIfExists method, then getting the body from the Request object and dispatching the method on the model.
-
-### Allowed http methods from the model
-
-The allowed http methods should be manually be specified to avoid fuzzing and other jacksters. Like below.
-
-
-```
-<?php
-
-namespace app\models;
-
-use \app\core\src\database\Entity;
-
-final class LanguageModel extends Entity {
-
-	protected array $ALLOWED_HTTP_METHODS = [
-		'getTranslations', 'create', 'delete'
-	];
-
-}
-```
-
-If you forget to include your method in the ALLOWED_HTTP_METHODS array, a method not allowed response will be returned to the client.
-
-When you want to make a request from you client, an example would be
-
-
-POST controller/method/primarykey
-```
-POST /language/edit/1
-```
-
-You can then use
-
-```
-$cEntity = $this->returnValidEntityIfExists();
-```
-
-In your custom methods, in order for the application to fetch you the correct entity based on the context.
-Should you need a new object or another you would do like below
-
-```
-<?php
-
-namespace app\controllers;
-
-use \app\core\src\Controller;
-
-class LanguageController extends Controller {
-
-    public function someMethod() {
-        // If the path primary key exists on the proper model, a Entity will be loaded for you, based on the context
-        $cLanguage = $this->returnValidEntityIfExists();
-        $cLanguage->requireExistence();
-
-        $request = $this->requestBody->body;
-        $response = $cLanguage->dispatchHTTPMethod($request->action, $request);
-
-        $this->response->{$this->determineClientResponseMethod(dispatchedHTTPMethodResult: $response)}($response ?? '');
+        public function getTableName(): string {
+            return 'Languages';
+        }
+        
+        public function getKeyField(): string {
+            return 'LanguageID';
+        }
+        
     }
-}
-```
+    ```
+
+    Models extends the Entity that has access to various methods that will ease the way you interact with the database
+
+    ### Patching entities
+
+    Patching can become quite cumbersome, and because of that, boar comes with various methods on children of Entity that allows you to
+    create, read, update and delete on Entities, without having to repeat yourself to much.
+
+    Example of entity methods below
+
+    ```
+    $cLanguage = new LanguageModel(N);
+
+    // Patching
+    $cLanguage->patchField(['Name' => $arguments->Name]);
+
+    $cLanguage->complete();
+    $cLanguage->findOrCreate();
+    $cLanguage->init($args);
+    $cLanguage->edit($args);
+
+    // Add meta data
+    $cLanguage->addMetaData(['Meta test']);
+
+    // Deleting
+    $cLanguage->delete();
+    $cLanguage->softDelete();
+    ```
+
+    Other examples of CRUDing things within the entire entity context can be browsed like below
+
+    ```
+    $cLanguage = new LanguageModel();
+
+    // Searching
+    $cLanguage->find('Name', 'English');
+    $cLanguage->search(['Name' => 'English']);
+
+    // Truncating
+    $cLanguage->truncate();
+    ```
+</details>
+
+<details>
+    <summary>Controller - Method interaction</summary>
+
+    A controller should always resolve to a model, this can happen in various ways but a default implemented way happens in ~/core/src/traits/ControllerMethodTrait.php
+
+    There are three default method provided (edit, view and delete) which dispatches the dispatchMethodOnEntity method.
+
+    You can create methods however you like and dispatchMethodOnEntity should be seen as a base for automatically creating the entity with the returnValidEntityIfExists method, then getting the body from the Request object and dispatching the method on the model.
+
+    ### Allowed http methods from the model
+
+    The allowed http methods should be manually be specified to avoid fuzzing and other jacksters. Like below.
+
+
+    ```
+    <?php
+
+    namespace app\models;
+
+    use \app\core\src\database\Entity;
+
+    final class LanguageModel extends Entity {
+
+        protected array $ALLOWED_HTTP_METHODS = [
+            'getTranslations', 'create', 'delete'
+        ];
+
+    }
+    ```
+
+    If you forget to include your method in the ALLOWED_HTTP_METHODS array, a method not allowed response will be returned to the client.
+
+    When you want to make a request from you client, an example would be
+
+
+    POST controller/method/primarykey
+    ```
+    POST /language/edit/1
+    ```
+
+    You can then use
+
+    ```
+    $cEntity = $this->returnValidEntityIfExists();
+    ```
+
+    In your custom methods, in order for the application to fetch you the correct entity based on the context.
+    Should you need a new object or another you would do like below
+
+    ```
+    <?php
+
+    namespace app\controllers;
+
+    use \app\core\src\Controller;
+
+    class LanguageController extends Controller {
+
+        public function someMethod() {
+            // If the path primary key exists on the proper model, a Entity will be loaded for you, based on the context
+            $cLanguage = $this->returnValidEntityIfExists();
+            $cLanguage->requireExistence();
+
+            $request = $this->requestBody->body;
+            $response = $cLanguage->dispatchHTTPMethod($request->action, $request);
+
+            $this->response->{$this->determineClientResponseMethod(dispatchedHTTPMethodResult: $response)}($response ?? '');
+        }
+    }
+    ```
+</details>
 
 <details>
     <summary>Request - Response cycle</summary>
@@ -334,41 +341,46 @@ POSTing a file to /file will automatically handle the file for you and mv it to 
 
 window.boar.behaviour have a default input file listener (uploadFile) so that if you have input type of file with a class of globalFileUploader you can directly upload files without having to do more, however certain data attributes must be present in order to attach the file to the proper entity. (entityType, entityType, type)
 
-### Query building
+<details>
+    <summary>Query building</summary>
 
-Boar comes with a querybuilder, located at core/src/database and can be accessed directly on the models by doing
+    Boar comes with a querybuilder, located at core/src/database and can be accessed directly on the models by doing like below
 
-```
-(new LanguageModel())->query()
-```
+    ```
+    // Will return a new QueryBuilder instance on the corresponding entity
+    (new LanguageModel())->query()
+    ```
 
-The code above will instansiate a new query builder based on the Language table from where you can chain 
+    The code above will instansiate a new query builder based on the Language table from where you can chain 
 
-```
-->select()->where()->run(); 
+    ```
+    ->select()->where()->run(); 
 
-// Or debug current query by ->debugQuery(); instead of run();
-```
+    // Or debug current query by ->debugQuery(); instead of run();
+    ```
+</details>
 
-### Entity relations
+<details>
+    <summary>Entity relations</summary>
 
-A default implementation of table relations has been created and can be found at ~/core/src/traits/EntityRelationsTrait from where you can describe relations based on your entities. Default methods has been provided and can be accesses like this (hasMany)
+    A default implementation of table relations has been created and can be found at ~/core/src/traits/EntityRelationsTrait from where you can describe relations based on your entities. Default methods has been provided and can be accesses like this (hasMany)
 
-```
-<?php
+    ```
+    <?php
 
-namespace app\models;
+    namespace app\models;
 
-use \app\core\src\database\Entity;
+    use \app\core\src\database\Entity;
 
-final class LanguageModel extends Entity {
+    final class LanguageModel extends Entity {
 
-	public function translations() {
-		return $this->hasMany(TranslationModel::class)->run();
-	}
-	
-}
-```
+        public function translations() {
+            return $this->hasMany(TranslationModel::class)->run();
+        }
+        
+    }
+    ```
+</details>
 
 ## Websocket
 
@@ -487,7 +499,6 @@ Example below where we have two methods, up for creating the table and down for 
 
 The second argument provided for up is the closure from where you can set column and determine keys on your table.
 
-
 File name must match the class name.
 
 ```
@@ -525,37 +536,39 @@ Once you are ready you can run php public/index.php DatabaseMigration and observ
 A minor web application firewall is the first object being constructed.
 Adjust the rules and filters to your needs.
 
-## Frontend
+<details>
+    <summary>Frontend</summary>
 
-### Javascript
+    ### Javascript
 
-Located at ~/public/resources/js/main.js you can import objects that you include in ./modules, for some modularity
+    Located at ~/public/resources/js/main.js you can import objects that you include in ./modules, for some modularity
 
-Once you include new paths to modulesToImport they will be avaliable at window.boar.YOUR_MODULE_NAME
+    Once you include new paths to modulesToImport they will be avaliable at window.boar.YOUR_MODULE_NAME
 
-Please note that objects will be frozen
+    Please note that objects will be frozen
 
-### Serviceworker
+    ### Serviceworker
 
-Comes with a default serviceworker implementation, use as you wish
+    Comes with a default serviceworker implementation, use as you wish
 
-### Form submissions
+    ### Form submissions
 
-All POST form submissions must include a valid CSRF token, this should be included in the form like below
+    All POST form submissions must include a valid CSRF token, this should be included in the form like below
 
-```
-<?= (new \app\core\src\tokens\CsrfToken())->insertHiddenToken(); ?>
-```
+    ```
+    <?= (new \app\core\src\tokens\CsrfToken())->insertHiddenToken(); ?>
+    ```
 
-By default, window.boar.behaviour will intercept all forms and return a promise from which you can do what you want
+    By default, window.boar.behaviour will intercept all forms and return a promise from which you can do what you want
 
-In the frontend you can then await this behaviour, or let it submit as normal, and do custom tasks like below
+    In the frontend you can then await this behaviour, or let it submit as normal, and do custom tasks like below
 
-```
+    ```
 
-$(document).on('click', '.something', async function(e) {
-    e.preventDefault();
-    const res = await window.boar.behaviour.submitForm($(e.target).closest('form'));
-    // Do something with the res
-});
-```
+    $(document).on('click', '.something', async function(e) {
+        e.preventDefault();
+        const res = await window.boar.behaviour.submitForm($(e.target).closest('form'));
+        // Do something with the res
+    });
+    ```
+</details>

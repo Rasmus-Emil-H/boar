@@ -1,14 +1,11 @@
 export default {
-    toast: async function(message) {
+    toast: async function(message, bg) {
         const toast = `
-          <div class="toast" id="customToast" role="alert" aria-live="assertive" aria-atomic="true">
-            <div class="toast-header">
-              <strong class="me-auto">Boar</strong>
-              <small>${new Date().toLocaleDateString()}</small>
-              <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-            </div>
-            <div class="toast-body bg-black">
-              ${message}
+          <div class="toast-container top-0 end-0">
+            <div class="toast" id="customToast" role="alert" aria-live="assertive" aria-atomic="true">
+              <div class="toast-body bg-${bg}">
+                ${message}
+              </div>
             </div>
           </div>
         `;

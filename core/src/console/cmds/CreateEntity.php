@@ -6,13 +6,22 @@ class CreateEntity {
 
     protected $entityTypes = ['controller', 'model', 'migration', 'view'];
 
-    public function createEntity($entityName) {
+    public function createEntity(string $entityName) {
+        $this->checkEntityExsistence($entityName);
+
         echo "Creating entity: $entityName\n";
 
         foreach ($this->entityTypes as $type) {
             $method = "create" . ucfirst($type);
             if (method_exists($this, $method)) $this->$method(ucfirst($entityName));
         }
+    }
+
+    private function checkEntityExsistence(string $entityName) {
+        $filename = "models/{$entityName}Model.php";
+        if (!file_exists($filename)) return;
+
+        exit('Entity already exists - Aborting operation');
     }
 
     protected function createController($name) {
@@ -58,7 +67,7 @@ class CreateEntity {
         final class {$name}Model extends Entity {
 
             public function getTableName(): string {
-                return '{$name}Table';
+                return '{$name}';
             }
                 
             public function getKeyField(): string {
@@ -74,7 +83,7 @@ class CreateEntity {
     }
 
     protected function createMigration($name) {
-        $migrationName = 'add_'.$name.'_table_'.date('Y_m_d', strtotime('now')).'_0001';
+        $migrationName = 'add_'.strtolower($name).'_table_'.date('Y_m_d', strtotime('now')).'_0001';
         $tableNamespace = 'use \app\core\src\database\table\Table';
 
         $migrationTemplate = <<<EOT
@@ -86,9 +95,9 @@ class CreateEntity {
         class $migrationName {
             public function up() {
                 (new Schema())->up('$name', function(Table \$table) {
-                    \$table->increments('YourID');
+                    \$table->increments('{$name}ID');
                     \$table->timestamp();
-                    \$table->primaryKey('YourID');
+                    \$table->primaryKey('{$name}ID');
                 });
             }
 

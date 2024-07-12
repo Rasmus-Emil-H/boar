@@ -1,18 +1,20 @@
 export default {
-    toast: function(message) {
-        return `
-          <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+    toast: async function(message) {
+        const toast = `
+          <div class="toast" id="customToast" role="alert" aria-live="assertive" aria-atomic="true">
             <div class="toast-header">
-              <img src="..." class="rounded me-2" alt="...">
-              <strong class="me-auto">Bootstrap</strong>
-              <small>Now</small>
+              <strong class="me-auto">Boar</strong>
+              <small>${new Date().toLocaleDateString()}</small>
               <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
             </div>
-            <div class="toast-body">
+            <div class="toast-body bg-black">
               ${message}
             </div>
           </div>
         `;
+
+        await $('body').append(toast);
+        bootstrap.Toast.getOrCreateInstance($('#customToast')).show();
     },
     initModal: function(title, body, id, hidefooter = null, buttonHider = null, buttonText = '', cb = null) {
         let modal = document.createElement('div');

@@ -405,9 +405,11 @@
     ```
 </details>
 
-## Exceptions
+<details>
+    <summary>Exceptions</summary>
 
-Custom exceptions can be made and should reside within ~/core/src/exceptions and should contain a code(int) and a message (string)
+    Custom exceptions can be made and should reside within ~/core/src/exceptions and should contain a code(int) and a message (string)
+</details>
 
 <details>
     <summary>Gate</summary>
@@ -544,10 +546,12 @@ Custom exceptions can be made and should reside within ~/core/src/exceptions and
     Once you are ready you can run php public/index.php DatabaseMigration and observe that your table has been created with the correct columns, types and relations.
 </details>
 
-## WAF
+<details>
+    <summary>WAF</summary>
 
-A minor web application firewall is the first object being constructed.
-Adjust the rules and filters to your needs.
+    A minor web application firewall is the first object being constructed.
+    Adjust the rules and filters to your needs.
+</details>
 
 <details>
     <summary>Frontend</summary>

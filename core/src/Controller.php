@@ -25,7 +25,6 @@ class Controller {
     use ControllerMethodTrait;
 
     private const DEFAULT_METHOD = 'index';
-
     private const VALID_ASSET_TYPES = ['js', 'css', 'meta'];
 
     protected array $data = [];

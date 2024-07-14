@@ -38,14 +38,14 @@ final class Application {
 
     public static string $ROOT_DIR;
     public static self $app;
+    
     public function __construct() {
-
         new src\WebApplicationFirewall();
 
         self::$app = $this;
         self::$ROOT_DIR = dirname(__DIR__);
 
-        $this->config       = new src\config\Config();
+        $this->config        = new src\config\Config();
         $this->session      = new src\Session();
         $this->request      = new src\Request($this);
         
@@ -59,7 +59,6 @@ final class Application {
         $this->getLanguage();
         $this->validateUserSession();
         $this->i18n         = new src\I18n();
-
     }
 
     protected function setConnection() {
@@ -70,7 +69,7 @@ final class Application {
 
     public function getLanguage() {
         if (IS_CLI) return;
-        
+
         if (!$this->session->get('language')) $this->session->set('language', self::$app->config->get('locale')->default);
     }
 
@@ -85,7 +84,7 @@ final class Application {
 
     private function validateUserSession() {
         if (IS_CLI) return;
-
+        
         $validSession = (new UserModel())->hasActiveSession();
 
         $defaultUnauthenticatedRoute = $this->getConfig()->get('routes')->unauthenticated;

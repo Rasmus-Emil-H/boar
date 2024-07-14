@@ -145,6 +145,24 @@
 
     Should you make a request to a controller without specifying a method, the index method will try to run
 
+    Controller cans get data from other controllers by setting child data on the controller you wish
+
+    ```
+    <?php
+
+    namespace app\controllers;
+
+    use \app\core\src\Controller;
+
+    class LanguageController extends Controller {
+
+        public function index() {
+            $this->setChildData(['varName' => 'Controller:Method']);
+        }
+
+    }
+    ```
+
     Controllers have access to various methods that can help you ease your development experience, some are listed below;
 
     denyGETRequest(), denyPOSTRequest(), isGet(), isPost()

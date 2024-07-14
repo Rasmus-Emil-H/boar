@@ -15,6 +15,7 @@ namespace app\core\src\database;
 use \app\core\src\miscellaneous\CoreFunctions;
 
 class Connection {
+    
     private static ?Connection $instance = null;
 
     private const DEFAULT_SQL_QUERY_FETCH_TYPE = 'fetchAll';

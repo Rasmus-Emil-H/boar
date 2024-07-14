@@ -63,6 +63,7 @@ final class Router {
 
     protected function setTemplateControllers(): void {
         if (app()::isCLI()) return;
+        
         $this->getApplicationParentController()->setChildren(['Header', 'Footer']);
     }
 

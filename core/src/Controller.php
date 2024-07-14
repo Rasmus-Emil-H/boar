@@ -26,7 +26,7 @@ class Controller {
 
     private const DEFAULT_METHOD = 'index';
 
-    private array $validAssetTypes = ['js', 'css', 'meta'];
+    private const VALID_ASSET_TYPES = ['js', 'css', 'meta'];
 
     protected array $data = [];
     protected array $children = [];
@@ -107,7 +107,7 @@ class Controller {
     }
 
     private function checkWantedAssetType(string $type): void {
-        if (in_array($type, $this->validAssetTypes)) return;
+        if (in_array($type, self::VALID_ASSET_TYPES)) return;
 
         throw new \app\core\src\exceptions\ForbiddenException('Forbidden asset type was provided');
     }

@@ -62,11 +62,12 @@ class Controller {
     }
 
     public function setChildData(): void {
+        $parentController = app()->getParentController();
         foreach ($this->getChildren() as $childController) {
             [$handler, $method] = preg_match('/:/', $childController) ? explode(':', $childController) : [$childController, self::DEFAULT_METHOD];
             $cController = (new ControllerFactory(compact('handler')))->create();
             $cController->{$method}();
-            app()->getParentController()->setData($cController->getData());
+            $parentController->setData($cController->getData());
             $cController->setChildData();
         }
     }
@@ -95,12 +96,12 @@ class Controller {
         return $entity;
     }
 
-    protected function crudEntity() {
-        return $this->returnEntity()->save();
-    }
-
     protected function getClientAssets() {
         return $this->clientAssets;
+    }
+
+    protected function appendClientAsset(string $type, string $path) {
+        $this->clientAssets->set($type, $path);
     }
 
     public function getView(): string {
@@ -108,7 +109,7 @@ class Controller {
     }
 
     protected function setView(string $view, string $dir = ''): void {
-        $this->view = CoreFunctions::app()->getView()->getTemplatePath($view, $dir);
+        $this->view = app()->getView()->getTemplatePath($view, $dir);
     }
 
     public function setLayout(string $layout): void {
@@ -124,9 +125,10 @@ class Controller {
         $this->setFrontendTemplateAndData($view, [...$data]);
     }
 
-    public function setFrontendTemplateAndData(string $templateFile, array $data = []): void {
+    public function setFrontendTemplateAndData(string $templateFile, array $data = []): self {
         $this->setData($data);
         $this->setView($templateFile);
+        return $this;
     }
 
 }

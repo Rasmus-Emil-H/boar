@@ -26,6 +26,8 @@ class Controller {
 
     private const DEFAULT_METHOD = 'index';
 
+    private array $validAssetTypes = ['js', 'css', 'meta'];
+
     protected array $data = [];
     protected array $children = [];
 
@@ -100,7 +102,15 @@ class Controller {
         return $this->clientAssets;
     }
 
+    private function checkWantedAssetType(string $type): void {
+        if (in_array($type, $this->validAssetTypes)) return;
+
+        throw new \app\core\src\exceptions\ForbiddenException('Forbidden asset type was provided');
+    }
+
     protected function appendClientAsset(string $type, string $path) {
+        $this->checkWantedAssetType($type);
+
         $this->clientAssets->set($type, $path);
     }
 

@@ -74,6 +74,10 @@ function renderComponent($method, $arguments = []) {
     return \app\core\src\html\Html::$method(...$arguments);
 }
 
+function CSRFTokenInput(): string {
+    return (new \app\core\src\tokens\CsrfToken())->insertHiddenToken();
+}
+
 function panic(string $reason = ''): void {
     exit($reason);
 }

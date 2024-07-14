@@ -44,6 +44,10 @@ class Controller {
         protected AssetsController $clientAssets
     ) {
         $this->requestBody = $this->request->getCompleteRequestBody();
+        $this->validateCSRFToken();
+    }
+
+    private function validateCSRFToken() {
         if ($this->request->isGet()) return;
         if (!CoreFunctions::validateCSRF()) $this->response->badToken();
     }

@@ -15,6 +15,7 @@
 
 namespace app\core\src;
 
+use app\core\Application;
 use \app\core\src\factories\ControllerFactory;
 use \app\core\src\miscellaneous\CoreFunctions;
 
@@ -26,7 +27,8 @@ final class Router {
     protected string $method;
 
     public function __construct(
-       private Request $request
+       private Request $request,
+       private Application $app
     ) {
         $this->path = $request->getArguments();
     }
@@ -58,23 +60,23 @@ final class Router {
     }
 
     protected function runMiddlewares(): void {
-        foreach ($this->getApplicationParentController()->getMiddlewares() as $middleware) $middleware->execute();
+        foreach ($this->app->getParentController()->getMiddlewares() as $middleware) $middleware->execute();
     }
 
     protected function setTemplateControllers(): void {
         if (app()::isCLI()) return;
         
-        $this->getApplicationParentController()->setChildren(['Header', 'Footer']);
+        $this->app->getParentController()->setChildren(['Header', 'Footer']);
     }
 
     protected function runController(): void {
-        $controller = $this->getApplicationParentController();
+        $controller = $this->app->getParentController();
         $controller->setChildData();
         $controller->{$this->method}();
     }
 
     protected function hydrateDOM(): void {
-        $controller = $this->getApplicationParentController();
+        $controller = $this->app->getParentController();
         echo $this->handleFrontendHydration($controller, $controller->getData());
     }
 
@@ -93,10 +95,6 @@ final class Router {
         $layoutFileContent = ob_get_clean();
 
         return str_replace('{{content}}', $viewContent, $layoutFileContent);
-    }
-
-    private function getApplicationParentController(): Controller {
-        return app()->getParentController();
     }
 
     public function resolve(): void {

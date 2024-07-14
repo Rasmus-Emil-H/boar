@@ -52,7 +52,7 @@ final class Application {
         $this->setConnection();
 
         $this->response     = new src\Response();
-        $this->router       = new src\Router($this->request);
+        $this->router       = new src\Router($this->request, $this);
         $this->view         = new src\View();
         $this->logger       = new src\utilities\Logger();
 

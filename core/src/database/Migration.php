@@ -72,7 +72,6 @@ class Migration {
             $handler = pathinfo($migration, PATHINFO_FILENAME);
 
             if (strlen($handler) > table\Table::MAX_COLUMN_LENGTH) $app->log("Classname ($handler) is too long!", exit: true);
-            $app->classCheck($handler);
 
             (new MigrationFactory(compact('handler')))->create()->up();
             (new MigrationModel())->set(['Migration' => $handler])->save(addMetaData: false);

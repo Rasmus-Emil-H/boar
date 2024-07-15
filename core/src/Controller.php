@@ -29,6 +29,7 @@ class Controller {
 
     protected array $data = [];
     protected array $children = [];
+    protected array $middlewares = [];
 
     protected object $requestBody;
 
@@ -60,7 +61,9 @@ class Controller {
         return $this->data;
     }
 
-    protected array $middlewares = [];
+    public function getDataKey(string $key): ?string {
+        return $this->data[$key] ?? null;
+    }
 
     public function setChildren(array $children): void {
         foreach ($children as $child) $this->children[] = $child; 

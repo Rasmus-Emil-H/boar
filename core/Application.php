@@ -93,10 +93,6 @@ final class Application {
             $this->response->redirect(CoreFunctions::first($defaultUnauthenticatedRoute)->scalar);
     }
 
-    public function classCheck(string $class): bool {
-        return class_exists($class);
-    }
-
     public function getParentController(): src\Controller {
         return $this->parentController;
     }

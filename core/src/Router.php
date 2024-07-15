@@ -15,48 +15,51 @@
 
 namespace app\core\src;
 
-use app\core\Application;
+use \app\core\Application;
 use \app\core\src\factories\ControllerFactory;
 use \app\core\src\miscellaneous\CoreFunctions;
 
 final class Router {
 
     protected const INDEX_METHOD = 'index';
+    protected const RESOURCE_INDICATOR = '/resources';
     
-    protected array $path;
+    protected array $arguments;
     protected string $method;
 
     public function __construct(
        private Request $request,
        private Application $app
     ) {
-        $this->path = $request->getArguments();
+        $this->arguments = $request->getArguments();
+    }
+
+    private function checkRouteAndGoToDefault(): void {
+        if (empty($this->arguments) || $this->request->getPath() === '/') 
+            $this->app->getResponse()->redirect(CoreFunctions::first($this->app->getConfig()->get('routes')->unauthenticated)->scalar);
     }
 
     protected function createController(): void {
-        $app = app();
+        $this->checkRouteAndGoToDefault();
 
-        if (empty($this->path) || $this->request->getPath() === '/') 
-            $app->getResponse()->redirect(CoreFunctions::first($app->getConfig()->get('routes')->unauthenticated)->scalar);
-
-        $handler = ucfirst(CoreFunctions::first($this->path)->scalar);
+        $handler = ucfirst(CoreFunctions::first($this->arguments)->scalar);
         if ($this->isResource($handler)) return;
 
-        $defaultRoute = $app->getConfig()->get('routes')->defaults->redirectTo;
+        $defaultRoute = $this->app->getConfig()->get('routes')->defaults->redirectTo;
 
         $controller = (new ControllerFactory(compact('handler')))->create();
-        if (!$controller) $app->getResponse()->redirect($defaultRoute);
+        if (!$controller) $this->app->getResponse()->redirect($defaultRoute);
 
-        $controllerMethod = $this->path[1] ?? '';
+        $controllerMethod = $this->arguments[1] ?? '';
 
-        $app->setParentController($controller);
+        $this->app->setParentController($controller);
         $this->method = $controllerMethod === '' || !method_exists($controller, $controllerMethod) ? self::INDEX_METHOD : $controllerMethod;
 
-        if (!method_exists($controller, $this->method)) $app->getResponse()->redirect($defaultRoute);
+        if (!method_exists($controller, $this->method)) $this->app->getResponse()->redirect($defaultRoute);
     }
 
     private function isResource(string $handler): bool {
-        return str_contains(strtolower($handler), strtolower('/resources'));
+        return str_contains(strtolower($handler), strtolower(self::RESOURCE_INDICATOR));
     }
 
     protected function runMiddlewares(): void {
@@ -64,7 +67,7 @@ final class Router {
     }
 
     protected function setTemplateControllers(): void {
-        if (app()::isCLI()) return;
+        if ($this->app::isCLI()) return;
         
         $this->app->getParentController()->setChildren(['Header', 'Footer']);
     }
@@ -82,16 +85,16 @@ final class Router {
 
     private function handleFrontendHydration(Controller $controller, array $data) {
         extract($data, EXTR_SKIP);
-        $layoutFile = app()::$ROOT_DIR .  File::LAYOUTS_FOLDER . $controller->getLayout() . File::TPL_FILE_EXTENSION;
+        $layoutFile = $this->app::$ROOT_DIR .  File::LAYOUTS_FOLDER . $controller->getLayout() . File::TPL_FILE_EXTENSION;
         
         ob_start();
             include_once $controller->getView();
         $viewContent = ob_get_clean();
 
         ob_start();
-            require_once $data['header'];
+            require_once $controller->getDataKey('header');
             include_once $layoutFile;
-            require_once $data['footer'];
+            require_once $controller->getDataKey('footer');
         $layoutFileContent = ob_get_clean();
 
         return str_replace('{{content}}', $viewContent, $layoutFileContent);

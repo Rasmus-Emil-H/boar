@@ -29,7 +29,7 @@ abstract class AbstractFactory {
     }
 
     public function validateObject(string $class): bool {
-        return app()->classCheck($class);
+        return class_exists($class);
     }
 
     public function getKey(): ?string {

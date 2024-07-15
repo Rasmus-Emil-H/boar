@@ -63,17 +63,16 @@ final class Router {
     }
 
     protected function runMiddlewares(): void {
-        foreach ($this->app->getParentController()->getMiddlewares() as $middleware) $middleware->execute();
-    }
-
-    protected function setTemplateControllers(): void {
-        if ($this->app::isCLI()) return;
-        
-        $this->app->getParentController()->setChildren(['Header', 'Footer']);
+        foreach ($this->app->getParentController()->getMiddlewares() as $middleware) 
+            $middleware->execute();
     }
 
     protected function runController(): void {
         $controller = $this->app->getParentController();
+
+        if (!$this->app::isCLI())
+            $this->app->getParentController()->setChildren(['Header', 'Footer']);
+
         $controller->setChildData();
         $controller->{$this->method}();
     }
@@ -88,12 +87,12 @@ final class Router {
         $layoutFile = $this->app::$ROOT_DIR .  File::LAYOUTS_FOLDER . $controller->getLayout() . File::TPL_FILE_EXTENSION;
         
         ob_start();
-            include_once $controller->getView();
+            require_once $controller->getView();
         $viewContent = ob_get_clean();
 
         ob_start();
             require_once $controller->getDataKey('header');
-            include_once $layoutFile;
+            require_once $layoutFile;
             require_once $controller->getDataKey('footer');
         $layoutFileContent = ob_get_clean();
 
@@ -103,7 +102,6 @@ final class Router {
     public function resolve(): void {
         $this->createController();
         $this->runMiddlewares();
-        $this->setTemplateControllers();
         $this->runController();
         $this->hydrateDOM();
     }

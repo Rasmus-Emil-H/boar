@@ -120,6 +120,25 @@
     ```
 
     The layout must be located in ~/views/layouts dir
+
+    You can also add additional scripts/stylesheets based on your current needs
+    The scripts and stylesheets will be appended to the currently setup options in your setup.json
+
+    ```
+    <?php
+
+    namespace app\controllers;
+
+    class AuthController extends Controller {
+
+        public function login(): void {
+            $this->addScript('test');
+            $this->addStylesheet('test');
+            $this->setClientLayoutStructure(layout: 'auth', view: 'login');
+        }
+        
+    }
+    ```
 </details>
 
 <details>

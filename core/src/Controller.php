@@ -25,7 +25,10 @@ class Controller {
     use ControllerMethodTrait;
 
     private const DEFAULT_METHOD = 'index';
+    private const FORBIDDEN_ASSET = 'Forbidden asset type was provided';
+    private const EXPECTED_ENTITY_ID_POSITION = 2;
     private const VALID_ASSET_TYPES = ['js', 'css', 'meta'];
+    private const VALID_ASSET_LOCATION = ['header', 'footer'];
 
     protected array $data = [];
     protected array $children = [];
@@ -57,16 +60,24 @@ class Controller {
         $this->data = $merged;
     }
 
+    public function upsertData(string $key, mixed $data): void {
+        $this->data[$key][] = $data;
+    }
+
     public function getData(): array {
         return $this->data;
     }
 
-    public function getDataKey(string $key): ?string {
+    public function getDataKey(string $key): mixed {
         return $this->data[$key] ?? null;
     }
 
     public function setChildren(array $children): void {
         foreach ($children as $child) $this->children[] = $child; 
+    }
+
+    public function setChild(string $key, mixed $child): void {
+        $this->children[$key] = $child; 
     }
 
     public function setChildData(): void {
@@ -75,13 +86,20 @@ class Controller {
             [$handler, $method] = preg_match('/:/', $childController) ? explode(':', $childController) : [$childController, self::DEFAULT_METHOD];
             $cController = (new ControllerFactory(compact('handler')))->create();
             $cController->{$method}();
+
             $parentController->setData($cController->getData());
+            $parentController->setChild($handler, $cController);
+
             $cController->setChildData();
         }
     }
 
     public function getChildren(): array {
         return $this->children;
+    }
+
+    public function getChild(string $child): ?object {
+        return $this->children[$child] ?? null;
     }
 
     public function registerMiddleware(Middleware $middleware): void {
@@ -94,8 +112,10 @@ class Controller {
 
     protected function returnEntity(): Entity {
         $request = $this->request->getArguments();
-        $key = CoreFunctions::getIndex($request, 2)->scalar;
+
+        $key = CoreFunctions::getIndex($request, self::EXPECTED_ENTITY_ID_POSITION)->scalar;
         $handler = ucfirst(CoreFunctions::first($request)->scalar);
+
         return (new EntityFactory(compact('handler', 'key')))->create();
     }
 
@@ -108,16 +128,24 @@ class Controller {
         return $this->clientAssets;
     }
 
+    private function checkAssetLocation(string $type): void {
+        if (in_array($type, self::VALID_ASSET_LOCATION)) return;
+
+        throw new \app\core\src\exceptions\ForbiddenException(self::FORBIDDEN_ASSET);
+    }
+
     private function checkAssetType(string $type): void {
         if (in_array($type, self::VALID_ASSET_TYPES)) return;
 
-        throw new \app\core\src\exceptions\ForbiddenException('Forbidden asset type was provided');
+        throw new \app\core\src\exceptions\ForbiddenException(self::FORBIDDEN_ASSET);
+    }    
+
+    public function addScript(string $src) {
+        return app()->getParentController()->upsertData(File::JS_EXTENSION, File::buildScript($src)); 
     }
 
-    protected function appendClientAsset(string $type, string $path) {
-        $this->checkAssetType($type);
-
-        $this->clientAssets->set($type, $path);
+    public function addStylesheet(string $src) {
+        return app()->getParentController()->upsertData(File::CSS_EXTENSION, File::buildStylesheet($src));
     }
 
     public function getView(): string {

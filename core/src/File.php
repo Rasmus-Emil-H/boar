@@ -10,13 +10,16 @@ final class File {
 
     use FileStaticMethodTrait;
 
+    public const PLACEHOLDER_FILE = '/usr/www/users/appkat/dev/public/resources/images/placeholder.jpg';
     public const INVALID_EXTENSION  = 'Invalid file extension';
     public const INVALID_FILE_NAME  = 'Invalid file name';
     public const INVALID_FILE_SIZE  = 'File is to big';
-    public const TPL_FILE_EXTENSION = '.tpl.php';
+    public const NO_FILES_ATTACHED = 'No files attached';
     public const VIEWS_FOLDER       = '/views/';
     public const LAYOUTS_FOLDER     = '/views/layouts/';
-    public const NO_FILES_ATTACHED = 'No files attached';
+    public const JS_EXTENSION = 'js';
+    public const CSS_EXTENSION = 'css';
+    public const TPL_FILE_EXTENSION = '.tpl.php';
 
     public const FILE_NOT_FOUND     = 'File not found';
     protected const MAXIMUM_FILE_SIZE  = 10000000;
@@ -68,8 +71,7 @@ final class File {
     }
 
     public function generateFinalName(): string {
-        $name = $this->getDirectory() . '/' . strtotime('now') . rand(1, 20000) . '-' . $this->getName();
-        return $name;
+        return $this->getDirectory() . '/' . strtotime('now') . rand(1, 20000) . '-' . $this->getName();
     }
 
     public function moveFile(): string {

@@ -63,8 +63,7 @@ final class Application {
 
     protected function setConnection() {
         $database = $this->config->get('database');
-        $applicationConfig = ['pdo' => ['dsn' => $database->dsn, 'user' => $database->user, 'password' => $database->password]];
-        $this->connection = Connection::getInstance($applicationConfig['pdo']);
+        $this->connection = Connection::getInstance(['dsn' => $database->dsn, 'user' => $database->user, 'password' => $database->password]);
     }
 
     public function getLanguage() {

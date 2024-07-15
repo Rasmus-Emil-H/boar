@@ -55,7 +55,7 @@ export default {
             const submitButton = form.find('button[type="submit"]').last();
             const _text = submitButton.html();
             submitButton.attr('disabled', true);
-            submitButton.html(window.boar.components.loader());
+            submitButton.html(window[appName].components.loader());
 
             $.ajax({
                 type: form.attr('method'),
@@ -69,7 +69,7 @@ export default {
                     resolve(response);
                 },
                 error: function(xhr, status, error) {
-                    window.boar.components.toast(xhr.responseJSON, window.boar.constants.mdbootstrap.ERROR_CLASS);
+                    window[appName].components.toast(xhr.responseJSON, window[appName].constants.mdbootstrap.ERROR_CLASS);
                     reject(xhr);
                 }
             }).always(function(res) {
@@ -82,9 +82,9 @@ export default {
     checkSubmittedFormResponse: function(response) {
         if (response.responseJSON) {
             if (typeof response.responseJSON === 'object') 
-                boar.components.toast(response.responseJSON.message ?? 'Success', boar.constants.mdbootstrap.SUCCESS_CLASS); 
+                window[appName].components.toast(response.responseJSON.message ?? 'Success', window[appName].constants.mdbootstrap.SUCCESS_CLASS); 
             else 
-                boar.components.toast(response.responseJSON, boar.constants.mdbootstrap.SUCCESS_CLASS);
+                window[appName].components.toast(response.responseJSON, window[appName].constants.mdbootstrap.SUCCESS_CLASS);
         }
         
         if (response.redirect) window.location.replace(response.redirect);
@@ -108,7 +108,7 @@ export default {
         }
     
         const _backupNodes = parent.html();
-        parent.html(boar.components.loader());
+        parent.html(window[appName].components.loader());
     
         const body = new FormData();
         body.append("file", target.files[0]);
@@ -121,7 +121,7 @@ export default {
             const response = await fetch('/file', { method: "POST", body });
             if (!response.ok) throw new Error('Network response was not ok');
             const jsonResponse = await response.json();
-            boar.components.toast(jsonResponse);
+            window[appName].components.toast(jsonResponse);
             parent.html(_backupNodes);
             return jsonResponse;
         } catch (error) {

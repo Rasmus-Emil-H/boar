@@ -3,7 +3,6 @@
 namespace app\controllers;
 
 use \app\core\src\Controller;
-use \app\core\src\miscellaneous\CoreFunctions;
 
 class FooterController extends Controller {
 

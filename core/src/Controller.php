@@ -105,14 +105,14 @@ class Controller {
         return $this->clientAssets;
     }
 
-    private function checkWantedAssetType(string $type): void {
+    private function checkAssetType(string $type): void {
         if (in_array($type, self::VALID_ASSET_TYPES)) return;
 
         throw new \app\core\src\exceptions\ForbiddenException('Forbidden asset type was provided');
     }
 
     protected function appendClientAsset(string $type, string $path) {
-        $this->checkWantedAssetType($type);
+        $this->checkAssetType($type);
 
         $this->clientAssets->set($type, $path);
     }

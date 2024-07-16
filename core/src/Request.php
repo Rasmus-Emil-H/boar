@@ -8,7 +8,6 @@
 
 namespace app\core\src;
 
-use \app\core\Application;
 use \app\core\src\miscellaneous\CoreFunctions;
 use \app\core\src\utilities\Utilities;
 
@@ -33,12 +32,10 @@ class Request {
     protected string $allowedSecondsForRequestInterval;
     protected string $subtractedSeconds;
 
-    public function __construct(
-        protected Application $app
-    ) {
+    public function __construct() {
         $this->clientRequest = $this->getCompleteRequestBody();
         $this->setArguments();
-        $this->requestConfig = $this->app->getConfig()->get('request')->limit;
+        $this->requestConfig = app()->getConfig()->get('request')->limit;
         $this->checkAmountOfRequest();
     }
 
@@ -65,7 +62,7 @@ class Request {
         try {
             $parameters = [];
             foreach (explode('&', $this->getServerInformation()['QUERY_STRING']) as $parameter) {
-                if ($parameter === '') continue;
+                if ($parameter === '' || $parameter === '_' || $parameter === '__') continue;
                 [$param, $value] = explode('=', $parameter);
                 $parameters[$param] = $value;
             }
@@ -123,7 +120,7 @@ class Request {
     }
 
     private function checkAmountOfRequest(): void {
-        if ($this->app::isCLI()) return;
+        if (IS_CLI) return;
         $this->setRatelimiting();
         $this->checkRateLimit();
     }
@@ -134,7 +131,7 @@ class Request {
     }
 
     protected function checkRateLimit(): void{
-        $app = $this->app;
+        $app = app();
         $session = $app->getSession();
         $this->requestAttempts = $session->get(self::REQUEST_MADE_KEY);
         if (!$this->requestAttempts) return;
@@ -146,18 +143,18 @@ class Request {
         $this->updateCurrentSessionRateLimit();
         list($initialUnixSessionRateLimitInstance, $requestAttemptCounter) = explode('-', $this->requestAttempts);
         $this->subtractedSeconds = (strtotime('now') - (int)$initialUnixSessionRateLimitInstance);
-        $this->app->getSession()->set(self::REQUEST_MADE_KEY, str_replace(('-'.$requestAttemptCounter), ('-'.($requestAttemptCounter+1)), $this->requestAttempts));
+        app()->getSession()->set(self::REQUEST_MADE_KEY, str_replace(('-'.$requestAttemptCounter), ('-'.($requestAttemptCounter+1)), $this->requestAttempts));
     }
 
     protected function handleCurrentSessionRateLimit(): void {
-        if ($this->requestAttempts > $this->allowedRequestAmount) $this->app->getResponse()->requestLimitReached();
-        if ($this->subtractedSeconds > $this->allowedSecondsForRequestInterval) $this->app->getSession()->set(self::REQUEST_MADE_KEY, $this->attempts);
+        if ($this->requestAttempts > $this->allowedRequestAmount) app()->getResponse()->requestLimitReached();
+        if ($this->subtractedSeconds > $this->allowedSecondsForRequestInterval) app()->getSession()->set(self::REQUEST_MADE_KEY, $this->attempts);
     }
 
     protected function updateCurrentSessionRateLimit(): void {
         $this->allowedSecondsForRequestInterval = ($this->allowedRequestMinutes * self::SECONDS_THROTTLER);
         $this->attempts = ((string)strtotime('+'.$this->allowedRequestMinutes.' minutes') . self::INITIAL_INDEX_ATTEMPT);
-        if (!$this->requestAttempts) $this->app->getSession()->set(self::REQUEST_MADE_KEY, $this->attempts);
+        if (!$this->requestAttempts) app()->getSession()->set(self::REQUEST_MADE_KEY, $this->attempts);
     }
 
     public function getPageOffset(): int {

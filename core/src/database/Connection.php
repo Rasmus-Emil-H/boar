@@ -52,14 +52,6 @@ class Connection {
         return self::$instance;
     }
 
-    private function checkQueryCache(string $cacheKey) {
-      if (isset($this->queryCache[$cacheKey])) return $this->queryCache[$cacheKey];
-    }
-
-   private function setCacheKeyResult(string $cacheKey, mixed $result): void {
-        $this->queryCache[$cacheKey] = $result;
-    }
-
     public function execute(#[\SensitiveParameter] string $query, #[\SensitiveParameter] array $args = [], string $fetchType = self::DEFAULT_SQL_QUERY_FETCH_TYPE) {
         try {
             if (is_iterable($args)) {
@@ -68,8 +60,8 @@ class Connection {
                     $serializedArguments[] = $arg instanceof \SimpleXMLElement ? (string)$arg : $arg;
 
                 $cacheKey = md5($query . serialize($serializedArguments));
-                $cachedSQLQueryResultBasedOnCacheKey = $this->checkQueryCache($cacheKey);
-                if ($cachedSQLQueryResultBasedOnCacheKey) return $cachedSQLQueryResultBasedOnCacheKey;
+
+                if (isset($this->queryCache[$cacheKey])) return $this->queryCache[$cacheKey];
             }
 
             $stmt = $this->pdo->prepare($query);
@@ -77,7 +69,7 @@ class Connection {
             $result = $stmt->{$fetchType}();
             $stmt = null;
             
-            if (isset($cacheKey)) $this->setCacheKeyResult($cacheKey, $result);
+            if (isset($cacheKey)) $this->queryCache[$cacheKey] = $result;
   
             return $result;
         } catch (\PDOException $e) {

@@ -47,7 +47,7 @@ final class Application {
 
         $this->config        = new src\config\Config();
         $this->session      = new src\Session();
-        $this->request      = new src\Request($this);
+        $this->request      = new src\Request();
         
         $this->setConnection();
 

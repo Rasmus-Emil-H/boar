@@ -12,6 +12,8 @@ const modulesDir = './modules/';
 const jsExtension = '.js';
 const appName = 'boar'
 
+window.appName = appName;
+
 const modules = ['utilities', 'components', 'behaviour', 'constants', 'websocket'];
 const allModules = modules.map(function(module) {
   return `${modulesDir}${module}${jsExtension}${version}`;

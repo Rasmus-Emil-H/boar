@@ -21,6 +21,8 @@ use \app\core\src\miscellaneous\CoreFunctions;
 
 final class Router {
 
+    private const EXPECTED_CONTROLLER_METHOD_POSITION = 1;
+
     protected const INDEX_METHOD = 'index';
     protected const RESOURCE_INDICATOR = '/resources';
     
@@ -50,7 +52,7 @@ final class Router {
         $controller = (new ControllerFactory(compact('handler')))->create();
         if (!$controller) $this->app->getResponse()->redirect($defaultRoute);
 
-        $controllerMethod = $this->arguments[1] ?? '';
+        $controllerMethod = $this->arguments[self::EXPECTED_CONTROLLER_METHOD_POSITION] ?? '';
 
         $this->app->setParentController($controller);
         $this->method = $controllerMethod === '' || !method_exists($controller, $controllerMethod) ? self::INDEX_METHOD : $controllerMethod;

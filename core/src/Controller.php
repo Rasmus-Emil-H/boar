@@ -87,8 +87,6 @@ class Controller {
             $cController->{$method}();
 
             $parentController->setData($cController->getData());
-            $parentController->setChild($handler, $cController);
-
             $cController->setChildData();
         }
     }

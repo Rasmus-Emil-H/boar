@@ -124,6 +124,9 @@
     You can also add additional scripts/stylesheets based on your current needs
     The scripts and stylesheets will be appended to the currently setup options in your setup.json
 
+    The js and css file extensions will be build behind the scenes, so that you should only specify the asset name
+    Temp assets must be located in the ~/public/resources/ASSET_TYPE dir
+
     ```
     <?php
 

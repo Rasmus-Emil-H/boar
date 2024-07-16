@@ -72,8 +72,7 @@ final class Router {
     protected function runController(): void {
         $controller = $this->app->getParentController();
 
-        if (!$this->app::isCLI())
-            $this->app->getParentController()->setChildren(['Header', 'Footer']);
+        if (!IS_CLI) $this->app->getParentController()->setChildren(['Header', 'Footer']);
 
         $controller->setChildData();
         $controller->{$this->method}();

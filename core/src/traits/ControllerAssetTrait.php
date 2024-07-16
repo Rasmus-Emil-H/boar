@@ -8,7 +8,7 @@ use \app\core\src\View;
 trait ControllerAssetTrait {
 
     private const VALID_ASSET_TYPES = ['js', 'css', 'meta'];
-    private const VALID_ASSET_LOCATION = ['header', 'footer'];
+    private const VALID_ASSET_LOCATIONS = ['header', 'footer'];
     private const FORBIDDEN_ASSET = 'Forbidden asset type was provided';
 
     protected function getClientAssets() {
@@ -16,7 +16,7 @@ trait ControllerAssetTrait {
     }
 
     public function checkAssetLocation(string $type): void {
-        if (in_array($type, $this::VALID_ASSET_LOCATION)) return;
+        if (in_array($type, $this::VALID_ASSET_LOCATIONS)) return;
 
         throw new \app\core\src\exceptions\ForbiddenException($this::FORBIDDEN_ASSET);
     }
@@ -30,16 +30,20 @@ trait ControllerAssetTrait {
     public function addScript(string|array $src) {
         if (is_string($src)) $src = (array)$src;
 
-        array_map(function($file) {
-            return app()->getParentController()->upsertData(File::JS_EXTENSION, File::buildScript($file));
+        $parent = app()->getParentController();
+
+        array_map(function($file) use($parent) {
+            return $parent->upsertData(File::JS_EXTENSION, File::buildScript($file));
         }, $src);
     }
 
     public function addStylesheet(string $src) {
         if (is_string($src)) $src = (array)$src;
 
-        array_map(function($file) {
-            return app()->getParentController()->upsertData(File::CSS_EXTENSION, File::buildStylesheet($file));
+        $parent = app()->getParentController();
+
+        array_map(function($file) use($parent) {
+            return $parent->upsertData(File::CSS_EXTENSION, File::buildStylesheet($file));
         }, $src);
     }
 

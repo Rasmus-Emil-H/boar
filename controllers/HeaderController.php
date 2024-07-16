@@ -9,7 +9,7 @@ class HeaderController extends Controller {
 
     public function index() {
 		$this->setView('header', 'partials/');
-		$this->setChildren(['navbar' => 'DOMNode:navbar']);
+		$this->setChildren(['navbar' => 'Partial:navbar']);
 
 		$app = app();
 		$assets = $app->getParentController()->getClientAssets();

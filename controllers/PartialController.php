@@ -4,7 +4,7 @@ namespace app\controllers;
 
 use \app\core\src\Controller;
 
-class DOMNodeController extends Controller {
+class PartialController extends Controller {
 
     public function navbar() {
       	$this->setView('navbar', 'partials/');

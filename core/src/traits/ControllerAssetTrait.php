@@ -51,6 +51,13 @@ trait ControllerAssetTrait {
         return $this->view ?? View::INVALID_VIEW;
     }
 
+    public function setAsPartialViewFile() {
+        extract($this->getData(), EXTR_SKIP);
+        ob_start();
+            require_once $this->getView();
+        $this->data['view'] = ob_get_clean();
+    }
+
     public function setView(string $view, string $dir = ''): void {
         $this->view = app()->getView()->getTemplatePath($view, $dir);
     }

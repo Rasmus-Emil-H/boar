@@ -142,6 +142,59 @@
         
     }
     ```
+
+    ### Partials
+
+    You can include create custom partials in order to make your application be split into smaller components like below
+    where ->setAsPartialViewFile(); will turn on output buffering, require your file and extract your defined variables and inject a view key with the output buffer result, on your child data
+
+
+    ```
+    <?php
+
+    namespace app\controllers;
+
+    use \app\core\src\Controller;
+
+    class PartialController extends Controller {
+
+        public function somePartial() {
+            $this->setView(view: 'card', dir: 'partials/someDirInsideThePartialsDir/');
+            $this->setData(['key' => 'value'])->setAsPartialViewFile();
+        }
+
+    }
+    ```
+
+    You can then use fetch this partial directly from any controller like below
+
+   ```
+    <?php
+
+    namespace app\controllers;
+
+    use \app\core\src\Controller;
+
+    class LanguageController extends Controller {
+
+        public function index() {
+            $this->upsertChildData(['somePartial' => 'Partial:somePartial']);
+            return $this->setFrontendTemplateAndData(templateFile: 'editLanguage', data: ['someKey' => 'someValue']);
+        }
+
+    }
+   ```
+    
+    The child partial is then directly attached to the correct symbol table for you to use in any view file like below
+
+    ~/views/editLanguage.tpl.php
+
+    ```
+    <div class="boar">
+        <?= $somePartial['partialView'] ?>
+    <div>
+    ```
+
 </details>
 
 <details>
@@ -179,7 +232,7 @@
     class LanguageController extends Controller {
 
         public function index() {
-            $this->setChildData(['varName' => 'Controller:Method']);
+            $this->upsertChildData(['varName' => 'Controller:Method']);
         }
 
     }

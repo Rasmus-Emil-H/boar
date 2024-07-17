@@ -74,8 +74,8 @@ final class Router {
 
         if (!IS_CLI) $this->app->getParentController()->setChildren(['Header', 'Footer']);
 
-        $controller->{$this->method}();
         $controller->setChildData();
+        $controller->{$this->method}();
     }
 
     protected function hydrateDOM(): void {

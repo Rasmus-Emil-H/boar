@@ -1,4 +1,4 @@
-export default {
+window[appName].constants = {
     mdbootstrap: {
         ERROR_CLASS: 'danger',
         SUCCESS_CLASS: 'success'

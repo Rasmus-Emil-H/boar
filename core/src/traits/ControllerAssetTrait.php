@@ -55,7 +55,7 @@ trait ControllerAssetTrait {
         extract($this->getData(), EXTR_SKIP);
         ob_start();
             require_once $this->getView();
-        $this->data['view'] = ob_get_clean();
+        $this->data['partialView'] = ob_get_clean();
     }
 
     public function setView(string $view, string $dir = ''): void {

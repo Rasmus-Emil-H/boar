@@ -20,7 +20,7 @@ class AuthController extends Controller {
 
     public function logout(): void {
         (new UserModel())->logout();
-        $this->session->unset(['user', 'SessionID']);
+        app()->getSession()->unset(['user', 'SessionID']);
 		$this->response->redirect('/');
     }
 

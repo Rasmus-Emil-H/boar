@@ -15,7 +15,7 @@ class ControllerFactory extends AbstractFactory {
         if (!$this->validateObject($controller)) return null;
         
         $app = app();
-        return new $controller($app->getRequest(), $app->getResponse(), $app->getSession(), new AssetsController());
+        return new $controller($app->getRequest(), $app->getResponse(), new AssetsController());
     }
 
 }

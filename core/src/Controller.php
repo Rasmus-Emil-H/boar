@@ -42,7 +42,6 @@ class Controller {
     public function __construct(
         protected Request  $request, 
         protected Response $response, 
-        protected Session  $session,
         protected AssetsController $clientAssets
     ) {
         $this->requestBody = $this->request->getCompleteRequestBody();
@@ -81,14 +80,15 @@ class Controller {
 
     public function setChildData(): void {
         $parentController = app()->getParentController();
-        foreach ($this->getChildren() as $childController) {
+
+        array_map(function($childController) use ($parentController) {
             [$handler, $method] = preg_match('/:/', $childController) ? explode(':', $childController) : [$childController, self::DEFAULT_METHOD];
             $cController = (new ControllerFactory(compact('handler')))->create();
             $cController->{$method}();
 
             $parentController->setData($cController->getData());
             $cController->setChildData();
-        }
+        }, $this->getChildren());
     }
 
     public function getChildren(): array {

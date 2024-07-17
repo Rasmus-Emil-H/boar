@@ -7,7 +7,7 @@
 |
 */
 
-const appName = 'autologik';
+const appName = 'boar';
 
 window.appName = appName;
 

@@ -71,7 +71,6 @@ trait ControllerAssetTrait {
     public function setFrontendTemplateAndData(string $templateFile, array $data = []) {
         $this->setData($data);
         $this->setView($templateFile);
-        return $this;
     }
 
 }

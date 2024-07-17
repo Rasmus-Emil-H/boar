@@ -77,4 +77,14 @@ trait ControllerMethodTrait {
         }
     }
 
+    public function dispatchMethodAction() {
+        $cEntity = $this->returnValidEntityIfExists();
+        
+        $this->appendFilesToRequestBody();
+        $request = $this->requestBody->body;
+        $response = $cEntity->dispatchHTTPMethod($request->action, $request);
+
+        $this->response->{$this->determineClientResponseMethod(dispatchedHTTPMethodResult: $response)}($response ?? '');
+    }
+
 }

@@ -74,8 +74,8 @@ final class Router {
 
         if (!IS_CLI) $this->app->getParentController()->setChildren(['Header', 'Footer']);
 
-        $controller->setChildData();
         $controller->{$this->method}();
+        $controller->setChildData();
     }
 
     protected function hydrateDOM(): void {
@@ -86,7 +86,7 @@ final class Router {
     private function handleFrontendHydration(Controller $controller, array $data) {
         extract($data, EXTR_SKIP);
         $layoutFile = $this->app::$ROOT_DIR .  File::LAYOUTS_FOLDER . $controller->getLayout() . File::TPL_FILE_EXTENSION;
-        
+
         ob_start();
             require_once $controller->getView();
         $viewContent = ob_get_clean();

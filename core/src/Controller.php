@@ -99,6 +99,18 @@ class Controller {
         return $this->children[$child] ?? null;
     }
 
+    public function upsertChildData(array $data) {
+        $parentController = app()->getParentController();
+
+        foreach ($data as $key => $childController) {
+            [$handler, $method] = preg_match('/:/', $childController) ? explode(':', $childController) : [$childController, self::DEFAULT_METHOD];
+            $cController = (new ControllerFactory(compact('handler')))->create();
+            $cController->{$method}();
+
+            $parentController->data[$key] = $cController->getData();
+        }
+    }
+
     public function registerMiddleware(Middleware $middleware): void {
         $this->middlewares[] = $middleware;
     }

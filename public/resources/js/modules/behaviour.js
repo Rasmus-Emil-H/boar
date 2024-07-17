@@ -7,7 +7,7 @@
 |
 */
 
-export default {
+window[appName].behaviour = {
     init: function() {
         this.globalNodeEventListeners();
     },
@@ -131,3 +131,6 @@ export default {
         }
     }
 }
+
+
+window[appName].behaviour.init();

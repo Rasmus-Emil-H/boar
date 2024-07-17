@@ -1,4 +1,4 @@
-export default {
+window[appName].components = {
     toast: async function(message, bg) {
         const toast = `
           <div class="toast-container top-0 end-0">

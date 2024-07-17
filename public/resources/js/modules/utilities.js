@@ -1,4 +1,4 @@
-export default {
+window[appName].utilities = {
     htmlspecialchars: function(str) {
         if (typeof str !== 'string') return str;
         return str.replace(/[&<>"']/g, function(match) {

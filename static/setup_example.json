@@ -59,7 +59,11 @@
         "js": [
             "<script defer src=\"/resources/js/jquery-3.7.0.min.js\"></script>",
             "<script defer src=\"/resources/js/bootstrap.bundle.min.js\"></script>",
-            "<script defer type=\"module\" src=\"/resources/js/main.js\"></script>"
+            "<script defer type=\"module\" src=\"/resources/js/main.js\"></script>",
+            "<script defer src=\"/resources/js/modules/constants.js?t=1\"></script>",
+            "<script defer src=\"/resources/js/modules/components.js?t=1\"></script>",
+            "<script defer src=\"/resources/js/modules/utilities.js?t=1\"></script>",
+            "<script defer src=\"/resources/js/modules/behaviour.js?t=1\"></script>"
         ],
         "metaTags": [
             "<meta charset=\"utf-8\">",

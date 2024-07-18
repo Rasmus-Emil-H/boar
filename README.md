@@ -179,7 +179,7 @@
 
         public function index() {
             $this->upsertChildData(['somePartial' => 'Partial:somePartial']);
-            return $this->setFrontendTemplateAndData(templateFile: 'editLanguage', data: ['someKey' => 'someValue']);
+            return $this->setFrontendTemplateAndData(templateFile: 'Languages', data: ['someKey' => 'someValue']);
         }
 
     }
@@ -187,7 +187,7 @@
     
     The child partial is then directly attached to the correct symbol table for you to use in any view file like below
 
-    ~/views/editLanguage.tpl.php
+    ~/views/Languages.tpl.php
 
     ```
     <div class="boar">

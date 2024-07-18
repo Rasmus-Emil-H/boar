@@ -45,19 +45,19 @@ final class Router {
         $this->checkRouteAndGoToDefault();
 
         $handler = ucfirst(CoreFunctions::first($this->arguments)->scalar);
-        if ($this->isResource($handler)) return;
-
-        $defaultRoute = $this->app->getConfig()->get('routes')->defaults->redirectTo;
+        if ($this->isResource($handler)) exit;
 
         $controller = (new ControllerFactory(compact('handler')))->create();
-        if (!$controller) $this->app->getResponse()->redirect($defaultRoute);
+        if (!$controller) exit;
+
+        debug(json_encode($controller));
 
         $controllerMethod = $this->arguments[self::EXPECTED_CONTROLLER_METHOD_POSITION] ?? '';
 
         $this->app->setParentController($controller);
         $this->method = $controllerMethod === '' || !method_exists($controller, $controllerMethod) ? self::INDEX_METHOD : $controllerMethod;
 
-        if (!method_exists($controller, $this->method)) $this->app->getResponse()->redirect($defaultRoute);
+        if (!method_exists($controller, $this->method)) $this->app->getResponse()->redirect($this->app->getConfig()->get('routes')->defaults->redirectTo);
     }
 
     private function isResource(string $handler): bool {
@@ -65,14 +65,13 @@ final class Router {
     }
 
     protected function runMiddlewares(): void {
-        foreach ($this->app->getParentController()->getMiddlewares() as $middleware) 
-            $middleware->execute();
+        foreach ($this->app->getParentController()->getMiddlewares() as $middleware) $middleware->execute();
     }
 
     protected function runController(): void {
         $controller = $this->app->getParentController();
 
-        if (!IS_CLI) $this->app->getParentController()->setChildren(['Header', 'Footer']);
+        if (!IS_CLI) $controller->setChildren(['Header', 'Footer']);
 
         $controller->setChildData();
         $controller->{$this->method}();

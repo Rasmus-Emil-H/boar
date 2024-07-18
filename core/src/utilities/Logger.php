@@ -5,10 +5,13 @@ namespace app\core\src\utilities;
 class Logger {
 
     public function log($data): void {
+
+        if (!app()->getConfig()->get('debugViaFile')) return;
+
         $seperator = ' --------------------- ';
         $message = ($seperator . date('d-m-Y H:i:s') . ' ERROR: ' . 
             (is_string($data) ? $data : $data->getMessage()) . ' TRACE ' . 
-            (is_string($data) ? $data : json_encode($data->getTrace(), JSON_PRETTY_PRINT)) . 
+            (is_string($data) ? $data : json_encode($data->getTrace() ?? $data, JSON_PRETTY_PRINT)) . 
             $seperator
         );
 

@@ -50,8 +50,6 @@ final class Router {
         $controller = (new ControllerFactory(compact('handler')))->create();
         if (!$controller) exit;
 
-        debug(json_encode($controller));
-
         $controllerMethod = $this->arguments[self::EXPECTED_CONTROLLER_METHOD_POSITION] ?? '';
 
         $this->app->setParentController($controller);

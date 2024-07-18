@@ -191,7 +191,7 @@
 
     ```
     <div class="boar">
-        <?= $somePartial['partialView'] ?>
+        <?= $somePartial['partialView']; ?>
     <div>
     ```
 

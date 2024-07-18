@@ -218,7 +218,7 @@ abstract class Entity {
             $cEntity = $this;
         }
 
-        return isset($cEntity) && method_exists($cEntity, 'frontendFields') ? $cEntity->frontendFields() : null;
+        return isset($cEntity) && method_exists($cEntity, 'safeFieldsDescription') ? $cEntity->safeFieldsDescription() : ['message' => 'OK'];
     }
 
 }

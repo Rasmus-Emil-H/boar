@@ -76,7 +76,7 @@ class Pagination {
                             <?php foreach($this->pages as $page): ?>
                                 <li class="page-item">
                                     <a class="page-link" <?= $page === $this->pageIndex ? 'style="color:red;font-weight:800;text-decoration:underline;"' : ''; ?> href="?page=<?= $page . $this->replacedQueryParamaters; ?>">
-                                        <?= hs($page); ?>
+                                        <?= $page; ?>
                                     </a>
                                 </li>
                             <?php endforeach; ?>

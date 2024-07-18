@@ -82,9 +82,7 @@ trait ControllerMethodTrait {
         
         $this->appendFilesToRequestBody();
         $request = $this->requestBody->body;
-        $response = $cEntity->dispatchHTTPMethod($request->action, $request);
-
-        $this->response->{$this->determineClientResponseMethod(dispatchedHTTPMethodResult: $response)}($response ?? '');
+        return $cEntity->dispatchHTTPMethod($request->action, $request);
     }
 
 }

@@ -53,9 +53,10 @@ class Controller {
         if (!CoreFunctions::validateCSRF()) $this->response->badToken();
     }
 
-    public function setData($data): void {
+    public function setData($data): self {
         $merged = array_merge($this->getData(), $data);
         $this->data = $merged;
+        return $this;
     }
 
     public function upsertData(string $key, mixed $data): void {
@@ -102,13 +103,20 @@ class Controller {
     public function upsertChildData(array $data) {
         $parentController = app()->getParentController();
 
-        foreach ($data as $key => $childController) {
-            [$handler, $method] = preg_match('/:/', $childController) ? explode(':', $childController) : [$childController, self::DEFAULT_METHOD];
-            $cController = (new ControllerFactory(compact('handler')))->create();
-            $cController->{$method}();
+        array_map(function($childs, $dataKey) use($parentController) {
+            array_map(function($childData, $controllerAndMethodLiteral) use($dataKey, $parentController) {
 
-            $parentController->data[$key] = $cController->getData();
-        }
+                if (!is_iterable($childData) && $controllerAndMethodLiteral !== 0)
+                    throw new \app\core\src\exceptions\ForbiddenException('Only iterables can be passed to ' . __METHOD__);
+
+                [$handler, $method] = preg_match('/:/', $controllerAndMethodLiteral) ? explode(':', $controllerAndMethodLiteral) : [$controllerAndMethodLiteral, self::DEFAULT_METHOD];
+                $cController = (new ControllerFactory(compact('handler')))->create();
+                $cController->{$method}($childData);
+    
+                $parentController->data[$dataKey] = $cController->getData();
+
+            }, $childs, array_keys($childs));
+        }, $data, array_keys($data));
     }
 
     public function registerMiddleware(Middleware $middleware): void {

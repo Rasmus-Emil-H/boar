@@ -104,6 +104,24 @@ trait EntityRelationsTrait {
     }
 
     /**
+     * Update a pivot relation with N amount of KVPs
+     */
+
+    public function updateCustomPivot($table, $keys, ?string $entityKeyField = null, ?string $entityKeyValue = null) {
+        $queryBuilder = new QueryBuilder(get_called_class(), $table, '');
+        return $queryBuilder->patch($keys, $entityKeyField, $entityKeyValue)->run();
+    }
+
+    /**
+     * Update a pivot relation with N amount of KVPs based on current entity
+     */
+
+    public function updateCustomPivotBasedOnEntity($table, $keys) {
+        $queryBuilder = new QueryBuilder(get_called_class(), $table, '');
+        return $queryBuilder->patch($keys, $this->getKeyField(), $this->key())->run();
+    }
+
+    /**
      * Find entites on pivot table where parent primary key is a match
      */
 

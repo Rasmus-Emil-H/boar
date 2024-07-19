@@ -178,7 +178,11 @@
     class LanguageController extends Controller {
 
         public function index() {
-            $this->upsertChildData(['somePartial' => 'Partial:somePartial']);
+            $this->upsertChildData([
+                'overAllInjectedIntoPartialKey' => [
+                    'Partial:somePartial' => ['injectedIntoPartialKey' => 'injectedIntoPartialValue']
+                ]
+            ]);
             return $this->setFrontendTemplateAndData(templateFile: 'Languages', data: ['someKey' => 'someValue']);
         }
 
@@ -233,6 +237,11 @@
 
         public function index() {
             $this->upsertChildData(['varName' => 'Controller:Method']);
+
+            // Furthermore if you want to inject data from the controller to the partial, you can do like below
+            $this->upsertChildData([
+                'childDataKey' => $this->createPartialWithData('Partial:somePartial', ['boar' => 'oink'])
+            ]);
         }
 
     }

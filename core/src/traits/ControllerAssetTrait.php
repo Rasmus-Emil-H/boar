@@ -58,6 +58,10 @@ trait ControllerAssetTrait {
         $this->data['partialView'] = ob_get_clean();
     }
 
+    public function createPartialWithData(string $method, array $data = []) {
+        return [$method => $data];
+    }
+
     public function setView(string $view, string $dir = ''): void {
         $this->view = app()->getView()->getTemplatePath($view, $dir);
     }

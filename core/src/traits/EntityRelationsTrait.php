@@ -179,7 +179,7 @@ trait EntityRelationsTrait {
      * Remove specific relation
      */
 
-     public function deleteTableRelation(array $keys, string $table) {
+     public function deleteTableRelation(string $table, array $keys) {
         $queryBuilder = new QueryBuilder(get_called_class(), $table, $this->key());
         return $queryBuilder->delete()->where($keys)->run();
     } 

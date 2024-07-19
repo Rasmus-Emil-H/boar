@@ -171,7 +171,7 @@ trait EntityRelationsTrait {
      */
 
     public function deleteRelation(array $keys) {
-        $queryBuilder = new QueryBuilder($this, $this->getPivot(), $this->key());
+        $queryBuilder = new QueryBuilder(get_called_class(), $this->getPivot(), $this->key());
         return $queryBuilder->delete()->where($keys)->run();
     }
 
@@ -180,7 +180,7 @@ trait EntityRelationsTrait {
      */
 
      public function deleteTableRelation(array $keys, string $table) {
-        $queryBuilder = new QueryBuilder($this, $table, $this->key());
+        $queryBuilder = new QueryBuilder(get_called_class(), $table, $this->key());
         return $queryBuilder->delete()->where($keys)->run();
     } 
 

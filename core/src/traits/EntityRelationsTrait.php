@@ -175,4 +175,13 @@ trait EntityRelationsTrait {
         return $queryBuilder->delete()->where($keys)->run();
     }
 
+   /**
+     * Remove specific relation
+     */
+
+     public function deleteTableRelation(array $keys, string $table) {
+        $queryBuilder = new QueryBuilder($this, $table, $this->key());
+        return $queryBuilder->delete()->where($keys)->run();
+    } 
+
 }

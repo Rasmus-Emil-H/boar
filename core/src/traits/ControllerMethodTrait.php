@@ -20,7 +20,7 @@ trait ControllerMethodTrait {
 
     public function checkAction() {
         if (isset($this->requestBody->body->action)) return;
-        throw new \app\core\src\exceptions\NotFoundException('Action was not found');
+            throw new \app\core\src\exceptions\NotFoundException('Action was not found');
     }
 
     public function determineClientResponseMethod(mixed $dispatchedHTTPMethodResult): string {

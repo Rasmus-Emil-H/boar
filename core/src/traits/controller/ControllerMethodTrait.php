@@ -1,6 +1,6 @@
 <?php
 
-namespace app\core\src\traits;
+namespace app\core\src\traits\controller;
 
 use \app\models\FileModel;
 use \app\core\src\File;

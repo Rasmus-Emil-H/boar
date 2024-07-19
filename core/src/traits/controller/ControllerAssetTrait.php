@@ -1,6 +1,6 @@
 <?php
 
-namespace app\core\src\traits;
+namespace app\core\src\traits\controller;
 
 use \app\core\src\File;
 use \app\core\src\View;

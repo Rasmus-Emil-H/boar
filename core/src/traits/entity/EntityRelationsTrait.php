@@ -11,7 +11,7 @@
 |
 */
 
-namespace app\core\src\traits;
+namespace app\core\src\traits\entity;
 
 use \app\core\src\database\querybuilder\QueryBuilder;
 use \app\core\src\database\table\Table;

@@ -7,7 +7,7 @@
 |
 */
 
-namespace app\core\src\traits;
+namespace app\core\src\traits\entity;
 
 trait EntityMagicMethodTrait {
 

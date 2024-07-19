@@ -17,8 +17,8 @@ use \app\models\SystemEventModel;
 use \app\models\UserModel;
 use \app\core\src\miscellaneous\CoreFunctions;
 
-use \app\core\src\traits\ApplicationGetterTrait;
-use \app\core\src\traits\ApplicationStaticMethodTrait;
+use \app\core\src\traits\application\ApplicationGetterTrait;
+use \app\core\src\traits\application\ApplicationStaticMethodTrait;
 
 final class Application {
 

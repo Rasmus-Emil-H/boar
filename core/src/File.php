@@ -4,7 +4,7 @@ namespace app\core\src;
 
 use \app\core\src\miscellaneous\CoreFunctions;
 use \app\core\src\utilities\Image;
-use \app\core\src\traits\FileStaticMethodTrait;
+use \app\core\src\traits\file\FileStaticMethodTrait;
 
 final class File {
 

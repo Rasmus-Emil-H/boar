@@ -14,10 +14,10 @@
 namespace app\core\src\database;
 
 use \app\core\src\miscellaneous\CoreFunctions;
-use \app\core\src\traits\EntityQueryTrait;
-use \app\core\src\traits\EntityMagicMethodTrait;
-use \app\core\src\traits\EntityHTTPMethodTrait;
-use \app\core\src\traits\EntityRelationsTrait;
+use \app\core\src\traits\entity\EntityQueryTrait;
+use \app\core\src\traits\entity\EntityMagicMethodTrait;
+use \app\core\src\traits\entity\EntityHTTPMethodTrait;
+use \app\core\src\traits\entity\EntityRelationsTrait;
 
 abstract class Entity {
 

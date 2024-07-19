@@ -10,7 +10,7 @@
 |
 */
 
-namespace app\core\src\traits;
+namespace app\core\src\traits\gate;
 
 use \app\core\src\database\Entity;
 use \app\core\src\miscellaneous\CoreFunctions;

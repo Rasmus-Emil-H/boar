@@ -18,8 +18,8 @@ use \app\core\src\miscellaneous\CoreFunctions;
 use \app\controllers\AssetsController;
 use \app\core\src\database\Entity;
 use \app\core\src\factories\EntityFactory;
-use \app\core\src\traits\ControllerMethodTrait;
-use \app\core\src\traits\ControllerAssetTrait;
+use \app\core\src\traits\controller\ControllerMethodTrait;
+use \app\core\src\traits\controller\ControllerAssetTrait;
 
 class Controller {
 

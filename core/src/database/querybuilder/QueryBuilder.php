@@ -153,8 +153,8 @@ class QueryBuilder extends QueryBuilderBase {
         return $this;
     }
     
-    public function partitionBy(string $sqlMethod, string $partitonBy, string $additionalLogic = ''): self {
-        $this->upsertQuery($sqlMethod . ' OVER (PARTITION BY ' . $partitonBy . ' ' . ($additionalLogic ?: '') . ') ');
+    public function partitionBy(string $sqlMethod, string $partitonBy): self {
+        $this->upsertQuery($sqlMethod . ' OVER (PARTITION BY ' . $partitonBy);
         return $this;
     }
 
@@ -344,6 +344,16 @@ class QueryBuilder extends QueryBuilderBase {
     
     public function max(string $field, string $alias = 'max'): self {
         $this->upsertQuery("SELECT MAX({$field}) AS {$alias} FROM {$this->table}");
+        return $this;
+    }
+
+    public function appendParenthesisStart(): self {
+        $this->upsertQuery(" ( ");
+        return $this;
+    }
+
+    public function appendParenthesisEnd(): self {
+        $this->upsertQuery(" ) ");
         return $this;
     }
 

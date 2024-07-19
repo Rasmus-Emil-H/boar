@@ -15,7 +15,7 @@ namespace app\core\src\gate;
 
 use \app\core\src\database\Entity;
 use \app\core\src\miscellaneous\CoreFunctions;
-use \app\core\src\traits\GateStaticMethodTrait;
+use \app\core\src\traits\gate\GateStaticMethodTrait;
 
 class Gate {
 

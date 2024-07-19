@@ -24,6 +24,7 @@ class Constants {
     public const SELECT = ' SELECT ';
     public const IS_NULL = ' IS NULL ';
     public const IS_NOT_NULL = ' IS NOT NULL ';
+    public const PARTITION_BY = ' PARTITION BY ';
 
     protected const SQL_DESCRIBE = ' DESCRIBE ';
     protected const GROUP_BY     = ' GROUP BY ';

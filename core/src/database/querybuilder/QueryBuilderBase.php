@@ -40,8 +40,10 @@ abstract class QueryBuilderBase extends Constants {
         return $this->lastQueryPart ?? null;
     }
 
-    private function checkQueryKey(string $key) {
-        if (isset($this->args[$key])) debug('Your key: ' . $key . ' is already set in the current query');
+    private function checkQueryKey(string $key): void {
+        if (!isset($this->args[$key])) return;
+        
+        debug('Your key: ' . $key . ' is already set in the current query');
     }
 
     public function updateQueryArguments(array $arguments): void {

@@ -154,7 +154,7 @@ class QueryBuilder extends QueryBuilderBase {
     }
     
     public function partitionBy(string $sqlMethod, string $partitonBy): self {
-        $this->upsertQuery($sqlMethod . ' OVER (PARTITION BY ' . $partitonBy);
+        $this->upsertQuery($sqlMethod . ' OVER ( ' . $this::PARTITION_BY . ' ' . $partitonBy);
         return $this;
     }
 

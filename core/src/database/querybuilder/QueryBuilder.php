@@ -28,6 +28,11 @@ class QueryBuilder extends QueryBuilderBase {
         return $this;
     }
 
+    public function selectFields(array $fields): self {
+        $this->upsertQuery($this::SELECT . implode(', ', $fields));
+        return $this;  
+    }
+
     public function selectFromSubQuery(string $fields = '*') {
         $this->upsertQuery($this::SELECT . $fields . $this::FROM);
         return $this; 
@@ -152,10 +157,22 @@ class QueryBuilder extends QueryBuilderBase {
         $this->upsertQuery($this::WITH . $temp . $this::AS);
         return $this;
     }
+
+    public function over(): self {
+       $this->upsertQuery(' OVER ( '); 
+       return $this;
+    }
     
-    public function partitionBy(string $sqlMethod, string $partitonBy): self {
-        $this->upsertQuery($sqlMethod . ' OVER ( ' . $this::PARTITION_BY . ' ' . $partitonBy);
+    public function partitionByClause(\closure $callback = null): self {
+        call_user_func($callback, $this);
+        $this->upsertQuery($this::SUBQUERY_CLOSE);
+
         return $this;
+    }
+
+    public function partitionBy(string $partitionBy): self {
+       $this->upsertQuery($this::PARTITION_BY . ' ' . $partitionBy); 
+       return $this;
     }
 
     public function limit(int $limit = self::DEFAULT_LIMIT): self {

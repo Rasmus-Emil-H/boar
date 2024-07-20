@@ -55,7 +55,7 @@ class CsrfToken {
     }
 
     private function getCurrentRequestUrl(): string {
-        return $this->server['REQUEST_SCHEME'] . '://' . $this->server['HTTP_HOST'] . $this->server['REQUEST_URI'];
+        return $this->server['REQUEST_SCHEME'] ?? 'https' . '://' . $this->server['HTTP_HOST'] . $this->server['REQUEST_URI'];
     }
 
     public function validate(): bool {

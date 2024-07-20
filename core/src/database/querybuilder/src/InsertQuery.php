@@ -27,7 +27,7 @@ trait InsertQuery {
     
     public function bindValues(array $arguments): void {
         foreach($arguments as $selector => $value) {
-            $this->upsertQuery((array_key_first($arguments) === $selector ? $this::WHERE : $this::AND) . $selector . $this::BIND . $selector);
+            $this->upsertQuery((array_key_first($arguments) === $selector ? Constants::WHERE : Constants::AND) . $selector . Constants::BIND . $selector);
             $this->setArgumentPair($selector, $value);
         }
     }

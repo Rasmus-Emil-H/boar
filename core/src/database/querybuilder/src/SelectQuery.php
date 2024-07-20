@@ -3,7 +3,9 @@
 namespace app\core\src\database\querybuilder\src;
 
 use \app\core\src\database\table\Table;
+use \app\core\src\miscellaneous\CoreFunctions;
 use \app\core\src\utilities\Parser;
+
 
 trait SelectQuery {
 
@@ -23,27 +25,27 @@ trait SelectQuery {
    }
 
     public function select(array $fields = ['*']): self {
-        $this->upsertQuery($this::SELECT . implode(', ', $fields) . $this::FROM . $this->table);
+        $this->upsertQuery(Constants::SELECT . implode(', ', $fields) . Constants::FROM . $this->table);
         return $this;
     }
 
     public function selectFieldsFrom(array $fields, string $from = ''): self {
-        $this->upsertQuery($this::SELECT . implode(', ', $fields) . $this::FROM . $from);
+        $this->upsertQuery(Constants::SELECT . implode(', ', $fields) . Constants::FROM . $from);
         return $this;
     }
 
     public function selectFields(array $fields): self {
-        $this->upsertQuery($this::SELECT . implode(', ', $fields));
+        $this->upsertQuery(Constants::SELECT . implode(', ', $fields));
         return $this;
     }
 
     public function selectFromSubQuery(string $fields = '*'): self {
-        $this->upsertQuery($this::SELECT . $fields . $this::FROM);
+        $this->upsertQuery(Constants::SELECT . $fields . Constants::FROM);
         return $this;
     }
 
     public function distinct(): self {
-        $this->upsertQuery('SELECT DISTINCT ' . $this->fields . $this::FROM . $this->table);
+        $this->upsertQuery('SELECT DISTINCT ' . $this->fields . Constants::FROM . $this->table);
         return $this;
     }
 
@@ -61,12 +63,12 @@ trait SelectQuery {
 
     public function where(array $arguments = []): self {
         foreach ($arguments as $selector => $sqlValue) {
-            $dateField = str_contains($selector, $this::DEFAULT_FRONTEND_DATE_FROM_INDICATOR) || str_contains($selector, $this::DEFAULT_FRONTEND_DATE_TO_INDICATOR);
+            $dateField = str_contains($selector, Constants::DEFAULT_FRONTEND_DATE_FROM_INDICATOR) || str_contains($selector, Constants::DEFAULT_FRONTEND_DATE_TO_INDICATOR);
 
             if ($dateField) $this->handleDateClausing($selector, $sqlValue);
             else {
                 list($comparison, $sqlValue) = Parser::sqlComparsion(($sqlValue ?? ''), $this->getComparisonOperators());
-                $key = preg_replace($this::DEFAULT_REGEX_REPLACE_PATTERN, '', $selector);
+                $key = preg_replace(Constants::DEFAULT_REGEX_REPLACE_PATTERN, '', $selector);
 
                 $this->updateQueryArgument($key, $sqlValue);
                 $this->upsertQuery($this->checkStart() . "{$selector} {$comparison} :{$key}");
@@ -79,8 +81,8 @@ trait SelectQuery {
         list($order, $field) = explode('-', $selector);
         if (str_contains($order, '.')) $table = CoreFunctions::first(explode('.', $order))->scalar;
 
-        $selector = preg_replace($this::DEFAULT_REGEX_REPLACE_PATTERN, '', $selector);
-        $sqlValue = date($this::DEFAULT_SQL_DATE_FORMAT, strtotime($sqlValue));
+        $selector = preg_replace(Constants::DEFAULT_REGEX_REPLACE_PATTERN, '', $selector);
+        $sqlValue = date(Constants::DEFAULT_SQL_DATE_FORMAT, strtotime($sqlValue));
         $arrow = CoreFunctions::last(explode('.', $order))->scalar === 'from' ? '>' : '<';
 
         $this->upsertQuery($this->checkStart() . (isset($table) && $table ? $table . '.' : '') . "{$field} " . $arrow . "= :{$selector}");
@@ -90,9 +92,9 @@ trait SelectQuery {
     public function or(array $arguments) {
         foreach ($arguments as $selector => $sqlValue) {
             list($comparison, $sqlValue) = Parser::sqlComparsion(($sqlValue ?? ''), $this->getComparisonOperators());
-            $key = trim($this::OR) . preg_replace($this::DEFAULT_REGEX_REPLACE_PATTERN, '', $selector);
+            $key = trim(Constants::OR) . preg_replace(Constants::DEFAULT_REGEX_REPLACE_PATTERN, '', $selector);
             $this->updateQueryArgument($key, $sqlValue);
-            $this->upsertQuery($this::OR . " {$selector} {$comparison} :{$key}");
+            $this->upsertQuery(Constants::OR . " {$selector} {$comparison} :{$key}");
         }
         return $this;
     }
@@ -100,10 +102,10 @@ trait SelectQuery {
     public function forceWhere(array $arguments = []): self {
         foreach ($arguments as $selector => $sqlValue) {
             list($comparison, $sqlValue) = Parser::sqlComparsion(($sqlValue ?? ''), $this->getComparisonOperators());
-            $key = preg_replace($this::DEFAULT_REGEX_REPLACE_PATTERN, '', $selector);
+            $key = preg_replace(Constants::DEFAULT_REGEX_REPLACE_PATTERN, '', $selector);
 
             $this->updateQueryArgument($key, $sqlValue);
-            $this->upsertQuery($this::WHERE . " {$selector} {$comparison} :{$key}");
+            $this->upsertQuery(Constants::WHERE . " {$selector} {$comparison} :{$key}");
         }
         return $this;
     }
@@ -117,12 +119,12 @@ trait SelectQuery {
     }
 
     public function isNull(string $field): self {
-        $this->upsertQuery($this->checkStart() . $field . $this::IS_NULL);
+        $this->upsertQuery($this->checkStart() . $field . Constants::IS_NULL);
         return $this;
     }
     
     public function isNotNull(string $field): self {
-        $this->upsertQuery($this->checkStart() . $field . $this::IS_NOT_NULL);
+        $this->upsertQuery($this->checkStart() . $field . Constants::IS_NOT_NULL);
         return $this;
     }
 
@@ -137,54 +139,54 @@ trait SelectQuery {
     }
 
     public function beforeToday(string $field = 'CreatedAt'): self {
-        $this->where([$field => $this::LOWER_THAN_CURRENT_DAY]);
+        $this->where([$field => Constants::LOWER_THAN_CURRENT_DAY]);
         return $this;
     }
 
     public function after(string $field): self {
-        $this->where([$field => $this::HIGHER_THAN_CURRENT_DAY]);
+        $this->where([$field => Constants::HIGHER_THAN_CURRENT_DAY]);
         return $this;
     }
 
     public function afterToday(string $field = 'CreatedAt'): self {
-        $this->where([$field => $this::HIGHER_THAN_CURRENT_DAY]);
+        $this->where([$field => Constants::HIGHER_THAN_CURRENT_DAY]);
         return $this;
     }
 
-    public function limit(int $limit = self::DEFAULT_LIMIT): self {
-        $this->upsertQuery($this::LIMIT . ' :limit ');
+    public function limit(int $limit = Constants::DEFAULT_LIMIT): self {
+        $this->upsertQuery(Constants::LIMIT . ' :limit ');
         $this->updateQueryArgument('limit', $limit);
         return $this;
     }
 
-    public function offset(int $offset = self::DEFAULT_OFFSET): self {
-        $this->upsertQuery($this::OFFSET . ' :offset ');
+    public function offset(int $offset = Constants::DEFAULT_OFFSET): self {
+        $this->upsertQuery(Constants::OFFSET . ' :offset ');
         $this->updateQueryArgument('offset', $offset);
         return $this;
     }
 
     private function checkStart(): string {
-        return (strpos($this->getQuery(), $this::WHERE) === false ? $this::WHERE : $this::AND);
+        return (strpos($this->getQuery(), Constants::WHERE) === false ? Constants::WHERE : Constants::AND);
     }
 
     public function groupBy(string $group): self {
-        $this->upsertQuery($this::GROUP_BY . $group);
+        $this->upsertQuery(Constants::GROUP_BY . $group);
         return $this;
     }
 
     public function from(string $from): self {
-        $this->upsertQuery($this::FROM . $from);
+        $this->upsertQuery(Constants::FROM . $from);
         return $this;
     }
 
-    public function orderBy(string|array $field, string $order = self::DEFAULT_ASCENDING_ORDER): self {
+    public function orderBy(string|array $field, string $order = Constants::DEFAULT_ASCENDING_ORDER): self {
         if (is_iterable($field)) $field = implode(',', $field);
-        $this->upsertQuery($this::ORDER_BY . $field . ' ' . $order);
+        $this->upsertQuery(Constants::ORDER_BY . $field . ' ' . $order);
         return $this;
     }
 
-    public function orderBySortOrder(string $order = self::DEFAULT_ASCENDING_ORDER): self {
-        $this->upsertQuery($this::ORDER_BY . Table::SORT_ORDER_COLUMN . ' ' . $order);
+    public function orderBySortOrder(string $order = Constants::DEFAULT_ASCENDING_ORDER): self {
+        $this->upsertQuery(Constants::ORDER_BY . Table::SORT_ORDER_COLUMN . ' ' . $order);
         return $this;
     }
 
@@ -199,7 +201,7 @@ trait SelectQuery {
     }
 
     public function as(string $as): self {
-        $this->upsertQuery($this::AS . $as);
+        $this->upsertQuery(Constants::AS . $as);
         return $this;
     }
 
@@ -212,7 +214,7 @@ trait SelectQuery {
     }
 
     public function with(string $temp): self {
-        $this->upsertQuery($this::WITH . $temp . $this::AS);
+        $this->upsertQuery(Constants::WITH . $temp . Constants::AS);
         return $this;
     }
 

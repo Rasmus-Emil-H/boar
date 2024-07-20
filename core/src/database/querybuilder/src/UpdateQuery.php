@@ -13,7 +13,7 @@ trait UpdateQuery {
         }
 
         if ($primaryKeyField && $primaryKey) {
-            $this->upsertQuery($this::WHERE . " $primaryKeyField = :primaryKey ");
+            $this->upsertQuery(Constants::WHERE . " $primaryKeyField = :primaryKey ");
             $this->updateQueryArgument('primaryKey', $primaryKey);
         }
 

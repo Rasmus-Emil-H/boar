@@ -12,7 +12,16 @@
 
 namespace app\core\src\database\querybuilder;
 
-abstract class QueryBuilderBase extends Constants {
+abstract class QueryBuilderBase {
+
+    protected string $query  = '';
+    protected string $where  = '';
+    protected string $fields = '';
+    protected string $placeholders = '';
+
+    protected string $lastQueryPart = '';
+
+    protected array $args = [];
     
     public function __construct(
         public string $class, 

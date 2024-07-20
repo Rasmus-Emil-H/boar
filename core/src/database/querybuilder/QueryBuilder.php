@@ -13,6 +13,7 @@
 namespace app\core\src\database\querybuilder;
 
 use \app\core\src\miscellaneous\CoreFunctions;
+use app\core\src\database\querybuilder\src\Constants;
 
 class QueryBuilder extends QueryBuilderBase {
 
@@ -23,31 +24,31 @@ class QueryBuilder extends QueryBuilderBase {
     use src\JoinQuery;
     use src\AggregateQuery;
 
-    private function getComparisonOperators(): array {
-        return $this->comparisonOperators;
+    public function getComparisonOperators(): array {
+        return Constants::COMPARISON_OPERATORS;
     }
 
     public function subQuery(\Closure $callback): self {
-        $this->upsertQuery($this::SUBQUERY_OPEN);
+        $this->upsertQuery(Constants::SUBQUERY_OPEN);
         call_user_func($callback, $this);
-        $this->upsertQuery($this::SUBQUERY_CLOSE);
+        $this->upsertQuery(Constants::SUBQUERY_CLOSE);
         return $this;
     }
 
     public function partitionByClause(\closure $callback = null): self {
         call_user_func($callback, $this);
-        $this->upsertQuery($this::SUBQUERY_CLOSE);
+        $this->upsertQuery(Constants::SUBQUERY_CLOSE);
 
         return $this;
     }
 
     public function partitionBy(string $partitionBy): self {
-       $this->upsertQuery($this::PARTITION_BY . ' ' . $partitionBy); 
+       $this->upsertQuery(Constants::PARTITION_BY . ' ' . $partitionBy); 
        return $this;
     }
 
     public function describeTable() {
-        $this->upsertQuery($this::SQL_DESCRIBE . $this->table);
+        $this->upsertQuery(Constants::SQL_DESCRIBE . $this->table);
         $this->run();
     }
 

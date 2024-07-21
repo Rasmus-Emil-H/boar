@@ -2,7 +2,7 @@
 
 namespace app\core\src\database\querybuilder\src;
 
-trait CallbackQuery {
+trait SubQuery {
 
     public function subQuery(\Closure $callback): self {
         $this->upsertQuery(Constants::SUBQUERY_OPEN);

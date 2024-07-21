@@ -24,7 +24,7 @@ class QueryBuilder extends QueryBuilderBase {
     use src\JoinQuery;
     use src\AggregateQuery;
     use src\PartitionQuery;
-    use src\CallbackQuery;
+    use src\SubQuery;
 
     public function getComparisonOperators(): array {
         return Constants::COMPARISON_OPERATORS;

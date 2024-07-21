@@ -13,7 +13,7 @@
 namespace app\core\src\database\querybuilder;
 
 use \app\core\src\miscellaneous\CoreFunctions;
-use app\core\src\database\querybuilder\src\Constants;
+use \app\core\src\database\querybuilder\src\Constants;
 
 class QueryBuilder extends QueryBuilderBase {
 
@@ -42,7 +42,7 @@ class QueryBuilder extends QueryBuilderBase {
         if (!is_iterable($response)) return [];
 
         $objects = [];
-        
+
         foreach ($response as $obj)
             $objects[] = new $this->class((array)$obj);
 

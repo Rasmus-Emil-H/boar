@@ -112,8 +112,7 @@ trait SelectQuery {
 
     public function between(string $from, string $to, int $interval, $dateFormat = '%Y-%m-%d'): self {
         $this->upsertQuery(" AND STR_TO_DATE(:dateFormat) BETWEEN DATE(:from) - INTERVAL :interval DAY AND DATE(:from) + INTERVAL :interval DAY ");
-
-        $this->updateQueryArguments(['dateFormat' => $dateFormat, 'from' => $from, 'to' => $to, 'interval' => $interval]);
+        $this->updateQueryArguments(compact('dateFormat', 'from', 'to', 'interval'));
         
         return $this;
     }

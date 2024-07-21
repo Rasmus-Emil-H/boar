@@ -41,12 +41,9 @@ class QueryBuilder extends QueryBuilderBase {
         
         if (!is_iterable($response)) return [];
 
-        $objects = [];
-
-        foreach ($response as $obj)
-            $objects[] = new $this->class((array)$obj);
-
-        return $objects;
+        return array_map(function($object) {
+            return new $this->class((array)$object);
+        }, (array)$response);
     }
 
 }

@@ -31,7 +31,7 @@ class QueryBuilder extends QueryBuilderBase {
     }
 
     public function debugQuery() {
-        CoreFunctions::d("Currently debugging query: " . $this->getQuery());
+        CoreFunctions::d('Currently debugging query: ' . $this->getQuery());
         CoreFunctions::dd($this->getArguments());
     }
 

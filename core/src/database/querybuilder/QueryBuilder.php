@@ -24,21 +24,10 @@ class QueryBuilder extends QueryBuilderBase {
     use src\JoinQuery;
     use src\AggregateQuery;
     use src\PartitionQuery;
+    use src\CallbackQuery;
 
     public function getComparisonOperators(): array {
         return Constants::COMPARISON_OPERATORS;
-    }
-
-    public function subQuery(\Closure $callback): self {
-        $this->upsertQuery(Constants::SUBQUERY_OPEN);
-        call_user_func($callback, $this);
-        $this->upsertQuery(Constants::SUBQUERY_CLOSE);
-        return $this;
-    }
-
-    public function describeTable() {
-        $this->upsertQuery(Constants::SQL_DESCRIBE . $this->table);
-        $this->run();
     }
 
     public function debugQuery() {

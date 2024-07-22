@@ -35,7 +35,14 @@ class QueryBuilder extends QueryBuilderBase {
         CoreFunctions::dd($this->getArguments());
     }
 
-    public function run(string $fetchMode = 'fetchAll'): array {
+    public function fetchRow(?array $criteria = null) {
+        $this->select()->where($criteria);
+        $response = app()->getConnection()->execute($this->getQuery(), $this->getArguments(), Constants::PDO_FETCH_ONE_MODE);
+        $this->resetQuery();
+        return $response;
+    }
+
+    public function run(string $fetchMode = Constants::PDO_FETCH_ALL_MODE): array {
         $response = app()->getConnection()->execute($this->getQuery(), $this->getArguments(), $fetchMode);
         $this->resetQuery();
         

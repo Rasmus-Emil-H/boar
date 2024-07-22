@@ -44,4 +44,7 @@ class Constants {
 
     public const DEFAULT_REGEX_REPLACE_PATTERN = '/[^a-zA-Z0-9]/';
 
+    public const PDO_FETCH_ALL_MODE = 'fetchAll';
+    public const PDO_FETCH_ONE_MODE = 'fetch';
+
 }

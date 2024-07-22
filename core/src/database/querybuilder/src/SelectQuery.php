@@ -44,19 +44,22 @@ trait SelectQuery {
         return $this;
     }
 
-    public function distinct(): self {
+    public function distinct(string $distinct): self {
+        $this->upsertQuery(' DISTINCT ' . $distinct);
+        return $this;
+    }
+
+    public function distinctFrom(): self {
         $this->upsertQuery('SELECT DISTINCT ' . $this->fields . Constants::FROM . $this->table);
         return $this;
     }
 
-    public function fetchRow(?array $criteria = null) {
-        $this->select()->where($criteria);
-        $response = app()->getConnection()->execute($this->getQuery(), $this->getArguments(), 'fetch');
-        $this->resetQuery();
-        return $response;
+    public function count(string $count, string $countName = 'count'): self {
+        $this->upsertQuery(" COUNT({$count}) as {$countName} ");
+        return $this;
     }
 
-    public function count(string $count, string $countName = 'count'): self {
+    public function countFrom(string $count, string $countName = 'count'): self {
         $this->upsertQuery("SELECT COUNT({$count}) as {$countName} FROM {$this->table}");
         return $this;
     }
@@ -173,8 +176,8 @@ trait SelectQuery {
         return $this;
     }
 
-    public function from(string $from): self {
-        $this->upsertQuery(Constants::FROM . $from);
+    public function from(?string $from = null): self {
+        $this->upsertQuery(Constants::FROM . ($from ?? $this->table));
         return $this;
     }
 

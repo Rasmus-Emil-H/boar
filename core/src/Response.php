@@ -30,6 +30,10 @@ final class Response {
         $this->setStatusCode(self::HTTP_LOCATION_TEMP);
         header('Location: ' . $location);
     }
+
+    public function redirectClient(string $location) {
+        $this->setResponse(self::HTTP_LOCATION_PERM, ['redirect' => $location]);
+    }
     
     public function setContentType(string $type) {
         header('Content-Type: ' . $type);

@@ -70,7 +70,7 @@ trait SelectQuery {
 
             if ($dateField) $this->handleDateClausing($selector, $sqlValue);
             else {
-                list($comparison, $sqlValue) = Parser::sqlComparsion(($sqlValue ?? ''), $this->getComparisonOperators());
+                list($comparison, $sqlValue) = Parser::sqlComparsion(($sqlValue ?? null), $this->getComparisonOperators());
                 $key = preg_replace(Constants::DEFAULT_REGEX_REPLACE_PATTERN, '', $selector);
 
                 $this->updateQueryArgument($key, $sqlValue);

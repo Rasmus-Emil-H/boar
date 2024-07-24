@@ -16,7 +16,6 @@ final class Response {
     private const HTTP_LOCATION_PERM = 302;
     private const HTTP_BAD_REQUEST = 400;
     private const HTTP_AUTHENTICATION_FAILED = 401;
-    
     private const HTTP_UNAUTHORIZED = 403;
     private const HTTP_NOT_FOUND = 404;
     private const HTTP_METHOD_NOT_ALLOWED = 405;

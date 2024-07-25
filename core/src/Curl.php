@@ -78,9 +78,9 @@ final class Curl {
 				]);
 			break;
 			default:
-				curl_setopt_array($this->handler, [
-					CURLOPT_POSTFIELDS => (!$appendOnlyFirstDataIndex ? $this->data : $this->data[array_key_first($this->data)])
-				]);
+				$urlWithQuery = $this->url . '?' . http_build_query($this->data);
+				curl_setopt($this->handler, CURLOPT_URL, $urlWithQuery);
+				curl_setopt($this->handler, CURLOPT_HTTPGET, true);
 			break;
 		}
 

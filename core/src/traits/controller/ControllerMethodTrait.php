@@ -8,6 +8,8 @@ use \app\core\src\miscellaneous\Hash;
 
 trait ControllerMethodTrait {
 
+    private const ACTION_NOT_FOUND = 'Action was not found';
+
     public function denyGETRequest() {
         if ($this->request->isGet()) 
             $this->response->methodNotAllowed();
@@ -20,15 +22,15 @@ trait ControllerMethodTrait {
 
     public function checkAction() {
         if (isset($this->requestBody->body->action)) return;
-            throw new \app\core\src\exceptions\NotFoundException('Action was not found');
+            throw new \app\core\src\exceptions\NotFoundException(self::ACTION_NOT_FOUND);
     }
 
     public function determineClientResponseMethod(mixed $dispatchedHTTPMethodResult): string {
         if (is_array($dispatchedHTTPMethodResult)) $dispatchedHTTPMethodResult = $dispatchedHTTPMethodResult['message'] ?? '';
 
-        $backendMessageContainsErrorInString = is_int(strpos($dispatchedHTTPMethodResult ?? '', 'Errors')) || is_int(strpos($dispatchedHTTPMethodResult ?? '', 'Error'));
+        $backendMessageContainsErrorInString = is_int(strpos($dispatchedHTTPMethodResult ?? '', 'error'));
 
-        return is_string($dispatchedHTTPMethodResult) ? ($backendMessageContainsErrorInString ? 'dataConflict' : 'ok') : 'ok';
+        return is_string($dispatchedHTTPMethodResult) && $backendMessageContainsErrorInString ? 'dataConflict' : 'ok';
     }
 
     public function edit() {

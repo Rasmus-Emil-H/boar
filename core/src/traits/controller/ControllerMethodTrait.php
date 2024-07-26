@@ -30,7 +30,7 @@ trait ControllerMethodTrait {
 
         $backendMessageContainsErrorInString = is_int(strpos($dispatchedHTTPMethodResult ?? '', 'error'));
 
-        return is_string($dispatchedHTTPMethodResult) && $backendMessageContainsErrorInString ? 'dataConflict' : 'ok';
+        return $backendMessageContainsErrorInString ? 'dataConflict' : 'ok';
     }
 
     public function edit() {

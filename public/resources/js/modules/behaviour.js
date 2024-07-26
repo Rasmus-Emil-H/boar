@@ -77,6 +77,8 @@ window[appName].behaviour = {
                 submitButton.html(_text);
                 resolve(res);
             });
+        }).catch(function(promiseError) {
+            console.log(promiseError);
         });
     },
     checkSubmittedFormResponse: function(response) {

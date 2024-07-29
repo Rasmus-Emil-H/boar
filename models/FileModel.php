@@ -23,9 +23,11 @@ final class FileModel extends Entity {
 	}
 
 	public function equivalentFile(): File {
+		$path = $this->get('Path');
+
 		return new File(
-			CoreFunctions::last(explode(DIRECTORY_SEPARATOR, $this->get('Path')))->scalar, 
-			dirname($this->get('Path'))
+			CoreFunctions::last(explode(DIRECTORY_SEPARATOR, $path))->scalar, 
+			dirname($path)
 		);
 	}
 

@@ -5,6 +5,7 @@ namespace app\models;
 use \app\core\src\database\Entity;
 use \app\core\src\database\table\Table;
 use \app\core\src\File;
+use \app\core\src\miscellaneous\CoreFunctions;
 use \app\core\src\miscellaneous\Hash;
 
 final class FileModel extends Entity {
@@ -22,7 +23,10 @@ final class FileModel extends Entity {
 	}
 
 	public function equivalentFile(): File {
-		return new File($this->get('Path'));
+		return new File(
+			CoreFunctions::last(explode(DIRECTORY_SEPARATOR, $this->get('Path')))->scalar, 
+			dirname($this->get('Path'))
+		);
 	}
 
 	/**

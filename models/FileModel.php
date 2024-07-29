@@ -4,6 +4,7 @@ namespace app\models;
 
 use \app\core\src\database\Entity;
 use \app\core\src\database\table\Table;
+use \app\core\src\File;
 use \app\core\src\miscellaneous\Hash;
 
 final class FileModel extends Entity {
@@ -18,6 +19,10 @@ final class FileModel extends Entity {
 
 	public function getPivot(): string {
 		return 'file_entity';
+	}
+
+	public function equivalentFile(): File {
+		return new File($this->get('Path'));
 	}
 
 	/**

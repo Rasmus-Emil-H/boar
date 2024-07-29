@@ -27,12 +27,15 @@ final class Response {
     }
 
     public function redirect(string $location) {
+        $path = app()->getRequest()->getPath();
+        if($path === '/admin') app()->getSession()->set('redirect', $path);
+
         $this->setStatusCode(self::HTTP_LOCATION_TEMP);
         header('Location: ' . $location);
     }
 
     public function redirectClient(string $location) {
-        $this->setResponse(self::HTTP_LOCATION_PERM, ['redirect' => $location]);
+        $this->setResponse(self::HTTP_OK, ['redirect' => $location]);
     }
     
     public function setContentType(string $type) {

@@ -120,6 +120,13 @@ trait SelectQuery {
         return $this;
     }
 
+    public function dateRange(string $column, string $fromDateRange, string $toDateRange, $dateRangeFormat = '%Y-%m-%d'): self {
+        $this->upsertQuery($this->checkStart() . " DATE_FORMAT($column, :dateRangeFormat) BETWEEN DATE_FORMAT(:fromDateRange, :dateRangeFormat) AND DATE_FORMAT(:toDateRange, :dateRangeFormat)");
+        $this->updateQueryArguments(compact('dateRangeFormat', 'fromDateRange', 'toDateRange'));
+
+        return $this;
+    }
+
     public function isNull(string $field): self {
         $this->upsertQuery($this->checkStart() . $field . Constants::IS_NULL);
         return $this;

@@ -121,8 +121,11 @@ trait SelectQuery {
     }
 
     public function dateRange(string $column, string $fromDateRange, string $toDateRange, $dateRangeFormat = '%Y-%m-%d'): self {
-        $this->upsertQuery($this->checkStart() . " DATE_FORMAT($column, :dateRangeFormat) BETWEEN DATE_FORMAT(:fromDateRange, :dateRangeFormat) AND DATE_FORMAT(:toDateRange, :dateRangeFormat)");
-        $this->updateQueryArguments(compact('dateRangeFormat', 'fromDateRange', 'toDateRange'));
+        $this->upsertQuery($this->checkStart() . " $column BETWEEN DATE(:fromDateRange".$column.") AND DATE(:toDateRange".$column.")");
+        $this->updateQueryArguments([
+            'fromDateRange'.$column => $fromDateRange,
+            'toDateRange'.$column => $toDateRange
+        ]);
 
         return $this;
     }

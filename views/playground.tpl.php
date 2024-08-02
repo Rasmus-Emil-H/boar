@@ -3,7 +3,7 @@
         <div class="request">
             <div class="form-floating mx-auto my-auto">
                 <form method="POST">
-                    <textarea name="Input" class="w-100 rounded vh25 noresize p-2" placeholder="echo 123;" id="floatingTextarea2"></textarea>
+                    <textarea name="Input" class="w-100 rounded vh25 noresize p-2" placeholder="var_dump($this);" id="floatingTextarea2"></textarea>
                     <button type="submit" id="php" class="btn btn-success w-100">Debug</button>
                     <?= CSRFTokenInput(); ?>
                 </form>

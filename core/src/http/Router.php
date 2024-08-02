@@ -94,9 +94,7 @@ final class Router {
             require_once $controller->getDataKey('header');
             require_once $layoutFile;
             require_once $controller->getDataKey('footer');
-        $layoutFileContent = ob_get_clean();
-
-        return str_replace('{{content}}', $viewContent, $layoutFileContent);
+        return str_replace('{{content}}', $viewContent, ob_get_clean());
     }
 
     public function resolve(): void {

@@ -109,7 +109,7 @@ class Request {
         $type = $this->method() === self::METHOD_GET ? INPUT_GET : INPUT_POST;
         foreach ($_REQUEST as $key => $_) {
             if (is_array($_)) foreach ($_ as $k => $v) $body[$key][] = (string)$v;
-            else $body[$key] = Utilities::stdFilterSpecialChars($type, $key);
+            else $body[$key] = $_;
         }
         return (object)$body;
     }

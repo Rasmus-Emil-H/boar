@@ -56,7 +56,7 @@ final class Application {
         $this->view         = new src\View();
         $this->logger       = new src\utilities\Logger();
 
-        $this->getLanguage();
+        $this->checkLanguage();
         $this->validateUserSession();
         $this->i18n         = new src\I18n();
     }
@@ -66,7 +66,7 @@ final class Application {
         $this->connection = Connection::getInstance(['dsn' => $database->dsn, 'user' => $database->user, 'password' => $database->password]);
     }
 
-    public function getLanguage() {
+    public function checkLanguage() {
         if (IS_CLI) return;
 
         if (!$this->session->get('language')) $this->session->set('language', self::$app->config->get('locale')->default);

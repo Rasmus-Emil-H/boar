@@ -24,11 +24,10 @@
     box-sizing:border-box;
     margin:0;
     padding:0;
-    font-family:Raleway,sans-serif
 }
 body,html{
     height:100%;
-    background:#141824;
+    background: #d9d9d9;
     color:white;
 }
 :root{
@@ -375,4 +374,10 @@ navbar{
 .error {
     background-color: var(--debug-red);
     color: white;
+}
+.vh50 {
+    height: 50vh !important;
+}
+.noresize {
+    resize: none !important;
 }

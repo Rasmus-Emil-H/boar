@@ -138,13 +138,13 @@ trait WhereQuery {
 
     public function limit(int $limit = Constants::DEFAULT_LIMIT): self {
         $this->upsertQuery(Constants::LIMIT . ' :limit ');
-        $this->updateQueryArgument('limit', $limit);
+        $this->updateQueryArguments(compact('limit'));
         return $this;
     }
 
     public function offset(int $offset = Constants::DEFAULT_OFFSET): self {
         $this->upsertQuery(Constants::OFFSET . ' :offset ');
-        $this->updateQueryArgument('offset', $offset);
+        $this->updateQueryArguments(compact('offset'));
         return $this;
     }
 

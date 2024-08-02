@@ -3,7 +3,7 @@
 namespace app\core\src\traits\controller;
 
 use \app\core\src\File;
-use \app\core\src\View;
+use \app\core\src\http\View;
 
 trait ControllerAssetTrait {
 

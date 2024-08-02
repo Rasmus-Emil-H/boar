@@ -6,7 +6,9 @@
  * @package app\core\View
  */
 
-namespace app\core\src;
+namespace app\core\src\http;
+
+use \app\core\src\File;
 
 final class View {
 

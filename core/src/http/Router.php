@@ -13,10 +13,12 @@
 |
 */
 
-namespace app\core\src;
+namespace app\core\src\http;
 
 use \app\core\Application;
+use \app\core\src\Controller;
 use \app\core\src\factories\ControllerFactory;
+use \app\core\src\File;
 use \app\core\src\miscellaneous\CoreFunctions;
 
 final class Router {

@@ -40,8 +40,8 @@ class Controller {
     public string $action = '';
     
     public function __construct(
-        protected Request  $request, 
-        protected Response $response, 
+        protected http\Request  $request, 
+        protected http\Response $response, 
         protected AssetsController $clientAssets
     ) {
         $this->requestBody = $this->request->getCompleteRequestBody();

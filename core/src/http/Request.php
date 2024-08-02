@@ -6,10 +6,9 @@
  * @package app\core\Request
  */
 
-namespace app\core\src;
+ namespace app\core\src\http;
 
 use \app\core\src\miscellaneous\CoreFunctions;
-use \app\core\src\utilities\Utilities;
 
 class Request {
 

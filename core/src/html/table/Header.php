@@ -6,7 +6,7 @@ use \app\core\src\database\table\Table;
 
 class Header {
 
-    private \app\core\src\Request $request; 
+    private \app\core\src\http\Request $request; 
     private const SORT_BY = '&sortBy=';
     private const ORDER_BY = '&orderBy=';
     private string $queryParameters;

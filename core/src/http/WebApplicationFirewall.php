@@ -1,6 +1,6 @@
 <?php
 
-namespace app\core\src;
+namespace app\core\src\http;
 
 class WebApplicationFirewall {
     protected $inputData;

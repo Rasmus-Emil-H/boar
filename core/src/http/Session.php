@@ -6,7 +6,7 @@
  * @package app\core\Session
  */
 
-namespace app\core\src;
+ namespace app\core\src\http;
 
 final class Session {
 

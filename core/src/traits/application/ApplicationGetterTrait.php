@@ -21,15 +21,15 @@ trait ApplicationGetterTrait {
         return $this->connection;
     }
 
-    public function getSession(): \app\core\src\Session {
+    public function getSession(): \app\core\src\http\Session {
         return $this->session;
     }
 
-    public function getResponse(): \app\core\src\Response {
+    public function getResponse(): \app\core\src\http\Response {
         return $this->response;
     }
 
-    public function getRequest(): \app\core\src\Request {
+    public function getRequest(): \app\core\src\http\Request {
         return $this->request;
     }
 
@@ -37,7 +37,7 @@ trait ApplicationGetterTrait {
         return $this->i18n;
     }
 
-    public function getView(): \app\core\src\View {
+    public function getView(): \app\core\src\http\View {
         return $this->view;
     }
 

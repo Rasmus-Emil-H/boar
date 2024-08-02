@@ -18,6 +18,7 @@ use \app\core\src\database\querybuilder\src\Constants;
 class QueryBuilder extends QueryBuilderBase {
 
     use src\SelectQuery;
+    use src\WhereQuery;
     use src\DeleteQuery;
     use src\InsertQuery;
     use src\UpdateQuery;

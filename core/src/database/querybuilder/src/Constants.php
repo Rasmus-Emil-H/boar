@@ -4,6 +4,9 @@ namespace app\core\src\database\querybuilder\src;
 
 class Constants {
 
+
+    public const COUNT          = 'COUNT';
+    public const DISTINCT       = 'DISTINCT';
     public const WHERE          = ' WHERE ';
     public const AND            = ' AND ';
     public const OR             = ' OR ';
@@ -17,6 +20,7 @@ class Constants {
     public const SUBQUERY_CLOSE = ' ) ';
 
     public const WITH = ' WITH ';
+    public const HAVING = 'HAVING';
     public const AS = ' AS ';
     public const DELETE_FROM = ' DELETE FROM ';
     public const TRUNCATE = ' TRUNCATE TABLE ';

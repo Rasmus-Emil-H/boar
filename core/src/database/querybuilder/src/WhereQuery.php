@@ -82,7 +82,7 @@ trait WhereQuery {
         return $this;
     }
 
-    public function dateBetween(string $column, string $from, string $to, $dateFormat = '%Y %m %d'): self {
+    public function dateBetween(string $column, string $from, string $to, $dateFormat = '%Y-%m-%d'): self {
         $formattedColumn = str_replace('.', '_', $column);
         
         $this->upsertQuery($this->checkStart() . " $column " . Constants::BETWEEN . " STR_TO_DATE(:fromDateRange_$formattedColumn, '$dateFormat') " . Constants::AND . " STR_TO_DATE(:toDateRange_$formattedColumn, '$dateFormat')");
@@ -94,7 +94,7 @@ trait WhereQuery {
         return $this;
     }
 
-    public function dateNotBetween(string $column, string $from, string $to, $dateFormat = '%Y %m %d'): self {
+    public function dateNotBetween(string $column, string $from, string $to, $dateFormat = '%Y-%m-%d'): self {
         $formattedColumn = str_replace('.', '_', $column);
         
         $this->upsertQuery($this->checkStart() . " $column " . Constants::NOT . Constants::BETWEEN . " STR_TO_DATE(:fromDateRange_$formattedColumn, '$dateFormat') " . Constants::AND . " STR_TO_DATE(:toDateRange_$formattedColumn, '$dateFormat') ");

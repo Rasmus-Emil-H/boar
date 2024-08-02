@@ -14,7 +14,7 @@
 
 namespace app\core\src\thirdpartycommunication;
 
-use \app\core\src\Curl;
+use \app\core\src\http\Curl;
 
 abstract class ThirdPartyCommunication {
 

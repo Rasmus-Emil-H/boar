@@ -1,5 +1,5 @@
 <div class="p-4">
-    <table class="table table-dark">
+    <table class="table">
         <?= $tableHeader; ?>
         <tbody>
             <?php foreach ($orders as $order): ?>

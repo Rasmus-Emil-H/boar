@@ -11,11 +11,11 @@ class OrderController extends Controller {
 
     public function index() {
 
-        if ($this->request->isPost()) $this->response->methodNotAllowed();
+        $this->denyPOSTRequest();
 
         if ($this->request->isGet())
             return $this->setFrontendTemplateAndData(templateFile: 'order', data: [
-                'orders' => CoreFunctions::applicationUser()->orders(),
+                'orders' => CoreFunctions::applicationUser()->orders() ?? [],
                 'tableHeader' => (new Header(['#' => '#', 'Total' => 'Total']))->create()
             ]);
     }

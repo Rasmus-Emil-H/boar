@@ -9,6 +9,16 @@ use \app\core\src\utilities\Parser;
 
 trait WhereQuery {
 
+    public function in(string $field, array $ins): self {
+        $queryINString = array_map(function($fieldKey, $fieldValue) {
+           $this->updateQueryArgument("inCounter$fieldKey", $fieldValue);
+           return " :inCounter$fieldKey ";
+       }, array_keys($ins), array_values($ins));
+
+       $this->upsertQuery($this->checkStart() . " $field IN ( " . implode(', ', $queryINString) . " ) ");
+       return $this;
+   }
+
     public function where(array $arguments = []): self {
         foreach ($arguments as $selector => $sqlValue) {
             $dateField = str_contains($selector, Constants::DEFAULT_FRONTEND_DATE_FROM_INDICATOR) || str_contains($selector, Constants::DEFAULT_FRONTEND_DATE_TO_INDICATOR);

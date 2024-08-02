@@ -9,16 +9,6 @@ use \app\core\src\utilities\Parser;
 
 trait SelectQuery {
 
-    public function in(string $field, array $ins): self {
-        $queryINString = array_map(function($fieldKey, $fieldValue) {
-           $this->updateQueryArgument("inCounter$fieldKey", $fieldValue);
-           return " :inCounter$fieldKey ";
-       }, array_keys($ins), array_values($ins));
-
-       $this->upsertQuery(" AND $field IN ( " . implode(', ', $queryINString) . " ) ");
-       return $this;
-   }
-
    public function on(string $field): self {
        $this->upsertQuery(" ON {$field} ");
        return $this;

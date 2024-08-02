@@ -114,7 +114,14 @@ trait SelectQuery {
     }
 
     public function between(string $from, int $interval, $dateFormat = '%Y-%m-%d'): self {
-        $this->upsertQuery($this->checkStart() . "  STR_TO_DATE(:dateFormat) BETWEEN DATE(:from) - INTERVAL :interval DAY AND DATE(:from) + INTERVAL :interval DAY ");
+        $this->upsertQuery($this->checkStart() . "  BETWEEN :from AND :to ");
+        $this->updateQueryArguments(compact('dateFormat', 'from', 'interval'));
+        
+        return $this;
+    }
+
+    public function notBetween(string $from, int $interval, $dateFormat = '%Y-%m-%d'): self {
+        $this->upsertQuery($this->checkStart() . " NOT (BETWEEN :from AND :to)");
         $this->updateQueryArguments(compact('dateFormat', 'from', 'interval'));
         
         return $this;
@@ -124,6 +131,18 @@ trait SelectQuery {
         $formattedColumn = str_replace('.', '_', $column);
         
         $this->upsertQuery($this->checkStart() . " $column BETWEEN STR_TO_DATE(:fromDateRange_$formattedColumn, '$dateFormat') AND STR_TO_DATE(:toDateRange_$formattedColumn, '$dateFormat')");
+        $this->updateQueryArguments([
+            "fromDateRange_$formattedColumn" => $from,
+            "toDateRange_$formattedColumn" => $to,
+        ]);
+
+        return $this;
+    }
+
+    public function dateNotBetween(string $column, string $from, string $to, $dateFormat = '%Y %m %d'): self {
+        $formattedColumn = str_replace('.', '_', $column);
+        
+        $this->upsertQuery($this->checkStart() . " $column NOT (BETWEEN STR_TO_DATE(:fromDateRange_$formattedColumn, '$dateFormat') AND STR_TO_DATE(:toDateRange_$formattedColumn, '$dateFormat')) ");
         $this->updateQueryArguments([
             "fromDateRange_$formattedColumn" => $from,
             "toDateRange_$formattedColumn" => $to,

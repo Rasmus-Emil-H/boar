@@ -378,6 +378,9 @@ navbar{
 .vh50 {
     height: 50vh !important;
 }
+.vh25 {
+    height: 25vh !important;
+}
 .noresize {
     resize: none !important;
 }

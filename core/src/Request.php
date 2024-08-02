@@ -61,7 +61,7 @@ class Request {
     public function getQueryParameters(): array {
         try {
 
-            if (!isset($this->getServerInformation()['QUERY_STRING'])) return [];
+            if (empty($this->getQueryString())) return [];
 
             $parameters = [];
             foreach (explode('&', $this->getServerInformation()['QUERY_STRING']) as $parameter) {

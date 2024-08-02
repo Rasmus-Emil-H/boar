@@ -10,6 +10,7 @@ class Constants {
     public const WHERE          = ' WHERE ';
     public const AND            = ' AND ';
     public const OR             = ' OR ';
+    public const NOT            = ' NOT ';
     public const LIMIT          = ' LIMIT ';
     public const OFFSET         = ' OFFSET ';
     public const BIND           = ' = :';
@@ -30,6 +31,7 @@ class Constants {
     public const IS_NOT_NULL = ' IS NOT NULL ';
     public const PARTITION_BY = ' PARTITION BY ';
 
+    public const BETWEEN      = 'BETWEEN';
     public const SQL_DESCRIBE = ' DESCRIBE ';
     public const GROUP_BY     = ' GROUP BY ';
     public const ORDER_BY     = ' ORDER BY ';

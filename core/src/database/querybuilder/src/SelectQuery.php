@@ -113,16 +113,16 @@ trait SelectQuery {
         return $this;
     }
 
-    public function between(string $from, int $interval, $dateFormat = '%Y-%m-%d'): self {
+    public function between(string|int $from, string|int $to): self {
         $this->upsertQuery($this->checkStart() . "  BETWEEN :from AND :to ");
-        $this->updateQueryArguments(compact('dateFormat', 'from', 'interval'));
+        $this->updateQueryArguments(compact('from', 'to'));
         
         return $this;
     }
 
-    public function notBetween(string $from, int $interval, $dateFormat = '%Y-%m-%d'): self {
+    public function notBetween(string|int $from, string|int $to): self {
         $this->upsertQuery($this->checkStart() . " NOT (BETWEEN :from AND :to)");
-        $this->updateQueryArguments(compact('dateFormat', 'from', 'interval'));
+        $this->updateQueryArguments(compact('from', 'to'));
         
         return $this;
     }

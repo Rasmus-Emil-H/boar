@@ -24,7 +24,6 @@ trait GateStaticMethodTrait {
     private const METHOD_KEY = 'method';
 
     public static function dispatch(array $methodArguments): bool {
-
         self::validateMethodArguments($methodArguments);
         
         $staticMethodArguments = $methodArguments;
@@ -43,6 +42,10 @@ trait GateStaticMethodTrait {
         
         if (!method_exists(__CLASS__, $methodArguments[self::METHOD_KEY]))
             throw new \app\core\src\exceptions\ForbiddenException(self::INVALID_METHOD);
+    }
+
+    public static function canInteractWith(string $method, object $body) {
+        return self::dispatch([self::METHOD_KEY => $method, $body]);
     }
 
     public static function isAuthenticatedUserAllowed(string $method, Entity $entity): bool {

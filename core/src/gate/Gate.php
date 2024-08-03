@@ -27,4 +27,11 @@ class Gate {
         return $product->user()->key() === $user->key() || $user->isAdmin();
     }
 
+    protected static function playground(object $requestBody): bool {
+        return 
+            isset($requestBody->body->playgroundKey) && 
+            $requestBody->body->playgroundKey === app()->getConfig()->get('playgroundKey') &&
+            CoreFunctions::applicationUser()->isAdmin();
+    }
+
 }

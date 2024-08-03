@@ -9,18 +9,17 @@
 namespace app\controllers;
 
 use \app\core\src\Controller;
-use \app\core\src\miscellaneous\CoreFunctions;
+use \app\core\src\gate\Gate;
 
 class PlaygroundController extends Controller {
 
     public function index() {
 
-        // if (!CoreFunctions::applicationUser()->isAdmin()) $this->response->redirect(app()->getConfig()->get('routes')->defaults->redirectTo);
+        if (!Gate::canInteractWith('playground', $this->requestBody))
+            $this->response->redirect(app()->getConfig()->get('routes')->defaults->redirectTo);
 
         if ($this->request->isGet()) 
             return $this->setFrontendTemplateAndData('playground');
-
-        if (!isset($this->requestBody->body->playgroundKey) || $this->requestBody->body->playgroundKey !== app()->getConfig()->get('playgroundKey')) $this->response->notAllowed();
 
         $debug = $this->requestBody->body->Input;
         ob_start();

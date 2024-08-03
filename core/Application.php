@@ -25,12 +25,12 @@ final class Application {
     use ApplicationGetterTrait;
     use ApplicationStaticMethodTrait;
 
-    protected src\Router $router;
-    protected src\Request $request;
-    protected src\Response $response;
-    protected src\Session $session;
+    protected src\http\Router $router;
+    protected src\http\Request $request;
+    protected src\http\Response $response;
+    protected src\http\Session $session;
     protected Connection $connection;
-    protected src\View $view;
+    protected src\http\View $view;
     protected src\I18n $i18n;
     protected src\config\Config $config;
     protected src\utilities\Logger $logger;
@@ -40,20 +40,20 @@ final class Application {
     public static self $app;
     
     public function __construct() {
-        new src\WebApplicationFirewall();
+        new src\http\WebApplicationFirewall();
 
         self::$app = $this;
         self::$ROOT_DIR = dirname(__DIR__);
 
         $this->config        = new src\config\Config();
-        $this->session      = new src\Session();
-        $this->request      = new src\Request();
+        $this->session      = new src\http\Session();
+        $this->request      = new src\http\Request();
         
         $this->setConnection();
 
-        $this->response     = new src\Response();
-        $this->router       = new src\Router($this->request, $this);
-        $this->view         = new src\View();
+        $this->response     = new src\http\Response();
+        $this->router       = new src\http\Router($this->request, $this);
+        $this->view         = new src\http\View();
         $this->logger       = new src\utilities\Logger();
 
         $this->checkLanguage();

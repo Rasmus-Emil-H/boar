@@ -54,15 +54,13 @@ class Connection {
 
     public function execute(#[\SensitiveParameter] string $query, #[\SensitiveParameter] array $args = [], string $fetchType = self::DEFAULT_SQL_QUERY_FETCH_TYPE) {
         try {
-            if (is_iterable($args)) {
-                $serializedArguments = array_map(function($arg) {
-                    return $arg instanceof \SimpleXMLElement ? (string)$arg : $arg;
-                }, $args);
+            $serializedArguments = array_map(function($arg) {
+                return $arg instanceof \SimpleXMLElement ? (string)$arg : $arg;
+            }, $args);
 
-                $cacheKey = md5($query . serialize($serializedArguments));
+            $cacheKey = md5($query . serialize($serializedArguments));
 
-                if (isset($this->queryCache[$cacheKey])) return $this->queryCache[$cacheKey];
-            }
+            if (isset($this->queryCache[$cacheKey])) return $this->queryCache[$cacheKey];
 
             $stmt = $this->pdo->prepare($query);
             $stmt->execute($args);

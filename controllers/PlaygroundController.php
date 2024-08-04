@@ -3,7 +3,7 @@
 /**
  * Initial draft for a playground directly from the frontend
  * 
- * Use with extream caution
+ * Use with extreme caution
  * Feel free to further strengthen the allowence of the controller access
  */
 

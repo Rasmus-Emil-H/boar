@@ -8,7 +8,7 @@
  */
 
 /**
- * Language controller
+ * Playground controller
  * AUTHOR: RE_WEB
  * @package app\controllers
  */

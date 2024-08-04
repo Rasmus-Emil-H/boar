@@ -13,6 +13,7 @@
 namespace app\core;
 
 use \app\core\src\database\Connection;
+use app\core\src\factories\ControllerFactory;
 use \app\models\SystemEventModel;
 use \app\models\UserModel;
 use \app\core\src\miscellaneous\CoreFunctions;
@@ -113,9 +114,9 @@ final class Application {
         try {
             $this->router->resolve();
         } catch (\Throwable $applicationError) {
+            $error = (new ControllerFactory(['handler' => 'Error']))->create();
+            $error?->index($applicationError);
             $this->logger->log($applicationError);
-            if ($this->isDevSite()) CoreFunctions::d($applicationError);
-            CoreFunctions::dd('Application error');
         }
     }
     

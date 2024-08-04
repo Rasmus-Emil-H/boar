@@ -30,8 +30,8 @@ class Gate {
     protected static function playground(object $requestBody): bool {
         return 
             isset($requestBody->body->playgroundKey) && 
-            $requestBody->body->playgroundKey === app()->getConfig()->get('playgroundKey') &&
-            CoreFunctions::applicationUser()->isAdmin();
+            $requestBody->body->playgroundKey === app()->getConfig()->get('playgroundKey') /*&&
+            CoreFunctions::applicationUser()->isAdmin()*/;
     }
 
 }

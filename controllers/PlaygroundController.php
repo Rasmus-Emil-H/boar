@@ -1,6 +1,13 @@
 <?php
 
 /**
+ * Initial draft for a playground directly from the frontend
+ * 
+ * Use with extream caution
+ * Feel free to further strengthen the allowence of the controller access
+ */
+
+/**
  * Language controller
  * AUTHOR: RE_WEB
  * @package app\controllers

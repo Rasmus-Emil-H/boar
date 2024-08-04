@@ -66,7 +66,7 @@ class Connection {
             $stmt->execute($args);
             $result = $stmt->{$fetchType}();
             
-            if (isset($cacheKey)) $this->queryCache[$cacheKey] = $result;
+            $this->queryCache[$cacheKey] = $result;
   
             return $result;
         } catch (\PDOException $e) {

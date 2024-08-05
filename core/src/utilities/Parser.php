@@ -26,7 +26,7 @@ class Parser {
 
             return $xml;
         } catch (\Exception $exception) {
-            app()->getLogger()->log('Caught exception: ',  $exception->getMessage(), "\n");
+            app()->getLogger()->log(get_called_class() . $exception->getMessage(), "\n");
             return null;
         }
     }

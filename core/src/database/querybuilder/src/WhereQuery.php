@@ -174,10 +174,28 @@ trait WhereQuery {
     }
 
     public function like(array $arguments): self {
+        return $this->likeClause($arguments);
+    }
+
+    public function likeOr(array $arguments): self {
+        return $this->likeClause($arguments, 'OR');
+    }
+
+    private function likeClause(array $arguments, string $type = ''): self {
         foreach ($arguments as $selector => $sqlValue) {
-            list($comparison, $sqlValue) = Parser::sqlComparsion(($sqlValue ?? ''), $this->getComparisonOperators());
+            list($_, $sqlValue) = Parser::sqlComparsion(($sqlValue ?? ''), $this->getComparisonOperators());
             $this->updateQueryArgument($selector, $sqlValue);
-            $sql = $this->checkStart() . "{$selector} LIKE CONCAT('%', :{$selector}, '%') ";
+            switch ($type) {
+                case 'OR':
+                    $sql = 
+                        (array_key_first($arguments) === $selector ? $this->checkStart() : '') . 
+                        " {$selector} LIKE CONCAT('%', :{$selector}, '%') " . 
+                        (count($arguments) && array_key_last($arguments) !== $selector ? $type : '');
+                    break;
+                default:
+                    $sql = $this->checkStart() . "{$selector} LIKE CONCAT('%', :{$selector}, '%') ";
+                    break;
+            }
             $this->upsertQuery($sql);
         }
         return $this;

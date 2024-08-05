@@ -1,13 +1,15 @@
 <?= $css[array_key_first($css)]; ?>
 
-<div class="fullscreen center">
-    <h1>Error</h1>
-    <?php if(app()::isDevSite()): ?>
-        <div class="error-container">
-            <h1><?= $exception->getMessage(); ?></h1>
-            <pre>
-                <?php var_dump($exception); ?>
-            </pre>
-        </div>
-    <?php endif; ?>
+<div class="fullscreen error-template">
+    <div class="error fullscreen">
+        <h1 class="mb-4"><?= $exception->getCode(); ?></h1>
+        <hr class="w-50" />
+        <?php if(app()::isDevSite()): ?>
+            <h4 class="mb-4 mt-4"><?= $exception->getMessage(); ?></h4>
+        <?php else: ?>
+            <h4 class="mb-4">Error</h4>
+        <?php endif; ?>
+        <a href="<?= hs($home); ?>" class="mt-4 w-50 button">GO HOME</a>
+    </div>
+    <div class="image"></div>
 </div>

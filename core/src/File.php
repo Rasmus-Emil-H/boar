@@ -30,6 +30,10 @@ final class File {
     ) {
         if (is_string($file)) $this->adjustFile();
         $this->file = (object)$this->file;
+        $this->validateDirectory();
+    }
+
+    private function validateDirectory() {
         $this->fileDirectory ??= dirname(__DIR__, 2).'/uploads';
     }
 

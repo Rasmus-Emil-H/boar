@@ -62,7 +62,7 @@ final class UserModel extends Entity {
 	}
 
 	public function resetPassword(string $newPassword, string $resetToken) {
-		$token = $this->getMetaData()like(['Data' => 'resetPassword='.$resetToken])->run();
+		$token = $this->getMetaData()->like(['Data' => 'resetPassword='.$resetToken])->run();
         $this->validatePassword($newPassword);
         $this->set(['Password' => password_hash($newPassword, PASSWORD_DEFAULT)])->save();
         CoreFunctions::first($token)->delete();

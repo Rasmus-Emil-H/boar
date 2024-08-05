@@ -103,8 +103,8 @@ trait EntityQueryTrait {
         return (new QueryBuilder(get_called_class(), $this->getTableName(), $this->getKeyField()))->select()->run(); 
     }
 
-    public function getMetaData(): QueryBuilder {
-        return (new EntityMetaData())->getQueryBuilder();
+    public function getMetaData() {
+        return (new EntityMetaData())->getQueryBuilder()->select()->where([Table::ENTITY_TYPE_COLUMN => $this->getTableName(), Table::ENTITY_ID_COLUMN => $this->key()])->run();
     }
 
     public function setStatus(int $status): self {

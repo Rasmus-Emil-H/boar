@@ -115,6 +115,7 @@ final class Application {
             $this->router->resolve();
         } catch (\Throwable $applicationError) {
             $error = (new ControllerFactory(['handler' => 'Error']))->create();
+            $this->setParentController($error);
             $error?->index($applicationError);
             $this->logger->log($applicationError);
         }

@@ -1,27 +1,13 @@
-<style>
-
-    html, body {
-        height: 100%;
-    }
-
-    * {
-        margin: 0 !important;
-        padding: 0 !important;
-        font-weight: 100;
-    }
-
-    .fullscreen {
-        height: 100%;
-        width: 100%;
-    }
-
-    .center {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-</style>
+<?= $css[array_key_first($css)]; ?>
 
 <div class="fullscreen center">
-    <h4><?= $exception->getMessage(); ?></h4>
+    <h1>Error</h1>
+    <?php if(app()::isDevSite()): ?>
+        <div class="error-container">
+            <h1><?= $exception->getMessage(); ?></h1>
+            <pre>
+                <?php var_dump($exception); ?>
+            </pre>
+        </div>
+    <?php endif; ?>
 </div>

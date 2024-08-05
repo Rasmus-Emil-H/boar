@@ -10,6 +10,7 @@ class ErrorController extends Controller {
         $this->response->setStatusCode($error->getCode());
         $this->setView('error');
         $this->setData(['exception' => $error]);
+        $this->addStylesheet('error');
         extract($this->getData());
         require_once $this->getView();
     }

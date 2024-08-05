@@ -9,7 +9,7 @@
         <?php else: ?>
             <h4 class="mb-4">Error</h4>
         <?php endif; ?>
-        <a href="<?= hs($home); ?>" class="mt-4 w-50 button">GO HOME</a>
+        <a href="<?= hs($home); ?>" class="w-50 p-2 btn btn-success">GO HOME</a>
     </div>
     <div class="image"></div>
 </div>

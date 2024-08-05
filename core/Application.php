@@ -116,6 +116,10 @@ final class Application {
         } catch (\Throwable $applicationError) {
             $error = (new ControllerFactory(['handler' => 'Error']))->create();
             $this->setParentController($error);
+            
+            $error->setChildren(['Header']);
+            $error->setChildData();
+
             $error?->index($applicationError);
             $this->logger->log($applicationError);
         }

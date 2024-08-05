@@ -31,10 +31,7 @@
 }
 
 .error-template .image {
-    background: url('/resources/images/error.jpg');
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
+    background: url('/resources/images/error.jpg') center / cover no-repeat;
 }
 
 @media screen and (max-width: 768px) {

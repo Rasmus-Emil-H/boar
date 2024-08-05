@@ -7,9 +7,9 @@
         <?php if(app()::isDevSite()): ?>
             <h4 class="mb-4 mt-4"><?= $exception->getMessage(); ?></h4>
         <?php else: ?>
-            <h4 class="mb-4">Error</h4>
+            <h4 class="mb-4"><?= ths('Error'); ?></h4>
         <?php endif; ?>
-        <a href="<?= hs($home); ?>" class="w-50 p-2 btn btn-success">GO HOME</a>
+        <a href="<?= hs($home); ?>" class="w-50 p-2 btn btn-success"><?= ths('GO HOME'); ?></a>
     </div>
     <div class="image"></div>
 </div>

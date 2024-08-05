@@ -41,4 +41,7 @@
     .image {
         display: none !important;
     }
+    * {
+        margin: 0 auto !important;
+    }
 }

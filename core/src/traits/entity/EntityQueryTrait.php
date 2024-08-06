@@ -69,7 +69,7 @@ trait EntityQueryTrait {
 
     public function getQueryBuilder(?string $table = null): QueryBuilder {
         $table ??= $this->getTableName();
-        return (new QueryBuilder(get_called_class(), $table, $this->getKeyField()));
+        return new QueryBuilder(get_called_class(), $table, $this->getKeyField());
     }
 
     private function bootstrapQuery(array $fields = ['*']): QueryBuilder {

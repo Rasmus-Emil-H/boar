@@ -183,19 +183,19 @@ trait WhereQuery {
 
     private function likeClause(array $arguments, string $type = ''): self {
         foreach ($arguments as $selector => $sqlValue) {
+            $formattedColumn = str_replace('.', '_', $selector);
             list($_, $sqlValue) = Parser::sqlComparsion(($sqlValue ?? ''), $this->getComparisonOperators());
-            $this->updateQueryArgument($selector, $sqlValue);
-            switch ($type) {
-                case 'OR':
-                    $sql = 
-                        (array_key_first($arguments) === $selector ? $this->checkStart() : '') . 
-                        " {$selector} LIKE CONCAT('%', :{$selector}, '%') " . 
-                        (count($arguments) && array_key_last($arguments) !== $selector ? $type : '');
-                    break;
-                default:
-                    $sql = $this->checkStart() . "{$selector} LIKE CONCAT('%', :{$selector}, '%') ";
-                    break;
-            }
+            
+            $sql = match ($type) {
+                'OR' =>
+                    (array_key_first($arguments) === $selector ? $this->checkStart() : '') .
+                    " {$selector} LIKE CONCAT('%', :{$formattedColumn}, '%') " .
+                    (count($arguments) && array_key_last($arguments) !== $selector ? $type : ''),
+                default =>
+                    $this->checkStart() . "{$selector} LIKE CONCAT('%', :{$formattedColumn}, '%') ",
+            };
+            
+            $this->updateQueryArgument($formattedColumn, $sqlValue);
             $this->upsertQuery($sql);
         }
         return $this;

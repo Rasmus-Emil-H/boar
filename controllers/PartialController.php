@@ -19,4 +19,14 @@ class PartialController extends Controller {
 		]);
     }
 
+	public function oink(array ...$data) {
+		$this->setView('oink', 'partials/oink');
+        $this->setData([...$data])->setAsPartialViewFile();
+	}
+
+	public function farm(array ...$data) {
+		$this->setView('oink', 'partials/farm');
+        $this->setData([...$data])->setAsPartialViewFile();
+	}
+
 }

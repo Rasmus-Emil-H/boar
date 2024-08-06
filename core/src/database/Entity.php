@@ -77,6 +77,7 @@ abstract class Entity {
 
         if(isset($data[$key])) {
             $exists = $this->getQueryBuilder()->fetchRow([$key => $data[$key]]);
+            //$exists = $this->getQueryBuilder()->select()->where([$key => $data[$key]])->run();
             if (is_array($exists)) $exists = CoreFunctions::first($exists);
             if(!empty($exists)) {
                 $this->setKey($exists->{$this->getKeyField()});
@@ -86,8 +87,7 @@ abstract class Entity {
             }
         }
 
-        if($data === null) $data = [];
-        $this->data = array_merge($this->data, $data);
+        $this->data = array_merge($this->data, $data??[]);
         
         return $this;
     }
@@ -108,12 +108,13 @@ abstract class Entity {
         $this->data = $data;
     }
 
-    public function save(bool $addMetaData = true): self {
-        if ($addMetaData) $this->addMetaData([$this->data]);
+    public function save(bool $addMetaData = false): self {
+        if ($addMetaData) $this->addMetaData($this->data);
 
         try {
             if ($this->exists()) return $this->patchEntity();
-            if(empty($this->data)) throw new \app\core\src\exceptions\EmptyException();
+            if (empty($this->data)) throw new \app\core\src\exceptions\EmptyException();
+
             return $this->createEntity();
         } catch(\Exception $e) {
             app()->addSystemEvent([$e->getMessage()]);

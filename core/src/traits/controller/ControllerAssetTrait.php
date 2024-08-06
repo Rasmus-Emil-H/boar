@@ -2,6 +2,7 @@
 
 namespace app\core\src\traits\controller;
 
+use \app\core\src\exceptions\NotFoundException;
 use \app\core\src\File;
 use \app\core\src\http\View;
 
@@ -52,6 +53,9 @@ trait ControllerAssetTrait {
     }
 
     public function setAsPartialViewFile() {
+        if (!file_exists($this->getView()))
+            throw new NotFoundException('File not found', 404);
+
         extract($this->getData(), EXTR_SKIP);
         ob_start();
             require_once $this->getView();

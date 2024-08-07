@@ -6,7 +6,7 @@ class Constants {
 
     public const ISOLATED       = 'isolated';
 
-    public const COUNT          = ' COUNT ';
+    public const COUNT          = ' COUNT';
     public const DISTINCT       = ' DISTINCT ';
     public const WHERE          = ' WHERE ';
     public const AND            = ' AND ';

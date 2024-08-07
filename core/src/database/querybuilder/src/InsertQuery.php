@@ -50,5 +50,12 @@ trait InsertQuery {
         return $this;
     }
 
+    public function isolate(\Closure $callback): self {
+        $this->upsertQuery(Constants::SUBQUERY_OPEN);
+        call_user_func($callback, $this);
+        $this->upsertQuery(Constants::SUBQUERY_CLOSE);
+        return $this;
+    }
+
     // Additional insert-related methods can go here
 }

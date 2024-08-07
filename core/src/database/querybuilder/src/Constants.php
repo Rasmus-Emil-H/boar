@@ -4,6 +4,7 @@ namespace app\core\src\database\querybuilder\src;
 
 class Constants {
 
+    public const ISOLATED       = 'isolated';
 
     public const COUNT          = 'COUNT';
     public const DISTINCT       = 'DISTINCT';

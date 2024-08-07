@@ -178,26 +178,42 @@ trait WhereQuery {
     }
 
     public function likeOr(array $arguments): self {
-        return $this->likeClause($arguments, 'OR');
+        return $this->likeClause($arguments, Constants::OR);
+    }
+
+    public function isolatedLikeOr(array $arguments): self {
+        return $this->likeClause($arguments, Constants::ISOLATED);
     }
 
     private function likeClause(array $arguments, string $type = ''): self {
+        if($type === Constants::ISOLATED)
+            $this->appendParenthesisStart();
+
         foreach ($arguments as $selector => $sqlValue) {
             $formattedColumn = str_replace('.', '_', $selector);
             list($_, $sqlValue) = Parser::sqlComparsion(($sqlValue ?? ''), $this->getComparisonOperators());
-            
-            $sql = match ($type) {
-                'OR' =>
-                    (array_key_first($arguments) === $selector ? $this->checkStart() : '') .
-                    " {$selector} LIKE CONCAT('%', :{$formattedColumn}, '%') " .
-                    (count($arguments) && array_key_last($arguments) !== $selector ? $type : ''),
-                default =>
-                    $this->checkStart() . "{$selector} LIKE CONCAT('%', :{$formattedColumn}, '%') ",
-            };
-            
+
             $this->updateQueryArgument($formattedColumn, $sqlValue);
+            $innerQuery = " {$selector} LIKE CONCAT('%', :{$formattedColumn}, '%') ";
+
+            $sql = match ($type) {
+                Constants::OR => 
+                    (array_key_first($arguments) === $selector ? $this->checkStart() : '') . 
+                    $innerQuery . 
+                    (count($arguments) && array_key_last($arguments) !== $selector ? $type : ''),
+                Constants::ISOLATED =>
+                    $innerQuery .
+                    (count($arguments) && array_key_last($arguments) !== $selector ? Constants::OR : ''),
+                default => 
+                    $this->checkStart() . $innerQuery,
+            };            
+            
             $this->upsertQuery($sql);
         }
+
+        if($type === Constants::ISOLATED)
+            $this->appendParenthesisEnd();
+
         return $this;
     }
 

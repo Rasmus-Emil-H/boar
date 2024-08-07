@@ -45,5 +45,10 @@ trait InsertQuery {
         return $this;
     }
 
+    public function insertWhereClause(): self {
+        $this->upsertQuery(Constants::WHERE);
+        return $this;
+    }
+
     // Additional insert-related methods can go here
 }

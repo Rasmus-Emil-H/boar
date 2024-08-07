@@ -1,9 +1,9 @@
 <?php
 
 /**
- * API Controller 
+ * Webhook Controller 
  * 
- * Used for on-demand data exchange
+ * Used for real time event driven data exchange
  * 
  * AUTHOR: RE_WEB
  * @package app\controllers
@@ -13,7 +13,7 @@ namespace app\controllers;
 
 use \app\core\src\Controller;
 
-class ApiController extends Controller {
+class WebhookController extends Controller {
 
     public function index() {
         

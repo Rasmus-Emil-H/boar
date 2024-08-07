@@ -6,8 +6,8 @@ class Constants {
 
     public const ISOLATED       = 'isolated';
 
-    public const COUNT          = 'COUNT';
-    public const DISTINCT       = 'DISTINCT';
+    public const COUNT          = ' COUNT ';
+    public const DISTINCT       = ' DISTINCT ';
     public const WHERE          = ' WHERE ';
     public const AND            = ' AND ';
     public const OR             = ' OR ';
@@ -22,7 +22,7 @@ class Constants {
     public const SUBQUERY_CLOSE = ' ) ';
 
     public const WITH = ' WITH ';
-    public const HAVING = 'HAVING';
+    public const HAVING = ' HAVING ';
     public const AS = ' AS ';
     public const DELETE_FROM = ' DELETE FROM ';
     public const TRUNCATE = ' TRUNCATE TABLE ';
@@ -32,7 +32,7 @@ class Constants {
     public const IS_NOT_NULL = ' IS NOT NULL ';
     public const PARTITION_BY = ' PARTITION BY ';
 
-    public const BETWEEN      = 'BETWEEN';
+    public const BETWEEN      = ' BETWEEN ';
     public const SQL_DESCRIBE = ' DESCRIBE ';
     public const GROUP_BY     = ' GROUP BY ';
     public const ORDER_BY     = ' ORDER BY ';
@@ -41,8 +41,8 @@ class Constants {
     public const DEFAULT_SQL_DATE_FORMAT = 'Y/m/d';
     public const DEFAULT_FRONTEND_DATE_FROM_INDICATOR = 'from-';
     public const DEFAULT_FRONTEND_DATE_TO_INDICATOR = 'to-';
-    public const LOWER_THAN_CURRENT_DAY = '< CURRENT_DATE()';
-    public const HIGHER_THAN_CURRENT_DAY = '> CURRENT_DATE()';
+    public const LOWER_THAN_CURRENT_DAY = ' < CURRENT_DATE() ';
+    public const HIGHER_THAN_CURRENT_DAY = ' > CURRENT_DATE() ';
 
     public const DEFAULT_LIMIT = 20;
     public const DEFAULT_OFFSET = 0;

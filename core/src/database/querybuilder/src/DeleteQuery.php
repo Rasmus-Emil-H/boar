@@ -14,5 +14,10 @@ trait DeleteQuery {
         return $this;
     }
 
+    public function truncateSpecific(string $table): self {
+        $this->upsertQuery(Constants::TRUNCATE . $table);
+        return $this;
+    }
+
     // Additional delete-related methods can go here
 }

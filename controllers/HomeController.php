@@ -14,10 +14,15 @@ class HomeController extends Controller {
 
     public function index() {
         $this->upsertChildData([
-            'oink' => $this->createPartialWithData('Partial:oink', ['Hello' => 'World'])
+            'farm' => $this->createPartialWithData('Partial:farm', [
+                'nested' => '🏡 I\'m a nested partial'
+            ]),
+            'oink' => $this->createPartialWithData('Partial:oink', [
+                'hello' => '🐗 I\'m a partial'
+            ])
         ]);
         
-        $this->setFrontendTemplateAndData('home', ['boar' => 'is live and running']);
+        $this->setFrontendTemplateAndData('home', ['boar' => 'Is live and running']);
     }
 
 }

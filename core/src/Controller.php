@@ -111,7 +111,7 @@ class Controller {
 
                 [$handler, $method] = preg_match('/:/', $controllerAndMethodLiteral) ? explode(':', $controllerAndMethodLiteral) : [$controllerAndMethodLiteral, self::DEFAULT_METHOD];
                 $cController = (new ControllerFactory(compact('handler')))->create();
-                $cController->{$method}($childData);
+                $cController->{$method}(array_merge($parentController->getData(), $childData));
     
                 $parentController->data[$dataKey] = $cController->getData();
 

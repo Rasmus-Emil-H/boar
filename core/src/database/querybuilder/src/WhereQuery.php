@@ -186,9 +186,6 @@ trait WhereQuery {
     }
 
     private function likeClause(array $arguments, string $type = ''): self {
-        if($type === Constants::ISOLATED)
-            $this->appendParenthesisStart();
-
         foreach ($arguments as $selector => $sqlValue) {
             $formattedColumn = str_replace('.', '_', $selector);
             list($_, $sqlValue) = Parser::sqlComparsion(($sqlValue ?? ''), $this->getComparisonOperators());
@@ -210,9 +207,6 @@ trait WhereQuery {
             
             $this->upsertQuery($sql);
         }
-
-        if($type === Constants::ISOLATED)
-            $this->appendParenthesisEnd();
 
         return $this;
     }

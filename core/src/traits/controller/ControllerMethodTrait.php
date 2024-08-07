@@ -28,7 +28,7 @@ trait ControllerMethodTrait {
     public function determineClientResponseMethod(mixed $dispatchedHTTPMethodResult): string {
         if (is_array($dispatchedHTTPMethodResult)) $dispatchedHTTPMethodResult = $dispatchedHTTPMethodResult['message'] ?? '';
 
-        $backendMessageContainsErrorInString = is_int(strpos($dispatchedHTTPMethodResult ?? '', 'error'));
+        $backendMessageContainsErrorInString = is_int(strpos(strtolower($dispatchedHTTPMethodResult) ?? '', 'error'));
 
         return $backendMessageContainsErrorInString ? 'dataConflict' : 'ok';
     }

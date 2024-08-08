@@ -110,16 +110,10 @@ abstract class Entity {
 
     public function save(bool $addMetaData = false): self {
         if ($addMetaData) $this->addMetaData($this->data);
+        if ($this->exists()) return $this->patchEntity();
+        if (empty($this->data)) throw new \app\core\src\exceptions\EmptyException();
 
-        try {
-            if ($this->exists()) return $this->patchEntity();
-            if (empty($this->data)) throw new \app\core\src\exceptions\EmptyException();
-
-            return $this->createEntity();
-        } catch(\Exception $e) {
-            app()->addSystemEvent([$e->getMessage()]);
-            throw new \app\core\src\exceptions\NotFoundException($e->getMessage());
-        }
+        return $this->createEntity();
     }
 
     public function get(string $key): mixed {

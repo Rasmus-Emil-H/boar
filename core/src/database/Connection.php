@@ -66,11 +66,11 @@ class Connection {
             $stmt->execute($args);
             $result = $stmt->{$fetchType}();
             
-            $this->queryCache[$cacheKey] = $result;
+            if (!empty($result)) $this->queryCache[$cacheKey] = $result;
   
             return $result;
         } catch (\PDOException $e) {
-            app()->getLogger()->log('SQL QUERY FAIL: ' . PHP_EOL.PHP_EOL . implode(',' . PHP_EOL, explode(',', $query)) . PHP_EOL.PHP_EOL . $e . PHP_EOL.PHP_EOL . json_encode($args));
+            app()->getLogger()->log('SQL QUERY FAIL: ' . PHP_EOL.PHP_EOL . implode(',' . PHP_EOL, explode(',', $query)) . PHP_EOL.PHP_EOL . implode(',' , $args) . PHP_EOL.PHP_EOL . $e);
         }
     }
 

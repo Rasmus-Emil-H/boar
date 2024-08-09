@@ -32,8 +32,7 @@ class QueryBuilder extends QueryBuilderBase {
     }
 
     public function debugQuery() {
-        CoreFunctions::d('Currently debugging query: ' . $this->getQuery());
-        CoreFunctions::dd($this->getArguments());
+        CoreFunctions::dd('Currently debugging query:' . PHP_EOL.PHP_EOL . $this->getQuery() . PHP_EOL.PHP_EOL.PHP_EOL . json_encode($this->getArguments()));
     }
 
     public function fetchRow(?array $criteria = null) {

@@ -2,6 +2,7 @@
 
 namespace app\core\src\traits\entity;
 
+use \app\core\src\database\Entity;
 use \app\core\src\database\querybuilder\QueryBuilder;
 use \app\core\src\database\table\Table;
 use \app\core\src\database\EntityMetaData;
@@ -76,7 +77,18 @@ trait EntityQueryTrait {
         return $this->query()->select();
     }
 
-    public function find(string $field, string $value): array {
+    public function find(string $field, string $value): Entity {
+        return $this->bootstrapQuery()->where([$field => $value])->run('fetch');
+    }
+
+    /**
+     * 
+     * @param string $field
+     * @param string $value
+     * @return [Entity]
+     */
+
+    public function findMultiple(string $field, string $value): array {
         return $this->bootstrapQuery()->where([$field => $value])->run();
     }
 
@@ -143,15 +155,14 @@ trait EntityQueryTrait {
         return $this->bootstrapQuery()->where($arguments)->run();
     }
 
-    public function findOrCreate(string $whereKey, string $whereValue, array $data = []): \app\core\src\database\Entity {
+    public function findOrCreate(string $whereKey, string $whereValue, array $data = []): Entity {
         $lookup = $this->find($whereKey, $whereValue);
-        if (!empty($lookup)) return CoreFunctions::first($lookup);
+        if ($lookup->exists()) return $lookup;
 
         $cEntity = new $this();
         $cEntity->setData($data);
         $cEntity->save();
-        $cEntity->addMetaData([$this->getTableName() . self::FIND_OR_CREATE_NEW_DATA_ENTRY])->save();
-        
+
         return $cEntity;
     }
 

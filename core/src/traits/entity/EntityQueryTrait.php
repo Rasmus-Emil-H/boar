@@ -125,7 +125,7 @@ trait EntityQueryTrait {
         return $this;
     }
 
-    public function coupleEntity(\app\core\src\database\Entity $entity) {
+    public function coupleEntity(Entity $entity) {
 		$entity->set([$this->getKeyField() => $this->key()]);
 		$entity->init();
 	}

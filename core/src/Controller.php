@@ -118,9 +118,6 @@ class Controller {
                     $cController->getData(),
                     array_filter($cController->getData(), fn($_, $k) => $parentController->getDataKey($k), ARRAY_FILTER_USE_BOTH)
                 );
-
-                foreach ($cController->getData() as $innerDataKey => $_)
-                    if ($parentController->getDataKey($innerDataKey)) unset($cController->data[$innerDataKey]);
     
                 $parentController->data[$dataKey] = $cController->getData();
 

@@ -48,7 +48,7 @@ final class UserModel extends Entity {
 	}
 
 	public function logout() {
-		$sessions = (new SessionModel())->find($this->getKeyField(), CoreFunctions::applicationUser()->key());
+		$sessions = (new SessionModel())->findMultiple($this->getKeyField(), CoreFunctions::applicationUser()->key());
 		foreach ($sessions as $session) $session->delete();
 	}
 

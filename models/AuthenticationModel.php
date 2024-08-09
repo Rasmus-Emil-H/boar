@@ -10,8 +10,7 @@
 namespace app\models;
 
 use \app\models\UserModel;
-use \app\core\src\Curl;
-use \app\core\src\miscellaneous\CoreFunctions;
+use \app\core\src\http\Curl;
 
 final class AuthenticationModel {
 
@@ -30,9 +29,8 @@ final class AuthenticationModel {
 
     public function applicationLogin() {
         $user = (new UserModel)->find('Email', $this->data->email);
-        if (empty($user)) $this->invalidLogin();
+        if (!$user->exists()) $this->invalidLogin();
 
-        $user = CoreFunctions::first($user);
         $passwordVerify = password_verify($this->data->password, $user->get('Password'));
         if (!$passwordVerify) $this->invalidLogin();
         

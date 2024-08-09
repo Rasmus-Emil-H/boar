@@ -140,6 +140,17 @@ trait EntityRelationsTrait {
     }
 
     /**
+     * hasManyToMany relationship with custom callback (i.e. to join tables to this)
+     */
+
+     public function findByHasManyToMany(string $relatedEntity, string $pivot, \Closure $callback) {
+        $queryBuilder = new QueryBuilder($relatedEntity, $pivot, '');
+        $queryBuilder->select();
+        call_user_func($callback, $queryBuilder);
+        return $queryBuilder->where([Table::ENTITY_TYPE_COLUMN => $this->getTableName(), Table::ENTITY_ID_COLUMN => $this->key()]);
+    }
+
+    /**
      * Find entities on a table where the column and value is a match
      */
 

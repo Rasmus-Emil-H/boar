@@ -110,8 +110,12 @@ class Controller {
                     throw new \app\core\src\exceptions\ForbiddenException('Only iterables can be passed to ' . __METHOD__);
 
                 [$handler, $method] = preg_match('/:/', $controllerAndMethodLiteral) ? explode(':', $controllerAndMethodLiteral) : [$controllerAndMethodLiteral, self::DEFAULT_METHOD];
+                
                 $cController = (new ControllerFactory(compact('handler')))->create();
                 $cController->{$method}(array_merge($parentController->getData(), $childData));
+
+                foreach ($cController->getData() as $innerDataKey => $_)
+                    if ($parentController->getDataKey($innerDataKey)) unset($cController->data[$innerDataKey]);
     
                 $parentController->data[$dataKey] = $cController->getData();
 

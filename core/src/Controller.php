@@ -114,6 +114,11 @@ class Controller {
                 $cController = (new ControllerFactory(compact('handler')))->create();
                 $cController->{$method}(array_merge($parentController->getData(), $childData));
 
+                $cController->data = array_diff_key(
+                    $cController->getData(),
+                    array_filter($cController->getData(), fn($_, $k) => $parentController->getDataKey($k), ARRAY_FILTER_USE_BOTH)
+                );
+
                 foreach ($cController->getData() as $innerDataKey => $_)
                     if ($parentController->getDataKey($innerDataKey)) unset($cController->data[$innerDataKey]);
     

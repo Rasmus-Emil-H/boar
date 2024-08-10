@@ -26,6 +26,8 @@ class Controller {
     use ControllerMethodTrait;
     use ControllerAssetTrait;
 
+    private const MESSAGE_ITERABLE_EXCEPTION = 'Only iterables can be passed to ';
+
     private const DEFAULT_METHOD = 'index';
     private const EXPECTED_ENTITY_ID_POSITION = 2;
 
@@ -107,7 +109,7 @@ class Controller {
             array_map(function($childData, $controllerAndMethodLiteral) use($dataKey, $parentController) {
 
                 if (!is_iterable($childData) && $controllerAndMethodLiteral !== 0)
-                    throw new \app\core\src\exceptions\ForbiddenException('Only iterables can be passed to ' . __METHOD__);
+                    throw new \app\core\src\exceptions\ForbiddenException(self::MESSAGE_ITERABLE_EXCEPTION . __METHOD__);
 
                 [$handler, $method] = preg_match('/:/', $controllerAndMethodLiteral) ? explode(':', $controllerAndMethodLiteral) : [$controllerAndMethodLiteral, self::DEFAULT_METHOD];
                 

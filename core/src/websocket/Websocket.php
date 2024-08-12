@@ -98,7 +98,6 @@ class Websocket {
                         $this->messageTo($tmpClient, $message);
                     }
                     break;
-                // Test case for when you want something returned to the Connector
                 case 'getClients':
                     $this->messageTo($client, json_encode(array_keys($this->getClientManager()->getClients())));
                     break;

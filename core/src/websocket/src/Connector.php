@@ -24,14 +24,14 @@ class Connector {
     /**
      * In case you want something back
      */
-    
+
     private static function waitForResponse($client) {
         $startTime = time();
         $timeout = 10;
         $buffer = '';
 
         while (time() - $startTime < $timeout) {
-            $data = fread($client, 1024);
+            $data = self::getWebsocketMessage($client);
 
             if ($data) {
                 $buffer .= $data;

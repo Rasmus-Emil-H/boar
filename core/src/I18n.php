@@ -16,7 +16,6 @@ use \app\core\src\exceptions\NotFoundException;
 use \app\models\LanguageModel;
 use \app\models\TranslationModel;
 use \app\core\src\miscellaneous\Hash;
-use \app\core\src\miscellaneous\CoreFunctions;
 
 final class I18n {
 
@@ -33,12 +32,11 @@ final class I18n {
     }
 
     public function translate(string $toTranslate): string {
+        if (!$toTranslate) return '';
+
         $translationExists = (new TranslationModel())->query()->select()->where(['LanguageID' => $this->languageID, 'Translation' => $toTranslate])->run('fetch');
-        if($toTranslate === 'yay') {
-            echo '<pre>';
-            var_dump($translationExists);
-        }
         if ($translationExists->exists()) return $translationExists->get('TranslationHumanReadable');
+        
         return $this->registerMissingTranslation($toTranslate);
     }
 

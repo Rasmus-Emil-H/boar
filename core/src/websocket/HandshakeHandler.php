@@ -26,11 +26,26 @@ class HandshakeHandler {
         return $request;
     }
 
-    public function performHandshake($client) {
-        $request = fread($client, 5000);
-        Logger::yell("Request received:\n$request\n");
+    /**
+     * Max attempts in order to try the same client multiple times
+     * Cases was found where the socket woudlnt get a proper response because of a ️🏁 condition
+     */
 
-        var_dump($request);
+    public function performHandshake($client) {
+
+        $attempts = 5;
+        $currentAttempt = 0;
+        $request = '';
+
+        while ($currentAttempt < $attempts) {
+            $request = fread($client, 5000);
+            Logger::yell("Request received:\n$request\n");
+            if ($request) break;
+            usleep(100000);
+            $attempts++;
+        }
+
+        if (!$request) exit;
 
         preg_match(Constants::WEBSOCKET_HEADER_KEY, $request, $matches);
 

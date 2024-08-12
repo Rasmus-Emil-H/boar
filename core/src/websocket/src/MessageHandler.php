@@ -1,6 +1,6 @@
 <?php
 
-namespace app\core\src\websocket;
+namespace app\core\src\websocket\src;
 
 class MessageHandler {
 
@@ -12,7 +12,7 @@ class MessageHandler {
     
     public function handleMessage($client, $data) {
         $data = $this->frameHandler->decodeFrame($data);
-        Logger::yell(Constants::MSG_RECEIVED_FROM_CLIENT . $data . PHP_EOL);
+        return $data;
     }
 
     public function broadcastMessage(array $clients, $message) {

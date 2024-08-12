@@ -1,6 +1,6 @@
 <?php
 
-namespace app\core\src\websocket;
+namespace app\core\src\websocket\src;
 
 class HandshakeHandler {
     
@@ -28,7 +28,7 @@ class HandshakeHandler {
 
     /**
      * Max attempts in order to try the same client multiple times
-     * Cases was found where the socket woudlnt get a proper response because of a ️🏁 condition
+     * Cases was found where the socket wouldnt get a proper response because of a ️🏁 condition
      */
 
     public function performHandshake($client) {
@@ -39,13 +39,13 @@ class HandshakeHandler {
 
         while ($currentAttempt < $attempts) {
             $request = fread($client, 5000);
-            Logger::yell("Request received:\n$request\n");
+            // Logger::yell("Request received:\n$request\n");
             if ($request) break;
             usleep(100000);
             $attempts++;
         }
 
-        if (!$request) exit;
+        if (!$request) return;
 
         preg_match(Constants::WEBSOCKET_HEADER_KEY, $request, $matches);
 
@@ -66,7 +66,7 @@ class HandshakeHandler {
 
         fwrite($client, $headers, strlen($headers));
 
-        Logger::yell("Handshake sent:\n$headers\n");
+        // Logger::yell("Handshake sent:\n$headers\n");
 
         return true;
     }

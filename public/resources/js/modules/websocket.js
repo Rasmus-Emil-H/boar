@@ -30,11 +30,13 @@ window[appName].websocket = {
     },
     handleServerPacket: async function(message) {
         console.log(message);
+        if (!message.includes('update')) return;
+        await window[appName].serviceWorkerInit.dispatchPushNotification(message, 'Push notification');
     },
     sendMessage: function(message) {
         this.ws.send(message);
     }
 }
 
-// window[appName].websocket.init();
-// window[appName].websocket.handler();
+window[appName].websocket.init();
+window[appName].websocket.handler();

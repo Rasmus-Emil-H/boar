@@ -79,10 +79,6 @@ final class CoreFunctions {
         return self::app()->getUser();
     } 
 
-    public static function getRemainingApplicationMemory(): int {
-        return ini_get('memory_limit') - memory_get_usage(real_usage: true);
-    }
-
     public static function browseEntities(array $iterableEntities, string $identifierKey, string $identifierValue): array {
         $result = [];
         

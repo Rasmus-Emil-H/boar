@@ -1,6 +1,4 @@
-let worker = {};
-
-export default {
+window[appName].serviceWorkerInit = {
     init: function() {
         navigator.serviceWorker.register('/serviceworkerInstall.js', {scope: '/'})
             .then(function(registration) {})
@@ -14,8 +12,10 @@ export default {
             for (let registration of registrations) registration.unregister();
         });
     },
-    dispatchPushNotification: async function(body, icon = '/resources/images/logo.png', tag) {
+    dispatchPushNotification: async function(body, icon = '/resources/images/pwalogo.png', tag) {
         const registration = await navigator.serviceWorker.getRegistration();
-        registration.showNotification("Boar", {body, icon, vibrate: [200, 100, 200, 100, 200, 100, 200], tag});
+        await registration.showNotification(window[appName], {body, icon, vibrate: [200, 100, 200, 100, 200, 100, 200], tag});
     }
 }
+
+window[appName].serviceWorkerInit.init();

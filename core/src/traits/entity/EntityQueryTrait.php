@@ -81,6 +81,10 @@ trait EntityQueryTrait {
         return $this->bootstrapQuery()->where([$field => $value])->run('fetch');
     }
 
+    public function findOne(string $field, string $value): array {
+        return $this->bootstrapQuery()->where([$field => $value])->run('fetch');
+    }
+
     /**
      * 
      * @param string $field

@@ -6,7 +6,6 @@ use \app\core\src\database\Entity;
 use \app\core\src\database\querybuilder\QueryBuilder;
 use \app\core\src\database\table\Table;
 use \app\core\src\database\EntityMetaData;
-use \app\core\src\miscellaneous\CoreFunctions;
 
 trait EntityQueryTrait {
 
@@ -81,7 +80,7 @@ trait EntityQueryTrait {
         return $this->bootstrapQuery()->where([$field => $value])->run('fetch');
     }
 
-    public function findOne(string $field, string $value): array {
+    public function findOne(string $field, string $value): Entity {
         return $this->bootstrapQuery()->where([$field => $value])->run('fetch');
     }
 

@@ -9,6 +9,8 @@
 
 const appName = 'boar';
 
-window.appName = appName;
-
 window[appName] = {};
+
+window[appName].getName = function() {
+    return appName;
+}

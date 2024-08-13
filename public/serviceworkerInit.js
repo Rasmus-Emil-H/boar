@@ -14,7 +14,7 @@ window[appName].serviceWorkerInit = {
     },
     dispatchPushNotification: async function(body, icon = '/resources/images/pwalogo.png', tag) {
         const registration = await navigator.serviceWorker.getRegistration();
-        await registration.showNotification(window[appName], {body, icon, vibrate: [200, 100, 200, 100, 200, 100, 200], tag});
+        await registration.showNotification(window[appName].getName(), {body, icon, vibrate: [200, 100, 200, 100, 200, 100, 200], tag});
     }
 }
 

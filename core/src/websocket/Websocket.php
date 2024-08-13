@@ -88,15 +88,16 @@ class Websocket {
 
             switch ($encode->type) {
                 case 'identifier':
-                    if (isset($encode->id))
-                        $this->clientManager->setClientByID($encode->id, $client);
+                    if (!isset($encode->id)) break;
+                    
+                    $this->clientManager->setClientByID($encode->id, $client);
                     break;
                 case 'update':
-                    if (isset($encode->clientID)) {
-                        $message = 'update' . $encode->message;
-                        $tmpClient = $this->getClientManager()->getClient($encode->clientID);
-                        $this->messageTo($tmpClient, $message);
-                    }
+                    if (!isset($encode->clientID)) break;
+
+                    $message = 'update' . $encode->message;
+                    $tmpClient = $this->getClientManager()->getClient($encode->clientID);
+                    $this->messageTo($tmpClient, $message);
                     break;
                 case 'getClients':
                     $this->messageTo($client, json_encode(array_keys($this->getClientManager()->getClients())));
@@ -106,7 +107,7 @@ class Websocket {
     }
 
     public function broadcast(array $clients) {
-        $this->messageHandler->broadcastMessage($clients, 'Pong');
+        $this->messageHandler->broadcastMessage($clients, 'SOME_RANDOM_MESSAGE');
     }
 
     public function messageTo($client, string $message) {

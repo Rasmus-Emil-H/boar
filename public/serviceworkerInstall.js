@@ -20,39 +20,64 @@ const messages = {
     }
 }
 
+self.addEventListener('beforeinstallprompt', event => { 
+    event.preventDefault(); 
+    const installButton = document.querySelector('#installButton'); 
+    if (!installButton) return 
+    installButton.style.display = 'block'; 
+    installButton.addEventListener('click', () => { 
+        event.prompt(); 
+    });
+});
+
 self.addEventListener('install', e => {
     e.waitUntil(self.skipWaiting());
 });
 
 self.addEventListener('activate', e => {
-  e.waitUntil(self.clients.claim());
-  e.waitUntil(
-      caches.keys().then(cacheNames => {
-          return Promise.all(
-              cacheNames.map(cache => {
-                  if (cache !== cacheName) return caches.delete(cache);
-              })
-          );
-      })
-  );
+    e.waitUntil(self.clients.claim());
+    e.waitUntil(
+        caches.keys().then(cacheNames => {
+            return Promise.all(
+                cacheNames.map(cache => {
+                    if (cache !== cacheName) return caches.delete(cache);
+                })
+            );
+        })
+    );
 });
 
+self.addEventListener('push', function(event) {
+    if (event.data) {
+      console.log('Push event!! ', event.data.text())
+      showLocalNotification('Yolo', event.data.text(), self.registration)
+    } else {
+      console.log('Push event but no data');
+    }
+});
+
+const showLocalNotification = (title, body, swRegistration) => {
+    const options = {body};
+    console.log(swRegistration);
+    swRegistration.showNotification(title, options);
+}
+
 self.addEventListener('fetch', e => {
-  if (e.request.url === login && e.request.method === 'POST') return;
-  if (e.request.method === 'POST') e.respondWith(cachePostRequest(e.request));
-  else {
-      e.respondWith(
-          fetch(e.request)
+    if (e.request.url === login && e.request.method === 'POST' && !navigator.onLine) return;
+    if (e.request.method === 'POST') e.respondWith(cachePostRequest(e.request));
+    else {
+        e.respondWith(
+            fetch(e.request)
             .then(async res => {
-              const resClone = res.clone();
-              caches.open(cacheName).then(cache => {
-                  cache.put(e.request, resClone);
-              });
-              return res;
+                const resClone = res.clone();
+                caches.open(cacheName).then(cache => {
+                    cache.put(e.request, resClone);
+                });
+                return res;
             })
             .catch(err => caches.match(e.request).then(res => res))
-      );
-  }
+        );
+    }
 });
 
 async function cachePostRequest(request) {
@@ -62,8 +87,8 @@ async function cachePostRequest(request) {
     const cacheData = { request: request.clone(), formData: Object.fromEntries(formData.entries()), request: requestClone, url: request.url };
     const cache = await caches.open(postCache);
     await cache.put(cacheKey, new Response(JSON.stringify(cacheData)));
-    await sendCachedPostRequests();
-    return new Response('OK', {status: 302, headers: { 'Location': request.url }});
+    const post = await sendCachedPostRequests();
+    return new Response(post.body, {status: post.status, headers: post.headers});
 }
 
 function checkConnection() {
@@ -87,6 +112,7 @@ async function sendCachedPostRequests() {
             for (const [key, value] of Object.entries(cachedData.formData)) body.append(key, value);
             const response = await fetch(cachedData.url, { method: 'POST', body });
             response.ok ? cache.delete(cacheKey) : console.log(messages.errors.postRequest, response.status);
+            return response;
         } catch (error) {
             console.log(messages.errors.postRequest, error);
         }
@@ -112,7 +138,7 @@ async function sendCachedFileRequests(fileKey) {
             if(fileKey) respondToClient({meta: body.get('meta'), data: {cachedPath: fileKey, 'Path': body.get('fileName'), id: body.get('EntityID'), UploadID: null, EntityID: body.get('EntityID'), Created: date, targetProp: 'uploads'}});
             const response = await fetch(body.get('url'), { method: 'POST', body });
             response.ok ? await cache.delete(cacheKey) : console.error(messages.errors.postRequest, response.status);
-            return new Response('OK', {status: 302, headers: { 'Location': body.get('url') }});
+            return new Response(response.body, {status: response.status, headers: response.headers});
         } catch (error) {
             console.log("file sync err", error);
         }

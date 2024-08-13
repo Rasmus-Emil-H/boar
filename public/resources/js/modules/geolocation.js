@@ -32,8 +32,8 @@ export default {
 
         return new Promise(function(resolve, reject) {
             navigator.geolocation.getCurrentPosition(async function(position) {
-                lat =  await position.coords.latitude
-                long = await position.coords.longitude
+                lat =  await position.coords.latitude;
+                long = await position.coords.longitude;
     
                 resolve([lat,long]);
             });

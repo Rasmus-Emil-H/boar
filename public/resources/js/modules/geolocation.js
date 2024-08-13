@@ -36,7 +36,7 @@ export default {
                 long = await position.coords.longitude;
     
                 resolve([lat,long]);
-            });
+            }, null, {enableHighAccuracy: true, maximumAge: 0});
         });
     },
     updateCoords: async function() {

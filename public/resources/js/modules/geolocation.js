@@ -25,8 +25,8 @@ export default {
         });
     },
     getLocation: function() {
-        let lat = 0
-        let long = 0
+        let lat = 0;
+        let long = 0;
 
         if(!navigator.geolocation) return;
 

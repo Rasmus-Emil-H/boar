@@ -3,7 +3,7 @@ const postCache = 'post-requests-cache';
 const fileCache = 'file-cache';
 const tempOfflineCache = 'offline-cache';
 const login = '/auth/login';
-const origin = 'https://replaceme.example';
+const origin = 's://h';
 
 const actions = {
     message: {
@@ -48,19 +48,34 @@ self.addEventListener('activate', e => {
 });
 
 self.addEventListener('push', function(event) {
-    if (event.data) {
-      console.log('Push event!! ', event.data.text())
-      showLocalNotification('Yolo', event.data.text(), self.registration)
-    } else {
-      console.log('Push event but no data');
-    }
+    console.log(event);
+    const options = {
+        body: 'Data',
+        icon: '/resources/images/logo.png',
+        badge: '/resources/images/logo.png',
+        silent: false,
+        actions: [
+            { action: 'open_app', title: 'Open App' }
+        ],
+        requireInteraction: true,
+    };
+
+    console.log(event);
+
+    event.waitUntil(
+        self.registration.showNotification('Data', options)
+    );
 });
 
-const showLocalNotification = (title, body, swRegistration) => {
-    const options = {body};
-    console.log(swRegistration);
-    swRegistration.showNotification(title, options);
-}
+self.addEventListener('notificationclick', function(event) {
+    event.notification.close();
+
+    event.waitUntil(
+        clients.matchAll({type: 'window'}).then(function(clientList) {
+            return clients.openWindow(origin);
+        })
+    );
+});
 
 self.addEventListener('fetch', e => {
     if (e.request.url === login && e.request.method === 'POST' && !navigator.onLine) return;
@@ -111,7 +126,8 @@ async function sendCachedPostRequests() {
             const body = new FormData();
             for (const [key, value] of Object.entries(cachedData.formData)) body.append(key, value);
             const response = await fetch(cachedData.url, { method: 'POST', body });
-            response.ok ? cache.delete(cacheKey) : console.log(messages.errors.postRequest, response.status);
+            const deleteCaches = [400, 401, 403, 409];
+            response.ok || deleteCaches.includes(response.status) ? cache.delete(cacheKey) : console.log(messages.errors.postRequest, response.status);
             return response;
         } catch (error) {
             console.log(messages.errors.postRequest, error);

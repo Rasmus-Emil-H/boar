@@ -105,6 +105,10 @@
                 "cert": "YOUR_PATH",
                 "key": "YOUR_PATH"
             }
-        } 
+        },
+        "pushAPI": {
+            "privatePEM": "",
+            "b64Public": ""
+        }
     }
 }

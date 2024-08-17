@@ -18,7 +18,7 @@ final class PushModel extends Entity {
     public function run($info, $data) {
         $push = new PushManager($info['Endpoint']);
         $push->setUserPayLoad(['title' => 'o', 'message' => 'k']);
-        $push->sendNotification();
+        return $push->sendNotification();
     }
     
     public function getPublicKey() {

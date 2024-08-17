@@ -6,7 +6,7 @@ window[appName].serviceWorkerInit = {
 
             if (permission !== 'granted') return;
 
-            const key = await this.urlB64ToUint8Array(await fetch('/push/getPublicKey').then(response => response.json()).then(json => json.responseJSON));
+            const key = await this.urlB64ToUint8Array(await fetch('/push/subscribe').then(response => response.json()).then(json => json.responseJSON));
 
             const subscription = await registration.pushManager.getSubscription() || await registration.pushManager.subscribe({
                 userVisibleOnly: true,

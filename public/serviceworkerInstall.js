@@ -23,7 +23,7 @@ const messages = {
 self.addEventListener('push', function(event) {
     console.log(event);
     const options = {
-        body: 'Trip change',
+        body: 'Update',
         icon: '/resources/images/logo.png',
         badge: '/resources/images/logo.png',
         requireInteraction: true,
@@ -37,7 +37,7 @@ self.addEventListener('push', function(event) {
     console.log(event);
 
     event.waitUntil(
-        self.registration.showNotification('Trip has been updated', options)
+        self.registration.showNotification('Update', options)
     );
 });
 

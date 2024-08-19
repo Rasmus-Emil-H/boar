@@ -77,13 +77,8 @@ class PushManager {
         $iat = time();
         $exp = $iat + 3600;
 
-        $payload = [
-            'aud' => 'https://fcm.googleapis.com',
-            'exp' => $exp,
-            'iat' => $iat,
-            'sub' => 'mailto:example@example.com' // Change to your email or a relevant contact
-        ];
+        $payload = ['aud' => 'https://fcm.googleapis.com', 'exp' => $exp, 'iat' => $iat, 'sub' => 'SOME_EMAIL'];
 
-        return JWT::encode($payload, $this->vapidPrivateKey->getFile(), 'ES256');
+        return JWT::encode($payload, $this->vapidPrivateKey, 'ES256');
     }
 }

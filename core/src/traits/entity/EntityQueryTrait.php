@@ -1,5 +1,18 @@
 <?php
 
+/**
+|----------------------------------------------------------------------------
+| Entity query trait
+|----------------------------------------------------------------------------
+|
+| This file is meant as a convenient way to do mundane queries and abstract 
+| away some of the repetitive tasks
+| 
+| @author RE_WEB
+| @package \app\core\src\traits
+|
+*/
+
 namespace app\core\src\traits\entity;
 
 use \app\core\src\database\Entity;
@@ -57,6 +70,10 @@ trait EntityQueryTrait {
 
     public function delete() {
         return $this->getQueryBuilder()->delete()->where([$this->getKeyField() => $this->key()])->run();
+    }
+
+    public function deleteWhere(array $where) {
+        return $this->getQueryBuilder()->delete()->where($where)->run(); 
     }
 
      public function truncate() {

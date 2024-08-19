@@ -20,10 +20,37 @@ const messages = {
     }
 }
 
+self.addEventListener('beforeinstallprompt', event => { 
+    event.preventDefault(); 
+    const installButton = document.querySelector('#installButton'); 
+    if (!installButton) return 
+    installButton.style.display = 'block'; 
+    installButton.addEventListener('click', () => { 
+        event.prompt(); 
+    });
+});
+
+self.addEventListener('install', e => {
+    e.waitUntil(self.skipWaiting());
+});
+
+self.addEventListener('activate', e => {
+    e.waitUntil(self.clients.claim());
+    e.waitUntil(
+        caches.keys().then(cacheNames => {
+            return Promise.all(
+                cacheNames.map(cache => {
+                    if (cache !== cacheName) return caches.delete(cache);
+                })
+            );
+        })
+    );
+});
+
 self.addEventListener('push', function(event) {
     console.log(event);
     const options = {
-        body: 'Update',
+        body: 'Changed registered',
         icon: '/resources/images/logo.png',
         badge: '/resources/images/logo.png',
         requireInteraction: true,
@@ -37,7 +64,7 @@ self.addEventListener('push', function(event) {
     console.log(event);
 
     event.waitUntil(
-        self.registration.showNotification('Update', options)
+        self.registration.showNotification('Information has been updated', options)
     );
 });
 
@@ -73,61 +100,65 @@ async function cachePostRequest(request) {
     const requestClone = request.clone();
     const formData = await requestClone.formData();
     const cacheKey = `${requestClone.url}/${Date.now()}`;
+    const cacheData = { request: request.clone(), formData: Object.fromEntries(formData.entries()), request: requestClone, url: request.url };
     const cache = await caches.open(postCache);
-
-    const serializedFormData = {};
-    for (const [key, value] of formData.entries()) {
-        if (value instanceof File) {
-            serializedFormData[key] = {
-                type: 'file',
-                name: value.name,
-                mimeType: value.type,
-                data: await value.arrayBuffer()
-            };
-        } else {
-            serializedFormData[key] = value;
-        }
-    }
-
-    const cacheData = {
-        formData: serializedFormData,
-        url: request.url
-    };
-
     await cache.put(cacheKey, new Response(JSON.stringify(cacheData)));
     const post = await sendCachedPostRequests();
-    return new Response(post.body, { status: post.status, headers: post.headers });
+    return new Response(post.body, {status: post.status, headers: post.headers});
+}
+
+function checkConnection() {
+    return Number(navigator.onLine);
+}
+
+async function synchroniseCaches() {
+  await sendCachedFileRequests();
+  await sendCachedPostRequests();
 }
 
 async function sendCachedPostRequests() {
     const cache = await caches.open(postCache);
     const cacheKeys = await cache.keys(); 
-
     for (const cacheKey of cacheKeys) {
         const cachedResponse = await cache.match(cacheKey);
-        if (!cachedResponse) continue;
-
+        if (!cachedResponse) return;
         try {
-            const cachedData = await cachedResponse.json();
-            const formData = new FormData();
-            for (const [key, value] of Object.entries(cachedData.formData)) {
-                if (value.type === 'file') {
-                    const blob = new Blob([value.data], { type: value.mimeType });
-                    const file = new File([blob], value.name, { type: value.mimeType });
-                    formData.append(key, file);
-                } else {
-                    formData.append(key, value);
-                }
-            }
-
-            const response = await fetch(cachedData.url, { method: 'POST', body: formData });
+            const cachedData = await cachedResponse.formData();
+            const response = await fetch(body.get('url'), { method: 'POST', cachedData });
             const deleteCaches = [400, 401, 403, 409];
-            response.ok || deleteCaches.includes(response.status) ? await cache.delete(cacheKey) : null;
-
+            response.ok || deleteCaches.includes(response.status) ? cache.delete(cacheKey) : console.log(messages.errors.postRequest, response.status);
             return response;
         } catch (error) {
-            console.error(messages.errors.postRequest, error);
-            return new Response(new Blob(), { status: 418, statusText: 'Request failed' });
+            console.log(error);
+            console.log(messages.errors.postRequest, error);
+            return new Response(new Blob(), {status: 418, statusText: 'Request failed'});
+        }
+    }
+}
+
+function respondToClient(msg) {
+    self.clients.matchAll().then(clients => {
+        clients.forEach(client => {
+            client.postMessage(msg);
+        });
+    });
+}
+
+async function sendCachedFileRequests(fileKey) {
+    const cache = await caches.open(fileCache);
+    const cacheKeys = await cache.keys();
+    for (const cacheKey of cacheKeys) {
+        const cacheResponse = await cache.match(cacheKey);
+        try {
+            const body = await cacheResponse.formData();
+            const date = new Date().toLocaleString().replaceAll('/', '-').replaceAll(',', '');
+            if(fileKey) respondToClient({meta: body.get('meta'), data: {cachedPath: fileKey, 'Path': body.get('fileName'), id: body.get('EntityID'), UploadID: null, EntityID: body.get('EntityID'), Created: date, targetProp: 'uploads'}});
+            const response = await fetch(body.get('url'), { method: 'POST', body });
+            response.ok ? await cache.delete(cacheKey) : console.error(messages.errors.postRequest, response.status);
+            return new Response(response.body, {status: response.status, headers: response.headers});
+        } catch (error) {
+            console.log("file sync err", error);
+            return new Response(new Blob(), {status: 418, statusText: 'Request failed'});
         }
     }
 }
@@ -162,50 +193,6 @@ self.addEventListener('message', (event) => {
                 console.error('Error storing file in cache:', e);
             });
     } else if(event.data.action === actions.message.CHECK_STATUS) synchroniseCaches();
-});
-
-function respondToClient(msg) {
-    self.clients.matchAll().then(clients => {
-        clients.forEach(client => {
-            client.postMessage(msg);
-        });
-    });
-}
-
-function checkConnection() {
-    return Number(navigator.onLine);
-}
-
-async function synchroniseCaches() {
-  await sendCachedFileRequests();
-  await sendCachedPostRequests();
-}
-
-self.addEventListener('beforeinstallprompt', event => { 
-    event.preventDefault(); 
-    const installButton = document.querySelector('#installButton'); 
-    if (!installButton) return;
-    installButton.style.display = 'block'; 
-    installButton.addEventListener('click', () => { 
-        event.prompt(); 
-    });
-});
-
-self.addEventListener('install', e => {
-    e.waitUntil(self.skipWaiting());
-});
-
-self.addEventListener('activate', e => {
-    e.waitUntil(self.clients.claim());
-    e.waitUntil(
-        caches.keys().then(cacheNames => {
-            return Promise.all(
-                cacheNames.map(cache => {
-                    if (cache !== cacheName) return caches.delete(cache);
-                })
-            );
-        })
-    );
 });
 
 self.addEventListener('online', event => {

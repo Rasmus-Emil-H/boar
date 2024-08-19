@@ -62,8 +62,7 @@ final class FileModel extends Entity {
 				$this->getKeyField() => $this->key()
 			]);
 
-		$path = file_get_contents($arguments->destination);
-		$b64 = 'data:image/' . $arguments->file->getFileType() . ';base64,' . base64_encode($path);
+		$b64 = 'data:image/' . $arguments->file->getFileType() . ';base64,' . base64_encode(file_get_contents($arguments->destination));
 
 		return ['b64' => $b64, 'id' => $this->key(), 'created' => date('d-m-y H:i', strtotime('now'))];
 	}

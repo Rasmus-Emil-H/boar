@@ -131,6 +131,7 @@ async function sendCachedPostRequests() {
             return response;
         } catch (error) {
             console.log(messages.errors.postRequest, error);
+            return new Response(new Blob(), {status: 418, statusText: 'Request failed'});
         }
     }
 }
@@ -157,6 +158,7 @@ async function sendCachedFileRequests(fileKey) {
             return new Response(response.body, {status: response.status, headers: response.headers});
         } catch (error) {
             console.log("file sync err", error);
+            return new Response(new Blob(), {status: 418, statusText: 'Request failed'});
         }
     }
 }

@@ -12,7 +12,7 @@
 | openssl ec -in private_key.pem -outform DER|tail -c +8|head -c 32|base64|tr -d '=' |tr '/+' '_-' >> private_key.txt
 | 
 | @author RE_WEB
-| @package \app\core\src
+| @package \app\core\miscellaneous\src
 |
 */
 

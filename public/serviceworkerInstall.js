@@ -3,7 +3,7 @@ const postCache = 'post-requests-cache';
 const fileCache = 'file-cache';
 const tempOfflineCache = 'offline-cache';
 const login = '/auth/login';
-const origin = 's://h';
+const origin = '://';
 
 const actions = {
     message: {
@@ -20,39 +20,13 @@ const messages = {
     }
 }
 
-self.addEventListener('beforeinstallprompt', event => { 
-    event.preventDefault(); 
-    const installButton = document.querySelector('#installButton'); 
-    if (!installButton) return 
-    installButton.style.display = 'block'; 
-    installButton.addEventListener('click', () => { 
-        event.prompt(); 
-    });
-});
-
-self.addEventListener('install', e => {
-    e.waitUntil(self.skipWaiting());
-});
-
-self.addEventListener('activate', e => {
-    e.waitUntil(self.clients.claim());
-    e.waitUntil(
-        caches.keys().then(cacheNames => {
-            return Promise.all(
-                cacheNames.map(cache => {
-                    if (cache !== cacheName) return caches.delete(cache);
-                })
-            );
-        })
-    );
-});
-
 self.addEventListener('push', function(event) {
     console.log(event);
     const options = {
-        body: 'Data',
+        body: 'Trip change',
         icon: '/resources/images/logo.png',
         badge: '/resources/images/logo.png',
+        requireInteraction: true,
         silent: false,
         actions: [
             { action: 'open_app', title: 'Open App' }
@@ -63,7 +37,7 @@ self.addEventListener('push', function(event) {
     console.log(event);
 
     event.waitUntil(
-        self.registration.showNotification('Data', options)
+        self.registration.showNotification('Trip has been updated', options)
     );
 });
 
@@ -99,66 +73,61 @@ async function cachePostRequest(request) {
     const requestClone = request.clone();
     const formData = await requestClone.formData();
     const cacheKey = `${requestClone.url}/${Date.now()}`;
-    const cacheData = { request: request.clone(), formData: Object.fromEntries(formData.entries()), request: requestClone, url: request.url };
     const cache = await caches.open(postCache);
+
+    const serializedFormData = {};
+    for (const [key, value] of formData.entries()) {
+        if (value instanceof File) {
+            serializedFormData[key] = {
+                type: 'file',
+                name: value.name,
+                mimeType: value.type,
+                data: await value.arrayBuffer()
+            };
+        } else {
+            serializedFormData[key] = value;
+        }
+    }
+
+    const cacheData = {
+        formData: serializedFormData,
+        url: request.url
+    };
+
     await cache.put(cacheKey, new Response(JSON.stringify(cacheData)));
     const post = await sendCachedPostRequests();
-    return new Response(post.body, {status: post.status, headers: post.headers});
-}
-
-function checkConnection() {
-    return Number(navigator.onLine);
-}
-
-async function synchroniseCaches() {
-  await sendCachedFileRequests();
-  await sendCachedPostRequests();
+    return new Response(post.body, { status: post.status, headers: post.headers });
 }
 
 async function sendCachedPostRequests() {
     const cache = await caches.open(postCache);
     const cacheKeys = await cache.keys(); 
+
     for (const cacheKey of cacheKeys) {
         const cachedResponse = await cache.match(cacheKey);
-        if (!cachedResponse) return;
+        if (!cachedResponse) continue;
+
         try {
             const cachedData = await cachedResponse.json();
-            const body = new FormData();
-            for (const [key, value] of Object.entries(cachedData.formData)) body.append(key, value);
-            const response = await fetch(cachedData.url, { method: 'POST', body });
+            const formData = new FormData();
+            for (const [key, value] of Object.entries(cachedData.formData)) {
+                if (value.type === 'file') {
+                    const blob = new Blob([value.data], { type: value.mimeType });
+                    const file = new File([blob], value.name, { type: value.mimeType });
+                    formData.append(key, file);
+                } else {
+                    formData.append(key, value);
+                }
+            }
+
+            const response = await fetch(cachedData.url, { method: 'POST', body: formData });
             const deleteCaches = [400, 401, 403, 409];
-            response.ok || deleteCaches.includes(response.status) ? cache.delete(cacheKey) : console.log(messages.errors.postRequest, response.status);
+            response.ok || deleteCaches.includes(response.status) ? await cache.delete(cacheKey) : null;
+
             return response;
         } catch (error) {
-            console.log(messages.errors.postRequest, error);
-            return new Response(new Blob(), {status: 418, statusText: 'Request failed'});
-        }
-    }
-}
-
-function respondToClient(msg) {
-    self.clients.matchAll().then(clients => {
-        clients.forEach(client => {
-            client.postMessage(msg);
-        });
-    });
-}
-
-async function sendCachedFileRequests(fileKey) {
-    const cache = await caches.open(fileCache);
-    const cacheKeys = await cache.keys();
-    for (const cacheKey of cacheKeys) {
-        const cacheResponse = await cache.match(cacheKey);
-        try {
-            const body = await cacheResponse.formData();
-            const date = new Date().toLocaleString().replaceAll('/', '-').replaceAll(',', '');
-            if(fileKey) respondToClient({meta: body.get('meta'), data: {cachedPath: fileKey, 'Path': body.get('fileName'), id: body.get('EntityID'), UploadID: null, EntityID: body.get('EntityID'), Created: date, targetProp: 'uploads'}});
-            const response = await fetch(body.get('url'), { method: 'POST', body });
-            response.ok ? await cache.delete(cacheKey) : console.error(messages.errors.postRequest, response.status);
-            return new Response(response.body, {status: response.status, headers: response.headers});
-        } catch (error) {
-            console.log("file sync err", error);
-            return new Response(new Blob(), {status: 418, statusText: 'Request failed'});
+            console.error(messages.errors.postRequest, error);
+            return new Response(new Blob(), { status: 418, statusText: 'Request failed' });
         }
     }
 }
@@ -193,6 +162,50 @@ self.addEventListener('message', (event) => {
                 console.error('Error storing file in cache:', e);
             });
     } else if(event.data.action === actions.message.CHECK_STATUS) synchroniseCaches();
+});
+
+function respondToClient(msg) {
+    self.clients.matchAll().then(clients => {
+        clients.forEach(client => {
+            client.postMessage(msg);
+        });
+    });
+}
+
+function checkConnection() {
+    return Number(navigator.onLine);
+}
+
+async function synchroniseCaches() {
+  await sendCachedFileRequests();
+  await sendCachedPostRequests();
+}
+
+self.addEventListener('beforeinstallprompt', event => { 
+    event.preventDefault(); 
+    const installButton = document.querySelector('#installButton'); 
+    if (!installButton) return;
+    installButton.style.display = 'block'; 
+    installButton.addEventListener('click', () => { 
+        event.prompt(); 
+    });
+});
+
+self.addEventListener('install', e => {
+    e.waitUntil(self.skipWaiting());
+});
+
+self.addEventListener('activate', e => {
+    e.waitUntil(self.clients.claim());
+    e.waitUntil(
+        caches.keys().then(cacheNames => {
+            return Promise.all(
+                cacheNames.map(cache => {
+                    if (cache !== cacheName) return caches.delete(cache);
+                })
+            );
+        })
+    );
 });
 
 self.addEventListener('online', event => {

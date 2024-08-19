@@ -12,7 +12,7 @@ class PushController extends Controller {
         if ($this->request->isGet())
             $this->response->ok((new PushModel())->getPublicKey());
 
-        (new PushModel())->truncate();
+        (new PushModel())->deleteWhere(['UserID' => CoreFunctions::applicationUser()->key()]);
 
         $object = json_decode($this->requestBody->body->body);
         $push = new PushModel();
@@ -30,12 +30,14 @@ class PushController extends Controller {
     public function ping() {
         $this->denyPOSTRequest();
 
-        if (!CoreFunctions::applicationUser()) $this->response->notFound();
+        $cPush = (new PushModel())->find('UserID', $this->requestBody->body->userID);
 
-        $sub = (new PushModel())->find('UserID', $this->requestBody->body->userID);
-        $sub->run((array)$sub->getData(), 'qwd');
+        if (!$cPush->exists())
+            $this->response->notFound(ths('User not found'));
 
-        $this->response->ok();
+        $cPush->run((array)$cPush->getData(), $this->requestBody->body->message);
+
+        $this->response->ok(ths('User pinged'));
     }
     
 }

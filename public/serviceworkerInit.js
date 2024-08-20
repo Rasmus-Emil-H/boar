@@ -1,22 +1,31 @@
 window[appName].serviceWorkerInit = {
     init: async function() {
         try {
-            const registration = await navigator.serviceWorker.register('/serviceworkerInstall.js', {scope: '/'});
+            if (!await navigator.serviceWorker.getRegistration()) await navigator.serviceWorker.register('/serviceworkerInstall.js', {scope: '/'});
+
             const permission = await Notification.requestPermission();
 
             if (permission !== 'granted') return;
 
-            const key = await this.urlB64ToUint8Array(await fetch('/push/subscribe').then(response => response.json()).then(json => json.responseJSON));
-
-            const subscription = await registration.pushManager.getSubscription() || await registration.pushManager.subscribe({
-                userVisibleOnly: true,
-                applicationServerKey: key
-            });
-
-            return await this.sendSubscriptionToServer(subscription);
+            this.checkPubSub();
         } catch (error) {
             console.error('Service Worker registration or Push Notification subscription failed:', error);
         }
+    },
+    checkPubSub: async function() {
+        const registration = await navigator.serviceWorker.getRegistration();
+
+        const hasPubSub = await registration.pushManager.getSubscription();
+        if (hasPubSub) return;
+
+        const key = await this.urlB64ToUint8Array(await fetch('/push/subscribe').then(response => response.json()).then(json => json.responseJSON));
+
+        const subscription = await registration.pushManager.getSubscription() || await registration.pushManager.subscribe({
+            userVisibleOnly: true,
+            applicationServerKey: key
+        });
+
+        this.sendSubscriptionToServer(subscription);
     },
     sendSubscriptionToServer: async function(subscription) {
         await $.post('/push/subscribe', {
@@ -24,10 +33,12 @@ window[appName].serviceWorkerInit = {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(subscription)
-        }).always(function(res) {
-            setTimeout(() => {
-                window[appName].components.toast('Subscribed to receive notifications', window[appName].constants.mdbootstrap.SUCCESS_CLASS);
-            }, 2000);
+        });
+    },
+    unregister: function() {
+        navigator.serviceWorker.getRegistrations().then(registrations => {
+            for (const registration of registrations)
+                registration.unregister();
         });
     },
     urlB64ToUint8Array(base64String) {
@@ -50,4 +61,5 @@ window[appName].serviceWorkerInit = {
     }
 };
 
-window[appName].serviceWorkerInit.init();
+// window[appName].serviceWorkerInit.init();
+// window[appName].serviceWorkerInit.unregister();

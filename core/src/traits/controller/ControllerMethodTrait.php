@@ -11,7 +11,7 @@ trait ControllerMethodTrait {
     private const ACTION_NOT_FOUND = 'Action was not found';
 
     public function denyGETRequest() {
-        if ($this->request->isGet()) 
+        if ($this->request->isGet())
             $this->response->methodNotAllowed();
     }
 
@@ -52,6 +52,9 @@ trait ControllerMethodTrait {
         $cEntity = $this->returnValidEntityIfExists();
 
         $request = $this->requestBody->body;
+
+        if (!$cEntity->exists() && isset($request->EntityID)) $cEntity = new $cEntity($request->EntityID);
+
         $response = $cEntity->dispatchHTTPMethod($request->action ?? $method, $request);
 
         $this->response->{$this->determineClientResponseMethod(dispatchedHTTPMethodResult: $response)}($response ?? '');

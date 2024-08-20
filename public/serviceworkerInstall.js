@@ -10,7 +10,7 @@ const postCache = 'post-requests-cache';
 const fileCache = 'file-cache';
 const tempOfflineCache = 'offline-cache';
 const login = '/auth/login';
-const origin = '://';
+const origin = ':/';
 
 const actions = {
     message: {
@@ -36,7 +36,7 @@ const messages = {
 
 self.addEventListener('fetch', e => {
     if (e.request.url === login && e.request.method === 'POST' && !navigator.onLine || e.request.url.includes('/push')) return;
-    if (e.request.method === 'POST') e.respondWith(cachePostRequest(e.request));
+    if (e.request.method === 'POST') e.respondWith(handlePostRequest(e.request));
     else {
         e.respondWith(
             fetch(e.request)
@@ -59,50 +59,65 @@ self.addEventListener('fetch', e => {
 |
 */
 
-async function cachePostRequest(request) {
-    const requestClone = request.clone();
-    const formData = await requestClone.formData();
-    const cacheKey = `${requestClone.url}/${Date.now()}`;
-    const cacheData = { request: request.clone(), formData, request: requestClone, url: request.url };
+async function handlePostRequest(request) {
+    const clonedRequest = request.clone();
+    const cacheKey = `${clonedRequest.url}|${Date.now()}`;
+
+    const formData = await clonedRequest.formData();
+    const serializedData = [];
+
+    for (const [key, value] of formData.entries()) {
+        if (value instanceof File) {
+            const fileData = {
+                key,
+                name: value.name,
+                type: value.type,
+                data: await value.arrayBuffer()
+            };
+            serializedData.push(fileData);
+        } else {
+            serializedData.push({ key, value });
+        }
+    }
+
     const cache = await caches.open(postCache);
-    await cache.put(cacheKey, new Response(JSON.stringify(cacheData)));
-    const post = await sendCachedPostRequests();
-    return new Response(post.body, {status: post.status, headers: post.headers});
+    await cache.put(cacheKey, new Response(JSON.stringify(serializedData)));
+
+    const postResponse = await sendCachedPostRequests();
+    if (postResponse) return postResponse;
+
+    return new Response(null, { status: 500, statusText: "Failed to send cached POST request" });
 }
 
 async function sendCachedPostRequests() {
     const cache = await caches.open(postCache);
-    const cacheKeys = await cache.keys(); 
-    for (const cacheKey of cacheKeys) {
-        const cachedResponse = await cache.match(cacheKey);
-        if (!cachedResponse) return;
+    const cacheKeys = await cache.keys();
+
+    for (const requestKey of cacheKeys) {
+        const cachedResponse = await cache.match(requestKey);
+        if (!cachedResponse) continue;
+
         try {
-            const cachedData = await cachedResponse.formData();
-            const response = await fetch(body.get('url'), { method: 'POST', cachedData });
-            const deleteCaches = [400, 401, 403, 409];
-            response.ok || deleteCaches.includes(response.status) ? cache.delete(cacheKey) : console.log(messages.errors.postRequest, response.status);
+            const cachedData = await cachedResponse.json();
+            const formData = new FormData();
+
+            for (const item of cachedData) {
+                if (item.data) {
+                    const file = new File([new Uint8Array(item.data)], item.name, { type: item.type });
+                    formData.append(item.key, file);
+                } else {
+                    formData.append(item.key, item.value);
+                }
+            }
+
+            const response = await fetch(requestKey.url, {method: 'POST', body: formData});
+
+            const deleteCaches = [400, 401, 404, 403, 409];
+            if (response.ok || deleteCaches.includes(response.status)) await cache.delete(requestKey);
+
             return response;
         } catch (error) {
-
-        }
-    }
-}
-
-async function sendCachedFileRequests(fileKey) {
-    const cache = await caches.open(fileCache);
-    const cacheKeys = await cache.keys();
-    for (const cacheKey of cacheKeys) {
-        const cacheResponse = await cache.match(cacheKey);
-        try {
-            const body = await cacheResponse.formData();
-            const date = new Date().toLocaleString().replaceAll('/', '-').replaceAll(',', '');
-            if(fileKey) respondToClient({meta: body.get('meta'), data: {cachedPath: fileKey, 'Path': body.get('fileName'), id: body.get('EntityID'), UploadID: null, EntityID: body.get('EntityID'), Created: date, targetProp: 'uploads'}});
-            const response = await fetch(body.get('url'), { method: 'POST', body });
-            response.ok ? await cache.delete(cacheKey) : console.error(messages.errors.postRequest, response.status);
-            return new Response(response.body, {status: response.status, headers: response.headers});
-        } catch (error) {
-            console.log("file sync err", error);
-            return new Response(new Blob(), {status: 418, statusText: 'Request failed'});
+            console.error('Error sending cached POST request:', error);
         }
     }
 }
@@ -145,17 +160,8 @@ self.addEventListener('install', e => {
     e.waitUntil(self.skipWaiting());
 });
 
-self.addEventListener('activate', e => {
+self.addEventListener('activate', (e) => {
     e.waitUntil(self.clients.claim());
-    e.waitUntil(
-        caches.keys().then(cacheNames => {
-            return Promise.all(
-                cacheNames.map(cache => {
-                    if (cache !== cacheName) return caches.delete(cache);
-                })
-            );
-        })
-    );
 });
 
 self.addEventListener('push', function(event) {

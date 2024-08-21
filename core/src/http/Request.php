@@ -122,9 +122,7 @@ class Request {
     }
 
     public function setHeaders(array $headers): void {
-        array_map(function($header) {
-            header($header);
-        }, $headers);
+        array_map(fn($header) => header($header), $headers);
     }
 
     private function checkAmountOfRequest(): void {

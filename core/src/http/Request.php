@@ -121,6 +121,12 @@ class Request {
         return json_decode(file_get_contents('php://input'));
     }
 
+    public function setHeaders(array $headers): void {
+        array_map(function($header) {
+            header($header);
+        }, $headers);
+    }
+
     private function checkAmountOfRequest(): void {
         if (IS_CLI) return;
         $this->setRatelimiting();

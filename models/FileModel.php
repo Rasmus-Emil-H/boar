@@ -1,5 +1,15 @@
 <?php
 
+/**
+|----------------------------------------------------------------------------
+| Base model for file entities in the app
+|----------------------------------------------------------------------------
+|
+| @author RE_WEB
+| @package app\models
+|
+*/
+
 namespace app\models;
 
 use \app\core\src\database\Entity;
@@ -64,7 +74,7 @@ final class FileModel extends Entity {
 
 		$b64 = 'data:image/' . $arguments->file->getFileType() . ';base64,' . base64_encode(file_get_contents($arguments->destination));
 
-		return ['b64' => $b64, 'id' => $this->key(), 'created' => date('d-m-y H:i', strtotime('now'))];
+		return ['b64' => $b64, 'id' => $this->key(), 'created' => date('d-m-y H:i', strtotime('now')), 'type' => $this->get('Type')];
 	}
 
 }

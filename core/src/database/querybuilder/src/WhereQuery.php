@@ -121,6 +121,11 @@ trait WhereQuery {
         return $this;
     }
 
+    public function isToday(string $field): self {
+        $this->upsertQuery('DATE('.$field.') = ' . Constants::CURDATE);
+        return $this; 
+    }
+
     public function beforeToday(string $field = 'CreatedAt'): self {
         $this->where([$field => Constants::LOWER_THAN_CURRENT_DAY]);
         return $this;

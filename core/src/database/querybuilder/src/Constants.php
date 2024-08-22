@@ -41,6 +41,7 @@ class Constants {
     public const DEFAULT_SQL_DATE_FORMAT = 'Y/m/d';
     public const DEFAULT_FRONTEND_DATE_FROM_INDICATOR = 'from-';
     public const DEFAULT_FRONTEND_DATE_TO_INDICATOR = 'to-';
+    public const CURDATE = 'CURDATE()';
     public const LOWER_THAN_CURRENT_DAY = ' < CURRENT_DATE() ';
     public const HIGHER_THAN_CURRENT_DAY = ' > CURRENT_DATE() ';
 

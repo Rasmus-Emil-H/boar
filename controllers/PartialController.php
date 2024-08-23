@@ -9,7 +9,7 @@ class PartialController extends Controller {
     public function navbar() {
       	$this->setView('navbar', 'partials/');
 		$this->setData([
-			'navbar' => $this->getView(), 
+			'navbar' => $this->getView(),
 			'navigationItems' => [
 				'<a class="dropdown-item" href="/user/profile">Profile</a>',
 				'<a class="dropdown-item" href="/order">Orders</a>',

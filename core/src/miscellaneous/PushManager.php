@@ -18,7 +18,7 @@
 
 namespace app\core\src\miscellaneous;
 
-use app\core\src\http\Curl;
+use \app\core\src\http\Curl;
 use \Firebase\JWT\JWT;
 
 class PushManager {

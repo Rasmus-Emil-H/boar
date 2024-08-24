@@ -131,12 +131,30 @@ trait EntityRelationsTrait {
     }
 
     /**
+     * Find entity on table where key and value match whatever
+     */
+
+    public function entityFromTableBasedOnKeyValuePair(string $relatedEntity, string $column, string $value, string $table) {
+        $queryBuilder = new QueryBuilder($relatedEntity, $table, '');
+        return $queryBuilder->select()->where([$column => $value]);
+    }
+
+    /**
      * Target specific pivot
      */
 
     public function hasManyToMany(string $relatedEntity, string $pivot) {
-        $querBuilder = new QueryBuilder($relatedEntity, $pivot, '');
-        return $querBuilder->select()->where([Table::ENTITY_TYPE_COLUMN => $this->getTableName(), Table::ENTITY_ID_COLUMN => $this->key()]);
+        $queryBuilder = new QueryBuilder($relatedEntity, $pivot, '');
+        return $queryBuilder->select()->where([Table::ENTITY_TYPE_COLUMN => $this->getTableName(), Table::ENTITY_ID_COLUMN => $this->key()]);
+    }
+
+    /**
+     * Target specific pivot by some polymorhic relation
+     */
+
+     public function hasManyToManyIntrovertedPolymorphic(string $relatedEntity, string $pivot, ...$keys) {
+        $queryBuilder = new QueryBuilder($relatedEntity, $pivot, '');
+        return $queryBuilder->select()->where(...$keys);
     }
 
     /**

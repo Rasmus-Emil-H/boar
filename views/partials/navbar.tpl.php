@@ -13,7 +13,7 @@
                 <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
                     <?php foreach ($navigationItems as $navItem): ?>
                         <li class="nav-item">
-                            <a class="nav-link" aria-current="page" href="<?= htmlspecialchars($navItem->href); ?>"><?= ths($navItem->title); ?></a>
+                            <a class="nav-link" aria-current="page" href="<?= hs($navItem->href); ?>"><?= ths($navItem->title); ?></a>
                         </li>
                     <?php endforeach; ?>
                 </ul>

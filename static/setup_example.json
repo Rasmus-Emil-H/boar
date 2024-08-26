@@ -95,6 +95,18 @@
         "table": {
             "paginationDefaultEntityLength": 50,
             "maximumPageInterval": 20
+        },
+        "menus": {
+            "user": [
+                {
+                    "href": "/user/profile",
+                    "title": "Profile"
+                },
+                {
+                    "href": "/auth/logout",
+                    "title": "Log out"
+                }
+            ]
         }
     },
     "integrations": {

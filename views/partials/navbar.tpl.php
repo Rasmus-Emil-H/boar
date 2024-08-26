@@ -11,7 +11,11 @@
             </div>
             <div class="offcanvas-body">
                 <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
-                    <?php \app\core\src\miscellaneous\CoreFunctions::loopAndEcho($navigationItems); ?>
+                    <?php foreach ($navigationItems as $navItem): ?>
+                        <li class="nav-item">
+                            <a class="nav-link" aria-current="page" href="<?= htmlspecialchars($navItem->href); ?>"><?= ths($navItem->title); ?></a>
+                        </li>
+                    <?php endforeach; ?>
                 </ul>
             </div>
         </div>

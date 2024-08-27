@@ -205,6 +205,15 @@ trait EntityRelationsTrait {
     }
 
     /**
+     * Remove custom relation
+     */
+
+     public function deleteCustomRelation($table, array $keys) {
+        $queryBuilder = new QueryBuilder($this, $table, $this->key());
+        return $queryBuilder->delete()->where($keys)->run();
+    }
+
+    /**
      * Remove specific relation
      */
 

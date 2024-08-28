@@ -131,15 +131,6 @@ trait EntityRelationsTrait {
     }
 
     /**
-     * Target specific pivot
-     */
-
-     public function hasOnePolymorphic(string $relatedEntity, string $pivot) {
-        $queryBuilder = new QueryBuilder($relatedEntity, $pivot, '');
-        return $queryBuilder->select()->where([Table::ENTITY_TYPE_COLUMN => $this->getTableName(), Table::ENTITY_ID_COLUMN => $this->key()]);
-    }
-
-    /**
      * Find entity on table where key and value match whatever
      */
 
@@ -193,6 +184,15 @@ trait EntityRelationsTrait {
     public function hasManyPolymorphic(string $class) {
         $polyMorphicEntity = $this->getInstanceOf($class);
         return $polyMorphicEntity->search([Table::ENTITY_TYPE_COLUMN => $this->getTableName(), Table::ENTITY_ID_COLUMN => $this->key()]);
+    }
+
+    /**
+     * Target specific pivot
+     */
+
+     public function hasOnePolymorphic(string $relatedEntity, string $pivot) {
+        $queryBuilder = new QueryBuilder($relatedEntity, $pivot, '');
+        return $queryBuilder->select()->where([Table::ENTITY_TYPE_COLUMN => $this->getTableName(), Table::ENTITY_ID_COLUMN => $this->key()]);
     }
 
     /**

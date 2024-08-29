@@ -87,9 +87,11 @@ class Image {
         if (!isset($exif['Orientation'])) return 0;
 
         return match ($exif['Orientation']) {
+            1 => 0,
             3 => 180,
             6 => -90,
-            8 => 90
+            8 => 90,
+            default => 0
         };
     }
 

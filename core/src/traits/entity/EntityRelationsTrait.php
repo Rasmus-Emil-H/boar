@@ -45,7 +45,7 @@ trait EntityRelationsTrait {
     public function hasOne(string $entity, string $entityKey) {
         $instance = $this->getInstanceOf($entity);
         $queryBuilder = new QueryBuilder($entity, $this->getTableName(), $this->key());
-        return $queryBuilder->select()->where([$instance->getKeyField() => $entityKey])->run();
+        return $queryBuilder->select()->where([$instance->getKeyField() => $entityKey])->run('fetch');
     }
 
     /**

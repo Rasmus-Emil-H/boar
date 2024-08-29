@@ -1,7 +1,7 @@
 window[appName].serviceWorkerInit = {
     init: async function() {
         try {
-            if (!await navigator.serviceWorker.getRegistration()) await navigator.serviceWorker.register('/serviceworkerInstall.js', {scope: '/'});
+            if (!await navigator.serviceWorker.getRegistration()) await navigator.serviceWorker.register('/serviceworkerInstall.js', {scope: '/', type: 'module'});
 
             const permission = await Notification.requestPermission();
 

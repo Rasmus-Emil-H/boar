@@ -55,6 +55,44 @@ class Image {
             [self::WIDTH => self::DEFAULT_RESIZE_HEIGHT * $aspectRatio, self::HEIGHT => self::DEFAULT_RESIZE_HEIGHT];
     }
 
+    /**
+     * Legacy
+     * Keep as a reminder
+     */
+    
+    private function realSize(int $maxWidth = self::DEFAULT_RESIZE_WIDTH, int $maxHeight = self::DEFAULT_RESIZE_HEIGHT) {
+        list($originalWidth, $originalHeight) = getimagesize($this->imagePath);
+        
+        if ($originalWidth > $maxWidth || $originalHeight > $maxHeight) {
+            $aspectRatio = $originalWidth / $originalHeight;
+    
+            if ($maxWidth / $aspectRatio > $maxHeight) {
+                $newWidth = $maxHeight * $aspectRatio;
+                $newHeight = $maxHeight;
+            } else {
+                $newWidth = $maxWidth;
+                $newHeight = $maxWidth / $aspectRatio;
+            }
+        } else {
+            $newWidth = $originalWidth;
+            $newHeight = $originalHeight;
+        }
+    
+        return ['width' => $newWidth, 'height' => $newHeight];
+    }
+
+    private function getImageRotationAngle(string $imagePath): int {
+        $exif = @exif_read_data($imagePath);
+    
+        if (!isset($exif['Orientation'])) return 0;
+
+        return match ($exif['Orientation']) {
+            3 => 180,
+            6 => -90,
+            8 => 90
+        };
+    }
+
     public function resizeImage(int $newWidth = self::DEFAULT_RESIZE_WIDTH, int $newHeight = self::DEFAULT_RESIZE_HEIGHT): bool {
         $imageInfo = getimagesize($this->imagePath);
 
@@ -66,7 +104,9 @@ class Image {
         if ($gdImage === null) return false;
 
         $dimensions = $this->evaluateDimensions([$newWidth, $newHeight]);
-        $resized = imagescale($gdImage, $dimensions[self::WIDTH], $dimensions[self::HEIGHT], IMG_BILINEAR_FIXED);
+        $resized = imagescale($gdImage, $dimensions[self::WIDTH], $dimensions[self::HEIGHT]);
+
+        imagerotate($gdImage, $this->getImageRotationAngle($this->imagePath), 0);
 
         if ($resized === false) {
             imagedestroy($gdImage);

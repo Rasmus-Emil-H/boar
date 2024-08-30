@@ -15,23 +15,27 @@ const config = {
 
             return true;
         },
-        GET: async function(request) {
+        GET: async function (request) {
             try {
                 const clone = request.clone();
                 const cache = await caches.open(config.caches.GETCache);
         
-                const response = await fetch(clone.url, {
-                    redirect: 'follow',
-                });
+                const response = await fetch(clone, { redirect: 'manual' });
         
-                if (response.ok && !response.redirected)
-                    await cache.put(request, response.clone());
+                if (response.ok && !response.redirected) await cache.put(request, response.clone());
         
                 return response;
             } catch (error) {
-                return caches.match(request) || new Response('Network error', { status: 500 });
+                console.error('Fetch encountered an error:', error);
+                // Attempt to serve from cache if available
+                const cachedResponse = await caches.match(request);
+                if (cachedResponse) {
+                    return cachedResponse;
+                }
+                return new Response('Network error', { status: 500 });
             }
         },
+        
         POST: async function(request) {
             const clonedRequest = request.clone();
             const formData = await clonedRequest.formData();

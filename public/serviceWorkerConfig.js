@@ -16,28 +16,30 @@ const config = {
             return true;
         },
         GET: async function(request) {
-            const clone = request.clone();
-            const cache = await caches.open(config.caches.GETCache);  
+            try {
+                const clone = request.clone();
+                const cache = await caches.open(config.caches.GETCache);
         
-            // const cacheKeys = await cache.keys();
+                const response = await fetch(clone.url, {
+                    redirect: 'follow',
+                });
         
-            // for (const requestKey of cacheKeys) {
-            //     const cachedResponse = await cache.match(requestKey);
-            //     if (cachedResponse) return cachedResponse;
-            // }
+                if (response.ok && !response.redirected)
+                    await cache.put(request, response.clone());
         
-            const response = await fetch(clone.url);
-            await cache.put(request, response.clone());
-            return response;
+                return response;
+            } catch (error) {
+                return caches.match(request) || new Response('Network error', { status: 500 });
+            }
         },
         POST: async function(request) {
             const clonedRequest = request.clone();
             const formData = await clonedRequest.formData();
             const formDataToSend = new FormData();
+            const cache = await caches.open(config.caches.GETCache);
         
-            for (const [key, value] of formData.entries()) {
+            for (const [key, value] of formData.entries())
                 formDataToSend.append(key, value);
-            }
         
             try {
                 return await fetch(clonedRequest.url, {

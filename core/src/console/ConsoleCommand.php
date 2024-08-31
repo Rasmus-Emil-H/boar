@@ -26,7 +26,7 @@ class ConsoleCommand {
     }
 
     protected function printUsage() {
-        echo "Usage: php boar {{commands}} {{args}}\n";
+        echo "Usage: php boar {{command}} {{args}}\n";
     }
 
     

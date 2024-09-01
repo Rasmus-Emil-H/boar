@@ -2,12 +2,14 @@
 
 namespace app\core\src\console\cmds;
 
+use \app\core\src\miscellaneous\CoreFunctions;
+
 class CreateEntity {
 
     protected array $entityTypes = ['controller', 'model', 'migration', 'view'];
 
     public function run(array $args): void {
-        $entityName = $args[1];
+        $entityName = CoreFunctions::first($args)->scalar;
         
         $this->checkEntityExistence($entityName);
 

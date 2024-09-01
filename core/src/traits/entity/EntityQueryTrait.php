@@ -198,4 +198,9 @@ trait EntityQueryTrait {
         return $this->crud($arguments, 'edit');
     }
 
+    public function getEntityTableFields(): self {
+        $this->bootstrapQuery()->where()->limit(1)->run();
+        return $this;
+    }
+
 }

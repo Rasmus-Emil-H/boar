@@ -21,7 +21,7 @@ class ConsoleCommand {
     }
 
     private function removeRedundantArgs() {
-        unset($this->arguments[0]);
+        unset($this->arguments[0], $this->arguments[1]);
     }
 
     public function run() {

@@ -39,7 +39,7 @@ class ConsoleCommand {
     }
 
     protected function printUsage() {
-        echo "Usage: php autologik {{command}} {{args}";
+        echo "Usage: php boar {{command}} {{args}";
     }
 
     

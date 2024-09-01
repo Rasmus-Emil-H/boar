@@ -3,30 +3,43 @@
 namespace app\core\src\console;
 
 use \app\core\src\console\cmds\CreateEntity;
+use \app\core\src\console\cmds\SeedDatabase;
 
 class ConsoleCommand {
 
-    public function run($argv) {
-        if (count($argv) < 3) {
-            $this->printUsage();
-            return;
-        }
+    private string $command;
+    private array $arguments;
 
-        $command = $argv[1];
-        $entityName = $argv[2];
+    public function __construct(array $arguments) {
+        $this->arguments = $arguments;
+        $this->setCommand();
+        $this->removeRedundantArgs();
+    }
 
-        switch ($command) {
+    private function setCommand() {
+        $this->command = $this->arguments[1];
+    }
+
+    private function removeRedundantArgs() {
+        unset($this->arguments[0]);
+    }
+
+    public function run() {
+        switch ($this->command) {
             case 'create-entity':
-                (new CreateEntity())->createEntity($entityName);
+                (new CreateEntity())->run($this->arguments);
+                break;
+            case 'seed-database':
+                (new SeedDatabase())->run($this->arguments);
                 break;
             default:
-                echo "Unknown command: $command\n";
+                echo "Unknown command: $this->command\n";
                 $this->printUsage();
         }
     }
 
     protected function printUsage() {
-        echo "Usage: php boar {{command}} {{args}}\n";
+        echo "Usage: php autologik {{command}} {{args}";
     }
 
     

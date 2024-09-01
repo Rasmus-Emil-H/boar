@@ -6,7 +6,9 @@ class CreateEntity {
 
     protected array $entityTypes = ['controller', 'model', 'migration', 'view'];
 
-    public function createEntity(string $entityName): void {
+    public function run(array $args): void {
+        $entityName = $args[1];
+        
         $this->checkEntityExistence($entityName);
 
         echo "Creating entity: $entityName\n";

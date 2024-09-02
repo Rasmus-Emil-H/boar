@@ -4,12 +4,15 @@ const config = {
         POSTCache: 'POSTCache',
         fileCache: 'FileCache'
     },
+    externalResources: [
+        'externalresource1', 'externalresource2'
+    ],
     request: {
         validMethods: ['GET', 'POST']
     },
     methods: {
         validateRequest: function (e) {
-            if (e.request.url.includes('google')) return false;
+            if (this.externalResources.contains(e.request.url)) return false;
             if (e.request.url === config.psudo.login && e.request.method === 'POST' && !navigator.onLine || e.request.url.includes('/push')) return false;
             if (!config.request.validMethods.includes(e.request.method)) return false;
 

@@ -17,7 +17,7 @@ const config = {
         },
         GET: async function (request) {
             try {
-                const clone = request.clone();
+                const clone = await request.clone();
                 const cache = await caches.open(config.caches.GETCache);
         
                 const response = await fetch(clone, { redirect: 'manual' });
@@ -27,11 +27,10 @@ const config = {
                 return response;
             } catch (error) {
                 console.error('Fetch encountered an error:', error);
-                // Attempt to serve from cache if available
+
                 const cachedResponse = await caches.match(request);
-                if (cachedResponse) {
-                    return cachedResponse;
-                }
+                if (cachedResponse) return cachedResponse;
+
                 return new Response('Network error', { status: 500 });
             }
         },
@@ -46,12 +45,16 @@ const config = {
                 formDataToSend.append(key, value);
         
             try {
-                return await fetch(clonedRequest.url, {
+                const response = await fetch(clonedRequest.url, {
                     method: 'POST',
                     body: formDataToSend,
                 });
+
+                if (!response.ok) cache.put(request, clonedRequest);
+
+                return response;
             } catch (error) {
-                return new Response(null, { status: 500, statusText: 'Failed to send POST request' });
+                return new Response(null, { status: 418, statusText: 'Failed to send POST request' });
             }
         }
     },

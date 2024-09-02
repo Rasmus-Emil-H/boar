@@ -3,6 +3,7 @@
 namespace app\models;
 
 use \app\core\src\database\Entity;
+use \app\core\src\database\EntityMetaData;
 use \app\core\src\miscellaneous\CoreFunctions;
 use \app\core\src\miscellaneous\Hash;
 
@@ -80,7 +81,7 @@ final class UserModel extends Entity {
 	}
 
 	public function checkPasswordResetToken(string|bool $resetToken): array {
-		return $this->getMetaData()->like(['Data' => 'resetPassword='.$resetToken])->run();
+		return (new EntityMetaData())->query()->select()->like(['Data' => 'resetPassword='.$resetToken])->run();
 	}
 
 	public function validatePassword(string $password) {

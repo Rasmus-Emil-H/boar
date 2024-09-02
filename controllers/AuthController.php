@@ -25,12 +25,12 @@ class AuthController extends Controller {
     }
 
     public function twofactor() {
-        if ($this->request->isGet()) return $this->setView('twofactor');
+        if ($this->request->isGet()) return $this->setClientLayoutStructure('auth', 'twoFactor');
         $this->response->setResponse(200, ['SMS SEND']);
     }
 
     public function requestNewPassword() {
-        if ($this->request->isGet()) return $this->setView('requestNewPassword');
+        if ($this->request->isGet()) return $this->setClientLayoutStructure('auth', 'requestNewPassword');
         (new UserModel())->requestPasswordReset($this->requestBody->body->email);
     }
 
@@ -43,7 +43,7 @@ class AuthController extends Controller {
     public function resetPassword() {
         if ($this->request->isGet()) {
             $this->validatePasswordResetToken();
-            return $this->setView('resetPassword');
+            return $this->setClientLayoutStructure('auth', 'resetPassword');
         }
         
         $newPassword = $this->requestBody->body->password;

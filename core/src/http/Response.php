@@ -63,6 +63,10 @@ final class Response {
         $this->setResponse(self::HTTP_OK, [$key => $message]);
     }
 
+    public function customResponse(string $key, string|array $message = '', int $state = self::HTTP_OK) {
+        $this->setResponse($state, [$key => $message]);
+    }
+
     public function ok(string|array $message = '') {
         if (empty($message)) $message = $this->returnStdSuccesMessage();
         

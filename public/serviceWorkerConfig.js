@@ -12,7 +12,7 @@ const config = {
     },
     methods: {
         validateRequest: function (e) {
-            if (this.externalResources.contains(e.request.url)) return false;
+            if (this.externalResources.includes(e.request.url)) return false;
             if (e.request.url === config.psudo.login && e.request.method === 'POST' && !navigator.onLine || e.request.url.includes('/push')) return false;
             if (!config.request.validMethods.includes(e.request.method)) return false;
 

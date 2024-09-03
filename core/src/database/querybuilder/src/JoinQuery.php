@@ -18,13 +18,13 @@ trait JoinQuery {
 
     public function leftJoin(string $table, string $on, array $and = []): self {
         $implodedAnd = (count($and) > 0 ? Constants::AND : '') . implode(Constants::AND, $and);
-        $this->upsertQuery(Constants::LEFT_JOIN . "{$table} {$on} {$implodedAnd} ");
+        $this->upsertQuery(Constants::LEFT_JOIN . "{$table} ON({$on}) {$implodedAnd} ");
         return $this;
     }
 
     public function rightJoin(string $table, string $on, array $and = []): self {
         $implodedAnd = (count($and) > 0 ? Constants::AND : '') . implode(Constants::AND, $and);
-        $this->upsertQuery(Constants::RIGHT_JOIN . "{$table} {$on} {$implodedAnd} ");
+        $this->upsertQuery(Constants::RIGHT_JOIN . "{$table} ON({$on}) {$implodedAnd} ");
         return $this;
     }
 

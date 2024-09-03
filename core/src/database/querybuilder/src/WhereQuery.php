@@ -41,9 +41,8 @@ trait WhereQuery {
 
         $selector = preg_replace(Constants::DEFAULT_REGEX_REPLACE_PATTERN, '', $selector);
         $sqlValue = date(Constants::DEFAULT_SQL_DATE_FORMAT, strtotime($sqlValue));
-        $arrow = CoreFunctions::last(explode('.', $order))->scalar === 'from' ? '>' : '<';
 
-        $this->upsertQuery($this->checkStart() . (isset($table) && $table ? $table . '.' : '') . "{$field} " . $arrow . "= :{$selector}");
+        $this->upsertQuery($this->checkStart() . (isset($table) && $table ? $table . '.' : '') . "{$field} = :{$selector}");
         $this->updateQueryArgument($selector, $sqlValue);
     }
 

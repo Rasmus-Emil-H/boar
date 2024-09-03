@@ -5,14 +5,20 @@ const config = {
         fileCache: 'FileCache'
     },
     externalResources: [
-        'externalresource1', 'externalresource2'
+        'maps', 'fontawesome'
     ],
     request: {
         validMethods: ['GET', 'POST']
     },
     methods: {
         validateRequest: function (e) {
-            if (config.externalResources.includes(e.request.url)) return false;
+            const test = config.externalResources.map(function(item) {
+                const skip = new RegExp(`/${item}/`);
+                return skip.test(e.request.url);
+            });
+
+            if (test) return false;
+
             if (e.request.url === config.psudo.login && e.request.method === 'POST' && !navigator.onLine || e.request.url.includes('/push')) return false;
             if (!config.request.validMethods.includes(e.request.method)) return false;
 
@@ -23,7 +29,7 @@ const config = {
                 const clone = await request.clone();
                 const cache = await caches.open(config.caches.GETCache);
         
-                const response = await fetch(clone, { redirect: 'manual' });
+                const response = await fetch(clone);
         
                 if (response.ok && !response.redirected) await cache.put(request, response.clone());
         

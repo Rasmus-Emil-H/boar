@@ -35,6 +35,7 @@ class Table {
     private const TEXT_COLUMN_TYPE      = 'TEXT';
     private const UUID_COLUMN_NAME      = 'UUID';
     private const BOOLEAN_COLUMN_TYPE   = 'BOOLEAN';
+    private const ENUM_COLUMN_TYPE      = 'ENUM';
     private const PRIMARY_KEY           = 'PRIMARY_KEY';
     private const TIMESTAMP             = 'TIMESTAMP DEFAULT CURRENT_TIMESTAMP';
 
@@ -127,6 +128,11 @@ class Table {
         if (!$foreignKeyCheck) return $this;
 
         $foreignKeyCheck->addConstraint(['ON UPDATE CASCADE' => null]);
+        return $this;
+    }
+
+    public function enum(string $columnName): self {
+        $this->createColumn($columnName, self::ENUM_COLUMN_TYPE);
         return $this;
     }
 

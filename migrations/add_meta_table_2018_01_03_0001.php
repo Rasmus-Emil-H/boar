@@ -10,6 +10,7 @@ class add_meta_table_2018_01_03_0001 {
             $table->increments('MetaID');
             $table->varchar('EntityType', 20);
             $table->integer('EntityID', 10);
+            $table->varchar('Type', 50);
             $table->varchar('IP', 30);
             $table->text('Data');
             $table->primaryKey('MetaID');

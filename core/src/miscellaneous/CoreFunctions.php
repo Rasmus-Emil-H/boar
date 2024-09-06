@@ -16,8 +16,10 @@ final class CoreFunctions {
 
     public static function displayDD($input, $title = 'Debugging'): void {
         if (self::app()::isCli()) exit($input);
-        echo '<pre style="padding: 2rem; background-color: #3a6b39; color: white; border-radius: 4px;margin-top: 10px;text-wrap:wrap;" class="debug">';
-        echo '<h2 class="text-center">' . $title . '</h2><hr><p style="font-size:.5rem;">';
+        
+        echo '<style>* {margin:0;padding:0;box-sizing:border-box;color:black;font-weight:100;}</style>';
+        echo '<pre style="background-color: #a3b18a; color: white; text-wrap:wrap;width:100vw;height:100vh;display:flex;justify-content:center;align-items:center;flex-direction:column;" class="debug">';
+        echo '<h2 class="text-center">' . $title . '</h2><hr><p style="font-size:1.5rem;">';
         var_dump($input);
         if ($title) echo '</p><hr /><h2 class="text-center">End of ' . $title . '</h2></pre>';
     }

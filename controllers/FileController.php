@@ -49,8 +49,9 @@ class FileController extends Controller {
 
         $cFile = $this->returnValidEntityIfExists();
         $cFile->requireExistence();
+        $file = new File($cFile->get('Path'));
 
-        return $this->response->customResponse('file', base64_encode(file_get_contents($cFile->get('Path'))));
+        return $this->response->customResponse('file', 'data:image/' . $file->getFileType() . ';base64, ' . base64_encode(file_get_contents($cFile->get('Path'))));
     }
 
     private function validateFileRequest(): void {

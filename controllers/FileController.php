@@ -44,6 +44,15 @@ class FileController extends Controller {
         }
 	}
 
+    public function view() {
+        $this->denyPOSTRequest();
+
+        $cFile = $this->returnValidEntityIfExists();
+        $cFile->requireExistence();
+
+        return $this->response->customResponse('file', base64_encode(file_get_contents($cFile->get('Path'))));
+    }
+
     private function validateFileRequest(): void {
         $this->denyGETRequest();
         

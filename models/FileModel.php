@@ -14,6 +14,7 @@ namespace app\models;
 
 use \app\core\src\database\Entity;
 use \app\core\src\database\table\Table;
+use \app\core\src\factories\EntityFactory;
 use \app\core\src\File;
 use \app\core\src\miscellaneous\CoreFunctions;
 use \app\core\src\miscellaneous\Hash;
@@ -71,6 +72,8 @@ final class FileModel extends Entity {
 				Table::ENTITY_ID_COLUMN => $arguments->body->entityID, 
 				$this->getKeyField() => $this->key()
 			]);
+		
+		(new EntityFactory(['handler' => substr($arguments->body->entityType, 0, -1), 'key' => $arguments->body->entityID]))->create()->addMetaData(['File added']);
 
 		$b64 = 'data:image/' . $arguments->file->getFileType() . ';base64,' . base64_encode(file_get_contents($arguments->destination));
 

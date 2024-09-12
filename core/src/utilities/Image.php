@@ -81,8 +81,8 @@ class Image {
         return ['width' => $newWidth, 'height' => $newHeight];
     }
 
-    private function getImageRotationAngle(string $imagePath): int {
-        $exif = @exif_read_data($imagePath);
+    private function getImageRotationAngle(): int {
+        $exif = @exif_read_data($this->imagePath);
     
         if (!isset($exif['Orientation'])) return 0;
 
@@ -108,7 +108,7 @@ class Image {
         $dimensions = $this->evaluateDimensions([$newWidth, $newHeight]);
         $resized = imagescale($gdImage, $dimensions[self::WIDTH], $dimensions[self::HEIGHT]);
 
-        imagerotate($gdImage, $this->getImageRotationAngle($this->imagePath), 0);
+        imagerotate($gdImage, $this->getImageRotationAngle(), 0);
 
         if ($resized === false) {
             imagedestroy($gdImage);

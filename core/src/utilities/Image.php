@@ -55,32 +55,6 @@ class Image {
             [self::WIDTH => self::DEFAULT_RESIZE_HEIGHT * $aspectRatio, self::HEIGHT => self::DEFAULT_RESIZE_HEIGHT];
     }
 
-    /**
-     * Legacy
-     * Keep as a reminder
-     */
-    
-    private function realSize(int $maxWidth = self::DEFAULT_RESIZE_WIDTH, int $maxHeight = self::DEFAULT_RESIZE_HEIGHT) {
-        list($originalWidth, $originalHeight) = getimagesize($this->imagePath);
-        
-        if ($originalWidth > $maxWidth || $originalHeight > $maxHeight) {
-            $aspectRatio = $originalWidth / $originalHeight;
-    
-            if ($maxWidth / $aspectRatio > $maxHeight) {
-                $newWidth = $maxHeight * $aspectRatio;
-                $newHeight = $maxHeight;
-            } else {
-                $newWidth = $maxWidth;
-                $newHeight = $maxWidth / $aspectRatio;
-            }
-        } else {
-            $newWidth = $originalWidth;
-            $newHeight = $originalHeight;
-        }
-    
-        return ['width' => $newWidth, 'height' => $newHeight];
-    }
-
     private function getImageRotationAngle(): int {
         $exif = @exif_read_data($this->imagePath);
     

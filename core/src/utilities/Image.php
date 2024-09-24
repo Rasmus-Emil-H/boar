@@ -19,7 +19,6 @@ class Image {
 
     private const DEFAULT_RESIZE_HEIGHT = 2000;
     private const DEFAULT_RESIZE_WIDTH = 2000;
-
     private const WIDTH = 'width'; 
     private const HEIGHT = 'height';
 

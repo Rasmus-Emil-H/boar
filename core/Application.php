@@ -13,7 +13,7 @@
 namespace app\core;
 
 use \app\core\src\database\Connection;
-use app\core\src\factories\ControllerFactory;
+use \app\core\src\factories\ControllerFactory;
 use \app\models\SystemEventModel;
 use \app\models\UserModel;
 use \app\core\src\miscellaneous\CoreFunctions;

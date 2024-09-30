@@ -21,6 +21,9 @@ class Constants {
     public const SUBQUERY_OPEN  = ' ( ';
     public const SUBQUERY_CLOSE = ' ) ';
 
+    public const UNION = ' UNION ';
+    public const UNION_ALL = ' UNION ALL ';
+
     public const WITH = ' WITH ';
     public const HAVING = ' HAVING ';
     public const AS = ' AS ';

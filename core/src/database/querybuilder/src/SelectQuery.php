@@ -92,5 +92,13 @@ trait SelectQuery {
         return $this;
     }
 
+    public function union() {
+        $this->upsertQuery(Constants::UNION);
+    }
+
+    public function unionAll() {
+        $this->upsertQuery(Constants::UNION_ALL);
+    }
+
     // Additional select-related methods can go here
 }

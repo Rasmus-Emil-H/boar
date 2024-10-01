@@ -116,14 +116,15 @@ trait EntityQueryTrait {
         return $this->bootstrapQuery()->where($conditions)->run();
     }
 
-    public function addMetaData(array $data): self {
+    public function addMetaData(array $data, string $type = null): self {
         if (empty($data)) throw new \InvalidArgumentException(self::INVALID_ENTITY_DATA);
 
         (new EntityMetaData())
             ->set([
                 Table::ENTITY_TYPE_COLUMN => $this->getTableName(), 
                 Table::ENTITY_ID_COLUMN => $this->key() ?? 0,
-                'Data' => json_encode($data), 
+                'Data' => json_encode($data),
+                'Type' => $type ?? 'Default',
                 'IP' => app()->getRequest()->getIP()
             ])
             ->save(addMetaData: false);
@@ -201,6 +202,14 @@ trait EntityQueryTrait {
     public function getEntityTableFields(): self {
         $this->bootstrapQuery()->where()->limit(1)->run();
         return $this;
+    }
+
+    public function appendHistory(array $data): self {
+        return $this->addMetaData($data, 'History');
+    }
+
+    public function history(): array|object {
+        return $this->getMetaData()->where(['Type' => 'History'])->run();
     }
 
 }

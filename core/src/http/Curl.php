@@ -78,7 +78,7 @@ final class Curl {
 				]);
 			break;
 			default:
-				$urlWithQuery = $this->url . '?' . http_build_query($this->data);
+				$urlWithQuery = $this->url . (count($this->data) ? '?' . http_build_query($this->data) : '');
 				curl_setopt($this->handler, CURLOPT_URL, $urlWithQuery);
 				curl_setopt($this->handler, CURLOPT_HTTPGET, true);
 			break;

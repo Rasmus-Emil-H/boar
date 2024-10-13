@@ -94,11 +94,11 @@ trait EntityQueryTrait {
     }
 
     public function find(string $field, string $value): Entity {
-        return $this->bootstrapQuery()->where(arguments: [$field => $value])->run('fetch');
+        return $this->bootstrapQuery()->where(arguments: [$field => $value])->run(fetchMode: 'fetch');
     }
 
     public function findOne(string $field, string $value): Entity {
-        return $this->bootstrapQuery()->where(arguments: [$field => $value])->run('fetch');
+        return $this->bootstrapQuery()->where(arguments: [$field => $value])->run(fetchMode: 'fetch');
     }
 
     /**
@@ -120,7 +120,7 @@ trait EntityQueryTrait {
         if (empty($data)) throw new \InvalidArgumentException(message: self::INVALID_ENTITY_DATA);
 
         (new EntityMetaData())
-            ->set([
+            ->set(data: [
                 Table::ENTITY_TYPE_COLUMN => $this->getTableName(), 
                 Table::ENTITY_ID_COLUMN => $this->key() ?? 0,
                 'Data' => json_encode(value: $data),
@@ -133,7 +133,7 @@ trait EntityQueryTrait {
     }
 
     public function getTableColumns(): array|object {
-        return (new QueryBuilder(get_called_class(), $this->getTableName(), $this->getKeyField()))->select()->run(); 
+        return (new QueryBuilder(class: get_called_class(), table: $this->getTableName(), keyID: $this->getKeyField()))->select()->run(); 
     }
 
     public function getMetaData(): QueryBuilder {

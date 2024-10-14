@@ -55,12 +55,12 @@ trait EntityQueryTrait {
 	}
 
     public function softDelete(): self {
-		$this->set([Table::DELETED_AT_COLUMN => new \DateTime(datetime: 'Y-m-d H:i:s')])->save();
+		$this->patchField([Table::DELETED_AT_COLUMN => new \DateTime(datetime: 'Y-m-d H:i:s')]);
         return $this;
 	}
 
     public function restore(): self {
-	    $this->set([Table::DELETED_AT_COLUMN => null])->save();
+	    $this->patchField([Table::DELETED_AT_COLUMN => null]);
         return $this;
 	}
 

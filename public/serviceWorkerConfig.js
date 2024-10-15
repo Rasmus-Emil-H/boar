@@ -12,13 +12,9 @@ const config = {
     },
     methods: {
         validateRequest: function (e) {
-            const test = config.externalResources.map(function(item) {
-                const skip = new RegExp(`/${item}/`);
-                return skip.test(e.request.url);
-            });
-
-            if (test) return false;
-
+            const proceed = !config.externalResources.some(item => new RegExp(`/${item}/`).test(e.request.url));
+            if (!proceed) return proceed;
+            
             if (e.request.url === config.psudo.login && e.request.method === 'POST' && !navigator.onLine || e.request.url.includes('/push')) return false;
             if (!config.request.validMethods.includes(e.request.method)) return false;
 

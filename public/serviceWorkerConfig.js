@@ -48,7 +48,7 @@ const config = {
             const clonedRequest = request.clone();
             const formData = await clonedRequest.formData();
             const formDataToSend = new FormData();
-            const cache = await caches.open(config.caches.GETCache);
+            const cache = await caches.open(config.caches.POSTCache);
         
             for (const [key, value] of formData.entries())
                 formDataToSend.append(key, value);
@@ -63,6 +63,7 @@ const config = {
 
                 return response;
             } catch (error) {
+                cache.put(request, clonedRequest);
                 return new Response(null, { status: 418, statusText: 'Failed to send POST request' });
             }
         }

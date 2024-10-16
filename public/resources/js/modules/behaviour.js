@@ -12,14 +12,12 @@ window[appName].behaviour = {
         this.globalNodeEventListeners();
     },
     globalNodeEventListeners: function() {
-
         const self = this;
 
         $('body').on('submit', 'form', function(e) {
             if ($(e.target).attr('method') === 'GET') return;
             e.preventDefault();
-            const form = $(this);
-            return self.submitForm(form);
+            return self.submitForm($(this));
         });
 
         $('.globalFileUploader').on('change', async function(e) {

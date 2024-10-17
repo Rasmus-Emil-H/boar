@@ -19,6 +19,7 @@ use \app\core\src\database\Entity;
 use \app\core\src\database\querybuilder\QueryBuilder;
 use \app\core\src\database\table\Table;
 use \app\core\src\database\EntityMetaData;
+use \app\models\FileModel;
 
 trait EntityQueryTrait {
 
@@ -211,5 +212,9 @@ trait EntityQueryTrait {
     public function history(): array|object {
         return $this->getMetaData()->where(arguments: ['Type' => 'History'])->run();
     }
+
+    public function files() {
+		return $this->hasManyToMany(FileModel::class, 'file_entity')->run();
+	}
 
 }

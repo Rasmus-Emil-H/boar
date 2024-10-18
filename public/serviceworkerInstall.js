@@ -25,6 +25,8 @@ self.addEventListener('fetch', (e) => {
 /**
 |----------------------------------------------------------------------------
 | Send Cached POST Requests
+| This logic assumes that every single entry in the IDB was meant to be send to the server
+| And is only a result of a network error
 |----------------------------------------------------------------------------
 |
 */

@@ -47,18 +47,22 @@ const config = {
             const clonedRequest = request.clone();
             const formData = await clonedRequest.formData();
             const formDataToSend = new FormData();
+        
             for (const [key, value] of formData.entries()) formDataToSend.append(key, value);
         
             try {
                 const response = await fetch(clonedRequest.url, {method: 'POST', body: formDataToSend});
 
                 if (!response.ok || !config.psudo.qualifiedRequestResponsesCode.includes(response.status)) {
-                    const db = new IndexedDBManager();
-                    await db.createRecord({data: JSON.stringify(formDataToSend)});
+                    const storePOSTRequestByIDB = new IndexedDBManager();
+                    await storePOSTRequestByIDB.createRecord({url: request.url, method: request.method, mode: request.mode, body: [...await request.formData()]});
                 }
 
                 return response;
             } catch (error) {
+                const storePOSTRequestByIDB = new IndexedDBManager();
+                await storePOSTRequestByIDB.createRecord({url: request.url, method: request.method, mode: request.mode, body: [...await request.formData()]});
+                
                 return new Response(null, {status: 422, statusText: config.messages.errors.postRequest});
             }
         }

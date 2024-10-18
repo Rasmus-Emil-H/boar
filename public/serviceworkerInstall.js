@@ -6,6 +6,7 @@
 */
 
 import config from './serviceWorkerConfig.js';
+import IndexedDBManager from '/resources/js/modules/indexedDB.js';
 
 /**
 |----------------------------------------------------------------------------
@@ -15,10 +16,10 @@ import config from './serviceWorkerConfig.js';
 */
 
 self.addEventListener('fetch', (e) => {
+    sendCachedPostRequests();
     if (!config.methods.validateRequest(e)) return;
-
     const methodHandler = e.request.method;
-    if (methodHandler === 'GET' || methodHandler === 'POST') e.respondWith(config.methods[methodHandler](e.request));
+    e.respondWith(config.methods[methodHandler](e.request));
 });
 
 /**
@@ -29,39 +30,17 @@ self.addEventListener('fetch', (e) => {
 */
 
 async function sendCachedPostRequests() {
-    const cache = await caches.open(config.caches.POSTCache);  
-    const cacheKeys = await cache.keys();
-
-    for (const requestKey of cacheKeys) {
-        const cachedResponse = await cache.match(requestKey);
-        if (!cachedResponse) continue;
-
+    const db = new IndexedDBManager();
+    const records = await db.getAllRecords();
+    for (let i = 0; i < records.length; i++) {
         try {
-            const cachedData = await cachedResponse.json();
-            const formData = new FormData();
-
-            for (const item of cachedData) {
-                if (item.data) {
-                    const blob = new Blob([new Uint8Array(item.data)], { type: item.type });
-                    const file = new File([blob], item.name, { type: item.type });
-                    formData.append(item.key, file);
-                } else {
-                    formData.append(item.key, item.value);
-                }
-            }
-
-            const response = await fetch(requestKey.url.split('%')[0], {
-                method: 'POST',
-                body: formData,
-            });
-
-            if (response.ok || config.psudo.qualifiedRequestResponsesCode.includes(response.status)) {
-                await cache.delete(requestKey);
-            }
-
-            return response;
-        } catch (error) {
-            console.error(config.messages.errors.postRequest, error);  
+            const request = records[i];
+            const body = new FormData();
+            for (let[key, value] of request.body) body.append(key, value);
+            await fetch(request.url, {method: request.method, body});
+            db.deleteRecord(request.id);
+        } catch(e) {
+            
         }
     }
 }
@@ -76,15 +55,6 @@ async function sendCachedPostRequests() {
 function respondToClient(msg) {
     const channel = new BroadcastChannel('sw-messages');
     channel.postMessage(msg);
-}
-
-function checkConnection() {
-    return Number(navigator.onLine);
-}
-
-async function synchroniseCaches() {
-    await sendCachedPostRequests();
-    // Add any additional cache synchronization functions here
 }
 
 /**
@@ -166,7 +136,7 @@ self.addEventListener('message', (event) => {
 });
 
 self.addEventListener('online', (event) => {
-    synchroniseCaches();
+    sendCachedPostRequests();
 });
 
 self.addEventListener('offline', (event) => {

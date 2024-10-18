@@ -39,7 +39,6 @@ const config = {
                 return new Response('Network error', { status: 500 });
             }
         },
-        
         POST: async function(request) {
             const clonedRequest = request.clone();
             const formData = await clonedRequest.formData();
@@ -50,24 +49,20 @@ const config = {
                 formDataToSend.append(key, value);
         
             try {
-                const response = await fetch(clonedRequest.url, {
-                    method: 'POST',
-                    body: formDataToSend,
-                });
+                const response = await fetch(clonedRequest.url, {method: 'POST', body: formDataToSend});
 
                 if (!response.ok) cache.put(request, clonedRequest);
 
                 return response;
             } catch (error) {
-                cache.put(request, clonedRequest);
-                return new Response(null, { status: 418, statusText: 'Failed to send POST request' });
+                return new Response(null, {status: 422, statusText: config.messages.errors.postRequest});
             }
         }
     },
     messages: {
         offline: 'Application is offline. Cannot send cached POST requests... Once your application is online again, it will send these cached requests automatically.',
         errors: {
-            postRequest: 'Error sending cached POST request. Status:'
+            postRequest: 'An error occurred'
         }
     },
     actions: {

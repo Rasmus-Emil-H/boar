@@ -34,7 +34,6 @@ class TranslationController extends Controller {
     }
 
     public function edit() {
-
         $cTranslation = $this->returnValidEntityIfExists();
 
         $request = $this->requestBody->body;

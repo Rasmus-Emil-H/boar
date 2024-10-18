@@ -17,7 +17,7 @@ class IndexedDBManager {
 
   async openDatabase() {
     return new Promise((resolve, reject) => {
-      const request = window.indexedDB.open(databaseName, 1);
+      const request = indexedDB.open(databaseName, 1);
 
       request.onupgradeneeded = (event) => {
         const db = event.target.result;
@@ -37,11 +37,11 @@ class IndexedDBManager {
 
   async createRecord(data) {
     const db = await this.openDatabase();
-    return new Promise((resolve, reject) => {
-      const transaction = db.transaction(objectStoreName, actions.write);
-      const objectStore = transaction.objectStore(objectStoreName);
+    return new Promise(async (resolve, reject) => {
+      const transaction = await db.transaction(objectStoreName, actions.write);
+      const objectStore = await transaction.objectStore(objectStoreName);
 
-      const request = objectStore.add(data);
+      const request = await objectStore.add(data);
 
       request.onsuccess = (event) => { resolve(event.target.result); };
 
@@ -123,15 +123,14 @@ class IndexedDBManager {
 
   async getAllRecords(id) {
     const db = await this.openDatabase();
-    return new Promise((resolve, reject) => {
-      const transaction = db.transaction(objectStoreName, actions.read);
-      const objectStore = transaction.objectStore(objectStoreName);
+    return new Promise(async (resolve, reject) => {
+      const transaction = await db.transaction(objectStoreName, actions.read);
+      const objectStore = await transaction.objectStore(objectStoreName);
 
-      const request = objectStore.getAll(id);
+      const request = await objectStore.getAll();
 
-      request.onsuccess = (event) => {
-        delete event.target.result[0].id;
-        resolve({trips: event.target.result[0]});
+      request.onsuccess = async (event) => {
+		    resolve(event.srcElement.result);
       };
 
       request.onerror = (event) => { reject(event.target.error); };

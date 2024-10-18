@@ -13,19 +13,19 @@ window[appName].serviceWorkerInit = {
         }
     },
     checkPubSub: async function() {
-        const registration = await navigator.serviceWorker.getRegistration();
-
-        const hasPubSub = await registration.pushManager.getSubscription();
-        if (hasPubSub) return;
-
-        const key = await this.urlB64ToUint8Array(await fetch('/push/subscribe').then(response => response.json()).then(json => json.responseJSON));
-
-        const subscription = await registration.pushManager.getSubscription() || await registration.pushManager.subscribe({
-            userVisibleOnly: true,
-            applicationServerKey: key
-        });
-
-        this.sendSubscriptionToServer(subscription);
+        try {
+            const registration = await navigator.serviceWorker.getRegistration();
+            const key = await this.urlB64ToUint8Array(await fetch('/push/subscribe').then(response => response.json()).then(json => json.responseJSON));
+    
+            const subscription = await registration.pushManager.getSubscription() || await registration.pushManager.subscribe({
+                userVisibleOnly: true,
+                applicationServerKey: key
+            });
+    
+            this.sendSubscriptionToServer(subscription);
+        } catch (e) {
+            window[appName].components.toast('Your device did not subscribe to the application', window[appName].constants.mdbootstrap.ERROR_CLASS);
+        }
     },
     sendSubscriptionToServer: async function(subscription) {
         await $.post('/push/subscribe', {

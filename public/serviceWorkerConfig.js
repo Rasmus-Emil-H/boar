@@ -1,3 +1,5 @@
+import IndexedDBManager from '/resources/js/modules/indexedDB.js';
+
 const config = {
     caches: {
         GETCache: 'GETCache',
@@ -23,11 +25,13 @@ const config = {
         GET: async function (request) {
             try {
                 const clone = await request.clone();
-                const cache = await caches.open(config.caches.GETCache);
         
                 const response = await fetch(clone);
         
-                if (response.ok && !response.redirected) await cache.put(request, response.clone());
+                if (response.ok && !response.redirected) {
+                    const cache = await caches.open(config.caches.GETCache);
+                    await cache.put(request, response.clone());
+                }
         
                 return response;
             } catch (error) {
@@ -43,15 +47,15 @@ const config = {
             const clonedRequest = request.clone();
             const formData = await clonedRequest.formData();
             const formDataToSend = new FormData();
-            const cache = await caches.open(config.caches.POSTCache);
-        
-            for (const [key, value] of formData.entries())
-                formDataToSend.append(key, value);
+            for (const [key, value] of formData.entries()) formDataToSend.append(key, value);
         
             try {
                 const response = await fetch(clonedRequest.url, {method: 'POST', body: formDataToSend});
 
-                if (!response.ok) cache.put(request, clonedRequest);
+                if (!response.ok || !config.psudo.qualifiedRequestResponsesCode.includes(response.status)) {
+                    const db = new IndexedDBManager();
+                    await db.createRecord({data: JSON.stringify(formDataToSend)});
+                }
 
                 return response;
             } catch (error) {
@@ -60,7 +64,7 @@ const config = {
         }
     },
     messages: {
-        offline: 'Application is offline. Cannot send cached POST requests... Once your application is online again, it will send these cached requests automatically.',
+        offline: 'Application is offline',
         errors: {
             postRequest: 'An error occurred'
         }
@@ -75,7 +79,7 @@ const config = {
     psudo: {
         login: '/auth/login',
         origin: 'host',
-        qualifiedRequestResponsesCode: [200, 400, 401, 403, 404, 409]
+        qualifiedRequestResponsesCode: [200, 400, 401, 403, 404, 409, 422]
     }
 };
 

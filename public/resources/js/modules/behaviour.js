@@ -67,7 +67,7 @@ window[appName].behaviour = {
                     resolve(response);
                 },
                 error: function(xhr, status, error) {
-                    window[appName].components.toast(xhr.responseJSON, window[appName].constants.mdbootstrap.ERROR_CLASS);
+                    window[appName].components.toast(xhr.responseJSON ?? error, window[appName].constants.mdbootstrap.ERROR_CLASS);
                     reject(xhr);
                 }
             }).always(function(res) {

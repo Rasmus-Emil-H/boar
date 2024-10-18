@@ -47,7 +47,7 @@ final class Session {
 
     public function unset(string|array $key): void {
         if (is_string($key)) $key = [$key];
-        foreach ($key as $unsetKey) unset($_SESSION[$unsetKey]);
+        foreach ($key as $unsetKey) unset($_SESSION[self::FLASH_ARRAY][$unsetKey]);
     }
 
     public function getAll(): array {

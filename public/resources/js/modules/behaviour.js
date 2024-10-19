@@ -35,6 +35,11 @@ window[appName].behaviour = {
             }
         });
 
+        if (!canProceed) {
+            const translation = await window[appName].i18n.translate('You cant submit empty data');
+            window[appName].components.toast(translation.responseJSON ?? 'You can\'t submit empty data', window[appName].constants.mdbootstrap.ERROR_CLASS);
+        }
+
         return canProceed;
     },
     submitForm: async function(form) {

@@ -186,11 +186,11 @@ abstract class Entity {
     }
 
     public function getCreatedTimestamp(string $date = ''): string {
-        return date('d-m-Y H:i', strtotime(($date !== '' ? $date : $this->get('CreatedAt'))));
+        return date('d-m-Y H:i', strtotime(($date !== '' ? $date : $this->get(Table::CREATED_AT_COLUMN))));
     }
 
     public function getSortOrder(): ?int {
-        return $this->get('SortOrder') ?? null;
+        return $this->get(Table::SORT_ORDER_COLUMN) ?? null;
     }
 
     public function requireExistence() {

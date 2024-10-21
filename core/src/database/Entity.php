@@ -13,6 +13,7 @@
 
 namespace app\core\src\database;
 
+use \app\core\src\database\table\Table;
 use \app\core\src\miscellaneous\CoreFunctions;
 use \app\core\src\traits\entity\EntityQueryTrait;
 use \app\core\src\traits\entity\EntityMagicMethodTrait;
@@ -108,7 +109,18 @@ abstract class Entity {
         $this->data = $data;
     }
 
+    private function checkClientCachedPOSTCreatedTimestampField() {
+        if (!$this->get('InitialClientRequestCreatedTimestamp')) return;
+
+        $initialClientRequestCreatedTimestamp = $this->get('InitialClientRequestCreatedTimestamp');
+
+        $this->set([Table::CREATED_AT_COLUMN => date('Y-m-d H:i:s', $initialClientRequestCreatedTimestamp)]);
+        $this->appendHistory(['CreatedAt field was changed because InitialClientRequestCreatedTimestamp was set and set to: ' . $initialClientRequestCreatedTimestamp]);
+    }
+
     public function save(bool $addMetaData = false): self {
+        $this->checkClientCachedPOSTCreatedTimestampField();
+
         if ($addMetaData) $this->addMetaData($this->data);
         if ($this->exists()) return $this->patchEntity();
         if (empty($this->data)) throw new \app\core\src\exceptions\EmptyException();

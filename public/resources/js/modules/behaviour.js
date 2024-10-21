@@ -53,6 +53,8 @@ window[appName].behaviour = {
         $(form[0]).find('[type="checkbox"]').each(function() {
             fd.set($(this).prop('name'), Number($(this).prop('checked')));
         });
+
+        if (!navigator.onLine) fd.set('InitialClientRequestCreatedTimestamp', Date.now());
         
         return new Promise(function(resolve, reject) {
             const submitButton = form.find('button[type="submit"]').last();

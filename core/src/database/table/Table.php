@@ -22,6 +22,7 @@ class Table {
 
     public const COMPLETED_COLUMN   = 'Completed';
     public const DELETED_AT_COLUMN  = 'DeletedAt';
+    public const CREATED_AT_COLUMN  = 'CreatedAt';
     public const STATUS_COLUMN      = 'Status';
     public const SORT_ORDER_COLUMN  = 'SortOrder';
     public const ENTITY_TYPE_COLUMN = 'EntityType';

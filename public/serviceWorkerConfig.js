@@ -53,19 +53,19 @@ const config = {
             try {
                 const response = await fetch(clonedRequest.url, {method: 'POST', body: formDataToSend});
 
-                if (!response.ok || !config.psudo.qualifiedRequestResponsesCode.includes(response.status)) {
-                    const storePOSTRequestByIDB = new IndexedDBManager();
-                    await storePOSTRequestByIDB.createRecord({url: request.url, method: request.method, mode: request.mode, body: [...await request.formData()]});
-                }
+                if (!response.ok || !config.psudo.qualifiedRequestResponsesCode.includes(response.status)) config.buildIndexDBRecord(request);
 
                 return response;
             } catch (error) {
-                const storePOSTRequestByIDB = new IndexedDBManager();
-                await storePOSTRequestByIDB.createRecord({url: request.url, method: request.method, mode: request.mode, body: [...await request.formData()]});
+                config.buildIndexDBRecord(request);
                 
                 return new Response(null, {status: 422, statusText: config.messages.errors.postRequest});
             }
         }
+    },
+    buildIndexDBRecord: async function(request) {
+        const storePOSTRequestByIDB = new IndexedDBManager();
+        await storePOSTRequestByIDB.createRecord({url: request.url, method: request.method, mode: request.mode, body: [...await request.formData()]});
     },
     messages: {
         offline: 'Application is offline',

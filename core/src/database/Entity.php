@@ -33,7 +33,8 @@ abstract class Entity {
     private const INVALID_ENTITY_KEY    = 'Invalid entity key';
     private const INVALID_ENTITY_STATIC_METHOD = 'Invalid static method';
     private const INVALID_ENTITY_METHOD = 'Invalid non static method method';
-
+    private const INITIAL_CLIENT_REQUEST_CACHED_POST_CREATED_TIMESTAMP = 'InitialClientRequestCreatedTimestamp';
+    
     private const OVERLOAD_ARGC_NEW_ENTITY  = 1;
     private const OVERLOAD_ARGC_EDIT_ENTITY = 2;
     private $key;
@@ -110,12 +111,13 @@ abstract class Entity {
     }
 
     private function checkClientCachedPOSTCreatedTimestampField() {
-        if (!$this->get('InitialClientRequestCreatedTimestamp')) return;
+        if (!$this->get(self::INITIAL_CLIENT_REQUEST_CACHED_POST_CREATED_TIMESTAMP)) return;
 
-        $initialClientRequestCreatedTimestamp = $this->get('InitialClientRequestCreatedTimestamp');
+        $initialClientRequestCreatedTimestamp = $this->get(self::INITIAL_CLIENT_REQUEST_CACHED_POST_CREATED_TIMESTAMP);
+        $date = date('Y-m-d H:i:s', $initialClientRequestCreatedTimestamp);
 
-        $this->set([Table::CREATED_AT_COLUMN => date('Y-m-d H:i:s', $initialClientRequestCreatedTimestamp)]);
-        $this->appendHistory(['CreatedAt field was changed because InitialClientRequestCreatedTimestamp was set and set to: ' . $initialClientRequestCreatedTimestamp]);
+        $this->set([Table::CREATED_AT_COLUMN => $date]);
+        $this->appendHistory(['CreatedAt field was changed because InitialClientRequestCreatedTimestamp was set and set to: ' . $date]);
     }
 
     public function save(bool $addMetaData = false): self {

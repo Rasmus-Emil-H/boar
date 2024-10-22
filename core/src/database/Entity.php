@@ -89,7 +89,7 @@ abstract class Entity {
             }
         }
 
-        $this->data = array_merge($this->data, $data??[]);
+        $this->data = array_merge($this->data, $data ?? []);
         
         return $this;
     }

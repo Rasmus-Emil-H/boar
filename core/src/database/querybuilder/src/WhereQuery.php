@@ -125,6 +125,16 @@ trait WhereQuery {
         return $this; 
     }
 
+    public function isNotToday(string $field): self {
+        $this->upsertQuery('DATE('.$field.') = ' . Constants::NOT_TODAY);
+        return $this;
+    }
+
+    public function isTodayOrLater(string $field): self {
+        $this->upsertQuery('DATE('.$field.') = ' . Constants::HIGHER_THAN_OR_TODAY);
+        return $this;
+    }
+
     public function beforeToday(string $field = 'CreatedAt'): self {
         $this->where([$field => Constants::LOWER_THAN_CURRENT_DAY]);
         return $this;

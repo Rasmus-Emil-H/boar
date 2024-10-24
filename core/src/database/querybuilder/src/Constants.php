@@ -39,14 +39,19 @@ class Constants {
     public const SQL_DESCRIBE = ' DESCRIBE ';
     public const GROUP_BY     = ' GROUP BY ';
     public const ORDER_BY     = ' ORDER BY ';
+
     public const DEFAULT_ASCENDING_ORDER = ' ASC ';
     public const DEFAULT_DESCENDING_ORDER = ' DESC ';
     public const DEFAULT_SQL_DATE_FORMAT = 'Y/m/d';
     public const DEFAULT_FRONTEND_DATE_FROM_INDICATOR = 'from-';
     public const DEFAULT_FRONTEND_DATE_TO_INDICATOR = 'to-';
-    public const CURDATE = 'CURDATE()';
-    public const LOWER_THAN_CURRENT_DAY = ' < CURRENT_DATE() ';
-    public const HIGHER_THAN_CURRENT_DAY = ' > CURRENT_DATE() ';
+
+    public const CURDATE = ' CURDATE() ';
+    public const LOWER_THAN_CURRENT_DAY = ' < CURDATE() ';
+    public const HIGHER_THAN_CURRENT_DAY = ' > CURDATE() ';
+    public const HIGHER_THAN_OR_TODAY = ' >= CURDATE() ';
+    public const LOWER_THAN_OR_TODAY = ' <= CURDATE() ';
+    public const NOT_TODAY = ' != CURDATE() ';
 
     public const DEFAULT_LIMIT = 20;
     public const DEFAULT_OFFSET = 0;

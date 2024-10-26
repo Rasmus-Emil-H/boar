@@ -92,7 +92,7 @@ self.addEventListener('push', (event) => {
 self.addEventListener('notificationclick', async (event) => {
     switch (event.action) {
         case 'open_app':
-            clients.openWindow('/trip');
+            clients.openWindow('/home');
             break;
         case 'reply':
             await fetch(`/push/reply?id=${event.notification.data.id}`);

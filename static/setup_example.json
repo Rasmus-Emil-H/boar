@@ -67,7 +67,7 @@
             "<script defer src=\"/resources/js/modules/components.js?t=1\"></script>",
             "<script type=\"module\" defer src=\"/resources/js/modules/indexedDB.js\"></script>",
             "<script defer src=\"/resources/js/modules/utilities.js?t=1\"></script>",
-            "<script defer src=\"/resources/js/modules/behaviour.js?t=1\"></script>"
+            "<script defer type=\"module\" src=\"/resources/js/modules/behaviour.js?t=1\"></script>"
         ],
         "metaTags": [
             "<meta charset=\"utf-8\">",

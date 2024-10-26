@@ -7,6 +7,8 @@
 |
 */
 
+import WorkerParent from '/resources/js/workers/main.js';
+
 window[appName].behaviour = {
     init: function() {
         this.globalNodeEventListeners();

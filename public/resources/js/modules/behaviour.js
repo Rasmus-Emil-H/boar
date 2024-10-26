@@ -126,17 +126,19 @@ window[appName].behaviour = {
         body.append('eg-csrf-token-label', csrf);
         body.append('type', type);
     
-        try {
-            const response = await fetch('/file', { method: "POST", body });
-            if (!response.ok) throw new Error('Network response was not ok');
-            const jsonResponse = await response.json();
-            window[appName].components.toast(jsonResponse);
-            parent.html(_backupNodes);
-            return jsonResponse;
-        } catch (error) {
-            console.error('Error uploading file:', error);
-            parent.html(_backupNodes);
-            throw error;
+        if (!window.Worker) {
+            try {
+                const response = await fetch('/file', {method: "POST", body});
+                const jsonResponse = await response.json();
+                button.html(_backupNodes);
+                return jsonResponse;
+            } catch (error) {
+                button.html(_backupNodes);
+                throw error;
+            }
+        } else {
+            button.html(_backupNodes);
+            new WorkerParent({data: body, cb, target, type: 'std', notificationType: 'Uploading file'});
         }
     }
 }

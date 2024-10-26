@@ -24,7 +24,7 @@ class WorkerParent {
     }
 
     dispatchNotification(message) {
-        window[appName].components.addPushNotification({message: `${message ?? this.notificationType}`, created: new Date().toLocaleTimeString()});
+        window[appName].components.toast(`${message ?? this.notificationType}`, window[appName].constants.mdbootstrap.SUCCESS_CLASS);
     }
 
     setData() {

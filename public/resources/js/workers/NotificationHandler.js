@@ -6,7 +6,7 @@ class NotificationHandler {
     showNotification(message) {
         if (!this.notificationType && !message) return;
 
-        window[appName].components.toast(`${message ?? this.notificationType}`, window[appName].constants.mdbootstrap.ERROR_CLASS);
+        window[appName].components.toast(`${message ?? this.notificationType}`, window[appName].constants.mdbootstrap.SUCCESS_CLASS);
     }
 }
 

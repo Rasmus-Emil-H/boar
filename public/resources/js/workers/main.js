@@ -10,6 +10,7 @@ class WorkerParent {
         this.notificationType = options.notificationType;
         this.cb = options.cb;
         this.worker = null;
+        this.additionalData = options.additionalData ?? {};
 
         this.showInitialNotification();
         this.spawnWorker();
@@ -24,7 +25,7 @@ class WorkerParent {
     }
 
     dispatchNotification(message) {
-        window[appName].components.toast(`${message ?? this.notificationType}`, window[appName].constants.mdbootstrap.SUCCESS_CLASS);
+        window[appName].components.addPushNotification({message: `${message ?? this.notificationType}`, created: new Date().toLocaleTimeString()});
     }
 
     setData() {
@@ -42,7 +43,7 @@ class WorkerParent {
 
         this.worker.onmessage = (e) => {
             this.dispatchNotification();
-            if (this.cb) this.cb(this.target, {responseJSON: e.data});
+            if (this.cb) this.cb(this.target, {responseJSON: e.data, additionalData: this.additionalData});
         }
     }
 

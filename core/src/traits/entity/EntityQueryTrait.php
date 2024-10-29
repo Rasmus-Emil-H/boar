@@ -20,6 +20,7 @@ use \app\core\src\database\querybuilder\QueryBuilder;
 use \app\core\src\database\table\Table;
 use \app\core\src\database\EntityMetaData;
 use \app\models\FileModel;
+use \app\models\LanguageModel;
 
 trait EntityQueryTrait {
 
@@ -216,5 +217,12 @@ trait EntityQueryTrait {
     public function files() {
 		return $this->hasManyToMany(FileModel::class, 'file_entity')->run();
 	}
+
+    public function attachToLanguage(int $languageID): void {
+        $cLanguage = new LanguageModel($languageID);
+        $cLanguage->requireExistence();
+
+        $this->createCustomPivot($this->languagePivot(), ['EntityType' => $this->getTableName(), 'EntityID' => $this->key(), 'LanguageID' => $cLanguage->key()]);
+    }
 
 }

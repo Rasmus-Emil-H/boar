@@ -130,6 +130,12 @@ abstract class Entity {
         return $this->createEntity();
     }
 
+    public function setAndSave(array $data, $addMetaData = false): self {
+        $this->setData($data);
+        $this->save($addMetaData);
+        return $this;
+    }
+
     public function get(string $key): mixed {
         return $this->data[$key] ?? false; 
     }
@@ -154,6 +160,15 @@ abstract class Entity {
 
     public function setTmpProperties(array $entityProperties): void {
         $this->set($entityProperties);
+    }
+
+    /**
+     * Common language pivot table for general entites
+     * @return string
+     */
+
+     protected function languagePivot(): string {
+        return 'entity_language';
     }
 
     private function checkMethodValidity(string $method) {

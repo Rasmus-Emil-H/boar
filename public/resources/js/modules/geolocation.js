@@ -1,22 +1,7 @@
-export default {
+window[appName].geolocation = {
     init: function() {
-        // window.navigator.geolocation.getCurrentPosition(function(res) {
-        //     console.log(res);
-        // });
-
-        window.addEventListener("devicemotion", function(event) {
-            const x = event.accelerationIncludingGravity.x;
-            const y = event.accelerationIncludingGravity.y;
-            const z = event.accelerationIncludingGravity.z;
-            const acceleration = event.acceleration;
-            const rotation = event.rotationRate;
-            console.log(`
-                x: ${x} -
-                y: ${y} -
-                z: ${z} -
-                acceleration: ${acceleration} -
-                rotation: ${rotation} -
-            `);
+        window.navigator.geolocation.getCurrentPosition(function(res) {
+            console.log(res);
         });
     },
     promptLocationPermissions: function() {
@@ -25,17 +10,11 @@ export default {
         });
     },
     getLocation: function() {
-        let lat = 0;
-        let long = 0;
-
         if(!navigator.geolocation) return;
 
         return new Promise(function(resolve, reject) {
             navigator.geolocation.getCurrentPosition(async function(position) {
-                lat =  await position.coords.latitude;
-                long = await position.coords.longitude;
-    
-                resolve([lat,long]);
+                resolve([position.coords.latitude, position.coords.longitude]);
             }, null, {enableHighAccuracy: true, maximumAge: 0});
         });
     },

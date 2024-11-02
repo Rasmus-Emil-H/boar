@@ -35,8 +35,6 @@ abstract class Entity {
     private const INVALID_ENTITY_METHOD = 'Invalid non static method method';
     private const INITIAL_CLIENT_REQUEST_CACHED_POST_CREATED_TIMESTAMP = 'InitialClientRequestCreatedTimestamp';
 
-    private const OVERLOAD_ARGC_NEW_ENTITY  = 1;
-    private const OVERLOAD_ARGC_EDIT_ENTITY = 2;
     private $key;
     protected array $data = [];
     protected array $additionalConstructorMethods = [];
@@ -220,29 +218,5 @@ abstract class Entity {
         if (!in_array($count, $possibleLengthRequirements)) 
             throw new \app\core\src\exceptions\ForbiddenException('Invalid parameter numbers');
     }
-
-    public function __call(string $method, array $arguments): ?array {
-        if (!$this->checkAvailableCallMethods($method)) return null;
-
-        $argc = count($arguments);
-        $this->checkOverloadArgumentCount($argc, [self::OVERLOAD_ARGC_NEW_ENTITY, self::OVERLOAD_ARGC_EDIT_ENTITY]);
-
-        $data = (array)CoreFunctions::first($arguments);
-
-        unset($data['eg-csrf-token-label']);
-        unset($data['action']); 
-
-        if ($argc === self::OVERLOAD_ARGC_NEW_ENTITY) {
-            $cEntity = new $this();
-            $cEntity->set($data);
-            $cEntity->save();
-        } else if ($argc === self::OVERLOAD_ARGC_EDIT_ENTITY) {
-            $this->set($data);
-            $this->save();
-            $cEntity = $this;
-        }
-
-        return isset($cEntity) && method_exists($cEntity, 'safeFieldsDescription') ? $cEntity->safeFieldsDescription() : ['message' => 'OK'];
-    }
-
+    
 }

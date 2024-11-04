@@ -8,7 +8,7 @@ class add_push_table_2024_08_14_0001 {
     public function up() {
         (new Schema())->up('Push', function(Table $table) {
             $table->increments('PushID');
-            $table->varchar('Endpoint', 200);
+            $table->text('Endpoint');
             $table->varchar('ExpirationTime', 50);
             $table->integer('UserID', 10);
             $table->text('PubSubKeys');

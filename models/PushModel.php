@@ -3,6 +3,7 @@
 namespace app\models;
 
 use \app\core\src\database\Entity;
+use \app\core\src\miscellaneous\Encrypt;
 use \app\core\src\miscellaneous\PushManager;
 
 final class PushModel extends Entity {
@@ -15,13 +16,13 @@ final class PushModel extends Entity {
         return 'PushID';
     }
 
-    public function run($info, $data) {
-        $push = new PushManager($info['Endpoint']);
-        $push->setUserPayLoad(['title' => 'o', 'message' => 'k']);
+    public function run($info, $data): mixed {
+        $push = new PushManager(Encrypt::decrypt($info['Endpoint']));
+        $push->setUserPayLoad($data);
         return $push->sendNotification();
     }
     
-    public function getPublicKey() {
+    public function getPublicKey(): string {
         $push = new PushManager(null);
         return $push->getVapidPublicKey();
     } 

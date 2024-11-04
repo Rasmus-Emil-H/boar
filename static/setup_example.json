@@ -14,9 +14,11 @@
         "password": ""
     },
     "encryption": {
-        "openSSL": {
-            "key": "",
-            "iv": ""
+        "openssl": {
+            "method": "aes-256-cbc",
+            "firstKey": "GENERATEVIA:Encrypt::generateKeys()",
+            "secondKey": "GENERATEVIA:Encrypt::generateKeys()",
+            "hashMacAlgo": "sha3-512"
         }
     },
     "routes": {

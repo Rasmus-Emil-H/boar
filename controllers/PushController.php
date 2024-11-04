@@ -5,6 +5,7 @@ namespace app\controllers;
 use \app\core\src\Controller;
 use \app\core\src\miscellaneous\CoreFunctions;
 use \app\models\PushModel;
+use \app\core\src\miscellaneous\Encrypt;
 
 class PushController extends Controller {
     
@@ -12,17 +13,16 @@ class PushController extends Controller {
         if ($this->request->isGet())
             $this->response->ok((new PushModel())->getPublicKey());
 
-        (new PushModel())->deleteWhere(['UserID' => CoreFunctions::applicationUser()->key()]);
+        (new PushModel())->deleteWhere(['UserID' => CoreFunctions::applicationUser()?->key()]);
 
         $object = json_decode($this->requestBody->body->body);
-        $push = new PushModel();
-        $push->setData([
-            'Endpoint' => $object->endpoint, 
+        
+        (new PushModel())->setAndSave([
+            'Endpoint' => Encrypt::encrypt($object->endpoint),
             'ExpirationTime' => $object->expirationTime ?? 'ok', 
-            'PubSubKeys' => json_encode($object->keys), 
-            'UserID' => CoreFunctions::applicationUser()->key()
+            'PubSubKeys' => Encrypt::encrypt(json_encode($object->keys)),
+            'UserID' => CoreFunctions::applicationUser()?->key()
         ]);
-        $push->save();
         
         $this->response->ok();
     }

@@ -29,7 +29,7 @@ trait EntityMagicMethodTrait {
     }
 
     public function __toString() {
-        $result = get_class($this)."($this->key):\n";
+        $result = get_class($this) . "($this->key): \n";
         foreach ($this->getData() as $key => $value) $result .= "[$key]:$value\n";
         return $result;
     }

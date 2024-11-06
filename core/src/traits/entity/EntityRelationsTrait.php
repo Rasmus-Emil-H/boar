@@ -104,6 +104,18 @@ trait EntityRelationsTrait {
     }
 
     /**
+     * Upsert a pivot relation with N amount of KVPs
+     */
+
+     public function upsertCustomPivot($table, string $identifier, ...$keys) {
+        $queryBuilder = new QueryBuilder(get_called_class(), $table, '');
+        $pivotExists = $queryBuilder->select()->where((array)CoreFunctions::first($keys))->run('fetch');
+        return $pivotExists->exists() ? 
+            $queryBuilder->patch((array)CoreFunctions::first($keys), $identifier, $pivotExists->get($identifier))->run() :
+            $queryBuilder->create(CoreFunctions::first($keys))->run();
+    }
+
+    /**
      * Update a pivot relation with N amount of KVPs
      */
 

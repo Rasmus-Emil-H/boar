@@ -47,10 +47,10 @@ class Encrypt {
         $second = substr($data, $ivLength, 64);
         $first   = substr($data, $ivLength + 64);
 
-        $knownString = openssl_decrypt($first, $config->method, $first, OPENSSL_RAW_DATA, $iv);
-        $userString = hash_hmac($config->hashMacAlgo, $first, $second, TRUE);
+        $data = openssl_decrypt($first, $config->method, $config->firstKey, OPENSSL_RAW_DATA, $iv);
+        $userString = hash_hmac($config->hashMacAlgo, $first, $config->secondKey, TRUE);
 
-        if (hash_equals($knownString, $userString)) return $data;
+        if (hash_equals($second, $userString)) return $data;
 
         return false;
     }

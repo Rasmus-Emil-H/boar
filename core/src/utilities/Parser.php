@@ -15,7 +15,7 @@ class Parser {
         return ['=', $sqlInstruction];
     }
 
-    public static function xml($response) {
+    public static function xml($response): bool|\SimpleXMLElement|null {
         try {
             $xml = simplexml_load_string($response);
 

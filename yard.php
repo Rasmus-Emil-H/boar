@@ -60,7 +60,9 @@ function getIterableJsonEncodedData(array|object $iterable): array {
             throw new \app\core\src\exceptions\NotFoundException("getData method was not found");
         
         foreach ($iteration->getData() as $dataKey => $dataValue)
-            $result[$iteration->key()][$dataKey] = is_iterable($dataValue) ? getIterableJsonEncodedData($dataValue) : json_encode($dataValue);
+            $result[$iteration->key()][$dataKey] = is_iterable($dataValue) ? 
+                getIterableJsonEncodedData($dataValue) : 
+                json_encode($dataValue);
     }
 
     return $result;

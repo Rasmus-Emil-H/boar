@@ -445,7 +445,7 @@
 
     POSTing a file to /file will automatically handle the file for you and mv it to the uploads dir and insert a row into the database, based on the requested entity
 
-    window.boar.behaviour have a default input file listener (uploadFile) so that if you have input type of file with a class of globalFileUploader you can directly upload files without having to do more, however certain data attributes must be present in order to attach the file to the proper entity. (entityType, entityType, type)
+    window[appName].behaviour have a default input file listener (uploadFile) so that if you have input type of file with a class of globalFileUploader you can directly upload files without having to do more, however certain data attributes must be present in order to attach the file to the proper entity. (entityType, entityType, type)
 </details>
 
 <details>
@@ -503,7 +503,7 @@
     And in main.js include
 
     ```
-    await window.boar.websocket.init();
+    await window[appName].websocket.init();
     ```
 </details>
 
@@ -664,7 +664,7 @@
 
     Located at ~/public/resources/js/main.js you can import objects that you include in ./modules, for some modularity
 
-    Once you include new paths to modulesToImport they will be avaliable at window.boar.YOUR_MODULE_NAME
+    Once you include new paths to modulesToImport they will be avaliable at window[appName].YOUR_MODULE_NAME
 
     Please note that objects will be frozen
 
@@ -680,7 +680,7 @@
     <?= (new \app\core\src\tokens\CsrfToken())->insertHiddenToken(); ?>
     ```
 
-    By default, window.boar.behaviour will intercept all forms and return a promise from which you can do what you want
+    By default, window[appName].behaviour will intercept all forms and return a promise from which you can do what you want
 
     In the frontend you can then await this behaviour, or let it submit as normal, and do custom tasks like below
 

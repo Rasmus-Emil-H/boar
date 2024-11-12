@@ -79,15 +79,3 @@ function renderComponent($method, $arguments = []) {
 function CSRFTokenInput(): string {
     return (new \app\core\src\tokens\CsrfToken())->insertHiddenToken();
 }
-
-/**
- * Dump and die
- */
-
- function dumpAndDie(mixed $input) {
-    return \app\core\src\miscellaneous\CoreFunctions::dd($input);
-}
-
-function panic(string $reason = ''): void {
-    exit($reason);
-}

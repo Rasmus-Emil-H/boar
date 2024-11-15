@@ -12,6 +12,8 @@
 
 namespace app\core\src\database;
 
+use app\core\src\exceptions\NotFoundException;
+
 class Connection {
     
     private static ?Connection $instance = null;
@@ -27,6 +29,8 @@ class Connection {
     private \Pdo $pdo;
 
     private array $queryCache;
+    private const CACHE_TTL = 60;
+    private const MAX_CACHE_SIZE = 1000;
     
     protected function __construct(#[\SensitiveParameter] array $pdoConfigurations) {
         $this->pdo = new \PDO($pdoConfigurations['dsn'], $pdoConfigurations['user'], $pdoConfigurations['password'], $this->defaultPdoOptions);
@@ -58,17 +62,30 @@ class Connection {
 
             $cacheKey = md5($query . serialize($serializedArguments));
 
-            if (isset($this->queryCache[$cacheKey])) return $this->queryCache[$cacheKey];
+            if (isset($this->queryCache[$cacheKey])) {
+                $cachedResult = $this->queryCache[$cacheKey];
+                if (time() - $cachedResult['timestamp'] < self::CACHE_TTL) return $cachedResult['result'];
+                unset($this->queryCache[$cacheKey]);
+            }
 
             $stmt = $this->pdo->prepare($query);
+            if (!method_exists($stmt, $fetchType)) throw new NotFoundException('Invalid fetch type');
             $stmt->execute($args);
+
             $result = $stmt->{$fetchType}();
             
-            if (!empty($result)) $this->queryCache[$cacheKey] = $result;
+            if (!empty($result)) {
+                /**
+                 * If you want N amount of max entries
+                 * if (count($this->queryCache) >= self::MAX_CACHE_SIZE) array_shift($this->queryCache);
+                 */
+
+                $this->queryCache[$cacheKey] = ['result' => $result, 'timestamp' => time()];
+            }
   
             return $result;
         } catch (\PDOException $e) {
-            app()->getLogger()->log('SQL QUERY FAIL: ' . PHP_EOL.PHP_EOL . implode(',' . PHP_EOL, explode(',', $query)) . PHP_EOL.PHP_EOL . implode(',' , $args) . PHP_EOL.PHP_EOL . $e);
+            app()->getLogger()->log('SQL QUERY FAIL: ' . implode(',' . PHP_EOL, explode(',', $query)));
         }
     }
 

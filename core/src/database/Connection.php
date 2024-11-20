@@ -90,7 +90,7 @@ class Connection {
             
             /**
              * Evict if needed (MRU)
-             * Or store
+             * And store
              */
 
             if ($cache && !empty($result)) {

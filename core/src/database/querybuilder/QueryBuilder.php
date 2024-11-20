@@ -42,8 +42,8 @@ class QueryBuilder extends QueryBuilderBase {
         return $response;
     }
 
-    public function run(string $fetchMode = Constants::PDO_FETCH_ALL_MODE) {
-        $response = app()->getConnection()->execute($this->getQuery(), $this->getArguments(), $fetchMode);
+    public function run(string $fetchMode = Constants::PDO_FETCH_ALL_MODE, $cache = true) {
+        $response = app()->getConnection()->execute($this->getQuery(), $this->getArguments(), $fetchMode, $cache);
         $this->resetQuery();
 
         if($fetchMode === Constants::PDO_FETCH_ONE_MODE)

@@ -54,19 +54,33 @@ class Connection {
         return self::$instance;
     }
 
-    public function execute(#[\SensitiveParameter] string $query, #[\SensitiveParameter] array $args = [], string $fetchType = self::DEFAULT_SQL_QUERY_FETCH_TYPE) {
+    public function execute(#[\SensitiveParameter] string $query, #[\SensitiveParameter] array $args = [], string $fetchType = self::DEFAULT_SQL_QUERY_FETCH_TYPE, $cache = true) {
         try {
-            $serializedArguments = array_map(function($arg) {
-                return $arg instanceof \SimpleXMLElement ? (string)$arg : $arg;
-            }, $args);
 
-            $cacheKey = md5($query . serialize($serializedArguments));
+            /**
+             * Check if caching is wanted
+             */
 
-            if (isset($this->queryCache[$cacheKey])) {
-                $cachedResult = $this->queryCache[$cacheKey];
-                if (time() - $cachedResult['timestamp'] < self::CACHE_TTL) return $cachedResult['result'];
-                unset($this->queryCache[$cacheKey]);
+            if ($cache) {
+                $serializedArguments = array_map(function($arg) {
+                    return $arg instanceof \SimpleXMLElement ? (string)$arg : $arg;
+                }, $args);
+    
+                $cacheKey = md5($query . serialize($serializedArguments));
+    
+                if (isset($this->queryCache[$cacheKey])) {
+                    $cachedResult = $this->queryCache[$cacheKey];
+                    /**
+                     * TTL
+                     */
+                    if (time() - $cachedResult['timestamp'] < self::CACHE_TTL) return $cachedResult['result'];
+                    unset($this->queryCache[$cacheKey]);
+                }
             }
+
+            /**
+             * Query
+             */
 
             $stmt = $this->pdo->prepare($query);
             if (!method_exists($stmt, $fetchType)) throw new NotFoundException('Invalid fetch type');
@@ -74,12 +88,13 @@ class Connection {
 
             $result = $stmt->{$fetchType}();
             
-            if (!empty($result)) {
-                /**
-                 * If you want N amount of max entries
-                 * if (count($this->queryCache) >= self::MAX_CACHE_SIZE) array_shift($this->queryCache);
-                 */
+            /**
+             * Evict if needed (MRU)
+             * Or store
+             */
 
+            if ($cache && !empty($result)) {
+                if (!empty($this->queryCache) && count($this->queryCache) > self::MAX_CACHE_SIZE) array_shift($this->queryCache);
                 $this->queryCache[$cacheKey] = ['result' => $result, 'timestamp' => time()];
             }
   

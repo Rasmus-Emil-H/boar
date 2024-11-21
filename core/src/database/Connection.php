@@ -70,9 +70,11 @@ class Connection {
     
                 if (isset($this->queryCache[$cacheKey])) {
                     $cachedResult = $this->queryCache[$cacheKey];
+                    
                     /**
                      * TTL
                      */
+
                     if (time() - $cachedResult['timestamp'] < self::CACHE_TTL) return $cachedResult['result'];
                     unset($this->queryCache[$cacheKey]);
                 }

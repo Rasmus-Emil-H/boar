@@ -24,9 +24,7 @@ const config = {
         },
         GET: async function (request) {
             try {
-                const clone = await request.clone();
-        
-                const response = await fetch(clone);
+                const response = await fetch(await request.clone());
         
                 if (response.ok && !response.redirected) {
                     const cache = await caches.open(config.caches.GETCache);

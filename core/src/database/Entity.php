@@ -13,8 +13,17 @@
 
 namespace app\core\src\database;
 
+use \app\core\src\attributes\Metadata;
+
 use \app\core\src\database\table\Table;
+
+use \app\core\src\exceptions\EmptyException;
+use \app\core\src\exceptions\ForbiddenException;
+use app\core\src\exceptions\InvalidTypeException;
+use \app\core\src\exceptions\NotFoundException;
+
 use \app\core\src\miscellaneous\CoreFunctions;
+
 use \app\core\src\traits\entity\EntityQueryTrait;
 use \app\core\src\traits\entity\EntityMagicMethodTrait;
 use \app\core\src\traits\entity\EntityHTTPMethodTrait;
@@ -49,10 +58,10 @@ abstract class Entity {
         if ($this->exists()) $this->checkAdditionalConstructorMethods();
     }
 
-    public function checkAdditionalConstructorMethods() {
-        if (empty($this->additionalConstructorMethods)) return;
-        foreach ($this->additionalConstructorMethods as $method)
+    private function checkAdditionalConstructorMethods(): void {
+        array_map(function($method) {
             $this->data[$method] = $this->dispatchMethod($method);
+        }, $this->additionalConstructorMethods);
     }
 
     /**
@@ -61,6 +70,7 @@ abstract class Entity {
      * @return object The current entity instance
      */
 
+    
     protected function convertData($data = null, array $allowedFields = null) {
         if (is_object($data) === true) $data = (array)$data;
         if (is_array($data) === true) foreach($data as $key => $value) $data[$key] = is_string($value) && trim($value) === '' ? null : $value;
@@ -96,6 +106,10 @@ abstract class Entity {
         $this->key = $key;
     }
 
+    protected function setKeyValuePair(string $key, mixed $value) {
+        $this->data[$key] = $value;
+    }
+
     public function key(): ?string {
         return $this->key;
     }
@@ -108,7 +122,7 @@ abstract class Entity {
         $this->data = $data;
     }
 
-    private function checkClientCachedPOSTCreatedTimestampField() {
+    private function checkClientCachedPOSTCreatedTimestampField(): void {
         if (!$this->propertyExists(self::INITIAL_CLIENT_REQUEST_CACHED_POST_CREATED_TIMESTAMP)) return;
 
         $initialClientRequestCreatedTimestamp = $this->get(self::INITIAL_CLIENT_REQUEST_CACHED_POST_CREATED_TIMESTAMP);
@@ -123,7 +137,7 @@ abstract class Entity {
 
         if ($addMetaData) $this->addMetaData($this->data);
         if ($this->exists()) return $this->patchEntity();
-        if (empty($this->data)) throw new \app\core\src\exceptions\EmptyException();
+        if (empty($this->data)) throw new EmptyException();
 
         return $this->createEntity();
     }
@@ -153,24 +167,15 @@ abstract class Entity {
     }
 
     public function checkAllowSave(): void {
-        if (!$this->exists()) throw new \app\core\src\exceptions\EmptyException(self::INVALID_ENTITY_SAVE);
+        if (!$this->exists()) throw new EmptyException(self::INVALID_ENTITY_SAVE);
     }
 
     public function setTmpProperties(array $entityProperties): void {
         $this->set($entityProperties);
     }
 
-    /**
-     * Common language pivot table for general entites
-     * @return string
-     */
-
-     protected function languagePivot(): string {
-        return 'entity_language';
-    }
-
     private function checkMethodValidity(string $method) {
-        if (!method_exists($this, $method)) throw new \app\core\src\exceptions\NotFoundException(self::INVALID_ENTITY_METHOD);
+        if (!method_exists($this, $method)) throw new NotFoundException(self::INVALID_ENTITY_METHOD);
     }
 
     public function setAllowedHTTPMethods() {
@@ -179,34 +184,22 @@ abstract class Entity {
 
     /**
      * Dispatcher for entity methods
-     * @throws \app\core\src\exceptions\NotFoundException
+     * @throws NotFoundException
      */
-
     public function dispatchMethod(string $method, mixed $arguments = []) {
         $this->checkMethodValidity($method);
+
         return $this->{$method}($arguments);
     }
-
-    /**
-     * HTTP Request dispatcher for entity methods
-     * @throws \app\core\src\exceptions\NotFoundException
-     */
 
     public function dispatchHTTPMethod(string $httpRequestEntityMethod, mixed $httpBody) {
         $this->setAllowedHTTPMethods();
         $this->validateHTTPAction($httpBody, $httpRequestEntityMethod);
+
         return $this->dispatchMethod($httpRequestEntityMethod, $httpBody);
     }
 
-    public function getCreatedTimestamp(string $date = ''): string {
-        return date('d-m-Y H:i', strtotime(($date !== '' ? $date : $this->get(Table::CREATED_AT_COLUMN))));
-    }
-
-    public function getSortOrder(): ?int {
-        return $this->get(Table::SORT_ORDER_COLUMN) ?? null;
-    }
-
-    public function requireExistence() {
+    public function requireExistence(): void {
         if (!$this->exists()) app()->getResponse()->notFound();
     }
 
@@ -216,7 +209,26 @@ abstract class Entity {
 
     private function checkOverloadArgumentCount(int $count, array $possibleLengthRequirements): void {
         if (!in_array($count, $possibleLengthRequirements)) 
-            throw new \app\core\src\exceptions\ForbiddenException('Invalid parameter numbers');
+            throw new ForbiddenException('Invalid parameter numbers');
     }
-    
+
+    #[Metadata(type: 'method', description: 'Fetch entities default created at column')]
+    public function getCreatedTimestamp(string $date = ''): ?string {
+        if (!$this->propertyExists(Table::CREATED_AT_COLUMN)) throw new InvalidTypeException(Table::CREATED_AT_COLUMN . ' is not defined');
+
+        return date('d-m-Y H:i', strtotime(($date !== '' ? $date : $this->get(Table::CREATED_AT_COLUMN))));
+    }
+
+    #[Metadata(type: 'method', description: 'Fetch entities default sort order column')]
+    public function getSortOrder(): ?int {
+        if (!$this->propertyExists(Table::SORT_ORDER_COLUMN)) throw new InvalidTypeException(Table::SORT_ORDER_COLUMN . ' is not defined');
+
+        return $this->get(Table::SORT_ORDER_COLUMN) ?? null;
+    }
+
+    #[Metadata(type: 'method', description: 'Fetch entities languge table')]
+    protected function languagePivot(): string {
+        return 'entity_language';
+    }
+
 }

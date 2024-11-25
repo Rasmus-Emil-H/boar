@@ -35,17 +35,21 @@ final class UserModel extends Entity {
 
 	public function login() {
 		$app = app();
+		$session = $app->getSession();
+
 		$sessionID = Hash::uuid();
 
-        $app->getSession()->set('SessionID', $sessionID);
-		$app->getSession()->set('user', $this->key());
+        $session->set('SessionID', $sessionID);
+		$session->set('user', $this->key());
         (new SessionModel())->set(['Value' => $sessionID, $this->getKeyField() => $this->key()])->save();
 
-		$checkForDirect = $app->getSession()->get('redirect');
-		$app->getSession()->unset('redirect');
+		$checkForDirect = $session->get('redirect');
+		$session->unset('redirect');
 		$app->addSystemEvent([$this->get('Name') . ' logged in']);
-
-		$app->getResponse()->setResponse(200, ['redirect' => $checkForDirect ? $checkForDirect : $app->getConfig()->get('routes')->defaults->redirectTo]);
+		
+		$app->getResponse()->setResponse(200, [
+			'redirect' => $checkForDirect ? $checkForDirect : $app->getConfig()->get('routes')->defaults->redirectTo
+		]);
 	}
 
 	public function logout() {

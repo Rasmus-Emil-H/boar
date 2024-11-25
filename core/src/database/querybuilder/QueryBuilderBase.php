@@ -12,6 +12,8 @@
 
 namespace app\core\src\database\querybuilder;
 
+use app\core\Application;
+
 abstract class QueryBuilderBase {
 
     protected string $query  = '';
@@ -22,6 +24,8 @@ abstract class QueryBuilderBase {
     protected string $lastQueryPart = '';
 
     protected array $args = [];
+
+    protected Application $app;
     
     public function __construct(
         public string $class, 
@@ -29,6 +33,7 @@ abstract class QueryBuilderBase {
         public string $keyID
     ) {
         $this->resetQuery();
+        $this->app = app();
     }
 
     public function upsertQuery(string $query): void {
@@ -65,7 +70,7 @@ abstract class QueryBuilderBase {
 
     public function updateQueryArgument(string $key, ?string $value): void {
         $this->checkQueryKey($key);
-
+        
         $this->args[$key] = $value;
     }
 

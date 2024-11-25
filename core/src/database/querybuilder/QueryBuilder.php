@@ -32,18 +32,18 @@ class QueryBuilder extends QueryBuilderBase {
     }
 
     public function debugQuery() {
-        CoreFunctions::dd('Currently debugging query:' . PHP_EOL.PHP_EOL . $this->getQuery() . PHP_EOL.PHP_EOL.PHP_EOL . json_encode($this->getArguments()));
+        CoreFunctions::dd('Currently debugging query:' . PHP_EOL . PHP_EOL . $this->getQuery() . PHP_EOL . PHP_EOL . PHP_EOL . json_encode($this->getArguments()));
     }
 
     public function fetchRow(?array $criteria = null) {
         $this->select()->where($criteria);
-        $response = app()->getConnection()->execute($this->getQuery(), $this->getArguments(), Constants::PDO_FETCH_ONE_MODE);
+        $response = $this->app->getConnection()->execute($this->getQuery(), $this->getArguments(), Constants::PDO_FETCH_ONE_MODE);
         $this->resetQuery();
         return $response;
     }
 
     public function run(string $fetchMode = Constants::PDO_FETCH_ALL_MODE, $cache = true) {
-        $response = app()->getConnection()->execute($this->getQuery(), $this->getArguments(), $fetchMode, $cache);
+        $response = $this->app->getConnection()->execute($this->getQuery(), $this->getArguments(), $fetchMode, $cache);
         $this->resetQuery();
 
         if($fetchMode === Constants::PDO_FETCH_ONE_MODE)

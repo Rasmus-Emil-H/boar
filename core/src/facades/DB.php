@@ -19,8 +19,8 @@ class DB {
             : $this->data;
     }
 
-    public static function table(string $table, string|int $primaryKey = ''): QueryBuilder {
-        return (new QueryBuilder(__CLASS__, $table, $primaryKey));
+    public static function table(string $table, string $class = __CLASS__, string|int $primaryKey = ''): QueryBuilder {
+        return (new QueryBuilder($class, $table, $primaryKey));
     }
 
 }

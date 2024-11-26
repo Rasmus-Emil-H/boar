@@ -140,7 +140,10 @@ window[appName].behaviour = {
             button.html(_backupNodes);
             new WorkerParent({data: body, cb, target, type: 'std', notificationType: 'Uploading file'});
         }
-    }
+    },
+    displayPushUpdate: function() {
+        console.log("do math");
+    },
 }
 
 

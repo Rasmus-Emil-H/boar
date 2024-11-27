@@ -89,14 +89,12 @@ window[appName].behaviour = {
         });
     },
     checkSubmittedFormResponse: function(response) {
-        if (response.responseJSON) {
-            if (typeof response.responseJSON === 'object') 
-                window[appName].components.toast(response.responseJSON.message ?? 'Success', window[appName].constants.mdbootstrap.SUCCESS_CLASS); 
-            else 
-                window[appName].components.toast(response.responseJSON, window[appName].constants.mdbootstrap.SUCCESS_CLASS);
-        }
-        
-        if (response.redirect) window.location.replace(response.redirect);
+        if (response.redirect) return window.location.replace(response.redirect);
+        if (!response.responseJSON) return;
+
+        window[appName].components.toast((
+            typeof response.responseJSON === 'object' ? response.responseJSON.message ?? 'Success' : response.responseJSON 
+        ), window[appName].constants.mdbootstrap.SUCCESS_CLASS);  
     },
     referenceGETForm(form) {
         let href = '?';

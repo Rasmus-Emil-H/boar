@@ -12,8 +12,8 @@ final class Response {
 
     private const HTTP_OK = 200;
     private const HTTP_CREATED = 201;
-    private const HTTP_LOCATION_TEMP = 301;
-    private const HTTP_LOCATION_PERM = 302;
+    private const HTTP_LOCATION_PERM = 301;
+    private const HTTP_LOCATION_TEMP = 302;
     private const HTTP_BAD_REQUEST = 400;
     private const HTTP_AUTHENTICATION_FAILED = 401;
     private const HTTP_UNAUTHORIZED = 403;
@@ -30,7 +30,7 @@ final class Response {
         $path = app()->getRequest()->getPath();
         if($path === '/admin') app()->getSession()->set('redirect', $path);
 
-        $this->setStatusCode(self::HTTP_LOCATION_TEMP);
+        $this->setStatusCode(self::HTTP_LOCATION_PERM);
         header('Location: ' . $location);
     }
 

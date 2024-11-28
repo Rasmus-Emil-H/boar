@@ -30,6 +30,7 @@ class Pagination {
     private function checkTableConfigurations() {
         $tableConfigurations = $this->app->getConfig()->get('frontend')->table;
         if (!$tableConfigurations) throw new \app\core\src\exceptions\NotFoundException(self::MISSING_TABLE_CONFIG_ERROR_MESSAGE);
+
         $this->maxAllowedFrontendPages = $tableConfigurations->maximumPageInterval;
     }
 
@@ -55,8 +56,8 @@ class Pagination {
         $negativIndex = $this->pageIndex - $pageDivision;
         $positiveIndex = $this->pageIndex + $pageDivision;
 
-        $firstVisuelPage = $needsManyPages ? $negativIndex < self::PAGINATION_START_PAGE ? self::PAGINATION_START_PAGE : $negativIndex : self::PAGINATION_START_PAGE;
-        $lastVisualPage = $needsManyPages ? $positiveIndex > $this->totalPaginationPagesNeeded ? $this->totalPaginationPagesNeeded : $positiveIndex : $this->totalPaginationPagesNeeded;
+        $firstVisuelPage = $needsManyPages ? ($negativIndex < self::PAGINATION_START_PAGE ? self::PAGINATION_START_PAGE : $negativIndex) : self::PAGINATION_START_PAGE;
+        $lastVisualPage  = $needsManyPages ? ($positiveIndex > $this->totalPaginationPagesNeeded ? $this->totalPaginationPagesNeeded : $positiveIndex) : $this->totalPaginationPagesNeeded;
 
         for ($page = $firstVisuelPage; $page <= $lastVisualPage; $page++) $pages[] = $page;
 

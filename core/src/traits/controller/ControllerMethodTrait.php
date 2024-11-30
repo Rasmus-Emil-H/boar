@@ -28,27 +28,12 @@ trait ControllerMethodTrait {
     public function determineClientResponseMethod(mixed $dispatchedHTTPMethodResult): string {
         if (is_array($dispatchedHTTPMethodResult)) $dispatchedHTTPMethodResult = $dispatchedHTTPMethodResult['message'] ?? '';
 
-        $backendMessageContainsErrorInString = is_int(strpos(strtolower($dispatchedHTTPMethodResult) ?? '', 'error'));
+        $backendMessageContainsErrorInString = is_int(strpos(strtolower(string: $dispatchedHTTPMethodResult) ?? '', 'error'));
 
         return $backendMessageContainsErrorInString ? 'dataConflict' : 'ok';
     }
 
-    public function edit() {
-        $this->denyGETRequest();
-        $this->dispatchMethodOnEntity();
-    }
-
-    public function view() {
-        $this->denyPOSTRequest();
-        $this->dispatchMethodOnEntity();
-    }
-
-    public function delete() {
-        $this->denyGETRequest();
-        $this->dispatchMethodOnEntity('delete');
-    }
-
-    private function dispatchMethodOnEntity(string $method = '') {
+    public function dispatchMethodOnEntity(string $method = '') {
         $cEntity = $this->returnValidEntityIfExists();
 
         $request = $this->requestBody->body;
@@ -67,7 +52,7 @@ trait ControllerMethodTrait {
             $file = new File($newFile);
             
             if (empty($file->getName())) continue;
-            $destination = $file->moveFile();
+            $destination = $file->moveFile($this->requestBody->body);
 
             $cFile = new FileModel();
             $cFile->setData([
@@ -80,6 +65,10 @@ trait ControllerMethodTrait {
             $cFile->save();
             $this->requestBody->body->$customFileType = $cFile;
         }
+    }
+
+    public function routedModelBinding(): void {
+        // return (object)['body' => $this->requestBody->body, 'entity' => $this->returnValidEntityIfExists()];
     }
 
     public function dispatchMethodAction() {

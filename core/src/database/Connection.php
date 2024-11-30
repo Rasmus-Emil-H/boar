@@ -12,7 +12,7 @@
 
 namespace app\core\src\database;
 
-use app\core\src\exceptions\NotFoundException;
+use InvalidArgumentException;
 
 class Connection {
     
@@ -27,12 +27,11 @@ class Connection {
     ];
 
     private \Pdo $pdo;
-
-    private array $queryCache;
-    private const CACHE_TTL = 60;
-    private const MAX_CACHE_SIZE = 1000;
     
-    protected function __construct(#[\SensitiveParameter] array $pdoConfigurations) {
+    protected function __construct(
+        #[\SensitiveParameter] array $pdoConfigurations,
+        private Cache $cache = new Cache()
+    ) {
         $this->pdo = new \PDO($pdoConfigurations['dsn'], $pdoConfigurations['user'], $pdoConfigurations['password'], $this->defaultPdoOptions);
         $this->pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
     }
@@ -54,56 +53,47 @@ class Connection {
         return self::$instance;
     }
 
-    public function execute(#[\SensitiveParameter] string $query, #[\SensitiveParameter] array $args = [], string $fetchType = self::DEFAULT_SQL_QUERY_FETCH_TYPE, $cache = true) {
+    public function execute(
+        #[\SensitiveParameter] string $query, 
+        #[\SensitiveParameter] array $args = [], 
+        string $fetchType = self::DEFAULT_SQL_QUERY_FETCH_TYPE, 
+        $cache = true
+    ) {
         try {
+            $this->validateFetchType($fetchType);
 
-            /**
-             * Check if caching is wanted
-             */
-
-            if ($cache) {
-                $serializedArguments = array_map(function($arg) {
-                    return $arg instanceof \SimpleXMLElement ? (string)$arg : $arg;
-                }, $args);
-    
-                $cacheKey = md5($query . serialize($serializedArguments));
-    
-                if (isset($this->queryCache[$cacheKey])) {
-                    $cachedResult = $this->queryCache[$cacheKey];
-                    
-                    /**
-                     * TTL
-                     */
-
-                    if (time() - $cachedResult['timestamp'] < self::CACHE_TTL) return $cachedResult['result'];
-                    unset($this->queryCache[$cacheKey]);
-                }
-            }
-
-            /**
-             * Query
-             */
-
-            $stmt = $this->pdo->prepare($query);
-            if (!method_exists($stmt, $fetchType)) throw new NotFoundException('Invalid fetch type');
-            $stmt->execute($args);
-
-            $result = $stmt->{$fetchType}();
+            $cacheKey = $this->generateCacheKey($query, $args);
             
-            /**
-             * Evict if needed (MRU)
-             * And store
-             */
-
-            if ($cache && !empty($result)) {
-                if (!empty($this->queryCache) && count($this->queryCache) > self::MAX_CACHE_SIZE) array_shift($this->queryCache);
-                $this->queryCache[$cacheKey] = ['result' => $result, 'timestamp' => time()];
+            if ($cache) {
+                $cachedResult = $this->cache->get($cacheKey);
+                if ($cachedResult !== null) return $cachedResult;
             }
-  
+
+            $result = $this->performQuery($query, $args, $fetchType);
+
+            if ($cache && !empty($result)) $this->cache->set($cacheKey, $result);
+
             return $result;
-        } catch (\PDOException $e) {
-            app()->getLogger()->log('SQL QUERY FAIL: ' . implode(',' . PHP_EOL, explode(',', $query)));
+        } catch (\PDOException $pdoException) {
+            app()->getLogger()->log($pdoException);
         }
+    }
+
+    private function generateCacheKey(string $query, array $args): string {
+        $serializedArgs = array_map(fn($arg) => $arg instanceof \SimpleXMLElement ? (string)$arg : $arg, $args);
+        return md5($query . serialize($serializedArgs));
+    }
+
+    private function validateFetchType(string $fetchType): void {
+        if (method_exists(\PDOStatement::class, $fetchType)) return;
+
+        throw new InvalidArgumentException('Invalid fetch type');
+    }
+
+    private function performQuery(string $query, array $args, string $fetchType): mixed {
+        $stmt = $this->pdo->prepare($query);
+        $stmt->execute($args);
+        return $stmt->{$fetchType}();
     }
 
     public function getLastInsertedID() {

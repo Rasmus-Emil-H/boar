@@ -22,7 +22,8 @@ trait ControllerMethodTrait {
 
     public function checkAction() {
         if (isset($this->requestBody->body->action)) return;
-            throw new \app\core\src\exceptions\NotFoundException(self::ACTION_NOT_FOUND);
+        
+        throw new \app\core\src\exceptions\NotFoundException(self::ACTION_NOT_FOUND);
     }
 
     public function determineClientResponseMethod(mixed $dispatchedHTTPMethodResult): string {

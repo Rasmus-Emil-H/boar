@@ -63,11 +63,10 @@ class Connection {
             $this->validateFetchType($fetchType);
 
             $cacheKey = $this->generateCacheKey($query, $args);
+
+            $cachedResult = $this->cache->get($cacheKey);
             
-            if ($cache) {
-                $cachedResult = $this->cache->get($cacheKey);
-                if ($cachedResult !== null) return $cachedResult;
-            }
+            if ($cache && $cachedResult) return $cachedResult;
 
             $result = $this->performQuery($query, $args, $fetchType);
 

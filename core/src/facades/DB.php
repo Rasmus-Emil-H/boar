@@ -23,4 +23,20 @@ class DB {
         return (new QueryBuilder($class, $table, $primaryKey));
     }
 
+    public static function dump(array $tables = []): void {
+        $config = app()->getConfig()->get('database');
+        $dsn = \app\core\src\miscellaneous\CoreFunctions::last(explode(';', $config->dsn));
+        $db = str_replace('dbname=', '', $dsn->scalar);
+        $fileName = app()::$ROOT_DIR . '/' . time() . 'test.sql';
+
+        exec(sprintf(
+            'mysqldump -u %s -p%s -h 127.0.0.1 %s %s > %s',
+            escapeshellarg($config->user),
+            escapeshellarg($config->password),
+            escapeshellarg($db),
+            implode(' ', array_map('escapeshellarg', $tables)),
+            escapeshellarg($fileName) 
+        ));
+    }
+
 }

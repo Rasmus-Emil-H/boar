@@ -7,12 +7,6 @@
  * Feel free to further strengthen the allowence of the controller access
  */
 
-/**
- * Playground controller
- * AUTHOR: RE_WEB
- * @package app\controllers
- */
-
 namespace app\controllers;
 
 use \app\core\src\Controller;

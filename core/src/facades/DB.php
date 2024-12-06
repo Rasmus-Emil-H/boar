@@ -27,6 +27,7 @@ class DB {
         $config = app()->getConfig()->get('database');
         $dsn = \app\core\src\miscellaneous\CoreFunctions::last(explode(';', $config->dsn));
         $db = str_replace('dbname=', '', $dsn->scalar);
+        
         $fileName = app()::$ROOT_DIR . '/' . time() . 'test.sql';
 
         exec(sprintf(

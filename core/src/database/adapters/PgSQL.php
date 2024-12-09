@@ -23,7 +23,7 @@ class PgSQL extends Adapter {
         \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION,
     ];
 
-    protected string $driverName = 'mysql';
+    protected string $driverName = 'pgsql';
 
     public function doConnect(): PDO {
         $db = $this->config;

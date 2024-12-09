@@ -13,10 +13,13 @@
 namespace app\core;
 
 use \app\core\src\database\Connection;
+
 use \app\core\src\factories\ControllerFactory;
+
+use \app\core\src\miscellaneous\CoreFunctions;
+
 use \app\models\SystemEventModel;
 use \app\models\UserModel;
-use \app\core\src\miscellaneous\CoreFunctions;
 
 use \app\core\src\traits\application\ApplicationGetterTrait;
 use \app\core\src\traits\application\ApplicationStaticMethodTrait;
@@ -30,11 +33,16 @@ final class Application {
     protected src\http\Request $request;
     protected src\http\Response $response;
     protected src\http\Session $session;
-    protected Connection $connection;
     protected src\http\View $view;
+
+    protected Connection $connection;
+
     protected src\I18n $i18n;
+
     protected src\config\Config $config;
+
     protected src\utilities\Logger $logger;
+
     protected src\Controller $parentController;
 
     public static string $ROOT_DIR;

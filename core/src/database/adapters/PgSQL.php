@@ -28,7 +28,7 @@ class PgSQL extends Adapter {
     public function doConnect(): PDO {
         $db = $this->config;
 
-        $pdo = new PDO('pgsql:' . $db->dsn, $db->user, $db->password, $this->options);
+        $pdo = new PDO($this->getDriverName() . ':' . $db->dsn, $db->user, $db->password, $this->options);
         $pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
 
         return $pdo;

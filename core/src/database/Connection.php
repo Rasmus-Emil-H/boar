@@ -95,7 +95,7 @@ class Connection {
         return $stmt->{$fetchType}();
     }
 
-    public function getLastInsertedID() {
+    public function getLastInsertedID(): string|false {
         return $this->pdo->lastInsertId();
     }
 

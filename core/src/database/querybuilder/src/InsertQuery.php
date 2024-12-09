@@ -4,6 +4,13 @@ namespace app\core\src\database\querybuilder\src;
 
 trait InsertQuery {
 
+    public function insertBatch(array $fields, array $data): self {
+        $this->upsertQuery("INSERT INTO {$this->table} (" . implode(',', $fields) . ") VALUES " . implode(',', array_map(function($row) {
+            return '(' . implode(',', $row) . ')';
+        }, $data)));
+        return $this;
+    }
+
     public function create(array|object $fields): self {
         $this->preparePlaceholdersAndBoundValues((array)$fields, 'insert');
         $this->upsertQuery("INSERT INTO {$this->table} ({$this->fields}) VALUES ({$this->placeholders})");

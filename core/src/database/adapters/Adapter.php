@@ -13,16 +13,16 @@ abstract class Adapter {
         return $this->doConnect($config);
     }
 
-    public function getDriverName() {
+    public function getDriverName(): string {
         return $this->driver;
     }
 
-    public function getConfig() {
+    public function getConfig(): object {
         return $this->config;
     }
 
-    public function getConfigValue($name, $default = null) {
-        return isset($this->config[$name]) ? $this->config[$name] : $default;
+    public function getConfigValue($name, $default = null): mixed {
+        return $this->config[$name] ?: $default;
     }
 
     abstract protected function doConnect();

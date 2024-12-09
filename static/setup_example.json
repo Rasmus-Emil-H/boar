@@ -9,7 +9,7 @@
     },
     "inDevelopment": true,
     "database": {
-        "dsn": "mysql:host=127.0.0.1;port=3306;dbname=boar",
+        "dsn": "host=127.0.0.1;port=3306;dbname=boar",
         "user": "root",
         "password": ""
     },

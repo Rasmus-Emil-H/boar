@@ -13,6 +13,9 @@
 namespace app\core\src\database;
 
 use \app\core\src\database\adapters\Adapter;
+
+use app\core\src\exceptions\InvalidTypeException;
+
 use InvalidArgumentException;
 
 class Connection {
@@ -52,6 +55,8 @@ class Connection {
 
     private function createAdapter() {
         if (is_object($this->adapter)) return $this->adapter;
+
+        throw new InvalidTypeException('Invalid adapter was provided');
     }
 
     protected function __clone() {

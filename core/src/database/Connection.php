@@ -12,6 +12,7 @@
 
 namespace app\core\src\database;
 
+use \app\core\src\database\adapters\Adapter;
 use InvalidArgumentException;
 
 class Connection {
@@ -20,20 +21,37 @@ class Connection {
 
     private const DEFAULT_SQL_QUERY_FETCH_TYPE = 'fetchAll';
 
-    private array $defaultPdoOptions = [
-        \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_OBJ,
-        \PDO::ATTR_EMULATE_PREPARES => false,
-        \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION,
-    ];
-
     private \Pdo $pdo;
+    protected Adapter $adapter;
     
     protected function __construct(
-        #[\SensitiveParameter] array $pdoConfigurations,
+        Adapter $adapter,
         private Cache $cache = new Cache()
     ) {
-        $this->pdo = new \PDO($pdoConfigurations['dsn'], $pdoConfigurations['user'], $pdoConfigurations['password'], $this->defaultPdoOptions);
-        $this->pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+        $this
+            ->setAdapter($adapter)
+            ->connect();
+    }
+
+    private function setAdapter(Adapter $adapter): self {
+        $this->adapter = $adapter;
+        return $this;
+    }
+
+    private function connect() {
+        $this->setPDO(
+            $this->createAdapter()->connect(
+                app()->getConfig()->get('database')
+            )
+        );
+    }
+
+    private function setPDO(\PDO $pdo) {
+        $this->pdo = $pdo;
+    }
+
+    private function createAdapter() {
+        if (is_object($this->adapter)) return $this->adapter;
     }
 
     protected function __clone() {
@@ -48,8 +66,8 @@ class Connection {
         return method_exists($this, $method) ? call_user_func_array([$this, $method], $params) : "PDO::$method does not exists.";
     }
 
-    public static function getInstance(array $pdoConfigurations) {
-        if (!self::$instance) self::$instance = new self($pdoConfigurations);
+    public static function getInstance(Adapter $adapter) {
+        if (!self::$instance) self::$instance = new self($adapter);
         return self::$instance;
     }
 
@@ -110,4 +128,5 @@ class Connection {
     public function rollback(): void { 
         $this->pdo->rollback();
     }
+    
 }

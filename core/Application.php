@@ -12,6 +12,8 @@
 
 namespace app\core;
 
+use \app\core\src\database\adapters\MySQL;
+
 use \app\core\src\database\Connection;
 
 use \app\core\src\factories\ControllerFactory;
@@ -71,8 +73,7 @@ final class Application {
     }
 
     protected function setConnection() {
-        $database = $this->config->get('database');
-        $this->connection = Connection::getInstance(['dsn' => $database->dsn, 'user' => $database->user, 'password' => $database->password]);
+        $this->connection = Connection::getInstance(new MySQL());
     }
 
     public function checkLanguage() {

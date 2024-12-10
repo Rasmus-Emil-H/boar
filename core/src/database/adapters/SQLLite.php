@@ -2,7 +2,7 @@
 
 /**
 |----------------------------------------------------------------------------
-| MySQL adapter
+| SQLLite adapter
 |----------------------------------------------------------------------------
 |
 | @author RE_WEB
@@ -15,7 +15,7 @@ namespace app\core\src\database\adapters;
 
 use PDO;
 
-class MySQL extends Adapter {
+class SQLLite extends Adapter {
 
     private array $options = [
         \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_OBJ,

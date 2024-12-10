@@ -25,10 +25,8 @@ class MySQL extends Adapter {
 
     protected string $driverName = 'mysql';
 
-    public function doConnect(): PDO {
-        $db = $this->config;
-
-        $pdo = new PDO($this->getDriverName() . ':' . $db->dsn, $db->user, $db->password, $this->options);
+    public function doConnect(object $config): PDO {
+        $pdo = new PDO($this->getDriverName() . ':' . $config->dsn, $config->user, $config->password, $this->options);
         $pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
 
         return $pdo;

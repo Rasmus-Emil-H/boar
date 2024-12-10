@@ -25,6 +25,6 @@ abstract class Adapter {
         return $this->config[$name] ?: $default;
     }
 
-    abstract protected function doConnect();
+    abstract protected function doConnect(object $config);
 
 }

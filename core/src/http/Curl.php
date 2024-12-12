@@ -18,14 +18,18 @@ final class Curl {
 	private const GET_METHOD = 'get';
 	private const AUTHENTICATION_METHOD_KEY = 'authenticationMethod';
 	private const AUTHENTICATION_CREDENTIALS_KEY = 'credentials';
+
 	protected $handler = null;
 	protected string $url = '';
+
+	protected string $method = 'get';
+	protected $content;
+
 	protected $info = [];
 	protected $data = [];
 	protected array $headers = [];
-	protected string $method = 'get';
 	protected array $auth = [];
-	protected $content;
+	protected array $cookies;
 	
 	public function setUrl(string $url = ''): self {
 		$this->url = $url;
@@ -63,6 +67,7 @@ final class Curl {
 		curl_setopt_array($this->handler, [
 			CURLOPT_URL => $this->url,
 			CURLOPT_HTTPHEADER => $this->headers,
+			CURLOPT_HEADER => 1,
 			CURLOPT_RETURNTRANSFER => true
 		]);
 	}
@@ -96,6 +101,12 @@ final class Curl {
 	private function sendAndReceiveRequest(): void {
 		$this->content = curl_exec($this->handler);
 		$this->info = curl_getinfo($this->handler);
+		$this->setCookies();
+	}
+
+	private function setCookies() {
+		preg_match_all('/^Set-Cookie:\s*([^;]*)/mi', $this->content, $matches);
+		$this->cookies = $matches[1];
 	}
 
 	public function send(bool $appendOnlyFirstDataIndex = false): void {
@@ -118,6 +129,10 @@ final class Curl {
 
 	public function getContent(): string|bool {
 		return $this->content;
+	}
+
+	public function getCookies(): array {
+		return $this->cookies;
 	}
 
 	public function close(): void {

@@ -29,7 +29,8 @@ final class Curl {
 	protected $data = [];
 	protected array $headers = [];
 	protected array $auth = [];
-	protected array $cookies;
+	protected array $responseCookies;
+	protected array $requestCookies;
 	
 	public function setUrl(string $url = ''): self {
 		$this->url = $url;
@@ -68,7 +69,8 @@ final class Curl {
 			CURLOPT_URL => $this->url,
 			CURLOPT_HTTPHEADER => $this->headers,
 			CURLOPT_HEADER => 1,
-			CURLOPT_RETURNTRANSFER => true
+			CURLOPT_RETURNTRANSFER => true,
+			CURLOPT_FOLLOWLOCATION => true
 		]);
 	}
 
@@ -101,18 +103,24 @@ final class Curl {
 	private function sendAndReceiveRequest(): void {
 		$this->content = curl_exec($this->handler);
 		$this->info = curl_getinfo($this->handler);
-		$this->setCookies();
+		$this->setResponseCookies();
 	}
 
-	private function setCookies() {
+	private function setResponseCookies() {
 		preg_match_all('/^Set-Cookie:\s*([^;]*)/mi', $this->content, $matches);
-		$this->cookies = $matches[1];
+		$this->responseCookies = $matches[1];
+	}
+
+	private function checkCookies() {
+		if (empty($this->requestCookies)) return;
+		curl_setopt($this->handler, CURLOPT_COOKIE, implode(',', $this->requestCookies));
 	}
 
 	public function send(bool $appendOnlyFirstDataIndex = false): void {
 		try {
 			$this->checkHandler();
 			$this->prepareRequest($appendOnlyFirstDataIndex);
+			$this->checkCookies();
 			$this->sendAndReceiveRequest();
 		} catch( \Exception $e ) {
 			die( $e->getMessage() );
@@ -131,8 +139,17 @@ final class Curl {
 		return $this->content;
 	}
 
-	public function getCookies(): array {
-		return $this->cookies;
+	public function getResponseCookies(): array {
+		return $this->responseCookies;
+	}
+
+	public function getRequestCookies(): array {
+		return $this->requestCookies;
+	}
+
+	public function setRequestCookies(array $cookies): self {
+		$this->requestCookies = $cookies;
+		return $this;
 	}
 
 	public function close(): void {

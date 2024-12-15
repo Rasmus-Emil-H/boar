@@ -53,10 +53,11 @@ class Connection {
         $this->pdo = $pdo;
     }
 
-    private function createAdapter() {
-        if (is_object($this->adapter)) return $this->adapter;
+    private function createAdapter(): object {
+        if (!is_object($this->adapter)) throw new InvalidTypeException('Invalid adapter was provided');
 
-        throw new InvalidTypeException('Invalid adapter was provided');
+        static::$instance = $this->adapter;
+        return $this->adapter;
     }
 
     protected function __clone() {

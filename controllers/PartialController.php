@@ -11,6 +11,7 @@ class PartialController extends Controller {
 		$this->setData([
 			'navbar' => $this->getView(),
 			'navigationItems' => app()->getConfig()->get('frontend')->menus->user
+			
 		]);
     }
 

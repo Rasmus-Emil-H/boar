@@ -13,7 +13,7 @@ class Cache {
         #[\SensitiveParameter] private int $MAX_CACHE_SIZE = 1000
     ) {}
 
-    public function get(string $key) {
+    public function get(string $key): mixed {
         if (!isset($this->cache[$key])) return null;
 
         $entry = $this->cache[$key];
@@ -22,7 +22,7 @@ class Cache {
         $this->evict($key);
     }
 
-    public function set(string $key, mixed $result) {
+    public function set(string $key, mixed $result): void {
         if (count($this->cache) >= $this->MAX_CACHE_SIZE) array_shift($this->cache);
 
         $this->cache[$key] = [self::RESULT_KEY => $result, self::TIMESTAMP_KEY => time()];

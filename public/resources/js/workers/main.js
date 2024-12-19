@@ -3,11 +3,9 @@ import WorkerManager from './WorkerManager.js';
 
 class WorkerParent {
     constructor(options) {
-        this.type = options.type;
-        this.data = options.data;
-        this.target = options.target;
-        this.callback = options.cb;
-        this.additionalData = options.additionalData ?? {};
+        this.options = options;
+
+        this.setProperties();
 
         this.notificationHandler = new NotificationHandler(options.notificationType);
         this.workerManager = new WorkerManager(this.type, this.data);
@@ -17,6 +15,14 @@ class WorkerParent {
         this.initialize();
     }
 
+    setProperties() {
+        this.type = this.options.type;
+        this.data = this.options.data;
+        this.target = this.options.target;
+        this.callback = this.options.cb;
+        this.additionalData = this.options.additionalData ?? {};
+    }
+
     initialize() {
         this.notificationHandler.showNotification();
         this.startWorkerCycle();
@@ -24,7 +30,7 @@ class WorkerParent {
 
     prepareData() {
         const body = {};
-
+        
         for (let [key, value] of this.data.entries()) body[key] = value;
         if (!Object.keys(body).includes('url')) body.url = location.href;
 

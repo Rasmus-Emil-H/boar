@@ -52,7 +52,7 @@ trait EntityQueryTrait {
         return $this;
     }
 
-    public function init(): void {
+    public function init() {
 		return $this->getQueryBuilder()->initializeNewEntity(data: $this->data);
 	}
 
@@ -101,6 +101,20 @@ trait EntityQueryTrait {
 
     public function findOne(string $field, string $value): Entity {
         return $this->bootstrapQuery()->where(arguments: [$field => $value])->run(fetchMode: 'fetch');
+    }
+
+    public function findFirst(string $field, string $value): Entity {
+        $tmp = $this->findOne($field, $value);
+        $tmp->requireExistence();
+
+        return $this->bootstrapQuery()->where([$field => $value])->orderBy($tmp->getKeyField(), 'ASC')->limit(1)->run('fetch');
+    }
+
+    public function findLast(string $field, string $value): Entity {
+        $tmp = $this->findOne($field, $value);
+        $tmp->requireExistence();
+
+        return $this->bootstrapQuery()->where([$field => $value])->orderBy($tmp->getKeyField(), 'DESC')->limit(1)->run('fetch');
     }
 
     /**

@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+use app\core\src\miscellaneous\CoreFunctions;
+
 /**
 |----------------------------------------------------------------------------
 | Session
@@ -60,9 +62,7 @@ function getIterableJsonEncodedData(array|object $iterable): array {
             throw new \app\core\src\exceptions\NotFoundException("getData method was not found");
         
         foreach ($iteration->getData() as $dataKey => $dataValue)
-            $result[$iteration->key()][$dataKey] = is_iterable($dataValue) ? 
-                getIterableJsonEncodedData($dataValue) : 
-                json_encode($dataValue);
+            $result[$iteration->key()][$dataKey] = is_iterable($dataValue) ? getIterableJsonEncodedData($dataValue) : json_encode($dataValue);
     }
 
     return $result;
@@ -78,4 +78,37 @@ function renderComponent($method, $arguments = []) {
 
 function CSRFTokenInput(): string {
     return (new \app\core\src\tokens\CsrfToken())->insertHiddenToken();
+}
+
+/**
+ * Dump and die
+ */
+
+function dumpAndDie(mixed $input) {
+    return \app\core\src\miscellaneous\CoreFunctions::dd($input);
+}
+
+function printme($input): void {
+    var_dump($input).PHP_EOL;
+    space();
+}
+
+function space(): void {
+    echo PHP_EOL.PHP_EOL.PHP_EOL;
+}
+
+function panic(string $reason = ''): void {
+    exit($reason);
+}
+
+function first(array|object $data): mixed {
+    return CoreFunctions::first($data)?->scalar;
+}
+
+function last(array|object $data): mixed {
+    return CoreFunctions::last($data)?->scalar;
+}
+
+function index(array|object $data, string|int $expectedIndex): mixed {
+    return CoreFunctions::getIndex($data, $expectedIndex)?->scalar; 
 }

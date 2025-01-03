@@ -42,7 +42,9 @@ class WorkerParent {
 
         this.workerManager.setOnMessage((e) => {
             this.notificationHandler.showNotification();
-            if (this.callback) this.callback(this.target, { responseJSON: e.data, additionalData: this.additionalData });
+            if (!this.callback) return; 
+            
+            this.callback(this.target, { responseJSON: e.data, additionalData: this.additionalData });
         });
     }
 }

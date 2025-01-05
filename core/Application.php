@@ -140,6 +140,7 @@ final class Application {
 
     public function bootstrap(): void {
         try {
+            $this->appServices->fetchAndRunServices();
             $this->router->resolve();
         } catch (Throwable $applicationError) {
             $this->displayError($applicationError);

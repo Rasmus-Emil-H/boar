@@ -20,6 +20,7 @@ final class File {
     public const JS_EXTENSION = 'js';
     public const CSS_EXTENSION = 'css';
     public const TPL_FILE_EXTENSION = '.tpl.php';
+    public const PHP_EXTENSION = '.php';
 
     public const FILE_NOT_FOUND     = 'File not found';
     protected const MAXIMUM_FILE_SIZE  = 10000000;

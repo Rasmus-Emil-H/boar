@@ -37,6 +37,10 @@ trait ApplicationGetterTrait {
         return $this->i18n;
     }
 
+    public function getServiceProvider(): \app\core\src\services\ApplicationServices {
+        return $this->appServices;
+    }
+
     public function getView(): \app\core\src\http\View {
         return $this->view;
     }

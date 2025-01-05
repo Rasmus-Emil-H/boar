@@ -11,4 +11,8 @@ class BootstrapProvider implements ServiceProvider {
         app()->getServiceProvider()->bind(WeatherAPI::class);
     }
 
+    public function boot(): void {
+        
+    }
+
 }

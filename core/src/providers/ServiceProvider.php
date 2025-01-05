@@ -15,5 +15,6 @@ namespace app\core\src\providers;
 interface ServiceProvider {
 
     public function register(): void;
+    public function boot(): void;
 
 }

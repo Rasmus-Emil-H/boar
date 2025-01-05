@@ -7,6 +7,7 @@ try {
     $app = new \app\core\Application();
     if (!IS_CLI) $app->bootstrap();
 } catch (\Throwable $e) {
+    debug($e);
     die;
 }
 

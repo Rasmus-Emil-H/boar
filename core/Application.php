@@ -19,12 +19,17 @@ use \app\core\src\database\Connection;
 use \app\core\src\factories\ControllerFactory;
 
 use \app\core\src\miscellaneous\CoreFunctions;
-
 use \app\models\SystemEventModel;
 use \app\models\UserModel;
 
 use \app\core\src\traits\application\ApplicationGetterTrait;
 use \app\core\src\traits\application\ApplicationStaticMethodTrait;
+
+use \app\core\src\providers\ServiceProvider;
+
+use \app\core\src\services\ApplicationServices;
+
+use Throwable;
 
 final class Application {
 
@@ -36,6 +41,8 @@ final class Application {
     protected src\http\Response $response;
     protected src\http\Session $session;
     protected src\http\View $view;
+
+    protected ServiceProvider $appServices;
 
     protected Connection $connection;
 
@@ -70,6 +77,7 @@ final class Application {
         $this->checkLanguage();
         $this->validateUserSession();
         $this->i18n         = new src\I18n();
+        $this->appServices  = new ApplicationServices();
     }
 
     protected function setConnection() {
@@ -119,18 +127,22 @@ final class Application {
         if ($exit) exit();
     }
 
+    private function displayError(Throwable $applicationError) {
+        $error = (new ControllerFactory(['handler' => 'Error']))->create();
+        $this->setParentController($error);
+        
+        $error->setChildren(['Header']);
+        $error->setChildData();
+
+        $error?->index($applicationError);
+        $this->logger->log($applicationError);
+    }
+
     public function bootstrap(): void {
         try {
             $this->router->resolve();
-        } catch (\Throwable $applicationError) {
-            $error = (new ControllerFactory(['handler' => 'Error']))->create();
-            $this->setParentController($error);
-            
-            $error->setChildren(['Header']);
-            $error->setChildData();
-
-            $error?->index($applicationError);
-            $this->logger->log($applicationError);
+        } catch (Throwable $applicationError) {
+            $this->displayError($applicationError);
         }
     }
     

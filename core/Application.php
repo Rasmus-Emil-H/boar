@@ -12,6 +12,8 @@
 
 namespace app\core;
 
+use \app\core\src\contracts\Service;
+
 use \app\core\src\database\adapters\MySQL;
 
 use \app\core\src\database\Connection;
@@ -24,8 +26,6 @@ use \app\models\UserModel;
 
 use \app\core\src\traits\application\ApplicationGetterTrait;
 use \app\core\src\traits\application\ApplicationStaticMethodTrait;
-
-use \app\core\src\providers\ServiceProvider;
 
 use \app\core\src\services\ApplicationServices;
 
@@ -42,7 +42,7 @@ final class Application {
     protected src\http\Session $session;
     protected src\http\View $view;
 
-    protected ServiceProvider $appServices;
+    protected ApplicationServices $appServices;
 
     protected Connection $connection;
 
@@ -125,6 +125,10 @@ final class Application {
     public function log(string $message, bool $exit = false): void {
         echo date('Y-m-d H:i:s') . ' ' . $message . PHP_EOL;
         if ($exit) exit();
+    }
+
+    public function getService(string $service): Service {
+        return $this->appServices->getService($service);
     }
 
     private function displayError(Throwable $applicationError) {

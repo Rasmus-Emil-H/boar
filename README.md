@@ -202,6 +202,23 @@
 </details>
 
 <details>
+    <summary>Service providers</summary>
+
+    Services that you have to instansiate and use throughout the system can become cumbersome and hard to maintain
+
+    Therefore boar comes with the ability to create a file in the providers dir (cp BootstrapProvider)
+
+    This will, on application bootstrapping, run the register method and attach services to your application, that you can then
+    get by calling 
+    
+    ```
+    <?php
+        
+    $service = app()->getService($service);
+    ```
+</details>
+
+<details>
     <summary>Controllers</summary>
 
     Creating a controller is straightforward, either cp one of existing or create a new as below.

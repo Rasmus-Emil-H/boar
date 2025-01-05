@@ -21,7 +21,9 @@ use \app\core\src\providers\ServiceProvider;
 
 use \app\core\src\contracts\Service;
 
-class ApplicationServices implements ServiceProvider {
+use \app\core\src\exceptions\NotFoundException;
+
+class ApplicationServices {
 
     private const PROVIDER_DIR = '/providers';
 
@@ -36,18 +38,22 @@ class ApplicationServices implements ServiceProvider {
     }
 
     public function bind(string $service): void {
-       $this->setServices(new $service());
+       $this->setServices($service, new $service());
     }
 
     public function getServices(): array {
         return $this->services;
     }
 
-    private function setServices(Service $service): void {
-        $this->services[] = $service;
+    public function getService(string $service): Service {
+        if (!isset($this->services[$service])) throw new NotFoundException('Service not found');
+        
+        return $this->services[$service];
     }
 
-    public function register(): void {}
+    private function setServices(string $key, Service $service): void {
+        $this->services[$key] = $service;
+    }
 
     private function createObject(string $file): ServiceProvider {
         return (new ProviderFactory(['handler' => $file]))->create();

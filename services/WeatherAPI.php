@@ -17,7 +17,7 @@ namespace app\services;
 
 use \app\core\src\contracts\Service;
 
-class WeatherAPI extends Service {
+class WeatherAPI implements Service {
 
     public function run(): ?string {
         return __CLASS__ . ' is alive';

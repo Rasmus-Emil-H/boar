@@ -2,7 +2,9 @@
 
 declare(strict_types=1);
 
-use app\core\src\miscellaneous\CoreFunctions;
+use \app\core\src\exceptions\InvalidTypeException;
+
+use \app\core\src\miscellaneous\CoreFunctions;
 
 /**
 |----------------------------------------------------------------------------
@@ -111,4 +113,13 @@ function last(array|object $data): mixed {
 
 function index(array|object $data, string|int $expectedIndex): mixed {
     return CoreFunctions::getIndex($data, $expectedIndex)?->scalar; 
+}
+
+function env(string $key): object {
+    $obj = app()->getConfig()->get($key);
+
+    if (is_string($obj))
+        throw new InvalidTypeException('Invalid env key');
+
+    return $obj;
 }

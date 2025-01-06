@@ -208,6 +208,29 @@
 
     Therefore boar comes with the ability to create a file in the providers dir (cp BootstrapProvider)
 
+    or
+
+    ``
+    <?php
+
+    namespace app\providers;
+
+    use \app\core\src\providers\ServiceProvider;
+    use \app\services\WeatherAPI;
+
+    class BootstrapProvider implements ServiceProvider {
+
+        public function register(): void {
+            app()->getServiceProvider()->bind(WeatherAPI::class);
+        }
+
+        public function boot(): void {
+            
+        }
+
+    }
+    ```
+
     This will, on application bootstrapping, run the register method and attach services to your application, that you can then
     get by calling 
     

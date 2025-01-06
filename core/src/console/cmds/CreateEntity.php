@@ -2,9 +2,13 @@
 
 namespace app\core\src\console\cmds;
 
+use \app\core\src\contracts\Console;
+
 use \app\core\src\miscellaneous\CoreFunctions;
 
-class CreateEntity {
+use \app\core\src\File;
+
+class CreateEntity implements Console {
 
     protected array $entityTypes = ['controller', 'model', 'migration', 'view'];
 
@@ -23,13 +27,14 @@ class CreateEntity {
 
     private function checkEntityExistence(string $entityName): void {
         $filename = "models/{$entityName}Model.php";
+
         if (!file_exists($filename)) return;
 
         exit('Entity already exists - Aborting operation');
     }
 
     protected function createController(string $name): void {
-        $controllerTemplate = <<<EOT
+        $content = <<<EOT
         <?php
 
         namespace app\controllers;
@@ -45,23 +50,27 @@ class CreateEntity {
         }
         EOT;
 
-        $filename = "controllers/{$name}Controller.php";
-        file_put_contents($filename, $controllerTemplate);
-        echo "Created controller: $filename\n";
+        $fileName = "controllers/{$name}Controller.php";
+
+        File::putContent($fileName, $content);
+
+        echo "Created controller: $fileName\n";
     }
 
     protected function createView(string $name): void {
-        $controllerTemplate = <<<EOT
+        $content = <<<EOT
         Im a template file for $name!
         EOT;
 
-        $filename = "views/{$name}.tpl.php";
-        file_put_contents($filename, $controllerTemplate);
-        echo "Created view: $filename\n";
+        $fileName = "views/{$name}.tpl.php";
+
+        File::putContent($fileName, $content); 
+
+        echo "Created view: $fileName\n";
     }
 
     protected function createModel(string $name): void {
-        $modelTemplate = <<<EOT
+        $content = <<<EOT
         <?php
 
         namespace app\models;
@@ -81,9 +90,11 @@ class CreateEntity {
         }
         EOT;
 
-        $filename = "models/{$name}Model.php";
-        file_put_contents($filename, $modelTemplate);
-        echo "Created model: $filename\n";
+        $fileName = "models/{$name}Model.php";
+
+        File::putContent($fileName, $content);
+
+        echo "Created model: $fileName\n";
     }
 
     private function formatMigrationName(string $name): string {
@@ -94,7 +105,7 @@ class CreateEntity {
         $migrationName = $this->formatMigrationName($name);
         $tableNamespace = 'use \app\core\src\database\table\Table';
 
-        $migrationTemplate = <<<EOT
+        $content = <<<EOT
         <?php
 
         /**
@@ -124,9 +135,10 @@ class CreateEntity {
         }
         EOT;
 
-        $filename = "migrations/$migrationName.php";
-        file_put_contents($filename, $migrationTemplate);
+        $fileName = "migrations/$migrationName.php";
 
-        echo "Created migration: $filename\n";
+        File::putContent($fileName, $content);
+
+        echo "Created migration: $fileName\n";
     }
 }

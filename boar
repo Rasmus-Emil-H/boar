@@ -5,5 +5,4 @@ require_once 'vendor/autoload.php';
 
 use \app\core\src\console\ConsoleCommand;
 
-$command = new ConsoleCommand($argv);
-$command->run();
+(new ConsoleCommand($argv))->setCmd()->run();

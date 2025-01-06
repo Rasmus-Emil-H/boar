@@ -32,4 +32,8 @@ trait FileStaticMethodTrait {
         return '<script defer src="'.str_replace(self::getResourceDir(), '/resources/', $location).'"></script>';
     }
 
+    public static function putContent(string $fileName, string $content): int|false {
+        return file_put_contents($fileName, $content);
+    }
+
 }

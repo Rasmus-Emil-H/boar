@@ -1,6 +1,18 @@
 <?php
 
+/**
+|----------------------------------------------------------------------------
+| Base for CLI behaviour
+|----------------------------------------------------------------------------
+|
+| @author RE_WEB
+| @package core\src
+|
+*/
+
 namespace app\core\src;
+
+use \app\core\src\exceptions\NotFoundException;
 
 class CLI {
 
@@ -18,10 +30,9 @@ class CLI {
         ];
     }
 
-    private static function checkValidity(string $task) {
-        if (array_key_exists($task, self::getJobs())) return;
-
-        throw new \app\core\src\exceptions\NotFoundException('CLI TOOL NOT FOUND' . PHP_EOL);
+    private static function checkValidity(string $task): void {
+        if (!array_key_exists($task, self::getJobs()))
+            throw new NotFoundException('CLI TOOL NOT FOUND' . PHP_EOL);
     }
 
     public static function checkTask(string $task): void {

@@ -1,13 +1,24 @@
 <?php
 
+/**
+|----------------------------------------------------------------------------
+| Base for Cron behaviour
+|----------------------------------------------------------------------------
+|
+| @author RE_WEB
+| @package core\src\scheduling
+|
+*/
+
 namespace app\core\src\scheduling;
 
 use \app\core\src\factories\CronjobFactory;
+
 use \app\models\CronModel;
 
 class Cron {
 
-    protected array $cronjobs;
+    protected array $cronjobs = [];
 
     protected function getCronjobs(): array {
         return $this->cronjobs;

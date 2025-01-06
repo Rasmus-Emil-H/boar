@@ -118,8 +118,7 @@ function index(array|object $data, string|int $expectedIndex): mixed {
 function env(string $key): object {
     $obj = app()->getConfig()->get($key);
 
-    if (is_string($obj))
-        throw new InvalidTypeException('Invalid env key');
+    if ($obj === 'invalidEnvKey') throw new InvalidTypeException('Invalid env key');
 
     return $obj;
 }

@@ -115,7 +115,7 @@ function index(array|object $data, string|int $expectedIndex): mixed {
     return CoreFunctions::getIndex($data, $expectedIndex)?->scalar; 
 }
 
-function env(string $key): object {
+function env(string $key): object|string {
     $obj = app()->getConfig()->get($key);
 
     if ($obj === 'invalidEnvKey') throw new InvalidTypeException('Invalid env key');

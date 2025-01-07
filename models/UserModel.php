@@ -54,8 +54,7 @@ final class UserModel extends Entity {
 
 	public function logout(): void {
 		(new SessionModel())
-			->findOne('Value', app()->getSession()
-			->get('SessionID'))
+			->findOne('Value', app()->getSession()->get('SessionID'))
 			?->delete();
 	}
 
@@ -77,10 +76,12 @@ final class UserModel extends Entity {
 	}
 
 	public function hasActiveSession() {
+		$appSession = app()->getSession();
+
 		$session = (new SessionModel())
 			->query()
 			->select()
-			->where(['Value' => app()->getSession()->get('SessionID'), $this->getKeyField() => app()->getSession()->get('user')])
+			->where(['Value' => $appSession->get('SessionID'), $this->getKeyField() => $appSession->get('user')])
 		->run();
 
         return !empty($session) && CoreFunctions::first($session)->exists();

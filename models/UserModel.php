@@ -52,9 +52,11 @@ final class UserModel extends Entity {
 		]);
 	}
 
-	public function logout() {
-		$sessions = (new SessionModel())->findMultiple($this->getKeyField(), CoreFunctions::applicationUser()->key());
-		foreach ($sessions as $session) $session->delete();
+	public function logout(): void {
+		(new SessionModel())
+			->findOne('Value', app()->getSession()
+			->get('SessionID'))
+			?->delete();
 	}
 
 	public function requestPasswordReset(string $email) {
@@ -93,9 +95,9 @@ final class UserModel extends Entity {
             app()->getResponse()->dataConflict(self::PASSWORD_ERROR_TEXT);
 	}
 
-	public function generateRandomUserOrientedPassword(): string {
+	public function generatePassword(?string $password = null): string {
 		return password_hash(
-			password: rand(self::PASSWORD_DEFAULT_RAND_FROM_INT, self::PASSWORD_DEFAULT_RAND_TO_INT), 
+			password: $password ?: rand(self::PASSWORD_DEFAULT_RAND_FROM_INT, self::PASSWORD_DEFAULT_RAND_TO_INT), 
 			algo: PASSWORD_DEFAULT
 		);
 	}

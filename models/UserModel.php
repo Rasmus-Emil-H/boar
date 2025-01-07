@@ -75,7 +75,7 @@ final class UserModel extends Entity {
         app()->getResponse()->setResponse(201, ['redirect' => '/auth/login']);
 	}
 
-	public function hasActiveSession() {
+	public function hasActiveSession(): bool {
 		$appSession = app()->getSession();
 
 		$session = (new SessionModel())

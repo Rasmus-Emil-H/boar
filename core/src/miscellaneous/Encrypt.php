@@ -1,19 +1,21 @@
 <?php
 
-/**
-|----------------------------------------------------------------------------
-| Default encryption
-|----------------------------------------------------------------------------
-|
-| @author RE_WEB
-| @package core
-|
-*/
-
 namespace app\core\src\miscellaneous;
 
-class Encrypt {
+use \app\core\src\attributes\Description;
 
+#[Description(
+    summary: 'Default encryption handler for the application',
+    author: 'RE_WEB',
+    package: 'core'
+)]
+final class Encrypt {
+
+    #[Description(
+        summary: 'Generates encryption keys for use in the encryption process.',
+        author: 'RE_WEB',
+        package: 'core'
+    )]
     private static function generateKeys(): array {
         return [
             'first' => base64_encode(openssl_random_pseudo_bytes(32)),
@@ -21,22 +23,36 @@ class Encrypt {
         ];
     }
 
+    #[Description(
+        summary: 'Fetches encryption-related configuration details.',
+        author: 'RE_WEB',
+        package: 'core'
+    )]
     private static function getConfig(): object {
         return app()->getConfig()->get('encryption')->openssl;
     }
 
+    #[Description(
+        summary: 'Encrypts the given data using AES encryption.',
+        author: 'RE_WEB',
+        package: 'core'
+    )]
     public static function encrypt(mixed $data): string {
         $config = self::getConfig();
-
         $ivLength = openssl_cipher_iv_length($config->method);
         $iv = openssl_random_pseudo_bytes($ivLength);
 
         $first = openssl_encrypt($data, $config->method, base64_decode($config->firstKey), OPENSSL_RAW_DATA, $iv);
-        $second = hash_hmac($config->hashMacAlgo, $first, base64_decode($config->secondKey), TRUE);
+        $second = hash_hmac($config->hashMacAlgo, $first, base64_decode($config->secondKey), true);
 
         return base64_encode($iv . $second . $first);
     }
 
+    #[Description(
+        summary: 'Decrypts the provided encrypted string and validates its integrity.',
+        author: 'RE_WEB',
+        package: 'core'
+    )]
     public static function decrypt(mixed $data): bool|string {
         $config = self::getConfig();
 
@@ -45,14 +61,11 @@ class Encrypt {
         $iv = substr($data, 0, $ivLength);
 
         $second = substr($data, $ivLength, 64);
-        $first   = substr($data, $ivLength + 64);
+        $first  = substr($data, $ivLength + 64);
 
-        $data = openssl_decrypt($first, $config->method, base64_decode($config->firstKey), OPENSSL_RAW_DATA, $iv);
-        $userString = hash_hmac($config->hashMacAlgo, $first, base64_decode($config->secondKey), TRUE);
+        $decryptedData = openssl_decrypt($first, $config->method, base64_decode($config->firstKey), OPENSSL_RAW_DATA, $iv);
+        $userString = hash_hmac($config->hashMacAlgo, $first, base64_decode($config->secondKey), true);
 
-        if (hash_equals($second, $userString)) return $data;
-
-        return false;
+        return hash_equals($second, $userString) ? $decryptedData : false;
     }
-
 }

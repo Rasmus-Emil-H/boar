@@ -46,10 +46,10 @@ function ths(string $string): string {
     return \app\core\src\miscellaneous\CoreFunctions::ths($string);
 }
 
-function hs(?string $string): string {
+function hs(string|int $string): string {
     if (!$string) return '';
 
-    return htmlspecialchars($string);
+    return htmlspecialchars((string)$string);
 }
 
 function app() {

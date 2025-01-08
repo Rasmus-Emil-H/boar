@@ -122,8 +122,8 @@ final class Curl {
 			$this->prepareRequest($appendOnlyFirstDataIndex);
 			$this->checkCookies();
 			$this->sendAndReceiveRequest();
-		} catch( \Exception $e ) {
-			die( $e->getMessage() );
+		} catch(\Exception $e) {
+			debug($e);
 		}
 	}
 	

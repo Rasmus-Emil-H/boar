@@ -17,10 +17,16 @@ namespace app\services;
 
 use \app\core\src\contracts\Service;
 
-class WeatherAPI implements Service {
+use \app\core\src\thirdpartycommunication\ThirdPartyCommunication;
+
+class WeatherAPI Extends ThirdPartyCommunication implements Service {
 
     public function run(): ?string {
         return __CLASS__ . ' is alive';
+    }
+
+    public function sendAndReceive() {
+        
     }
 
 }

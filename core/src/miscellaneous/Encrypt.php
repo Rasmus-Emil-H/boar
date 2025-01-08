@@ -3,6 +3,7 @@
 namespace app\core\src\miscellaneous;
 
 use \app\core\src\attributes\Description;
+use \app\core\src\attributes\ParameterDetails;
 
 #[Description(
     summary: 'Default encryption handler for the application',
@@ -11,32 +12,23 @@ use \app\core\src\attributes\Description;
 )]
 final class Encrypt {
 
-    #[Description(
-        summary: 'Generates encryption keys for use in the encryption process.',
-        author: 'RE_WEB',
-        package: 'core'
-    )]
+    private const BITS_256 = 32;
+    private const BITS_512 = 64;
+
+    #[Description(summary: 'Generates encryption keys for use in the encryption process')]
     private static function generateKeys(): array {
         return [
-            'first' => base64_encode(openssl_random_pseudo_bytes(32)),
-            'second' => base64_encode(openssl_random_pseudo_bytes(64))
+            'first' => bin2hex(random_bytes(self::BITS_256)),
+            'second' => bin2hex(random_bytes(self::BITS_512))
         ];
     }
 
-    #[Description(
-        summary: 'Fetches encryption-related configuration details.',
-        author: 'RE_WEB',
-        package: 'core'
-    )]
+    #[Description(summary: 'Fetches encryption-related configuration details')]
     private static function getConfig(): object {
-        return app()->getConfig()->get('encryption')->openssl;
+        return env('encryption')->openssl;
     }
 
-    #[Description(
-        summary: 'Encrypts the given data using AES encryption.',
-        author: 'RE_WEB',
-        package: 'core'
-    )]
+    #[Description(summary: 'Encrypts the given data using AES encryption')]
     public static function encrypt(mixed $data): string {
         $config = self::getConfig();
         $ivLength = openssl_cipher_iv_length($config->method);
@@ -48,11 +40,7 @@ final class Encrypt {
         return base64_encode($iv . $second . $first);
     }
 
-    #[Description(
-        summary: 'Decrypts the provided encrypted string and validates its integrity.',
-        author: 'RE_WEB',
-        package: 'core'
-    )]
+    #[Description(summary: 'Decrypts the provided encrypted string and validates its integrity')]
     public static function decrypt(mixed $data): bool|string {
         $config = self::getConfig();
 

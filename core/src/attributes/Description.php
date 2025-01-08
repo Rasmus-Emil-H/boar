@@ -6,7 +6,7 @@ namespace app\core\src\attributes;
 class Description {
     public function __construct(
         public string $summary,
-        public string $author,
-        public string $package
+        public ?string $author = null,
+        public ?string $package = null
     ) {}
 }

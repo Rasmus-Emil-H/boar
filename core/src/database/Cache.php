@@ -20,6 +20,8 @@ class Cache {
         if ((time() - $entry[self::TIMESTAMP_KEY]) < $this->CACHE_TTL) return $entry[self::RESULT_KEY];
 
         $this->evict($key);
+
+        return 'invalid key: ' . $key;
     }
 
     public function set(string $key, mixed $result): void {

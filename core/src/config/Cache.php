@@ -3,8 +3,6 @@
 namespace app\core\src\config;
 
 class Cache {
-    
-    private string $cache_dir = '/tmp/cache';
 
     private array $data;
 
@@ -15,9 +13,7 @@ class Cache {
     }
 
     private function bootstrap() {
-        $available_options = array($this->cache_dir);
-
-        foreach ($available_options as $name)
+        foreach (scandir($this->getCacheDirectory()) as $name)
             if (isset($options[$name]))
                 $this->data[$name] = $options[$name];
     }
@@ -37,7 +33,7 @@ class Cache {
         }
 
         $serialized = join('', $lines);
-        
+
         return unserialize($serialized);
     }
 
@@ -49,26 +45,30 @@ class Cache {
     public function save(string $id, $data, int $lifetime = 3600): int|false {
         $dir = $this->getDirectory($id);
         if (!is_dir($dir)) if (!mkdir($dir, 0755, true)) return false;
+        
         $file_name  = $this->getFileName($id);
         $lifetime   = time() + $lifetime;
         $serialized = serialize($data);
+
         return file_put_contents($file_name, $lifetime . PHP_EOL . $serialized);
     }
 
     protected function getDirectory(string $id): string {
-        $hash = hash('sha256', $id, false);
+        $hash = hash(env('hash')->algo, $id, false);
         $dirs = [$this->getCacheDirectory(), substr($hash, 0, 2), substr($hash, 2, 2)];
+
         return join(DIRECTORY_SEPARATOR, $dirs);
     }
 
     protected function getCacheDirectory() {
-        return $this->cache_dir;
+        return env('cache')->defaultDir;
     }
 
     protected function getFileName(string $id): string {
         $directory  = $this->getDirectory($id);
-        $hash       = hash('sha256', $id, false);
+        $hash       = hash(env('hash')->algo, $id, false);
         $file       = $directory . DIRECTORY_SEPARATOR . $hash . '.cache';
+
         return $file;
     }
 }

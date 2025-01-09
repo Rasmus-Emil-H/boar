@@ -35,10 +35,10 @@ class Cache {
             @unlink($file_name);
             return false;
         }
-        $serialized = join('', $lines);
-        $data       = unserialize($serialized);
 
-        return $data;
+        $serialized = join('', $lines);
+        
+        return unserialize($serialized);
     }
 
     public function delete(string $id): bool {

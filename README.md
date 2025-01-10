@@ -749,7 +749,30 @@
     php boar unit-test
     ```
 
-    You can further more create tests by doing
+    Which, if all goes well will result in something like 
+
+    ```
+    🚀 Ready to run tests: 2
+
+    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    🔍 Test File: BooleanTest
+    📋 Status: ✅ SUCCESS
+    🕣 Executed At: 10-01-2025 13:55:29
+    ⏳ Duration: 0.001985 seconds
+    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    🔍 Test File: SampleTest
+    📋 Status: ✅ SUCCESS
+    🕣 Executed At: 10-01-2025 13:55:29
+    ⏳ Duration: 0.000122 seconds
+    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+    🎉 Tests (2) completed!
+    😿 Tests (0) failed
+    ```
+
+    You can furthermore create tests by doing
 
     ```
     php boar create-test sample

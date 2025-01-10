@@ -2,6 +2,8 @@
 
 namespace app\core\src\console;
 
+use \app\core\src\CLI;
+
 use \app\core\src\console\cmds\CreateEntity;
 use \app\core\src\console\cmds\CreateTest;
 use \app\core\src\console\cmds\SeedDatabase;
@@ -23,10 +25,15 @@ class ConsoleCommand {
     private Console $cmd;
 
     public function __construct(
-        private array $arguments
+        private array $arguments,
+        public CLI $cli = new CLI()
     ) {
         $this->setCommand();
         $this->removeRedundantArgs();
+    }
+
+    private function getCLI(): CLI {
+        return $this->cli;
     }
 
     private function setCommand() {
@@ -42,7 +49,7 @@ class ConsoleCommand {
     public function setCmd(): self|string {
         if (!isset($this->commands[$this->command])) exit($this->printUsage());
 
-        $this->cmd = new $this->commands[$this->command]();
+        $this->cmd = new $this->commands[$this->command]($this->getCLI());
 
         return $this;
     }
@@ -59,7 +66,8 @@ class ConsoleCommand {
         Usage: php boar [options...]
 
         Current commands:
-        $cmds
+
+        $cmds        
         EOT;
 
         exit(echoCLI($help));

@@ -3,6 +3,7 @@
 namespace app\core\src\unittest\assert;
 
 trait AssertTypes {
+
     public function assertInstanceOf() {
 
     }
@@ -15,7 +16,7 @@ trait AssertTypes {
 
     }
 
-    public function assertIsBool($value): bool {
+    public function assertIsBool(mixed $value): bool {
         return gettype($value) === 'boolean';
     }
 
@@ -51,11 +52,12 @@ trait AssertTypes {
 
     }
 
-    public function assertIsString() {
-
+    public function assertIsString(string $value): bool {
+        return gettype($value) === 'string';
     }
 
     public function assertNull() {
 
     }
+    
 }

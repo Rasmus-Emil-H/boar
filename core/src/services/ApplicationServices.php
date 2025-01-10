@@ -60,7 +60,7 @@ class ApplicationServices {
     }
 
     private function getProviderDir(): array {
-        return preg_grep('/^([^.])/', scandir(app()::$ROOT_DIR . self::PROVIDER_DIR));
+        return File::getFilesWithoutDots(app()::$ROOT_DIR . self::PROVIDER_DIR);
     }
 
 }

@@ -202,46 +202,6 @@
 </details>
 
 <details>
-    <summary>Service providers</summary>
-
-    Services that you have to instansiate and use throughout the system can become cumbersome and hard to maintain
-
-    Therefore boar comes with the ability to create a file in the providers dir (cp BootstrapProvider)
-
-    or
-
-    ``
-    <?php
-
-    namespace app\providers;
-
-    use \app\core\src\providers\ServiceProvider;
-    use \app\services\WeatherAPI;
-
-    class BootstrapProvider implements ServiceProvider {
-
-        public function register(): void {
-            app()->getServiceProvider()->bind(WeatherAPI::class);
-        }
-
-        public function boot(): void {
-            
-        }
-
-    }
-    ```
-
-    This will, on application bootstrapping, run the register method and attach services to your application, that you can then
-    get by calling 
-    
-    ```
-    <?php
-        
-    $service = app()->getService($service);
-    ```
-</details>
-
-<details>
     <summary>Controllers</summary>
 
     Creating a controller is straightforward, either cp one of existing or create a new as below.
@@ -618,6 +578,12 @@
     ```
 
     The cmd above will create: A controller, a model, a migration file and a view
+
+    For more information, please run
+
+    ```
+    php boar help
+    ```
 </details>
 
 <details>
@@ -732,4 +698,84 @@
         // Do something with the res
     });
     ```
+</details>
+
+<details>
+    <summary>Service providers</summary>
+
+    Services that you have to instansiate and use throughout the system can become cumbersome and hard to maintain
+
+    Therefore boar comes with the ability to create a file in the providers dir (cp BootstrapProvider)
+
+    or
+
+    ```
+    <?php
+
+    namespace app\providers;
+
+    use \app\core\src\providers\ServiceProvider;
+    use \app\services\WeatherAPI;
+
+    class BootstrapProvider implements ServiceProvider {
+
+        public function register(): void {
+            app()->getServiceProvider()->bind(WeatherAPI::class);
+        }
+
+        public function boot(): void {
+            
+        }
+
+    }
+    ```
+
+    This will, on application bootstrapping, run the register method and attach services to your application, that you can then
+    get by calling 
+    
+    ```
+    <?php
+        
+    $service = app()->getService($service);
+    ```
+</details>
+
+<details>
+    <summary>Unit testing</summary>
+
+    A minor tool for unit testing your objects are availible by running
+
+    ```
+    php boar unit-test
+    ```
+
+    You can further more create tests by doing
+
+    ```
+    php boar create-test sample
+    ```
+
+    Which will touch a file in ~/tests
+
+    ```
+    <?php
+
+    namespace app\tests;
+
+    use \app\core\src\contracts\UnitTest;
+
+    use \app\core\src\unittest\TestCase;
+
+    final class SampleTest extends TestCase implements UnitTest {
+
+        public function run(): mixed {
+            return 'it\'a alive';
+        }
+
+    }
+    ```
+
+    TestCase object has various methods that you can build upon @ ~/core/src/unittest/assert/*
+
+    At the moment they are all bound to ~/core/src/unittest/src/Assert.php, which TestCase uses
 </details>

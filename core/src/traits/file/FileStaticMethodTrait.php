@@ -36,4 +36,8 @@ trait FileStaticMethodTrait {
         return file_put_contents($fileName, $content);
     }
 
+    public static function getFilesWithoutDots(string $dir): array {
+        return preg_grep('/^([^.])/', scandir($dir));
+    }
+
 }

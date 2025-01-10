@@ -2,7 +2,10 @@
 <?php
 
 require_once 'vendor/autoload.php';
+require_once 'yard.php';
 
 use \app\core\src\console\ConsoleCommand;
 
-(new ConsoleCommand($argv))->setCmd()->run();
+$method = ($argv[1] ?? 'run') === 'help' ? 'help' : 'run';
+
+(new ConsoleCommand($argv))->{$method}();

@@ -122,3 +122,7 @@ function env(string $key): object|string {
 
     return $obj;
 }
+
+function echoCLI(string $string): void {
+    echo $string . PHP_EOL;
+}

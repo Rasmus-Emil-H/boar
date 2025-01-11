@@ -22,7 +22,7 @@ class UnitTest implements Console {
     public function __construct(
         private CLI $cli
     ) {
-        $this->testFiles = File::getFilesWithoutDots(dirname(__DIR__, $this->nestedDirDepth) . '/tests');
+        $this->testFiles = File::getNonHiddenFiles(dirname(__DIR__, $this->nestedDirDepth) . '/tests');
         
         $this->stdin(PHP_EOL . '🚀 Ready to run tests: ' . count($this->testFiles), 'cyan');
     }

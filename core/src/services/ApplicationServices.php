@@ -60,7 +60,7 @@ class ApplicationServices {
     }
 
     private function getProviderDir(): array {
-        return File::getFilesWithoutDots(app()::$ROOT_DIR . self::PROVIDER_DIR);
+        return File::getNonHiddenFiles(app()::$ROOT_DIR . self::PROVIDER_DIR);
     }
 
 }

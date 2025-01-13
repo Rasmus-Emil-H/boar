@@ -129,6 +129,10 @@
         "pushAPI": {
             "privatePEM": "",
             "b64Public": ""
+        },
+        "weatherapi": {
+            "apikey": "1234",
+            "base": "https://api.meteomatics.com"
         }
     }
 }

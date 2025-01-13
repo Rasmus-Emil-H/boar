@@ -19,14 +19,14 @@ final class Curl {
 	private const AUTHENTICATION_METHOD_KEY = 'authenticationMethod';
 	private const AUTHENTICATION_CREDENTIALS_KEY = 'credentials';
 
-	protected $handler = null;
 	protected string $url = '';
-
 	protected string $method = 'get';
+	
 	protected $content;
-
+	protected $handler = null;
 	protected $info = [];
 	protected $data = [];
+
 	protected array $headers = [];
 	protected array $auth = [];
 	protected array $responseCookies;
@@ -116,12 +116,13 @@ final class Curl {
 		curl_setopt($this->handler, CURLOPT_COOKIE, implode(',', $this->requestCookies));
 	}
 
-	public function send(bool $appendOnlyFirstDataIndex = false): void {
+	public function send(bool $appendOnlyFirstDataIndex = false): self {
 		try {
 			$this->checkHandler();
 			$this->prepareRequest($appendOnlyFirstDataIndex);
 			$this->checkCookies();
 			$this->sendAndReceiveRequest();
+			return $this;
 		} catch(\Exception $e) {
 			debug($e);
 		}

@@ -26,6 +26,7 @@ use \app\core\src\exceptions\NotFoundException;
 class ApplicationServices {
 
     private const PROVIDER_DIR = '/providers';
+    private const INVALID_SERVICE_NAME = 'Service not found';
 
     private array $services = [];
 
@@ -46,7 +47,7 @@ class ApplicationServices {
     }
 
     public function getService(string $service): Service {
-        if (!isset($this->services[$service])) throw new NotFoundException('Service not found');
+        if (!isset($this->services[$service])) throw new NotFoundException(self::INVALID_SERVICE_NAME);
         
         return $this->services[$service];
     }

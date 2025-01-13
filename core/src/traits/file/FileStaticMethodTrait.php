@@ -4,6 +4,9 @@ namespace app\core\src\traits\file;
 
 trait FileStaticMethodTrait {
 
+    private const INVALID_STYLESHEET = 'Stylesheet not found';
+    private const INVALID_SCRIPT = 'Script not found';
+
     public static function base64Encode(string $filePath) {
         if (!file_exists($filePath)) return 'data:image/jpeg;base64,';
 
@@ -11,25 +14,25 @@ trait FileStaticMethodTrait {
     }
 
     public static function getResourceDir() {
-        return app()::$ROOT_DIR.'/public/resources/';
+        return app()::$ROOT_DIR . '/public/resources/';
     }
 
     public static function buildStylesheet(string $src): string {
-        $location = self::getResourceDir().self::CSS_EXTENSION.'/'.$src.'.'.self::CSS_EXTENSION;
+        $location = self::getResourceDir() . self::CSS_EXTENSION . '/' . $src . '.' . self::CSS_EXTENSION;
 
         if (!file_exists($location)) 
-            throw new \app\core\src\exceptions\NotFoundException('Stylesheet not found');
+            throw new \app\core\src\exceptions\NotFoundException(self::INVALID_STYLESHEET);
 
         return '<link rel="stylesheet" href="'.str_replace(self::getResourceDir(), '/resources/', $location).'">';
     }
 
     public static function buildScript(string $src): string {
-        $location = self::getResourceDir().self::JS_EXTENSION.'/'.$src.'.'.self::JS_EXTENSION;
+        $location = self::getResourceDir() . self::JS_EXTENSION . '/' . $src .'.' . self::JS_EXTENSION;
         
         if (!file_exists($location)) 
-            throw new \app\core\src\exceptions\NotFoundException('Script not found');
+            throw new \app\core\src\exceptions\NotFoundException(self::INVALID_SCRIPT);
 
-        return '<script defer src="'.str_replace(self::getResourceDir(), '/resources/', $location).'"></script>';
+        return '<script defer src="' . str_replace(self::getResourceDir(), '/resources/', $location) . '"></script>';
     }
 
     public static function putContent(string $fileName, string $content): int|false {

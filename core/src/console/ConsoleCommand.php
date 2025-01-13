@@ -24,6 +24,8 @@ class ConsoleCommand {
 
     private Console $cmd;
 
+    private const USAGE_TEXT = 'Unknow command was provided. Usage: php boar {{command}} {{args} \n';
+
     public function __construct(
         private array $arguments,
         public CLI $cli = new CLI()
@@ -74,8 +76,7 @@ class ConsoleCommand {
     }
 
     protected function printUsage(): string {
-        return "Unknow command was provided. Usage: php boar {{command}} {{args} \n";
+        return self::USAGE_TEXT;
     }
 
-    
 }

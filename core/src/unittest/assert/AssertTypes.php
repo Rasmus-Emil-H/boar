@@ -3,61 +3,59 @@
 namespace app\core\src\unittest\assert;
 
 trait AssertTypes {
-
-    public function assertInstanceOf() {
-
+    public function assertInstanceOf(mixed $value, string $className): bool {
+        return $value instanceof $className;
     }
 
-    public function assertIsArray() {
-
+    public function assertIsArray(mixed $value): bool {
+        return is_array($value);
     }
 
-    public function assertIsList() {
-
+    public function assertIsList(mixed $value): bool {
+        return is_array($value) && array_is_list($value);
     }
 
     public function assertIsBool(mixed $value): bool {
-        return gettype($value) === 'boolean';
+        return is_bool($value);
     }
 
-    public function assertIsCallable() {
-
+    public function assertIsCallable(mixed $value): bool {
+        return is_callable($value);
     }
 
-    public function assertIsFloat() {
-
+    public function assertIsFloat(mixed $value): bool {
+        return is_float($value);
     }
 
-    public function assertIsInt() {
-
+    public function assertIsInt(mixed $value): bool {
+        return is_int($value);
     }
 
-    public function assertIsIterable() {
-
+    public function assertIsIterable(mixed $value): bool {
+        return is_iterable($value);
     }
 
-    public function assertIsNumeric() {
-
+    public function assertIsNumeric(mixed $value): bool {
+        return is_numeric($value);
     }
 
-    public function assertIsObject() {
-
+    public function assertIsObject(mixed $value): bool {
+        return is_object($value);
     }
 
-    public function assertIsResource() {
-
+    public function assertIsResource(mixed $value): bool {
+        return is_resource($value);
     }
 
-    public function assertIsScalar() {
-
+    public function assertIsScalar(mixed $value): bool {
+        return is_scalar($value);
     }
 
-    public function assertIsString(string $value): bool {
-        return gettype($value) === 'string';
+    public function assertIsString(mixed $value): bool {
+        return is_string($value);
     }
 
-    public function assertNull() {
-
+    public function assertNull(mixed $value): bool {
+        return is_null($value);
     }
-    
 }

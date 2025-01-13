@@ -26,7 +26,17 @@ class WeatherAPI Extends ThirdPartyCommunication implements Service {
     }
 
     public function sendAndReceive() {
-        
+        $request = $this
+            ->curl
+            ->setUrl(env('integrations')->weatherapi->base)
+            ->send();
+
+        $content = $request->getContent();
+
+        $request->close();
+
+        return $content;
+
     }
 
 }

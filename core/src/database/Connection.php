@@ -29,11 +29,15 @@ class Connection {
     
     protected function __construct(
         Adapter $adapter,
-        private Cache $cache = new Cache()
+        private Cache $cache = new Cache
     ) {
         $this
             ->setAdapter($adapter)
             ->connect();
+    }
+
+    public function getAdapter(): Adapter {
+        return $this->adapter;
     }
 
     private function setAdapter(Adapter $adapter): self {
@@ -56,20 +60,7 @@ class Connection {
     private function createAdapter(): object {
         if (!is_object($this->adapter)) throw new InvalidTypeException('Invalid adapter was provided');
 
-        static::$instance = $this->adapter;
         return $this->adapter;
-    }
-
-    protected function __clone() {
-        throw new \app\core\src\exceptions\ForbiddenException('Can not clone ' . get_called_class());
-    }
-
-    public function __wakeup() {
-        throw new \Exception('Can not unserialize ' . get_called_class());
-    }
-
-    public function __call(string $method, array $params = []) {
-        return method_exists($this, $method) ? call_user_func_array([$this, $method], $params) : "PDO::$method does not exists.";
     }
 
     public static function getInstance(Adapter $adapter) {
@@ -78,9 +69,9 @@ class Connection {
     }
 
     public function execute(
-        #[\SensitiveParameter] string $query, 
-        #[\SensitiveParameter] array $args = [], 
-        string $fetchType = self::DEFAULT_SQL_QUERY_FETCH_TYPE, 
+        #[\SensitiveParameter] string $query,
+        #[\SensitiveParameter] array $args = [],
+        string $fetchType = self::DEFAULT_SQL_QUERY_FETCH_TYPE,
         $cache = true
     ) {
         try {
@@ -133,6 +124,18 @@ class Connection {
     
     public function rollback(): void { 
         $this->pdo->rollback();
+    }
+
+    protected function __clone() {
+        throw new \app\core\src\exceptions\ForbiddenException('Can not clone ' . get_called_class());
+    }
+
+    public function __wakeup() {
+        throw new \Exception('Can not unserialize ' . get_called_class());
+    }
+
+    public function __call(string $method, array $params = []) {
+        return method_exists($this, $method) ? call_user_func_array([$this, $method], $params) : "PDO::$method does not exists.";
     }
     
 }

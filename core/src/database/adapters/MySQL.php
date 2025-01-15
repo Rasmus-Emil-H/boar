@@ -23,6 +23,10 @@ class MySQL extends Adapter {
         \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION,
     ];
 
+    public string $createTable = 'CREATE TABLE IF NOT EXISTS ';
+    public string $dropTable   = 'DROP TABLE IF EXISTS ';
+    public string $alterTable  = 'ALTER TABLE ';
+
     protected string $driverName = 'mysql';
 
     public function doConnect(object $config): PDO {

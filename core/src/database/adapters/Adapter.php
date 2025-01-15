@@ -7,6 +7,8 @@ abstract class Adapter {
     protected string $driver = 'mysql';
     protected object $config;
 
+    abstract protected function doConnect(object $config);
+
     public function connect($config) {
         $this->config = $config;
 
@@ -25,6 +27,8 @@ abstract class Adapter {
         return $this->config[$name] ?: $default;
     }
 
-    abstract protected function doConnect(object $config);
+    public function __get($name) {
+        return $this->{$name} ?? '';
+    }
 
 }

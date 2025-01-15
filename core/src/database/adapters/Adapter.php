@@ -27,7 +27,7 @@ abstract class Adapter {
         return $this->config[$name] ?: $default;
     }
 
-    public function __get($name) {
+    public function __get($name): string {
         return $this->{$name} ?? '';
     }
 

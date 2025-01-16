@@ -67,6 +67,9 @@ class Migration {
 
     public function iterateMigrations(array $toBeAppliedMigrations): void {
         $app = app();
+
+        if (!count($toBeAppliedMigrations)) $app->log('No migrations to be applied', exit: true);
+
         foreach ($toBeAppliedMigrations as $migration) {
             require_once $app::$ROOT_DIR . self::MIGRATION_DIR . $migration;
             $handler = pathinfo($migration, PATHINFO_FILENAME);
@@ -79,7 +82,7 @@ class Migration {
             $app->log(self::SUCCESSFULL_MIGRATION . $handler);
         }
 
-        $app->log("Done");
+        $app->log('Done');
     }
 
     public function seedLanguage() {

@@ -50,10 +50,6 @@ class Schema {
         (new MigrationModel())->query()->rawSQL($query)->run();
     }
 
-    /**
-     * Table CRUD
-     */
-    
     public function table($table, \Closure $callback): void {
         $table = new Table($table);
         $callback($table);

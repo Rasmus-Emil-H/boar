@@ -19,6 +19,10 @@ class DB {
             : $this->data;
     }
 
+    public function getData(): array {
+        return $this->data;
+    }
+
     public static function table(string $table, string $class = __CLASS__, string|int $primaryKey = ''): QueryBuilder {
         return (new QueryBuilder($class, $table, $primaryKey));
     }

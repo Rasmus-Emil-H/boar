@@ -1,2 +1,35 @@
-<p>If you're seeing this page your DocumentRoot is pointing to the wrong directory.</p>
-<p>Please point to {{root}}/public/ instead.</p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invalid configurations</title>
+    <style>
+        body {
+            background-color: #1b263b;
+        }
+
+        .error {
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        p {
+            font-weight: 600;
+            color: #c1bdbd;
+            font-family: "Gill Sans", sans-serif;
+        }
+    </style>
+</head>
+<body>
+    <div class="error">
+        <p>If you're seeing this page your DocumentRoot is pointing to the wrong directory.</p>
+        <p>Please point to {{root}}/public instead.</p>
+        <p>vim /etc/apache2/httpd.conf</p>
+    </div>
+</body>
+</html>

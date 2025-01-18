@@ -8,8 +8,10 @@ use \app\core\src\File;
 
 class CreateTest implements Console {
 
+    private const ERROR_MESSAGE = __CLASS__ . ' only takes 1 argument: the name of the test. ' . PHP_EOL . 'You provided the following arguments: ';
+
     public function run(array $args): void {
-        if (count($args) !== 1) exit(echoCLI(__CLASS__ . ' only takes 1 argument, the name'));
+        if (count($args) !== 1) exit(echoCLI(self::ERROR_MESSAGE . implode(',', $args)));
         
         $this->createTest(first($args));
     }

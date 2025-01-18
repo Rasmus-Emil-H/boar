@@ -24,7 +24,7 @@ class ConsoleCommand {
 
     private Console $cmd;
 
-    private const USAGE_TEXT = 'Unknow command was provided. Usage: php boar {{command}} {{args} \n';
+    private const USAGE_TEXT = 'Unknow command was provided. Usage: php boar {{command}} {{args}' . PHP_EOL;
 
     public function __construct(
         private array $arguments,

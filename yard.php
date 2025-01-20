@@ -126,3 +126,7 @@ function env(string $key): object|string {
 function echoCLI(string $string): void {
     echo $string . PHP_EOL;
 }
+
+function type(mixed $mixed): mixed {
+    return get_debug_type($mixed);
+}

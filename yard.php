@@ -127,6 +127,6 @@ function echoCLI(string $string): void {
     echo $string . PHP_EOL;
 }
 
-function type(mixed $mixed): mixed {
+function type(mixed $mixed): string {
     return get_debug_type($mixed);
 }

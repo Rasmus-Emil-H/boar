@@ -8,4 +8,6 @@ use \app\core\src\console\ConsoleCommand;
 
 $method = ($argv[1] ?? 'run') === 'help' ? 'help' : 'run';
 
+$app = new \app\core\Application();
+
 (new ConsoleCommand($argv))->{$method}();

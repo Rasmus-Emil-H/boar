@@ -6,6 +6,8 @@ use \app\core\src\CLI;
 
 use \app\core\src\console\cmds\CreateEntity;
 use \app\core\src\console\cmds\CreateTest;
+use \app\core\src\console\cmds\Migrate;
+use \app\core\src\console\cmds\NewMigration;
 use \app\core\src\console\cmds\SeedDatabase;
 use \app\core\src\console\cmds\UnitTest;
 
@@ -17,9 +19,11 @@ class ConsoleCommand {
 
     private array $commands = [
         'create-entity' => CreateEntity::class,
+        'migrate'       => Migrate::class,
+        'new-migration' => NewMigration::class,
         'seed-database' => SeedDatabase::class,
-        'create-test' => CreateTest::class,
-        'unit-test' => UnitTest::class,
+        'create-test'   => CreateTest::class,
+        'unit-test'     => UnitTest::class,
     ];
 
     private Console $cmd;
@@ -69,7 +73,7 @@ class ConsoleCommand {
 
         Current commands:
 
-        $cmds        
+        $cmds
         EOT;
 
         exit(echoCLI($help));

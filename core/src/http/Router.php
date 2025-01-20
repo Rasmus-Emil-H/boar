@@ -16,9 +16,14 @@
 namespace app\core\src\http;
 
 use \app\core\Application;
+
 use \app\core\src\Controller;
-use \app\core\src\factories\ControllerFactory;
 use \app\core\src\File;
+
+use \app\core\src\exceptions\InvalidTypeException;
+
+use \app\core\src\factories\ControllerFactory;
+
 use \app\core\src\miscellaneous\CoreFunctions;
 
 final class Router {
@@ -47,10 +52,10 @@ final class Router {
         $this->checkRouteAndGoToDefault();
 
         $handler = ucfirst(CoreFunctions::first($this->arguments)->scalar);
-        if ($this->isResource($handler)) exit;
+        if ($this->isResource($handler)) exit();
 
         $controller = (new ControllerFactory(compact('handler')))->create();
-        if (!$controller) exit;
+        if (!$controller) throw new InvalidTypeException('Invalid handler');
 
         $controllerMethod = $this->arguments[self::EXPECTED_CONTROLLER_METHOD_POSITION] ?? '';
 
@@ -84,8 +89,7 @@ final class Router {
 
     private function handleFrontendHydration(Controller $controller, array $data) {
         extract($data, EXTR_SKIP);
-        $layoutFile = $this->app::$ROOT_DIR .  File::LAYOUTS_FOLDER . $controller->getLayout() . File::TPL_FILE_EXTENSION;
-
+        $layoutFile = $this->app::$ROOT_DIR .  File::LAYOUTS_FOLDER . $controller->getLayout() . File::TPL_FILE_EXTENSION; 
         ob_start();
             require_once $controller->getView();
         $viewContent = ob_get_clean();

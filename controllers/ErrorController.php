@@ -8,9 +8,8 @@ class ErrorController extends Controller {
 
     public function index($error) {
         $this->response->setStatusCode($error->getCode());
-
         $this->addStylesheet('error');
-        $this->setFrontendTemplateAndData('error', ['exception' => $error, 'home' => app()->getConfig()->get('routes')->defaults->redirectTo]);
+        $this->setFrontendTemplateAndData('error', ['exception' => $error, 'home' => env('routes')->defaults->redirectTo]);
         extract($this->getData());
 
         require_once $this->getDataKey('header');

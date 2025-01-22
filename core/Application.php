@@ -147,7 +147,7 @@ final class Application {
             $this->appServices->fetchAndRunServices();
             $this->router->resolve();
         } catch (Throwable $applicationError) {
-            $this->displayError($applicationError);
+            exit($this->displayError($applicationError));
         }
     }
     

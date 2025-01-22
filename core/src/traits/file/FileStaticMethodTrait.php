@@ -26,13 +26,13 @@ trait FileStaticMethodTrait {
         return '<link rel="stylesheet" href="'.str_replace(self::getResourceDir(), '/resources/', $location).'">';
     }
 
-    public static function buildScript(string $src): string {
+    public static function buildScript(string $src, bool $module = false): string {
         $location = self::getResourceDir() . self::JS_EXTENSION . '/' . $src .'.' . self::JS_EXTENSION;
         
         if (!file_exists($location)) 
             throw new \app\core\src\exceptions\NotFoundException(self::INVALID_SCRIPT);
 
-        return '<script defer src="' . str_replace(self::getResourceDir(), '/resources/', $location) . '"></script>';
+        return '<script defer src="' . str_replace(self::getResourceDir(), '/resources/', $location) . '" ' . ($module ? 'type="module"' : '') . '></script>';
     }
 
     public static function putContent(string $fileName, string $content): int|false {

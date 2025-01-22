@@ -28,13 +28,13 @@ trait ControllerAssetTrait {
         throw new \app\core\src\exceptions\ForbiddenException($this::FORBIDDEN_ASSET);
     }    
 
-    public function addScript(string|array $src) {
+    public function addScript(string|array $src, bool $module = false) {
         if (is_string($src)) $src = (array)$src;
 
         $parent = app()->getParentController();
 
-        array_map(function($file) use($parent) {
-            return $parent->upsertData(File::JS_EXTENSION, File::buildScript($file));
+        array_map(function($file) use($parent, $module) {
+            return $parent->upsertData(File::JS_EXTENSION, File::buildScript($file, $module));
         }, $src);
     }
 

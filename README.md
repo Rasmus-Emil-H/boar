@@ -741,6 +741,23 @@
 </details>
 
 <details>
+    <summary>Service container</summary>
+
+    A bare bone out of the box service container is avaliable via
+
+    ```
+    <?php
+
+    use \app\core\src\ServiceContainer;
+
+    $container = new ServiceContainer();
+    $container->register('cli', function() {
+        return new CLI();
+    });
+    ```
+</details>
+
+<details>
     <summary>Unit testing</summary>
 
     A minor tool for unit testing your objects are availible by running
@@ -752,7 +769,7 @@
     Which, if all goes well will result in something like 
 
     ```
-    🚀 Ready to run tests: 1
+    🚀 Ready to run tests: 2
 
     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
     🔍 Test File: BooleanTest
@@ -761,7 +778,14 @@
     ⏳ Duration: 0.001985 seconds
     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-    🎉 Tests (1) completed!
+    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    🔍 Test File: SampleTest
+    📋 Status: ✅ SUCCESS
+    🕣 Executed At: 10-01-2025 13:55:29
+    ⏳ Duration: 0.000122 seconds
+    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+    🎉 Tests (2) completed!
     😿 Tests (0) failed
     ```
 

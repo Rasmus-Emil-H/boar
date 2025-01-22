@@ -1,13 +1,21 @@
 #!/usr/bin/env php
+
 <?php
 
 require_once 'vendor/autoload.php';
 require_once 'yard.php';
 
+use \app\core\src\CLI;
 use \app\core\src\console\ConsoleCommand;
+use \app\core\src\ServiceContainer;
 
 $method = ($argv[1] ?? 'run') === 'help' ? 'help' : 'run';
 
 $app = new \app\core\Application();
 
-(new ConsoleCommand($argv))->{$method}();
+$container = new ServiceContainer();
+$container->register('cli', function() {
+    return new CLI();
+});
+
+(new ConsoleCommand($argv, $container))->{$method}();

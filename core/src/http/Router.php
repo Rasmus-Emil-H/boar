@@ -44,8 +44,8 @@ final class Router {
     }
 
     private function checkRouteAndGoToDefault(): void {
-        if (empty($this->arguments) || $this->request->getPath() === '/') 
-            $this->app->getResponse()->redirect(CoreFunctions::first($this->app->getConfig()->get('routes')->unauthenticated)->scalar);
+        if (empty($this->arguments) || $this->request->getPath() === '/')
+            exit($this->app->getResponse()->redirect(first(env('routes')->unauthenticated)));
     }
 
     protected function createController(): void {

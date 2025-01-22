@@ -2,15 +2,13 @@
 
 namespace app\core\src\console\cmds;
 
-use \app\core\src\CLI;
+use \app\core\src\File;
 
 use \app\core\src\contracts\Console;
 
-use \app\core\src\File;
-
 use \app\core\src\factories\TestCaseFactory;
 
-class UnitTest implements Console {
+class UnitTest extends BaseCommand implements Console {
 
     private array $testFiles = [];
 
@@ -19,11 +17,10 @@ class UnitTest implements Console {
     private int $succededTests = 0;
     private int $failedTests = 0;
 
-    public function __construct(
-        private CLI $cli
-    ) {
+    public function __construct() {
+        parent::__construct();
+
         $this->testFiles = File::getNonHiddenFiles(dirname(__DIR__, $this->nestedDirDepth) . '/tests');
-        
         $this->stdin(PHP_EOL . '🚀 Ready to run tests: ' . count($this->testFiles), 'cyan');
     }
 
@@ -45,8 +42,7 @@ class UnitTest implements Console {
             $this->displayResultViaCLI($result, $handler, $timeTaken);
         }, $this->testFiles);
 
-        $this->stdin('🎉 Tests (' . $this->succededTests . ') completed' . PHP_EOL, 'cyan');
-        $this->stdin('😿 Tests (' . $this->failedTests . ') failed' . PHP_EOL, 'cyan');
+        $this->displayResults();
     }
 
     private function displayResultViaCLI(mixed $result, string $handler, float $timeTaken): void {
@@ -70,7 +66,9 @@ class UnitTest implements Console {
         $this->stdin($output, 'yellow');
     }
 
-    private function stdin(string $message, string $color): void {
-        $this->cli->printWithColor($message, $color);
+    private function displayResults(): void {
+        $this->stdin('🎉 Tests (' . $this->succededTests . ') completed' . PHP_EOL, 'cyan');
+        $this->stdin('😿 Tests (' . $this->failedTests . ') failed' . PHP_EOL, 'cyan');
     }
+
 }

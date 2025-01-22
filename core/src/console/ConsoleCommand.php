@@ -2,8 +2,6 @@
 
 namespace app\core\src\console;
 
-use \app\core\src\CLI;
-
 use \app\core\src\console\cmds\CreateEntity;
 use \app\core\src\console\cmds\CreateTest;
 use \app\core\src\console\cmds\Migrate;
@@ -12,6 +10,8 @@ use \app\core\src\console\cmds\SeedDatabase;
 use \app\core\src\console\cmds\UnitTest;
 
 use \app\core\src\contracts\Console;
+
+use \app\core\src\ServiceContainer;
 
 class ConsoleCommand {
 
@@ -32,14 +32,10 @@ class ConsoleCommand {
 
     public function __construct(
         private array $arguments,
-        public CLI $cli = new CLI()
+        private ServiceContainer $container
     ) {
         $this->setCommand();
         $this->removeRedundantArgs();
-    }
-
-    private function getCLI(): CLI {
-        return $this->cli;
     }
 
     private function setCommand() {
@@ -55,7 +51,7 @@ class ConsoleCommand {
     public function setCmd(): self|string {
         if (!isset($this->commands[$this->command])) exit($this->printUsage());
 
-        $this->cmd = new $this->commands[$this->command]($this->getCLI());
+        $this->cmd = new $this->commands[$this->command]($this->container->get('cli'));
 
         return $this;
     }
@@ -76,7 +72,7 @@ class ConsoleCommand {
         $cmds
         EOT;
 
-        exit(echoCLI($help));
+        exit($this->container->get('cli')->printWithColor($help, 'red'));
     }
 
     protected function printUsage(): string {

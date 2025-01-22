@@ -2,33 +2,25 @@
 
 namespace app\core\src\console\cmds;
 
-use \app\core\src\CLI;
 use \app\core\src\File;
 
 use \app\core\src\contracts\Console;
 
-class NewMigration implements Console {
-
-    public function __construct(
-        private CLI $cli
-    ) {
-    }
-
-    private function stdin(string $message, string $color): void {
-        $this->cli->printWithColor($message, $color);
-    }
+class NewMigration extends BaseCommand implements Console {
 
     public function run(array $args): void {
-        $key  = 'name';
-        $type = 'type';
-
-        $args[$key]  = first($args);
-        $args[$type] = last($args);
-        
-        if (count($args) !== 2) exit($this->stdin(__CLASS__  . ' error: Arguments ('.implode(', ', [$key, $type]).') must be specified', 'red'));
-
-        $this->createMigration($args[$key], $args[$type]);
+        if (count($args) !== 2) {
+            exit($this->stdin(
+                __CLASS__ . ' error: Arguments (name, type) must be specified',
+                'cyan'
+            ));
+        }
+    
+        [$name, $type] = array_values($args);
+    
+        $this->createMigration($name, $type);
     }
+    
 
     private function formatMigrationName(string $name, string $type): string {
         return $type.'_'.strtolower($name).'_table_'.date('Y_m_d', strtotime('now')).'_0001';

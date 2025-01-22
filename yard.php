@@ -1,5 +1,14 @@
 <?php
 
+/**
+|----------------------------------------------------------------------------
+| Yard for various easy getters
+|----------------------------------------------------------------------------
+|
+| @author RE_WEB
+|
+*/
+
 declare(strict_types=1);
 
 use \app\core\src\exceptions\InvalidTypeException;
@@ -129,4 +138,8 @@ function echoCLI(string $string): void {
 
 function type(mixed $mixed): string {
     return get_debug_type($mixed);
+}
+
+function appUser(): ?\app\models\UserModel {
+    return CoreFunctions::applicationUser();
 }

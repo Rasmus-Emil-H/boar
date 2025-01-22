@@ -55,7 +55,7 @@ class UnitTest extends BaseCommand implements Console {
         $output = <<<EOT
 
         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        🔍 Test File: $handler
+        🔍 Case: $handler ($handler.php)
         📋 Status: $status
         🕣 Executed At: $doneAt
         ⏳ Duration: $timeTakenFormatted seconds

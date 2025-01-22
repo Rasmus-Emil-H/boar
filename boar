@@ -6,7 +6,9 @@ require_once 'vendor/autoload.php';
 require_once 'yard.php';
 
 use \app\core\src\CLI;
+
 use \app\core\src\console\ConsoleCommand;
+
 use \app\core\src\ServiceContainer;
 
 $method = ($argv[1] ?? 'run') === 'help' ? 'help' : 'run';

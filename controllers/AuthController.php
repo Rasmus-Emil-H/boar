@@ -11,7 +11,7 @@ use \app\models\AuthenticationModel;
 class AuthController extends Controller {
 
     public function login(): void {
-        if ((new UserModel())->hasActiveSession()) $this->response->redirect(app()->getConfig()->get('routes')->defaults->redirectTo);
+        if ((new UserModel())->hasActiveSession()) $this->response->redirect(env('routes')->defaults->redirectTo);
 
         if ($this->request->isPost()) new AuthenticationModel($this->requestBody, 'applicationLogin');
         
@@ -61,7 +61,7 @@ class AuthController extends Controller {
         
         $request = $this->requestBody;
         $emailExists = (new UserModel())->find('Email', $request->body->email);
-        if ($emailExists) $this->response->dataConflict();
+        if ($emailExists->exists()) $this->response->dataConflict(ths('Email already exists'));
 
         (new UserModel())
             ->set(['Email' => $request->body->email, 'Name' => $request->body->name, 'Password' => password_hash($request->body->password, PASSWORD_DEFAULT)])

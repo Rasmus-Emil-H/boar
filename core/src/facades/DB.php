@@ -3,7 +3,10 @@
 namespace app\core\src\facades;
 
 use \app\core\src\database\querybuilder\QueryBuilder;
+
 use \app\core\src\exceptions\NotFoundException;
+
+use \app\core\src\miscellaneous\CoreFunctions;
 
 class DB {
 
@@ -12,11 +15,9 @@ class DB {
     ) {}
 
     public function get(?string $key = null): mixed {
-        return $key ? 
-            (
-                !isset($this->data[$key]) ? throw new NotFoundException('Invalid key') : $this->data[$key]
-            )
-            : $this->data;
+        if (!isset($this->data[$key])) throw new NotFoundException(__CLASS__ . ' invalid key');
+
+        return $key ? $this->data[$key] : $this->data;
     }
 
     public function getData(): array {
@@ -28,8 +29,10 @@ class DB {
     }
 
     public static function dump(array $tables = []): void {
-        $config = app()->getConfig()->get('database');
-        $dsn = \app\core\src\miscellaneous\CoreFunctions::last(explode(';', $config->dsn));
+        $config = env('database');
+
+        $dsn = CoreFunctions::last(explode(';', $config->dsn));
+
         $db = str_replace('dbname=', '', $dsn->scalar);
         
         $fileName = app()::$ROOT_DIR . '/' . time() . 'test.sql';

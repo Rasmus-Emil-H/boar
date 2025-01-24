@@ -10,7 +10,6 @@
 |
 */
 
-
 namespace app\core\src;
 
 use \app\core\src\exceptions\InvalidTypeException;

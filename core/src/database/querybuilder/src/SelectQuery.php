@@ -49,7 +49,7 @@ trait SelectQuery {
         return $this;
     }
 
-    public function countFrom(string $count, string $countName = 'count'): self {
+    public function countFrom(string $count = '*', string $countName = 'count'): self {
         $this->upsertQuery(Constants::SELECT . ' ' . Constants::COUNT . "({$count}) " . Constants::AS . " {$countName} " . Constants::FROM . " {$this->table}");
         return $this;
     }

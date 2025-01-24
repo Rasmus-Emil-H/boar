@@ -9,7 +9,7 @@
 | away some of the repetitive tasks
 | 
 | @author RE_WEB
-| @package \app\core\src\traits
+| @package \app\core\src\traits\entity
 |
 */
 
@@ -19,6 +19,7 @@ use \app\core\src\database\Entity;
 use \app\core\src\database\querybuilder\QueryBuilder;
 use \app\core\src\database\table\Table;
 use \app\core\src\database\EntityMetaData;
+
 use \app\models\FileModel;
 use \app\models\LanguageModel;
 
@@ -32,7 +33,7 @@ trait EntityQueryTrait {
     private const SQL_FETCH_MODE_FETCH = 'fetch';
 
     public function patchEntity(): self {
-        $this->getQueryBuilder()->patch(fields: $this->data, primaryKeyField: $this->getKeyField(), primaryKey: $this->key())->run(fetchMode: self::SQL_FETCH_MODE_FETCH);
+        $this->getQueryBuilder()->patch($this->data, $this->getKeyField(), $this->key())->run(self::SQL_FETCH_MODE_FETCH);
         return $this;
     }
 
@@ -42,53 +43,53 @@ trait EntityQueryTrait {
         unset($data['eg-csrf-token-label']);
         unset($data['action']);
         
-        $this->getQueryBuilder()->patch(fields: $data, primaryKeyField: $this->getKeyField(), primaryKey: $this->key())->run(fetchMode: self::SQL_FETCH_MODE_FETCH);
+        $this->getQueryBuilder()->patch($data, $this->getKeyField(), $this->key())->run(self::SQL_FETCH_MODE_FETCH);
         return $this;
     }
     
     public function createEntity() {
-        $this->getQueryBuilder()->create(fields: $this->data)->run();
+        $this->getQueryBuilder()->create($this->data)->run();
         $this->setKey(app()->getConnection()->getLastInsertedID());
         return $this;
     }
 
     public function init() {
-		return $this->getQueryBuilder()->initializeNewEntity(data: $this->data);
+		return $this->getQueryBuilder()->initializeNewEntity($this->data);
 	}
 
     public function softDelete(): self {
-		$this->patchField([Table::DELETED_AT_COLUMN => new \DateTime(datetime: 'Y-m-d H:i:s')]);
+		$this->patchField([Table::DELETED_AT_COLUMN => new \DateTime('Y-m-d H:i:s')]);
         return $this;
 	}
 
     public function restore(): self {
-	    $this->patchField([Table::DELETED_AT_COLUMN => null]);
+	    $this->set([Table::DELETED_AT_COLUMN => null])->save();
         return $this;
 	}
 
     public function query(): QueryBuilder {
-        return (new QueryBuilder(class: get_called_class(), table: $this->getTableName(), keyID: $this->getKeyField()));
+        return (new QueryBuilder(get_called_class(), $this->getTableName(), $this->getKeyField()));
     }
 
-    public function delete(): array|object {
-        return $this->getQueryBuilder()->delete()->where(arguments: [$this->getKeyField() => $this->key()])->run();
+    public function delete() {
+        return $this->getQueryBuilder()->delete()->where([$this->getKeyField() => $this->key()])->run();
     }
 
-    public function deleteWhere(array $where): array|object {
-        return $this->getQueryBuilder()->delete()->where(arguments: $where)->run(); 
+    public function deleteWhere(array $where) {
+        return $this->getQueryBuilder()->delete()->where($where)->run(); 
     }
 
-     public function truncate(): array|object {
+     public function truncate() {
         return $this->getQueryBuilder()->truncate()->run();
     }
 
-     public function trashed(): array|object {
-        return $this->getQueryBuilder()->select()->where(arguments: [Table::DELETED_AT_COLUMN => self::SQL_IS_NOT_NULL])->run();
+     public function trashed() {
+        return $this->getQueryBuilder()->select()->where([Table::DELETED_AT_COLUMN => self::SQL_IS_NOT_NULL])->run();
     }
 
     public function getQueryBuilder(?string $table = null): QueryBuilder {
         $table ??= $this->getTableName();
-        return new QueryBuilder(class: get_called_class(), table: $table, keyID: $this->getKeyField());
+        return new QueryBuilder(get_called_class(), $table, $this->getKeyField());
     }
 
     private function bootstrapQuery(array $fields = ['*']): QueryBuilder {
@@ -96,25 +97,29 @@ trait EntityQueryTrait {
     }
 
     public function find(string $field, string $value): Entity {
-        return $this->bootstrapQuery()->where(arguments: [$field => $value])->run(fetchMode: 'fetch');
+        return $this->bootstrapQuery()->where([$field => $value])->run(self::SQL_FETCH_MODE_FETCH);
     }
 
     public function findOne(string $field, string $value): Entity {
-        return $this->bootstrapQuery()->where(arguments: [$field => $value])->run(fetchMode: 'fetch');
+        return $this->bootstrapQuery()->where([$field => $value])->run(self::SQL_FETCH_MODE_FETCH);
     }
-
+    
     public function findFirst(string $field, string $value): Entity {
         $tmp = $this->findOne($field, $value);
         $tmp->requireExistence();
 
-        return $this->bootstrapQuery()->where([$field => $value])->orderBy($tmp->getKeyField(), 'ASC')->limit(1)->run('fetch');
+        return $this->bootstrapQuery()->where([$field => $value])->orderBy($tmp->getKeyField(), 'ASC')->limit(1)->run(self::SQL_FETCH_MODE_FETCH);
     }
 
     public function findLast(string $field, string $value): Entity {
         $tmp = $this->findOne($field, $value);
         $tmp->requireExistence();
 
-        return $this->bootstrapQuery()->where([$field => $value])->orderBy($tmp->getKeyField(), 'DESC')->limit(1)->run('fetch');
+        return $this->bootstrapQuery()->where([$field => $value])->orderBy($tmp->getKeyField(), 'DESC')->limit(1)->run(self::SQL_FETCH_MODE_FETCH);
+    }
+
+    public function tableHasValidEntry(): ?object {
+        return $this->bootstrapQuery()->limit(1)->run(self::SQL_FETCH_MODE_FETCH);
     }
 
     /**
@@ -125,21 +130,21 @@ trait EntityQueryTrait {
      */
 
     public function findMultiple(string $field, string $value): array {
-        return $this->bootstrapQuery()->where(arguments: [$field => $value])->run();
+        return $this->bootstrapQuery()->where([$field => $value])->run();
     }
 
     public function findByMultiple(array $conditions): array {
-        return $this->bootstrapQuery()->where(arguments: $conditions)->run();
+        return $this->bootstrapQuery()->where($conditions)->run();
     }
 
     public function addMetaData(array $data, string $type = null): self {
-        if (empty($data)) throw new \InvalidArgumentException(message: self::INVALID_ENTITY_DATA);
+        if (empty($data)) throw new \InvalidArgumentException(self::INVALID_ENTITY_DATA);
 
         (new EntityMetaData())
-            ->set(data: [
+            ->set([
                 Table::ENTITY_TYPE_COLUMN => $this->getTableName(), 
                 Table::ENTITY_ID_COLUMN => $this->key() ?? 0,
-                'Data' => json_encode(value: $data),
+                'Data' => json_encode($data),
                 'Type' => $type ?? 'Default',
                 'IP' => app()->getRequest()->getIP()
             ])
@@ -148,12 +153,16 @@ trait EntityQueryTrait {
         return $this;
     }
 
-    public function getTableColumns(): array|object {
-        return (new QueryBuilder(class: get_called_class(), table: $this->getTableName(), keyID: $this->getKeyField()))->select()->run(); 
+    public function getTableColumns() {
+        return (new QueryBuilder(get_called_class(), $this->getTableName(), $this->getKeyField()))->select()->run(); 
     }
 
-    public function getMetaData(): QueryBuilder {
-        return (new EntityMetaData())->getQueryBuilder()->select()->where(arguments: [Table::ENTITY_TYPE_COLUMN => $this->getTableName(), Table::ENTITY_ID_COLUMN => $this->key()]);
+    public function getMetaData(array $where = []): QueryBuilder {
+        return (new EntityMetaData())->getQueryBuilder()->select()->where([Table::ENTITY_TYPE_COLUMN => $this->getTableName(), Table::ENTITY_ID_COLUMN => $this->key(), ...$where]);
+    }
+
+    public function searchMeta(array $where) {
+        return $this->getMetaData($where);
     }
 
     public function setStatus(int $status): self {
@@ -162,8 +171,8 @@ trait EntityQueryTrait {
         return $this;
     }
 
-    public function coupleEntity(Entity $entity): void {
-		$entity->set(data: [$this->getKeyField() => $this->key()]);
+    public function coupleEntity(Entity $entity) {
+		$entity->set([$this->getKeyField() => $this->key()]);
 		$entity->init();
 	}
 
@@ -179,17 +188,17 @@ trait EntityQueryTrait {
 
     public function setRelationelTableSortOrder(string $table, int $sortOrder, $additionalConditions = []): void {
         $this->getQueryBuilder($table)
-            ->patch(fields: [Table::SORT_ORDER_COLUMN => $sortOrder])
-            ->where(arguments: $additionalConditions)
+            ->patch([Table::SORT_ORDER_COLUMN => $sortOrder])
+            ->where($additionalConditions)
             ->run();
     }
 
     public function all(): array {
-        return (new QueryBuilder(class: get_called_class(), table: $this->getTableName(), keyID: $this->getKeyField()))->select()->run();
+        return (new QueryBuilder(get_called_class(), $this->getTableName(), $this->getKeyField()))->select()->run();
     }
 
     public function search(array $arguments): array {
-        return $this->bootstrapQuery()->where(arguments: $arguments)->run();
+        return $this->bootstrapQuery()->where($arguments)->run();
     }
 
     public function findOrCreate(string $whereKey, string $whereValue, array $data = []): Entity {
@@ -203,7 +212,7 @@ trait EntityQueryTrait {
         return $cEntity;
     }
 
-    public function complete(): void {
+    public function complete() {
 		$this->patchField([Table::COMPLETED_COLUMN => 1]);
 	}
 
@@ -216,16 +225,16 @@ trait EntityQueryTrait {
     }
 
     public function getEntityTableFields(): self {
-        $this->bootstrapQuery()->where()->limit(limit: 1)->run();
+        $this->bootstrapQuery()->where()->limit(1)->run();
         return $this;
     }
-
+    
     public function appendHistory(array $data): self {
         return $this->addMetaData($data, 'History');
     }
 
-    public function history(): array|object {
-        return $this->getMetaData()->where(arguments: ['Type' => 'History'])->run();
+    public function history(?array $where = null): array|object {
+        return $this->getMetaData()->where($where ?? ['Type' => 'History'])->run();
     }
 
     public function files() {

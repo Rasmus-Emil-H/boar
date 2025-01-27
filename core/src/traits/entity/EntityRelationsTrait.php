@@ -109,10 +109,12 @@ trait EntityRelationsTrait {
 
      public function upsertCustomPivot($table, string $identifier, ...$keys) {
         $queryBuilder = new QueryBuilder(get_called_class(), $table, '');
-        $pivotExists = $queryBuilder->select()->where((array)CoreFunctions::first($keys))->run('fetch');
-        return $pivotExists->exists() ? 
-            $queryBuilder->patch((array)CoreFunctions::first($keys), $identifier, $pivotExists->get($identifier))->run() :
-            $queryBuilder->create(CoreFunctions::first($keys))->run();
+        $pivotExists = $queryBuilder->select()->where((array)CoreFunctions::first($keys))->run('fetch', false);
+        $entityIsEquivalent = (int)$this->key() === $pivotExists->get('EntityID') && $this->getTableName() === $pivotExists->get('EntityType');
+        
+        return $entityIsEquivalent ? 
+            $queryBuilder->patch((array)CoreFunctions::first($keys), $identifier, $pivotExists->get($identifier))->run('fetchAll', false) :
+            $queryBuilder->create(CoreFunctions::first($keys))->run('fetchAll', false);
     }
 
     /**

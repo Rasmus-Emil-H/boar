@@ -22,6 +22,7 @@ use \app\core\src\database\EntityMetaData;
 
 use \app\models\FileModel;
 use \app\models\LanguageModel;
+use \app\models\StateModel;
 
 trait EntityQueryTrait {
 
@@ -166,9 +167,12 @@ trait EntityQueryTrait {
     }
 
     public function setStatus(int $status): self {
-        if (!$this->get(Table::STATUS_COLUMN)) throw new \app\core\src\exceptions\ForbiddenException(self::INVALID_ENTITY_STATUS);
-        $this->set([Table::STATUS_COLUMN => $status])->save();
+        $this->upsertCustomPivot('state_entity', $this->getTableName(), ['StateID' => $status, 'EntityID' => $this->key(), 'EntityType' => $this->getTableName()]);
         return $this;
+    }
+
+    public function state() {
+        return $this->hasOnePolymorphic(StateModel::class, 'state_entity')->run('fetch');
     }
 
     public function coupleEntity(Entity $entity) {

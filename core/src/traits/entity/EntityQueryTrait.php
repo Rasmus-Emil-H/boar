@@ -20,6 +20,8 @@ use \app\core\src\database\querybuilder\QueryBuilder;
 use \app\core\src\database\table\Table;
 use \app\core\src\database\EntityMetaData;
 
+use \app\core\src\exceptions\NotFoundException;
+
 use \app\models\FileModel;
 use \app\models\LanguageModel;
 use \app\models\StateModel;
@@ -167,6 +169,8 @@ trait EntityQueryTrait {
     }
 
     public function setStatus(int $status): self {
+        if (!(new StateModel($status))->exists()) throw new NotFoundException('Invalid state');
+
         $this->upsertCustomPivot('state_entity', $this->getTableName(), ['StateID' => $status, 'EntityID' => $this->key(), 'EntityType' => $this->getTableName()]);
         return $this;
     }

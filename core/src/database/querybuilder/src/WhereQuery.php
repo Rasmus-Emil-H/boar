@@ -3,9 +3,10 @@
 namespace app\core\src\database\querybuilder\src;
 
 use \app\core\src\database\table\Table;
-use \app\core\src\miscellaneous\CoreFunctions;
-use \app\core\src\utilities\Parser;
 
+use \app\core\src\miscellaneous\CoreFunctions;
+
+use \app\core\src\utilities\Parser;
 
 trait WhereQuery {
 
@@ -17,6 +18,23 @@ trait WhereQuery {
 
        $this->upsertQuery($this->checkStart() . " $field IN ( " . implode(', ', $queryINString) . " ) ");
        return $this;
+   }
+
+   public function notIn(string $field, array $ins): self {
+        $queryINString = array_map(function($fieldKey, $fieldValue) {
+            $this->updateQueryArgument("inCounter$fieldKey", $fieldValue);
+            return " :inCounter$fieldKey ";
+        }, array_keys($ins), array_values($ins));
+
+        $this->upsertQuery($this->checkStart() . " $field NOT IN ( " . implode(', ', $queryINString) . " ) ");
+        return $this;
+    }
+
+    public function not(string $field, string $value): self {
+        $this->upsertQuery($this->checkStart() . " NOT $field = :not" . $field);
+        $this->updateQueryArgument('not' . $field, $value);
+
+        return $this;
    }
 
     public function where(array $arguments = []): self {

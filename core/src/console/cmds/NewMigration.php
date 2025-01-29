@@ -30,6 +30,8 @@ class NewMigration extends BaseCommand implements Console {
         $migrationName = $this->formatMigrationName($name, $type);
         $tableNamespace = 'use \app\core\src\database\table\Table';
 
+        $name = ucfirst($name);
+
         $content = <<<EOT
         <?php
 

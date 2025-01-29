@@ -79,7 +79,10 @@ final class Router {
         if (!IS_CLI) $controller->setChildren(['Header', 'Footer']);
 
         $controller->setChildData();
-        $controller->{$this->method}();
+
+        $bindings = $controller->routedModelBinding();
+
+        $controller->{$this->method}($bindings['body'], $bindings['entity']);
     }
 
     protected function hydrateDOM(): void {

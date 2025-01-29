@@ -257,6 +257,32 @@
 </details>
 
 <details>
+    <summary>"Route model binding"</summary>
+
+    Boar provides the option to pass in the body and entity of the request, instead of having to manually define them
+    like below
+
+    ```
+    public function edit(object $request, UserModel $cUser) {
+        $cUser->patchField(['Name' => $request->body->name]);
+    }
+    ```
+
+    instead of the old way of doing it
+    like below
+
+    ```
+    public function edit() {
+        $cCar = new UserModel($this->requestBody->body->EntityID);
+        $cCar->requireExistence();
+
+        $cUser->patchField(['Name' => $body->Name]);
+    }
+    ```
+
+</details>
+
+<details>
     <summary>Models</summary>
 
     Creating a model is straightforward, either cp one of existing or create a new as below

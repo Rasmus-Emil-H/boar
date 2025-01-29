@@ -68,8 +68,8 @@ trait ControllerMethodTrait {
         }
     }
 
-    public function routedModelBinding(): void {
-        // return (object)['body' => $this->requestBody->body, 'entity' => $this->returnValidEntityIfExists()];
+    public function routedModelBinding(): array {
+        return ['body' => $this->requestBody, 'entity' => $this->returnValidEntityIfExists()];
     }
 
     public function dispatchMethodAction() {

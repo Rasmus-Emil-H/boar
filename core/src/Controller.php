@@ -13,13 +13,20 @@
 namespace app\core\src;
 
 use \app\core\src\middlewares\Middleware;
-use \app\core\src\factories\ControllerFactory;
+
 use \app\core\src\miscellaneous\CoreFunctions;
+
 use \app\controllers\AssetsController;
+
 use \app\core\src\database\Entity;
+
 use \app\core\src\factories\EntityFactory;
+use \app\core\src\factories\ControllerFactory;
+
 use \app\core\src\traits\controller\ControllerMethodTrait;
 use \app\core\src\traits\controller\ControllerAssetTrait;
+
+use \stdClass;
 
 class Controller {
 
@@ -47,7 +54,7 @@ class Controller {
         protected AssetsController $clientAssets
     ) {
         $this->requestBody = $this->request->getCompleteRequestBody();
-        $this->validateCSRFToken();
+        // if ($this->request->getPath() !== '/push/subscribe') $this->validateCSRFToken();
     }
 
     private function validateCSRFToken() {
@@ -83,7 +90,6 @@ class Controller {
 
     public function setChildData(): void {
         $parentController = app()->getParentController();
-
         array_map(function($childController) use ($parentController) {
             [$handler, $method] = preg_match('/:/', $childController) ? explode(':', $childController) : [$childController, self::DEFAULT_METHOD];
             $cController = (new ControllerFactory(compact('handler')))->create();
@@ -113,15 +119,15 @@ class Controller {
 
                 [$handler, $method] = preg_match('/:/', $controllerAndMethodLiteral) ? explode(':', $controllerAndMethodLiteral) : [$controllerAndMethodLiteral, self::DEFAULT_METHOD];
                 
-                $cController = (new ControllerFactory(compact('handler')))->create();
-                $cController->{$method}(array_merge($parentController->getData(), $childData));
+                $child = (new ControllerFactory(compact('handler')))->create();
+                $child->{$method}($childData);
 
-                $cController->data = array_diff_key(
-                    $cController->getData(),
-                    array_filter($cController->getData(), fn($_, $k) => $parentController->getDataKey($k), ARRAY_FILTER_USE_BOTH)
+                $child->data = array_diff_key(
+                    $child->getData(),
+                    array_filter($child->getData(), fn($_, $k) => $parentController->getDataKey($k), ARRAY_FILTER_USE_BOTH)
                 );
     
-                $parentController->data[$dataKey] = $cController->getData();
+                $parentController->data[$dataKey] = $child->getData();
 
             }, $childs, array_keys($childs));
         }, $data, array_keys($data));
@@ -135,7 +141,7 @@ class Controller {
         return $this->middlewares;
     }
 
-    protected function returnEntity(): Entity {
+    protected function returnEntity(): Entity|stdClass {
         $request = $this->request->getArguments();
 
         $key = CoreFunctions::getIndex($request, self::EXPECTED_ENTITY_ID_POSITION)->scalar;
@@ -144,9 +150,8 @@ class Controller {
         return (new EntityFactory(compact('handler', 'key')))->create();
     }
 
-    protected function returnValidEntityIfExists(): Entity {
-        $entity = $this->returnEntity();
-        return $entity;
+    public function returnValidEntityIfExists(): Entity|stdClass {
+        return $this->returnEntity();
     }
 
 }

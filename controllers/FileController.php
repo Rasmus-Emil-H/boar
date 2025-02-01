@@ -3,9 +3,12 @@
 namespace app\controllers;
 
 use \app\core\src\Controller;
-use \app\core\src\factories\EntityFactory;
 use \app\core\src\File;
+
+use \app\core\src\factories\EntityFactory;
+
 use \app\core\src\gate\Gate;
+
 use \app\models\FileModel;
 
 class FileController extends Controller {
@@ -44,10 +47,9 @@ class FileController extends Controller {
         }
 	}
 
-    public function view() {
+    public function view(object $request, FileModel $cFile) {
         $this->denyPOSTRequest();
 
-        $cFile = $this->returnValidEntityIfExists();
         $cFile->requireExistence();
         
         $file = new File($cFile->get('Path'));
@@ -57,8 +59,13 @@ class FileController extends Controller {
 
     private function validateFileRequest(): void {
         $this->denyGETRequest();
-        
+
         if (empty($this->requestBody->files)) $this->response->setResponse(400, [File::NO_FILES_ATTACHED]);
+    }
+
+    public function delete(object $body, FileModel $file) {
+        $file->delete();
+        $this->response->ok();
     }
 
 }

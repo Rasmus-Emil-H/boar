@@ -14,3 +14,7 @@ window[appName] = {};
 window[appName].getName = function() {
     return appName;
 }
+
+function online() {
+    return navigator?.onLine;
+}

@@ -44,6 +44,7 @@ trait EntityMagicMethodTrait {
 
         unset($data['eg-csrf-token-label']);
         unset($data['action']); 
+        if (isset($data['InitialClientRequestCreatedTimestamp'])) unset($data['InitialClientRequestCreatedTimestamp']);
 
         if ($argc === self::OVERLOAD_ARGC_NEW_ENTITY) {
             $cEntity = new $this();

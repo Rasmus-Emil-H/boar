@@ -1,7 +1,7 @@
 onmessage = async(e) => {
     const fd = new FormData();
     for (let key in e.data) {
-        if (typeof e.data[key] === 'object') {
+        if (e.data[key] instanceof Array) {
             row = 0;
             for (let iteration in e.data[key]) {
                 fd.append(`${key.replace('[]', '')}${row}`, e.data[key][iteration]);

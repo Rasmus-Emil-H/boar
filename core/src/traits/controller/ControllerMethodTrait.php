@@ -49,10 +49,10 @@ trait ControllerMethodTrait {
     public function appendFilesToRequestBody() {
         $customFileType = $this->requestBody->body->fileType ?? 'DefaultFile';
 
-        foreach ($this->requestBody->files as $newFile) {
+        return array_map(function($newFile) use ($customFileType) {
             $file = new File($newFile);
             
-            if (empty($file->getName())) continue;
+            if (empty($file->getName())) return;
             $destination = $file->moveFile($this->requestBody->body);
 
             $cFile = new FileModel();
@@ -64,8 +64,9 @@ trait ControllerMethodTrait {
             ]);
 
             $cFile->save();
-            $this->requestBody->body->$customFileType = $cFile;
-        }
+
+            return $cFile;
+        }, $this->requestBody->files);
     }
 
     public function routedModelBinding(): array {

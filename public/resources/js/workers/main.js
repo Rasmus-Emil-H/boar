@@ -56,7 +56,6 @@ class WorkerParent {
         this.workerManager.postMessage(this.body);
 
         this.workerManager.setOnMessage((e) => {
-            this.notificationHandler.showNotification();
             if (!this.callback) return;
             
             this.callback(this.target, { responseJSON: e.data, additionalData: this.additionalData });

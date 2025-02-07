@@ -131,7 +131,7 @@
             "b64Public": ""
         },
         "weatherapi": {
-            "apikey": "1234",
+            "apikey": "12345",
             "base": "https://api.meteomatics.com"
         }
     }

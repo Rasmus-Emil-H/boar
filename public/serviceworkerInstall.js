@@ -16,7 +16,6 @@ import IndexedDBManager from '/resources/js/modules/indexedDB.js';
 */
 
 self.addEventListener('fetch', (e) => {
-    sendCachedPostRequests();
     if (!config.methods.validateRequest(e)) return;
     const methodHandler = e.request.method;
     e.respondWith(config.methods[methodHandler](e.request));

@@ -24,20 +24,22 @@ const config = {
         },
         GET: async function (request) {
             try {
-                const response = await fetch(await request.clone());
-        
-                if (response.ok && !response.redirected) {
-                    const cache = await caches.open(config.caches.GETCache);
-                    await cache.put(request, response.clone());
+                const cache = await caches.open(config.caches.GETCache);
+                const cachedResponse = await cache.match(request);
+                
+                if (cachedResponse) {
+                    fetch(request).then(async (networkResponse) => {
+                        if (networkResponse.ok && !networkResponse.redirected) await cache.put(request, networkResponse.clone());
+                    });
+                    return cachedResponse;
                 }
-        
-                return response;
+                
+                const networkResponse = await fetch(request);
+                if (networkResponse.ok && !networkResponse.redirected) {
+                    await cache.put(request, networkResponse.clone());
+                }
+                return networkResponse;
             } catch (error) {
-                console.error('Fetch encountered an error:', error);
-
-                const cachedResponse = await caches.match(request);
-                if (cachedResponse) return cachedResponse;
-
                 return new Response('Network error', { status: 500 });
             }
         },

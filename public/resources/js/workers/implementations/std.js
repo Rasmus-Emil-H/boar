@@ -12,7 +12,11 @@ onmessage = async(e) => {
         }
     };
 
-    const response = await fetch(e.data.url ?? '/file', {method: "POST", body: fd});
-    const jsonResponse = await response.json();
-    postMessage(jsonResponse.responseJSON ?? '');
+    try {
+        const response = await fetch(e.data.url ?? '/file', {method: "POST", body: fd});
+        const jsonResponse = await response.json();
+        postMessage(jsonResponse.responseJSON ?? '');
+    } catch {
+        postMessage('Error'); 
+    }
 }

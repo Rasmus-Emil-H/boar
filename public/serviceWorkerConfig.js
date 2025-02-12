@@ -17,7 +17,7 @@ const config = {
             const proceed = !config.externalResources.some(item => new RegExp(`/${item}/`).test(e.request.url));
             if (!proceed) return proceed;
             
-            if (e.request.url === config.psudo.login && e.request.method === 'POST' && !navigator.onLine || e.request.url.includes('/push')) return false;
+            if (e.request.url === config.psudo.login && e.request.method === 'POST' && !online() || e.request.url.includes('/push')) return false;
             if (!config.request.validMethods.includes(e.request.method)) return false;
 
             return true;
@@ -29,15 +29,17 @@ const config = {
                 
                 if (cachedResponse) {
                     fetch(request).then(async (networkResponse) => {
-                        if (networkResponse.ok && !networkResponse.redirected) await cache.put(request, networkResponse.clone());
+                        if (networkResponse.ok && !networkResponse.redirected) 
+                            await cache.put(request, networkResponse.clone());
                     });
+
                     return cachedResponse;
                 }
                 
                 const networkResponse = await fetch(request);
-                if (networkResponse.ok && !networkResponse.redirected) {
+                if (networkResponse.ok && !networkResponse.redirected) 
                     await cache.put(request, networkResponse.clone());
-                }
+
                 return networkResponse;
             } catch (error) {
                 return new Response('Network error', { status: 500 });
@@ -51,17 +53,30 @@ const config = {
             for (const [key, value] of formData.entries()) formDataToSend.append(key, value);
         
             try {
-                const response = await fetch(clonedRequest.url, {method: 'POST', body: formDataToSend});
+                const response = await fetch(clonedRequest.url, {mode: 'cors', method: 'POST', body: formDataToSend});
 
                 if (!response.ok || !config.psudo.qualifiedRequestResponsesCode.includes(response.status)) config.buildIndexDBRecord(request);
+                else config.evictGETVersion(request.url);
 
                 return response;
             } catch (error) {
+                console.log(error);
                 config.buildIndexDBRecord(request);
                 
                 return new Response(null, {status: 422, statusText: config.messages.errors.postRequest});
             }
         }
+    },
+    evictGETVersion: async function(url) {
+        const cache = await caches.open(config.caches.GETCache);
+        const cacheKeys = await cache.keys();
+
+        cacheKeys.map(async item => {
+            if (item.url !== url) return;
+
+            const cachedResponse = await cache.match(item);
+            await cache.delete(cachedResponse.url);
+        });
     },
     buildIndexDBRecord: async function(request) {
         const storePOSTRequestByIDB = new IndexedDBManager();

@@ -24,8 +24,16 @@ class DB {
         return $this->data;
     }
 
+    public function keyExists(string $key): bool {
+        return key_exists($key, $this->getData());
+    }
+
     public static function table(string $table, string $class = __CLASS__, string|int $primaryKey = ''): QueryBuilder {
         return (new QueryBuilder($class, $table, $primaryKey));
+    }
+
+    public static function processList() {
+        return (new QueryBuilder(__CLASS__, '', ''))->rawSQL('SHOW processlist')->run();
     }
 
     public static function dump(array $tables = []): void {

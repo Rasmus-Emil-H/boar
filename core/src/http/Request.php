@@ -82,6 +82,10 @@ class Request {
         return $this->getServerInformation()['HTTP_HOST'];
     }
 
+    public function getOrigin(): string {
+        return $this->getServerInformation()['HTTP_ORIGIN'];
+    }
+
     public function method(): string {
         return strtolower($this->getServerInformation()['REQUEST_METHOD'] ?? self::METHOD_GET);
     }

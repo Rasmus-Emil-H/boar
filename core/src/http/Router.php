@@ -104,7 +104,15 @@ final class Router {
         return str_replace('{{content}}', $viewContent, ob_get_clean());
     }
 
+    private function checkAPIContext() {
+        if ($this->arguments[0] !== 'api') return;
+
+        unset($this->arguments[0]);
+        $this->arguments = array_values($this->arguments);
+    }
+
     public function resolve(): void {
+        $this->checkAPIContext();
         $this->createController();
         $this->runMiddlewares();
         $this->runController();

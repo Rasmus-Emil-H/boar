@@ -34,6 +34,8 @@ class Table {
     private const FLOAT_COLUMN_TYPE     = 'FLOAT';
     private const VARCHAR_COLUMN_TYPE   = 'VARCHAR';
     private const TEXT_COLUMN_TYPE      = 'TEXT';
+    private const LONG_TEXT_COLUMN_TYPE = 'LONGTEXT';
+    private const JSON_COLUMN_TYPE      = 'JSON';
     private const UUID_COLUMN_NAME      = 'UUID';
     private const BOOLEAN_COLUMN_TYPE   = 'BOOLEAN';
     private const ENUM_COLUMN_TYPE      = 'ENUM';
@@ -68,6 +70,16 @@ class Table {
 
     public function text(string $columnName): self {
         $this->createColumn($columnName, self::TEXT_COLUMN_TYPE);
+        return $this;
+    }
+    
+    public function longtext(string $columnName): self {
+        $this->createColumn($columnName, self::LONG_TEXT_COLUMN_TYPE);
+        return $this;
+    }
+
+    public function json(string $columnName): self {
+        $this->createColumn($columnName, self::JSON_COLUMN_TYPE);
         return $this;
     }
 

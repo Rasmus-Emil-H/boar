@@ -129,4 +129,12 @@ final class File {
         return file_exists($this->getFilePath());
     }
 
+    public static function putContent(string $fileName, string $content): int|false {
+        return file_put_contents($fileName, $content);
+    }
+
+    public function rename(string $path) {
+        return rename(app()::$ROOT_DIR . "/uploads/" . $this->file->get('Name'), $path);
+    }
+
 }

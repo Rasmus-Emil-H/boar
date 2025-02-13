@@ -168,7 +168,7 @@ trait EntityQueryTrait {
         return $this->getMetaData($where);
     }
 
-    public function setStatus(int $status): self {
+    public function setState(int $status): self {
         if (!(new StateModel($status))->exists()) throw new NotFoundException('Invalid state');
 
         $this->upsertCustomPivot('state_entity', $this->getTableName(), ['StateID' => $status, 'EntityID' => $this->key(), 'EntityType' => $this->getTableName()]);
@@ -177,6 +177,10 @@ trait EntityQueryTrait {
 
     public function state() {
         return $this->hasOnePolymorphic(StateModel::class, 'state_entity')->run('fetch');
+    }
+
+    public function states() {
+        return $this->hasOnePolymorphic(StateModel::class, 'state_entity')->run();
     }
 
     public function coupleEntity(Entity $entity) {

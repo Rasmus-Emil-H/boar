@@ -18,9 +18,7 @@ abstract class AbstractFactory {
 
     public function __construct(
         protected array $arguments = []
-    ) {
-        
-    }
+    ) {}
     
     abstract public function create(): ?object;
 

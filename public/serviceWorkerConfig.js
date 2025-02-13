@@ -79,8 +79,8 @@ const config = {
         });
     },
     buildIndexDBRecord: async function(request) {
-        const storePOSTRequestByIDB = new IndexedDBManager();
-        await storePOSTRequestByIDB.createRecord({url: request.url, method: request.method, mode: request.mode, body: [...await request.formData()]});
+        const idb = new IndexedDBManager();
+        await idb.createRecord({url: request.url, method: request.method, mode: request.mode, body: [...await request.formData()]});
     },
     messages: {
         offline: 'Application is offline',

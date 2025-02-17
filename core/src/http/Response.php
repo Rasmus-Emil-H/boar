@@ -41,6 +41,10 @@ final class Response {
     public function setContentType(string $type) {
         header('Content-Type: ' . $type);
     }
+
+    public function setHeaders(array $headers): void {
+        array_map(fn($header) => header($header), $headers);
+    }
     
     public function setResponse(int $code, array $message = []) {
         if (empty($message)) $message = $this->returnStdSuccesMessage();

@@ -3,7 +3,7 @@ window[appName].i18n = {
         return new Promise(async function(resolve, reject) {
             try {
                 const serverInteraction = await $.get(`/translation/translate?translation=${string}`);
-                resolve(await serverInteraction.json());
+                resolve(await serverInteraction);
             } catch {
                 reject(string);
             }

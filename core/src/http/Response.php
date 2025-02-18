@@ -77,6 +77,10 @@ final class Response {
         $this->setResponse(self::HTTP_OK, ['responseJSON' => $message]);
     }
 
+    public function raw(string $raw): void {
+        exit($raw);
+    }
+
     public function created() {
         $this->setResponse(self::HTTP_CREATED);
     }

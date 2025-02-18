@@ -8,8 +8,8 @@ class add_translations_table_2018_12_16_0001 {
     public function up() {
         (new Schema())->up('Translations', function(Table $table) {
             $table->increments('TranslationID');
-            $table->varchar('Translation', 50);
-            $table->varchar('TranslationHumanReadable', 100);
+            $table->text('Translation');
+            $table->text('TranslationHumanReadable');
             $table->integer('LanguageID', 2);
             $table->varchar('TranslationHash', 50);
             $table->timestamp();

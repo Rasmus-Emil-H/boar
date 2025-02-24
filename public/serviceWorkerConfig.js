@@ -50,7 +50,6 @@ const config = {
 
                 return networkResponse;
             } catch (error) {
-                console.log(error);
                 return new Response('Network error', { status: 200 });
             }
         },
@@ -65,11 +64,14 @@ const config = {
                 const response = await fetch(clonedRequest.url, {mode: 'cors', method: 'POST', body: formDataToSend});
 
                 if (response.status === 409 && navigator?.onLine) {
+                    console.log(request.url);
                     config.evictGETVersion(request.url);
                 } else if (!response.ok || !config.psudo.qualifiedRequestResponsesCode.includes(response.status)) {
+                    console.log(request.url);
                     config.buildIndexDBRecord(request);
                 } else if (response.ok) {
-                    config.evictGETVersion(request.url);
+                    console.log(request.url);
+                    config.evictGETVersion(request.url, request.referrer);
                 }
 
                 return response;
@@ -80,7 +82,7 @@ const config = {
             }
         }
     },
-    evictGETVersion: async function(url) {
+    evictGETVersion: async function(url, referrer = null) {
         if (!navigator.onLine) return;
         
         const cache = await caches.open(config.caches.GETCache);
@@ -91,8 +93,11 @@ const config = {
 
         /**
          * Keep refreshing trip so that the overall
+         * Also nuke referrer is possible
          * facade remains updated
          */
+        
+        if (referrer && referrer !== url) await config.rerunGETRequest(referrer);
         await config.rerunGETRequest('/trip');
     },
     rerunGETRequest: async function(url) {
@@ -135,7 +140,7 @@ const config = {
     },
     psudo: {
         login: '/auth/login',
-        origin: 'host',
+        origin: 'https://YOUR_HOST',
         qualifiedRequestResponsesCode: [200, 400, 401, 403, 404]
     }
 };

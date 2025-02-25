@@ -88,7 +88,7 @@ try {
         window[appName].behaviour.displayPushUpdate();
     });
     
-    window[appName].serviceWorkerInit.init();
+    // window[appName].serviceWorkerInit.init();
     // window[appName].serviceWorkerInit.unregister();
 } catch(e) {
     window[appName].components.toast('This feature is not avaliable on your device', window[appName].constants.mdbootstrap.ERROR_CLASS);

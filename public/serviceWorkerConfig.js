@@ -50,6 +50,9 @@ const config = {
 
                 return networkResponse;
             } catch (error) {
+                const cachedResponse = await caches.match(request);
+                if (cachedResponse) return cachedResponse;
+                
                 return new Response('Network error', { status: 200 });
             }
         },
@@ -63,14 +66,13 @@ const config = {
             try {
                 const response = await fetch(clonedRequest.url, {mode: 'cors', method: 'POST', body: formDataToSend});
 
+                config.buildIndexDBRecord(request);
+
                 if (response.status === 409 && navigator?.onLine) {
-                    console.log(request.url);
                     config.evictGETVersion(request.url);
                 } else if (!response.ok || !config.psudo.qualifiedRequestResponsesCode.includes(response.status)) {
-                    console.log(request.url);
                     config.buildIndexDBRecord(request);
                 } else if (response.ok) {
-                    console.log(request.url);
                     config.evictGETVersion(request.url, request.referrer);
                 }
 
@@ -97,7 +99,7 @@ const config = {
          * facade remains updated
          */
         
-        if (referrer && referrer !== url) await config.rerunGETRequest(referrer);
+        if (referrer && referrer.trim() !== url.trim()) await config.rerunGETRequest(referrer);
         await config.rerunGETRequest('/trip');
     },
     rerunGETRequest: async function(url) {
@@ -105,8 +107,6 @@ const config = {
 
         try {
             const cache = await caches.open(config.caches.GETCache);
-
-            console.log(`Deleting ${url}`);
 
             await cache.delete(url);
 
@@ -123,7 +123,10 @@ const config = {
     },
     buildIndexDBRecord: async function(request) {
         const idb = new IndexedDBManager();
-        await idb.createRecord({url: request.url, method: request.method, mode: request.mode, body: [...await request.formData()]});
+        const fd = [...await request.formData()];
+        const appendTTL = fd.some((item) => item[0] === 'ttl');
+        if (!appendTTL) fd.push(['ttl', 3]);
+        await idb.createRecord({url: request.url, method: request.method, mode: request.mode, body: fd});
     },
     messages: {
         offline: 'Application is offline',
@@ -140,7 +143,7 @@ const config = {
     },
     psudo: {
         login: '/auth/login',
-        origin: 'https://YOUR_HOST',
+        origin: 'https://yourhost',
         qualifiedRequestResponsesCode: [200, 400, 401, 403, 404]
     }
 };

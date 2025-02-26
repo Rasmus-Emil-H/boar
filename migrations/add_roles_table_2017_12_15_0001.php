@@ -15,9 +15,6 @@ class add_roles_table_2017_12_15_0001 {
             $table->timestamp();
             $table->primaryKey('RoleID');
         });
-        
-        foreach ((object)self::DEFAULT_ROLES as $key => $role)
-            (new DatabaseSeeder())->up('Role', ['Name' => $role], 1);
     }
 
     public function down() {

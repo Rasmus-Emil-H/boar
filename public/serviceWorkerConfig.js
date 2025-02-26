@@ -1,6 +1,8 @@
 import IndexedDBManager from '/resources/js/modules/indexedDB.js';
 
-const config = {    
+const config = {
+    INITIAL_TTL_ATTEMPTS: 3,
+    clearGETCacheURL: 'clearGETCacheURL',
     caches: {
         GETCache: 'GETCache',
         POSTCache: 'POSTCache',
@@ -10,7 +12,8 @@ const config = {
         'maps', 'fontawesome'
     ],
     request: {
-        validMethods: ['GET', 'POST']
+        validMethods: ['GET', 'POST'],
+        skipablePOSTEvictionEndpoints: []
     },
     methods: {
         validateRequest: function (e) {
@@ -58,31 +61,38 @@ const config = {
         },
         POST: async function(request) {
             const clonedRequest = request.clone();
-            const formData = await clonedRequest.formData();
-            const formDataToSend = new FormData();
-        
-            for (const [key, value] of formData.entries()) formDataToSend.append(key, value);
+            const body = await clonedRequest.formData();
         
             try {
-                const response = await fetch(clonedRequest.url, {mode: 'cors', method: 'POST', body: formDataToSend});
+                const response = await fetch(clonedRequest.url, {mode: 'cors', method: 'POST', body});
 
-                config.buildIndexDBRecord(request);
+                // Dont do anything if "pointless" URLS are POSTed to
+                const skip = config.request.skipablePOSTEvictionEndpoints.some(item => request.url.includes(item));
+                if (skip) return response;
 
                 if (response.status === 409 && navigator?.onLine) {
                     config.evictGETVersion(request.url);
                 } else if (!response.ok || !config.psudo.qualifiedRequestResponsesCode.includes(response.status)) {
                     config.buildIndexDBRecord(request);
                 } else if (response.ok) {
+                    config.checkCustomGETCacheEviction(body);
                     config.evictGETVersion(request.url, request.referrer);
                 }
 
                 return response;
             } catch (error) {
+                console.log(error);
                 config.buildIndexDBRecord(request);
                 
                 return new Response(null, {status: 422, statusText: config.messages.errors.postRequest});
             }
         }
+    },
+    // Evict addtional custom urls if needed
+    checkCustomGETCacheEviction: async function(body) {
+        for (const [key, value] of body.entries())
+            if (key === config.clearGETCacheURL)
+                config.evictGETVersion(value);
     },
     evictGETVersion: async function(url, referrer = null) {
         if (!navigator.onLine) return;
@@ -124,8 +134,10 @@ const config = {
     buildIndexDBRecord: async function(request) {
         const idb = new IndexedDBManager();
         const fd = [...await request.formData()];
+        
         const appendTTL = fd.some((item) => item[0] === 'ttl');
-        if (!appendTTL) fd.push(['ttl', 3]);
+        if (!appendTTL) fd.push(['ttl', this.INITIAL_TTL_ATTEMPTS]);
+
         await idb.createRecord({url: request.url, method: request.method, mode: request.mode, body: fd});
     },
     messages: {

@@ -10,8 +10,10 @@ class add_sessions_table_2017_12_15_0001 {
             $table->increments('SessionID');
             $table->varchar('Value', 100);
             $table->timestamp();
+            $table->integer('UserID', 10);
             $table->varchar('IP', 30);
             $table->primaryKey('SessionID');
+            $table->foreignKey('UserID', 'Users');
         });
     }
 

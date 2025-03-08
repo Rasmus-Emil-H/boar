@@ -3,7 +3,7 @@
     "debugViaFile": true,
     "appIcon": "/favicon.ico",
     "version": "0.1",
-    "playgroundKey": "x",
+    "playgroundKey": "",
     "env": {
         
     },

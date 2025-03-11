@@ -23,15 +23,15 @@ use \Firebase\JWT\JWT;
 
 class PushManager {
     
-    private $vapidPublicKey;
-    private $vapidPrivateKey;
-    private $subscriptionEndpoint;
+    private readonly string  $vapidPublicKey;
+    private readonly string  $vapidPrivateKey;
+    private readonly ?string $subscriptionEndpoint;
 
     private array $userPayload;
 
-    public function __construct(string $subscriptionEndpoint = null) {
+    public function __construct(?string $subscriptionEndpoint = null) {
         $this->vapidPublicKey = $this->getVapidPublicKey();
-        $this->vapidPrivateKey = app()->getConfig()->get('integrations')->pushAPI->privatePEM;
+        $this->vapidPrivateKey = env('integrations')->pushAPI->privatePEM;
         $this->subscriptionEndpoint = $subscriptionEndpoint;
     }
 
@@ -44,7 +44,7 @@ class PushManager {
     }
 
     public function getVapidPublicKey(): string {
-        $publicKey = trim(preg_replace('/\-+BEGIN PUBLIC KEY\-+|\-+END PUBLIC KEY\-+|\s+/', '', app()->getConfig()->get('integrations')->pushAPI->b64Public));
+        $publicKey = trim(preg_replace('/\-+BEGIN PUBLIC KEY\-+|\-+END PUBLIC KEY\-+|\s+/', '', env('integrations')->pushAPI->b64Public));
         return str_replace(['+', '/', '='], ['-', '_', ''], $publicKey);
     }
 

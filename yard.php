@@ -22,6 +22,17 @@ use \app\core\src\miscellaneous\CoreFunctions;
 |
 */
 
+$timeout = 2629800;
+
+session_set_cookie_params([
+    'lifetime' => $timeout
+]);
+
+ini_set("session.gc_probability", 1);
+ini_set("session.gc_divisor", 100);
+ini_set("session.gc_maxlifetime", $timeout );
+ini_set("session.cookie_lifetime", $timeout );
+
 session_start();
 
 /**

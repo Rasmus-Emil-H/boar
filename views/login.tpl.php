@@ -1,18 +1,22 @@
-<div>
-    <div class="background">
-        <div class="shape"></div>
-        <div class="shape"></div>
+<div class="container">
+    <div class="card">
+        <form class="card-content" method="POST" action="/auth/login">
+            <h4 class="header"><?= hs(app()->getConfig()->get('appName')); ?></h4>
+            <div class="input-field">
+                <input id="email" type="email" name="email" required autofocus>
+                <label for="email">Email</label>
+            </div>
+
+            <div class="input-field">
+                <input id="password" type="password" name="password" required>
+                <label for="password">Password</label>
+            </div>
+
+            <?= (new \app\core\src\tokens\CsrfToken())->insertHiddenToken(); ?>
+            
+            <button type="submit" class="btn green darken-2 waves-effect waves-light"><?= ths('Log in'); ?></button>
+            
+            <a href="signup" class="btn blue waves-effect waves-light"><?= ths('Create account'); ?></a>
+        </form>
     </div>
-    <form class="login-form center flex-column" method="POST" action="/auth/login">
-        <h1 class="header mb-4"><?= hs(app()->getConfig()->get('appName')); ?></h1>
-        <div class="form-group w-100 mb-3">
-            <input autofocus type="email" required name="email" class="form-control" placeholder="Email" aria-label="Username" aria-describedby="basic-addon1">
-        </div>
-        <div class="form-group w-100 mb-3">
-            <input type="password" required name="password" class="form-control" placeholder="Password" aria-label="Username" aria-describedby="basic-addon1">
-        </div>
-        <?= (new \app\core\src\tokens\CsrfToken())->insertHiddenToken(); ?>
-            <button type="submit" class="btn btn-success btn-lg mt-2 w-100"><?= ths('Log in'); ?></button>
-        <a href="signup" class="btn btn-info btn-lg mt-2 w-100"><?= ths('Create account'); ?></a>
-    </form>
 </div>

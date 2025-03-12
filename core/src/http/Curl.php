@@ -21,12 +21,12 @@ final class Curl {
 
 	protected string $url = '';
 	protected string $method = 'get';
+	protected string $body = '';
 	
 	protected $content;
 	protected $handler = null;
-	protected $info = [];
-	protected $data = [];
-
+	protected array $info = [];
+	protected array $data = [];
 	protected array $headers = [];
 	protected array $auth = [];
 	protected array $responseCookies;
@@ -50,6 +50,15 @@ final class Curl {
 	public function setHeaders(array $headers): self {
 		foreach ($headers as $header) $this->headers[] = $header;
 		return $this;
+	}
+
+	public function setBody(string $body): self {
+		$this->body = $body;
+		return $this;
+	}
+
+	public function getBody(): string {
+		return $this->body;
 	}
 
 	public function setAuthenticationMechanism(string $authenticationMethod, string|array $credentials): self {
@@ -102,6 +111,8 @@ final class Curl {
 
 	private function sendAndReceiveRequest(): void {
 		$this->content = curl_exec($this->handler);
+		$headerSize = curl_getinfo($this->handler, CURLINFO_HEADER_SIZE);
+		$this->setBody(substr($this->content, $headerSize));
 		$this->info = curl_getinfo($this->handler);
 		$this->setResponseCookies();
 	}

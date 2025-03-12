@@ -1,17 +1,6 @@
 window[appName].components = {
-    toast: async function(message, bg) {
-        const toast = `
-          <div class="toast-container top-0 end-0">
-            <div class="toast" id="customToast" role="alert" aria-live="assertive" aria-atomic="true">
-              <div class="toast-body bg-${bg}">
-                ${message}
-              </div>
-            </div>
-          </div>
-        `;
-
-        await $('body').append(toast);
-        bootstrap.Toast.getOrCreateInstance($('#customToast')).show();
+    toast: async function(html, bg) {
+        M.toast({html});
     },
     initModal: function(title, body, id, hidefooter = null, buttonHider = null, buttonText = '', cb = null) {
         let modal = document.createElement('div');

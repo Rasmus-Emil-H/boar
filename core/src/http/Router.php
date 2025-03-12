@@ -55,7 +55,7 @@ final class Router {
         if ($this->isResource($handler)) exit();
 
         $controller = (new ControllerFactory(compact('handler')))->create();
-        if (!$controller) throw new InvalidTypeException('Invalid handler');
+        if (!$controller) exit;
 
         $controllerMethod = $this->arguments[self::EXPECTED_CONTROLLER_METHOD_POSITION] ?? '';
 

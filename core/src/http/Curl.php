@@ -136,6 +136,7 @@ final class Curl {
 			return $this;
 		} catch(\Exception $e) {
 			debug($e);
+			return $this;
 		}
 	}
 	

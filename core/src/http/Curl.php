@@ -26,7 +26,7 @@ final class Curl {
 	protected $content;
 	protected $handler = null;
 	protected array $info = [];
-	protected array $data = [];
+	protected array|string|bool $data = [];
 	protected array $headers = [];
 	protected array $auth = [];
 	protected array $responseCookies;

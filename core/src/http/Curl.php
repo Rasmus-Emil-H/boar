@@ -168,7 +168,7 @@ final class Curl {
 	public function close(): void {
 	   curl_close($this->handler);
 	   $this->headers = $this->data = $this->auth = $this->info = [];
-	   $this->handler = $this->content = $this->info = null;
+	   $this->handler = $this->content = null;
 	}
 
 	public function debug(): void {

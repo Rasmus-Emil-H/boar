@@ -35,10 +35,19 @@ const config = {
 
                 if (cachedResponse) {
                     try {
-                        if (navigator?.onLine) {
+                        if (navigator?.onLine && freeSpace) {
                             fetch(request).then(async (networkResponse) => {
-                                if (networkResponse.ok && !networkResponse.redirected) 
-                                    await cache.put(request, networkResponse.clone());
+                                const networkResponseClone = networkResponse.clone();
+                                if (networkResponse.ok && !networkResponse.redirected) {
+                                    const cacheData = new Response(networkResponseClone.body, {
+                                        status: networkResponseClone.status,
+                                        statusText: networkResponseClone.statusText,
+                                        headers: networkResponseClone.headers
+                                    });
+
+                                    cacheData.headers.append('Cachedts', Date.now());
+                                    await cache.put(request, cacheData);
+                                }
                             });
                         }
                     } catch(e) {
@@ -49,7 +58,17 @@ const config = {
                 }
 
                 const networkResponse = await fetch(request);
-                if (networkResponse.ok && !networkResponse.redirected && freeSpace) await cache.put(request, networkResponse.clone());
+                if (networkResponse.ok && !networkResponse.redirected && freeSpace) {
+                    const networkResponseClone = networkResponse.clone();
+                    const cacheData = new Response(networkResponseClone.body, {
+                        status: networkResponseClone.status,
+                        statusText: networkResponseClone.statusText,
+                        headers: networkResponseClone.headers
+                    });
+
+                    cacheData.headers.append('Cachedts', Date.now());
+                    await cache.put(request, cacheData);
+                }
 
                 return networkResponse;
             } catch (error) {

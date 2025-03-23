@@ -108,12 +108,14 @@
         "menus": {
             "user": [
                 {
-                    "href": "/user/profile",
-                    "title": "Profile"
+                    "href": "user/profile",
+                    "title": "Profile",
+                    "icon": "account_circle"
                 },
                 {
                     "href": "/auth/logout",
-                    "title": "Log out"
+                    "title": "Log out",
+                    "icon": "exit_to_app"
                 }
             ]
         }

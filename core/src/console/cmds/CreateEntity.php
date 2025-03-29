@@ -86,6 +86,33 @@ class CreateEntity implements Console {
             public function getKeyField(): string {
                 return '{$name}ID';
             }
+
+            /**
+                |----------------------------------------------------------------------------
+                | ENTITY RELATIONS FOR __CLASS__
+                |----------------------------------------------------------------------------
+                |
+                |
+            */
+
+            /**
+                |----------------------------------------------------------------------------
+                | HTTP METHODS
+                |----------------------------------------------------------------------------
+                | Below are methods that the client can interact with
+                | from their respective models
+                | 
+                | The methods below should be used via controllers
+                |
+            */
+
+            protected array \$ALLOWED_HTTP_METHODS = [
+                'somemethodthatshouldbeallowedfromthecontroller'
+            ];
+
+            public function somemethodthatshouldbeallowedfromthecontroller(object $request) {
+                // do whatever you need with stuff injected in from the controller
+            }
             
         }
         EOT;

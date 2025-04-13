@@ -141,6 +141,10 @@ class Controller {
         return $this->middlewares;
     }
 
+    public function getEntityID() {
+        return CoreFunctions::getIndex($this->request->getArguments(), self::EXPECTED_ENTITY_ID_POSITION)->scalar;
+    }
+
     protected function returnEntity(): Entity|stdClass {
         $request = $this->request->getArguments();
 

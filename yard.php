@@ -154,3 +154,17 @@ function type(mixed $mixed): string {
 function appUser(): ?\app\models\UserModel {
     return CoreFunctions::applicationUser();
 }
+
+/**
+ * Gat path
+ */
+function routePath(): string {
+    return app()->getRequest()->getPath();
+}
+
+/**
+ * Get current entity, if valid
+ */
+function getEntity() {
+    return app()->getParentController()->returnValidEntityIfExists();
+}

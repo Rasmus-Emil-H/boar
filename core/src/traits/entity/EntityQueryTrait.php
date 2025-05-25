@@ -209,6 +209,10 @@ trait EntityQueryTrait {
         return (new QueryBuilder(get_called_class(), $this->getTableName(), $this->getKeyField()))->select()->run();
     }
 
+    public function some(int $limit, int $offset = 0): array {
+        return (new QueryBuilder(get_called_class(), $this->getTableName(), $this->getKeyField()))->select()->limit($limit)->offset($offset)->run();
+    }
+
     public function search(array $arguments): array {
         return $this->bootstrapQuery()->where($arguments)->run();
     }

@@ -20,8 +20,11 @@ final class CoreFunctions {
         echo '<style>* {margin:0;padding:0;box-sizing:border-box;color:black;font-weight:100;}</style>';
         echo '<pre style="background-color: #a3b18a; color: white; text-wrap:wrap;width:100vw;height:100vh;display:flex;justify-content:center;align-items:center;flex-direction:column;" class="debug">';
         echo '<h2 class="text-center">' . $title . '</h2><hr><p style="font-size:1.5rem;">';
+
         var_dump($input);
-        if ($title) echo '</p><hr /><h2 class="text-center">End of ' . $title . '</h2></pre>';
+
+        if ($title) 
+            echo '</p><hr /><h2 class="text-center">End of ' . $title . '</h2></pre>';
     }
       
     public static function dd(mixed $input, $title = ''): void {

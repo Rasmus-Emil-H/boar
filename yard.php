@@ -63,7 +63,7 @@ define('IS_CLI', isset($argv));
 */
 
 function ths(string $string): string {
-    return \app\core\src\miscellaneous\CoreFunctions::ths($string);
+    return CoreFunctions::ths($string);
 }
 
 function hs(string|int $string): string {
@@ -73,7 +73,7 @@ function hs(string|int $string): string {
 }
 
 function app() {
-    return \app\core\src\miscellaneous\CoreFunctions::app();
+    return CoreFunctions::app();
 }
 
 function getIterableJsonEncodedData(array|object $iterable): array {
@@ -107,7 +107,7 @@ function CSRFTokenInput(): string {
  */
 
 function dumpAndDie(mixed $input) {
-    return \app\core\src\miscellaneous\CoreFunctions::dd($input);
+    return CoreFunctions::dd($input);
 }
 
 function printme($input): void {
@@ -167,4 +167,8 @@ function routePath(): string {
  */
 function getEntity() {
     return app()->getParentController()->returnValidEntityIfExists();
+}
+
+function rootDir(): string {
+    return app()::$ROOT_DIR;
 }

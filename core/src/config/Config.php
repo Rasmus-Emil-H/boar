@@ -2,10 +2,20 @@
 
 namespace app\core\src\config;
 
+use Exception;
+
 class Config {
 
     public function get(string $key): object|string {
-        $config = file_get_contents(app()::$ROOT_DIR . '/static/setup.json');
+        $configFile = 'setup.json';
+
+        $setup = rootDir() . '/static/' . $configFile;
+
+        if (!is_file($setup)) {
+            exit('Missing ' . $configFile);
+        }
+
+        $config = file_get_contents($setup);
         return json_decode($config)->$key ?? 'invalidEnvKey';
     }
 

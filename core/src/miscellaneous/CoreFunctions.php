@@ -18,13 +18,12 @@ final class CoreFunctions {
         if (self::app()::isCli()) exit($input);
         
         echo '<style>* {margin:0;padding:0;box-sizing:border-box;color:black;font-weight:100;}</style>';
-        echo '<pre style="background-color: #a3b18a; color: white; text-wrap:wrap;width:100vw;height:100vh;display:flex;justify-content:center;align-items:center;flex-direction:column;" class="debug">';
+        echo '<pre style="background-color: #a3b18a; color: white; text-wrap:wrap;width:100vw;height:100vh;display:flex;justify-content:center;align-items:center;flex-direction:column;overflow:scroll;" class="debug">';
         echo '<h2 class="text-center">' . $title . '</h2><hr><p style="font-size:1.5rem;">';
 
         var_dump($input);
 
-        if ($title) 
-            echo '</p><hr /><h2 class="text-center">End of ' . $title . '</h2></pre>';
+        echo '</p><hr /><h2 class="text-center">End of ' . $title . '</h2></pre>';
     }
       
     public static function dd(mixed $input, $title = ''): void {
@@ -63,21 +62,26 @@ final class CoreFunctions {
       
     public static function first(array|object $iterable): ?object {
         if (empty($iterable)) return null;
+
         return (object)$iterable[array_key_first($iterable)];
     }
 
     public static function last(array|object $iterable): ?object {
         if (empty($iterable)) return null;
+        
         return (object)$iterable[array_key_last($iterable)];
     }
       
     public static function getIndex(array|object $iterable, int|string $expectedIndex): ?object {
-          if (!isset($iterable[$expectedIndex])) return (object)['scalar' => 'Invalid'];
-          return (object)$iterable[$expectedIndex];
+        if (!isset($iterable[$expectedIndex])) 
+            return (object)['scalar' => 'Invalid'];
+
+        return (object) $iterable[$expectedIndex];
     }
       
     public static function loopAndEcho(array|object $iterable, bool $echoKey = false): void {
-        foreach ($iterable as $key => $value) echo $echoKey ? $key : $value;
+        foreach ($iterable as $key => $value) 
+            echo $echoKey ? $key : $value;
     }
       
     public static function applicationUser(): ?\app\models\UserModel {

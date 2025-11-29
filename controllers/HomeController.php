@@ -6,7 +6,7 @@ use \app\core\src\Controller;
 
 class HomeController extends Controller {
 
-    public function index() {
+    public function index(): void {
         $this->upsertChildData([
             'farm' => $this->createPartialWithData(method: 'Partial:farm', data: [
                 'nested' => '🏡 I\'m a nested partial'

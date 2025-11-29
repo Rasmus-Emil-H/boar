@@ -106,7 +106,7 @@ function CSRFTokenInput(): string {
  * Dump and die
  */
 
-function dumpAndDie(mixed $input) {
+function dd(mixed $input) {
     return CoreFunctions::dd($input);
 }
 

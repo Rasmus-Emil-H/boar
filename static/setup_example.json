@@ -108,7 +108,7 @@
         "menus": {
             "user": [
                 {
-                    "href": "user/profile",
+                    "href": "/user/profile",
                     "title": "Profile",
                     "icon": "account_circle"
                 },

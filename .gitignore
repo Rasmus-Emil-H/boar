@@ -3,3 +3,4 @@ vendor
 composer.lock
 static/setup.json
 debug.log
+uploads/*

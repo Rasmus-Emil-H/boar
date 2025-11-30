@@ -13,7 +13,11 @@ class UserController extends Controller {
     }
 
     public function profile() {
-        $this->setFrontendTemplateAndData('profile');
+        if ($this->request->isGet()) {
+            return $this->setFrontendTemplateAndData('profile', ['user' => appUser()]);
+        }
+
+        $this->response->ok();
     }
 
 }

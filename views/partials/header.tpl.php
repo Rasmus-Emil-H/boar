@@ -6,7 +6,7 @@
     <?php \app\core\src\miscellaneous\CoreFunctions::loopAndEcho($stylesheets); ?>
     <link rel="icon" type="image/x-icon" href="<?= hs($icon); ?>">
   </head>
-<body>
+<body data-bs-theme="dark">
   
 <?php if(!app()::isGuest()): ?>
   <?php require_once $navbar; ?>

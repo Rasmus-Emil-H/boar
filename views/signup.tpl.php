@@ -1,19 +1,50 @@
-<div class="container">
-    <div class="card">
-        <form class="card-content" method="POST">
-            <h4 class="header"><?= hs(app()->getConfig()->get('appName')); ?></h4>
-            <div class="form-group w-100 mb-3">
-                <input type="email" required name="email" class="form-control" autofocus placeholder="Email" aria-label="Username" aria-describedby="basic-addon1">
+<div class="container d-flex justify-content-center align-items-center" style="min-height: 100vh;">
+    <div class="card p-4 shadow-lg" style="max-width: 420px; width: 100%;">
+        <form method="POST">
+            <h4 class="mb-4 text-center"><?= env('appName'); ?></h4>
+
+            <div class="mb-3">
+                <input 
+                    type="email" 
+                    name="email" 
+                    required 
+                    class="form-control" 
+                    placeholder="Email"
+                    autofocus
+                >
             </div>
-            <div class="form-group w-100 mb-3">
-                <input type="text" required name="name" class="form-control" placeholder="Name" aria-label="Username" aria-describedby="basic-addon1">
+
+            <div class="mb-3">
+                <input 
+                    type="text" 
+                    name="name" 
+                    required 
+                    class="form-control" 
+                    placeholder="Name"
+                >
             </div>
-            <div class="form-group w-100 mb-3">
-                <input type="password" required name="password" class="form-control" placeholder="Password" aria-label="Username" aria-describedby="basic-addon1">
+
+            <div class="mb-3">
+                <input 
+                    type="password" 
+                    name="password" 
+                    required 
+                    class="form-control" 
+                    placeholder="Password"
+                >
             </div>
+
             <?= CSRFTokenInput(); ?>
-            <button type="submit" class="btn"><?= ths('Create account'); ?></button>
-            <a href="/" class="btn"><?= ths('Go back'); ?></a>
+
+            <div class="d-grid gap-2 mt-3">
+                <button type="submit" class="btn btn-primary">
+                    <?= ths('Create account'); ?>
+                </button>
+
+                <a href="/" class="btn btn-outline-secondary">
+                    <?= ths('Go back'); ?>
+                </a>
+            </div>
         </form>
     </div>
 </div>

@@ -1,22 +1,41 @@
-<div class="container">
-    <div class="card">
-        <form class="card-content" method="POST" action="/auth/login">
-            <h4 class="header"><?= hs(app()->getConfig()->get('appName')); ?></h4>
-            <div class="input-field">
-                <input id="email" type="email" name="email" required autofocus>
-                <label for="email">Email</label>
+<div class="container d-flex justify-content-center align-items-center" style="min-height: 100vh;">
+    <div class="card p-4 shadow-lg" style="max-width: 420px; width: 100%;">
+        <form method="POST" action="/auth/login">
+            <h4 class="mb-4 text-center"><?= env('appName'); ?></h4>
+
+            <div class="mb-3">
+                <label for="email" class="form-label">Email</label>
+                <input 
+                    id="email" 
+                    type="email" 
+                    name="email" 
+                    class="form-control"
+                    required 
+                    autofocus
+                >
             </div>
 
-            <div class="input-field">
-                <input id="password" type="password" name="password" required>
-                <label for="password">Password</label>
+            <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <input 
+                    id="password" 
+                    type="password" 
+                    name="password" 
+                    class="form-control"
+                    required
+                >
             </div>
 
-            <?= (new \app\core\src\tokens\CsrfToken())->insertHiddenToken(); ?>
-            
-            <button type="submit" class="btn green darken-2 waves-effect waves-light"><?= ths('Log in'); ?></button>
-            
-            <a href="signup" class="btn blue waves-effect waves-light"><?= ths('Create account'); ?></a>
+            <?= CSRFTokenInput(); ?>
+
+            <div class="d-grid gap-2">
+                <button type="submit" class="btn btn-success">
+                    <?= ths('Log in'); ?>
+                </button>
+                <a href="signup" class="btn btn-primary">
+                    <?= ths('Create account'); ?>
+                </a>
+            </div>
         </form>
     </div>
 </div>

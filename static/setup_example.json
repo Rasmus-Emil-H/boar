@@ -61,13 +61,13 @@
     },
     "clientAssets": {
         "css": [
-            "<link rel=\"stylesheet\" href=\"/resources/css/materialize.min.css\">",
+            "<link rel=\"stylesheet\" href=\"/resources/css/bs.css\">",
             "<link rel=\"stylesheet\" href=\"/resources/css/main.css\">",
             "<link rel=\"stylesheet\" href=\"https://fonts.googleapis.com/icon?family=Material+Icons\">"
         ],
         "js": [
             "<script defer src=\"/resources/js/jquery-3.7.0.min.js\"></script>",
-            "<script defer src=\"/resources/js/materialize.min.js\"></script>",
+            "<script defer src=\"/resources/js/bs.js\"></script>",
             "<script defer src=\"/resources/js/main.js\"></script>",
             "<script defer src=\"/resources/js/modules/constants.js?t=1\"></script>",
             "<script defer src=\"/resources/js/modules/i18n.js\"></script>",

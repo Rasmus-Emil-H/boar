@@ -20,31 +20,26 @@ class FileController extends Controller {
 	public function index() {
         $this->validateFileRequest();
 
-        try {
-            $request = $this->requestBody;
+        $request = $this->requestBody;
 
-            $request->entity = new EntityFactory([
-                'handler' => $request->body->entityType, 
-                'key' => $request->body->entityID
-            ]);
+        $request->entity = new EntityFactory([
+            'handler' => $request->body->entityType,
+            'key' => $request->body->entityID
+        ]);
 
-            $request->customFileType = $request->body->type ?? 'defaultType';
+        $request->customFileType = $request->body->type ?? 'defaultType';
 
-            foreach ($request->files as $newFile) {
-                $request->file = new File($newFile);
-                $request->destination = $request->file->moveFile();
+        foreach ($request->files as $newFile) {
+            $request->file = new File($newFile);
+            $request->destination = $request->file->moveFile();
 
-                $cFile = new FileModel();
-                $files[] = $cFile->dispatchHTTPMethod('attachFile', $request);
-            }
-
-            $files['message'] = hs('Files added');
-            
-            $this->response->ok($files);
-        } catch (\Exception $error) {
-            debug($error);
-            $this->response->setResponse(400, [File::NO_FILES_ATTACHED]);
+            $cFile = new FileModel();
+            $files[] = $cFile->dispatchHTTPMethod('attachFile', $request);
         }
+
+        $files['message'] = hs('Files added');
+        
+        $this->response->ok($files);
 	}
 
     public function view(object $request, FileModel $cFile) {
@@ -60,7 +55,15 @@ class FileController extends Controller {
     private function validateFileRequest(): void {
         $this->denyGETRequest();
 
-        if (empty($this->requestBody->files)) $this->response->setResponse(400, [File::NO_FILES_ATTACHED]);
+        if (empty($this->requestBody->files)) {
+            $this->response->setResponse(400, [File::NO_FILES_ATTACHED]);
+        }
+
+        $file = $this->requestBody->files['image'];
+
+        if (!isset($file['entityType']) || !isset($file['entityID'])) {
+            $this->response->setResponse(400,  ['Error']);
+        }
     }
 
     public function delete(object $body, FileModel $file) {

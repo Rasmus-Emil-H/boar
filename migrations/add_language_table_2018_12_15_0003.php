@@ -2,6 +2,7 @@
 
 use \app\core\src\database\table\Table;
 use \app\core\src\database\Schema;
+use \app\models\LanguageModel;
 
 class add_language_table_2018_12_15_0003 {
 
@@ -13,6 +14,11 @@ class add_language_table_2018_12_15_0003 {
             $table->timestamp('CreatedAt');
             $table->primaryKey('LanguageID');
         });
+
+        (new LanguageModel([
+            'Name' => 'English',
+            'Code' => 'EN'    
+        ]))->save();
     }
 
     public function down() {

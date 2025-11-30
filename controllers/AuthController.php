@@ -65,9 +65,7 @@ class AuthController extends Controller {
 
         (new UserModel())
             ->set(['Email' => $request->body->email, 'Name' => $request->body->name, 'Password' => password_hash($request->body->password, PASSWORD_DEFAULT)])
-            ->save()
-            ->setRole('User')
-            ->addMetaData(['event' => 'user signed up']);
+            ->save();
 
         $this->response->setResponse(201, ['redirect' => '/auth/login']);
     }

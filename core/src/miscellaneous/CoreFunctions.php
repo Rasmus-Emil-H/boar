@@ -14,25 +14,22 @@ namespace app\core\src\miscellaneous;
 
 final class CoreFunctions {
 
-    public static function displayDD($input, $title = 'Debugging'): void {
+    public static function displayDD($input): void {
         if (self::app()::isCli()) exit($input);
         
         echo '<style>* {margin:0;padding:0;box-sizing:border-box;color:black;font-weight:100;}</style>';
-        echo '<pre style="background-color: #a3b18a; color: white; text-wrap:wrap;width:100vw;height:100vh;display:flex;justify-content:center;align-items:center;flex-direction:column;overflow:scroll;" class="debug">';
-        echo '<h2 class="text-center">' . $title . '</h2><hr><p style="font-size:1.5rem;">';
+        echo '<pre style="background-color:#a3b18a; color: #000;margin:0; text-wrap:wrap;width:100vw;display:flex;justify-content:center;align-items:center;flex-direction:column;overflow:scroll;padding:1rem;" class="debug">';
 
         var_dump($input);
-
-        echo '</p><hr /><h2 class="text-center">End of ' . $title . '</h2></pre>';
     }
       
-    public static function dd(mixed $input, $title = ''): void {
-        self::displayDD($input, $title);
+    public static function dd(mixed $input): void {
+        self::displayDD($input);
         exit;
     }
       
-    public static function d(mixed $input, $title = ''): void {
-        self::displayDD($input, $title);
+    public static function d(mixed $input): void {
+        self::displayDD($input);
         echo '<hr />';
     }
       

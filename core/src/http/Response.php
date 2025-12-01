@@ -12,6 +12,7 @@ final class Response {
 
     private const HTTP_OK = 200;
     private const HTTP_CREATED = 201;
+    private const HTTP_NO_CONTENT = 204;
     private const HTTP_LOCATION_PERM = 301;
     private const HTTP_LOCATION_TEMP = 302;
     private const HTTP_BAD_REQUEST = 400;
@@ -83,6 +84,10 @@ final class Response {
 
     public function created() {
         $this->setResponse(self::HTTP_CREATED);
+    }
+
+    public function deleted(): void {
+        $this->setResponse(self::HTTP_NO_CONTENT);
     }
 
     public function badToken() {
